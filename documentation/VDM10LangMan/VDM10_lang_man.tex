@@ -117,7 +117,7 @@
 \lstset{language=VDM++}
 \lstset{alsolanguage=Java}
 % The command below enables you to escape into normal LaTeX mode inside your 
-% VDM chunks by starting with a `!ï¿½ character and ending with a `!ï¿½
+% VDM chunks by starting with a `!Ôø? character and ending with a `!Ôø?
 \lstset{escapeinside=!!}
 
 %\newcommand{\kw}[1]{{\tt #1}}
@@ -4184,7 +4184,8 @@ an access modifier allowing access to it outside the defining class.
     \Ruleref{map enumeration pattern} \dsep
     \Ruleref{map muinon pattern} \dsep
     \Ruleref{tuple pattern} \dsep
-    \Ruleref{record pattern}
+    \Ruleref{record pattern} \dsep
+    \Ruleref{object pattern}
     }
 
   \Rule{pattern identifier}{
@@ -4234,6 +4235,19 @@ an access modifier allowing access to it outside the defining class.
  
   \Rule{record pattern}{
     \Lop{mk\_}, \Ruleref{name}, \Lit{(}, [\Ruleref{pattern list}], \Lit{)}
+    }
+
+
+  \Rule{object pattern}{
+      \Lop{obj\_}, \Ruleref{identifier}, \Lit{(}, [ \Ruleref{field pattern list} ], \Lit{)}
+    }
+
+  \Rule{field pattern list}{
+      \Ruleref{field pattern}, \SeqPt{\Lit{,},  \Ruleref{field pattern}}
+    }
+
+  \Rule{field pattern}{
+      \Ruleref{identifier},  \Lit{|->}, \Ruleref{pattern}
     }
 
   \Rule{pattern list}{
@@ -4297,6 +4311,8 @@ an access modifier allowing access to it outside the defining class.
   \item A {\it record pattern} fits only record values with the same tag.
     Each of the patterns are matched against the field of the record value.
     All the fields of the record must be matched.
+
+  \item A {\it object pattern} is explained in \ref{sec:object_pattern}
   \end{enumerate}
 
 \item[Examples:] The simplest kind of pattern is the pattern
@@ -4439,6 +4455,73 @@ a map from team names to points score:
 \end{lstlisting}
 The function \texttt{print\_Expr} on page \pageref{printExprDef} also gives
 several examples of record patterns.
+\end{description}
+
+
+\section{Object Pattern}\label{sec:object_pattern}
+
+\begin{description}
+\item[Semantics:] An object pattern matches object references. An object is matched to the class identified by the class name led by the prefix \texttt{obj\_}. If the class of the object is class identifier or any of its subclasses, separate instance variables named in an object pattern are matched against the object from left to right.  It is not necessary to enumerate all the instance variables of a referred class in an object pattern.
+
+Object patterns may appear only where access to the instance variables named in the pattern would be permitted. So private instance variables can only be matched within operations of the same class. This also implies an object pattern may not appear in function definitions, preconditions, postconditions or invariants. The type checker will validate accessibility of each instance variable in the pattern. The value of referred instance variables may or may not change during the matching.
+
+\item[Examples:] Using an object pattern, an object can be matched by the values of its instance variables. The following simple example evaluates to \texttt{<STUDENT>} if and only if the object reference person points at an instance of the class Student or any of its subclasses, otherwise \texttt{<NOT\_STUDENT>}.
+\begin{lstlisting}
+cases person:
+   obj_Student() -> <STUDENT>,
+   others -> <NOT_STUDENT>
+end
+\end{lstlisting}
+The object pattern \texttt{obj\_Student()} does not only match an instance of the class Student. If a class Undergraduate is a subclass of Student, the object pattern \texttt{obj\_Student()} also matches any instance of the class Undergraduate.
+
+The following example matches the instance variable name against \texttt{"John"}.
+
+\begin{lstlisting}
+cases person:
+   obj_Student(name |-> "John") -> <JOHN>,
+   others -> <NOT_A_STUDENT_OR_NOT_JOHN>
+end
+\end{lstlisting}
+An object pattern can also bind the value of instance variable. For example, the following expression binds \texttt{n} to the \texttt{name} instance variable of  \texttt{person} if person is an instance of the class Student.
+
+\begin{lstlisting}
+cases person:
+   obj_Student(name |-> n) -> n,
+   others -> ""
+end
+\end{lstlisting}
+An object pattern may contain another object pattern. The following expression gives the name and department concatenated by \texttt{"@"} for Students, and add the title for Professors.
+\begin{lstlisting}
+cases person:
+   obj_Student
+      (name |-> n, dept |-> obj_Department(name->dname))
+                 -> n^"@"^dname,
+   obj_Professor(name |-> n) -> "Prof. "^n,
+   others -> ""
+end
+\end{lstlisting}
+An object pattern may appear in conjunction with other kinds of patterns. The following operation takes a sequence of \texttt{Professor} objects and returns titled names sorted into initials.  For example, \texttt{professorDict([new Professor("Smith"), new Professor("Scott"), new Professor("Adams")])} evaluates to 
+\begin{lstlisting}
+{'A' |-> {"Prof. Adams"}, 
+ 'S' |-> {"Prof. Scott", "Prof. Smith"}}. 
+\end{lstlisting}
+The first pattern of the cases expression consists of a list concatenation pattern. The first element of the list is matched against an object pattern whose instance variable {\tt name} is also matched against another sequence concatenation pattern of the initial character {\tt initial} and the  {\tt remaining}.
+\begin{lstlisting}
+professorDict: seq of Professor 
+                        ==> map char to set of seq of char
+professorDict(ps) == return cases ps:
+  [obj_Professor(name |-> [initial]^remaining)]^rest ->
+    let
+      dict = professorDict(rest),
+      name = "Prof. "^[initial]^remaining,
+      names = if initial in set dom dict 
+                     then dict(initial) 
+                     else {}
+    in
+  dict ++ {initial |-> names union {name}},
+  [-]^rest -> professorDict(rest),[] -> {|->}
+  end;
+\end{lstlisting}
 \end{description}
 
 \chapter{Bindings}\label{bind}
@@ -11447,6 +11530,7 @@ In VDM++ and VDM-RT a call statement looks like:
   \Ruleref{map enumeration pattern} \dsep
   \Ruleref{map muinon pattern} \dsep
   \Ruleref{tuple pattern} \dsep
+  \Ruleref{object pattern} \dsep
   \Ruleref{record pattern}
   }
 
@@ -11499,6 +11583,19 @@ In VDM++ and VDM-RT a call statement looks like:
   \Lit{mk\_},\nmk \Ruleref{name}, \Lit{(}, \OptPt{\Ruleref{pattern list}}, \Lit{)}
   }
 \ntext{no delimiter is allowed}
+
+
+  \Ruledef{object pattern}{
+      \Lop{obj\_}, \Ruleref{identifier}, \Lit{(}, [ \Ruleref{field pattern list} ], \Lit{)}
+    }
+
+  \Ruledef{field pattern list}{
+      \Ruleref{field pattern}, \SeqPt{\Lit{,},  \Ruleref{field pattern}}
+    }
+
+  \Ruledef{field pattern}{
+      \Ruleref{identifier},  \Lit{|->}, \Ruleref{pattern}
+    }
 
 \Ruledef{pattern list}{
   \Ruleref{pattern}, \SeqPt{\Lit{,}, \Ruleref{pattern}}
