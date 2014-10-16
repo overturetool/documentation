@@ -1615,7 +1615,7 @@ types.
     <d>}. 
 \end{description}
 
-\subsection{The Object Reference Type (VDM++ and VDM-RT}
+\subsection{The Object Reference Type (VDM++ and VDM-RT)}
 
 The object reference type has been added as part of the standard
 VDM-SL\ types. Therefore there is no direct way of restricting the use
@@ -4239,8 +4239,10 @@ an access modifier allowing access to it outside the defining class.
 
 
   \Rule{object pattern}{
-      \Lop{obj\_}, \Ruleref{identifier}, \Lit{(}, [ \Ruleref{field pattern list} ], \Lit{)}
+      \Lop{obj\_}, \Ruleref{identifier}, \Lit{(}, [ \Ruleref{field pattern list} ], \Lit{)}\nmk
     }
+ \ntext{\Ruleref{object pattern} is only be used in VDM++ and VDM-RT.
+ 	\Ruleref{object pattern} is explained in \ref{sec:object_pattern}}
 
   \Rule{field pattern list}{
       \Ruleref{field pattern}, \SeqPt{\Lit{,},  \Ruleref{field pattern}}
@@ -4458,10 +4460,24 @@ several examples of record patterns.
 \end{description}
 
 
-\section{Object Pattern}\label{sec:object_pattern}
+\section{Object Pattern (VDM++ and VDM-RT)}\label{sec:object_pattern}
 
 \begin{description}
-\item[Semantics:] An object pattern matches object references. An object is matched to the class identified by the class name led by the prefix \texttt{obj\_}. If the class of the object is class identifier or any of its subclasses, separate instance variables named in an object pattern are matched against the object from left to right.  It is not necessary to enumerate all the instance variables of a referred class in an object pattern.
+
+\item[Syntax:]
+  \Rule{object pattern}{
+      \Lop{obj\_}, \Ruleref{identifier}, \Lit{(}, [ \Ruleref{field pattern list} ], \Lit{)}
+    }
+
+  \Rule{field pattern list}{
+      \Ruleref{field pattern}, \SeqPt{\Lit{,},  \Ruleref{field pattern}}
+    }
+
+  \Rule{field pattern}{
+      \Ruleref{identifier},  \Lit{|->}, \Ruleref{pattern}
+    }
+
+\item[Semantics:] An object pattern matches object references. An object is matched to the class identified by the class name led by the prefix \texttt{obj\_}. If the class of the object is class \texttt{identifier} or any of its subclasses, separate instance variables named in an object pattern are matched against the object from left to right.  It is not necessary to enumerate all the instance variables of a referred class in an object pattern.
 
 Object patterns may appear only where access to the instance variables named in the pattern would be permitted. So private instance variables can only be matched within operations of the same class. This also implies an object pattern may not appear in function definitions, preconditions, postconditions or invariants. The type checker will validate accessibility of each instance variable in the pattern. The value of referred instance variables may or may not change during the matching.
 
@@ -11586,8 +11602,9 @@ In VDM++ and VDM-RT a call statement looks like:
 
 
   \Ruledef{object pattern}{
-      \Lop{obj\_}, \Ruleref{identifier}, \Lit{(}, [ \Ruleref{field pattern list} ], \Lit{)}
+      \Lop{obj\_}, \Ruleref{identifier}, \Lit{(}, [ \Ruleref{field pattern list} ], \Lit{)}\nmk
     }
+ \ntext{\Ruleref{object pattern} is only be used in VDM++ and VDM-RT.}
 
   \Ruledef{field pattern list}{
       \Ruleref{field pattern}, \SeqPt{\Lit{,},  \Ruleref{field pattern}}
