@@ -224,7 +224,8 @@
         John Fitzgerald\\
         Sune Wolff\\
         Shin Sahara\\
-        Marcel Verhoef}
+        Marcel Verhoef\\
+        Peter J\o{}rgensen}
 
 \date{November 2014}
 \reportno{TR-001}     
@@ -2168,7 +2169,20 @@ then the pre-condition function would be
 \end{lstlisting}
 
 In case functions are defined polymorphic a \keyw{measure} should also be
-used.
+used.\\
+
+\noindent Finally, VDM makes no assumptions about the type bound to a type parameter. This binding must be made explicitly, either by making an assertion as part of the pre-condition of the function, or by making a test before the part of the function body that restricts the type parameter. For an example, consider the function given below:
+
+\begin{lstlisting}
+public f[@T]: seq of @T -> seq of @T 
+f(s) ==
+  if is_(s, seq of real) then
+  	[s(i) + 1 | i in set inds s]
+  else
+  	reverse s;
+\end{lstlisting}
+
+Here the type parameter \texttt{@T} denotes the element type of the sequence \texttt{s} passed to the function. Note how the body of the function assumes the type parameter to be defined for the \texttt{+} operator. This only works since the \texttt{\textbf{if}}-clause explicitly states that the parameter \texttt{s} is of type \texttt{\textbf{seq of real}}. Without the \texttt{\textbf{if}}-clause use of the \texttt{+} operator would fail due to \texttt{@T} not being of a numeric type. Alternatively, the assumption could be stated using a pre-condition. This puts a restriction on the type parameter that applies to the entire body of the function, though with simple examples like this the effect is the same as explicitly declaring the type of the parameter in the function signature.
 
 \section{Higher Order Functions}
 
