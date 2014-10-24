@@ -117,7 +117,7 @@
 \lstset{language=VDM++}
 \lstset{alsolanguage=Java}
 % The command below enables you to escape into normal LaTeX mode inside your 
-% VDM chunks by starting with a `!Ôø? character and ending with a `!Ôø?
+% VDM chunks by starting with a `!ï¿½ï¿½? character and ending with a `!ï¿½ï¿½?
 \lstset{escapeinside=!!}
 
 %\newcommand{\kw}[1]{{\tt #1}}
@@ -226,7 +226,7 @@
         Shin Sahara\\
         Marcel Verhoef}
 
-\date{March 2014}
+\date{November 2014}
 \reportno{TR-001}     
 
 \pagenumbering{roman}
@@ -244,6 +244,8 @@ July    & 2012 & 3       & 1.2.2 & \\ \hline
 April   & 2013 & 4       & 2.0.0 & \\ \hline
 March & 2014 & 5 & 2.0.4 &
 Includes RMs \#16, \#17, \#18, \#20 \\ \hline
+November & 2014 & 6 & 2.1.2 &
+Includes RMs \#26 \\ \hline
 \end{tabular}
 
 %\addtocounter{page}{2}
@@ -8422,18 +8424,19 @@ If a class inherits from several classes only one of these may declare
 its own thread (possibly through inheritance). Furthermore, explicitly
 declaring a thread in a subclass will override any inherited thread.  
 
-\section{Periodic Thread Definitions}\label{se:periodic-thread}
+\section{Periodic Thread Definitions (VDM-RT)}\label{se:periodic-thread}
 
 The periodic obligation can be regarded as the way of describing repetitive activities in a class.
+As the `period' implies a explicit notion of time, this construct is only available in VDM-RT.
 
 \begin{description}
-\item[Syntax (VDM++):] For VDM++, where time is not explicit, it looks like:
-  
-\Ruledef{periodic obligation}{
-  \Lop{periodic},\Lit{(}, \Ruleref{expression}, \Lit{)}, \Lit{(}, \Ruleref{name}, \Lit{)}
-}
-
-\item[Semantics (VDM++):] The type of the expression should always yield a natural number, otherwise a run-time error will occur. The expression denotes the size of the time slice, after which the operation \Lop{name} is called, repetitively. The size of the time slice can be used to specify \emph{execution ratios} between multiple periodic threads in VDM++. Its behavior in relation to the other parts of the specification is defined by the interpreter settings with respect to time slicing and scheduling. Note however, that these values have \emph{no} explicit relation to real time.
+%\item[Syntax (VDM++):] For VDM++, where time is not explicit, it looks like:
+% 
+%\Ruledef{periodic obligation}{
+%  \Lop{periodic},\Lit{(}, \Ruleref{expression}, \Lit{)}, \Lit{(}, \Ruleref{name}, \Lit{)}
+%}
+%
+%\item[Semantics (VDM++):] The type of the expression should always yield a natural number, otherwise a run-time error will occur. The expression denotes the size of the time slice, after which the operation \Lop{name} is called, repetitively. The size of the time slice can be used to specify \emph{execution ratios} between multiple periodic threads in VDM++. Its behavior in relation to the other parts of the specification is defined by the interpreter settings with respect to time slicing and scheduling. Note however, that these values have \emph{no} explicit relation to real time.
 
 \item[Syntax(VDM-RT):] Time is explicit in VDM-RT, using a discrete clock with a 1~nsec resolution, where the periodic obligation looks like:
 
@@ -8550,19 +8553,19 @@ end Timer
 \end{description}
 
 
-\section{Sporadic Thread Definitions}\label{se:sporadic-thread}
+\section{Sporadic Thread Definitions (VDM-RT)}\label{se:sporadic-thread}
 
 The sporadic obligation can be regarded as the way
 of describing stochastic activities in a class.
 
 \begin{description}
-\item[Syntax:]
+\item[Syntax: (VDM-RT)]
   \Ruledef{sporadic obligation}{
     \Lop{sporadic}, \lfeed \Lit{(}, \Ruleref{expression},  \Ruleref{expression},   \Ruleref{expression}, 
     \Lit{)}, \lfeed \Lit{(}, \Ruleref{name}, \Lit{)}
   }
 
-\item[Semantics:] The type of the expressions should all yield a natural number (as we use a natural number valued wall-clock in the VDM-RT interpreter), otherwise a run-time error will occur. Note that the evaluation of the expressions also causes time to elapse whenever the \Lop{start} or \Lop{start\_list} statement is executed. The expressions all denote a time value with a resolution of 1~nsec.
+\item[Semantics: (VDM-RT)] The type of the expressions should all yield a natural number (as we use a natural number valued wall-clock in the VDM-RT interpreter), otherwise a run-time error will occur. Note that the evaluation of the expressions also causes time to elapse whenever the \Lop{start} or \Lop{start\_list} statement is executed. The expressions all denote a time value with a resolution of 1~nsec.
 For each sporadic obligation, three different numbers are used. They are, in order 
 of appearance:
 
@@ -8591,7 +8594,7 @@ end Timer
 
 \end{description}
 
-\section{Procedural Thread Definitions}\label{se:proc-thread}
+\section{Procedural Thread Definitions (VDM++ and VDM-RT)}\label{se:proc-thread}
 
 A procedural thread provides a mechanism to explicitly define the
 external behaviour of an active object through the use of {\em
@@ -10451,11 +10454,11 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
     \Ruleref{periodic obligation}  \dsep
     \Ruleref{sporadic obligation} }
 
-For VDM++ where time is not explicit, it looks like:
-  
-\Ruledef{periodic obligation}{
-  \Lop{periodic},\Lit{(}, \Ruleref{expression}, \Lit{)}, \Lit{(}, \Ruleref{name}, \Lit{)}
-}
+%For VDM++ where time is not explicit, it looks like:
+% 
+%\Ruledef{periodic obligation}{
+%  \Lop{periodic},\Lit{(}, \Ruleref{expression}, \Lit{)}, \Lit{(}, \Ruleref{name}, \Lit{)}
+%}
 
 For VDM-RT where time is explicit, it looks like:
 
