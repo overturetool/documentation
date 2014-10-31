@@ -30,7 +30,7 @@
 %\newcounter{exerciseno}
 \newcommand{\MYEQUIV}{$\equiv$}
 \newenvironment{TypeSemantics}{\begin{longtable}[r]{|p{3.5cm}|p{9cm}|}\hline%
-  Operator Name & Semantics Description \\ \hline\hline \endhead}% 
+  Operator Name & Semantics Description \\ \hline\hline \endhead}%
   {\hline\end{longtable}}
 
 \newcommand\thebookexercise{\thechapter.\arabic{exerciseno}}
@@ -49,7 +49,7 @@
 \newcommand{\insertfig}[4]{ % Filename, epsheight, epswidth, caption,  label
 \begin{figure}[htb]
 \begin{center}
-\includegraphics[width=#2]{#1} 
+\includegraphics[width=#2]{#1}
 \end{center}
 \caption{{\em #3}} #4
 \end{figure}
@@ -58,7 +58,7 @@
 \newcommand{\insertfignw}[3]{ % Filename, caption,  label
 \begin{figure}[h]
 \begin{center}
-\includegraphics{#1} 
+\includegraphics{#1}
 \end{center}
 \caption{{\em #2}} #3
 \end{figure}
@@ -82,21 +82,21 @@
 \include{customlangdef}
 % define the layout for listings
 \lstdefinestyle{tool}{basicstyle=\ttfamily,
-                         frame=trBL, 
-			 showstringspaces=false, 
-			 frameround=ffff, 
-			 framexleftmargin=0mm, 
+                         frame=trBL,
+			 showstringspaces=false,
+			 frameround=ffff,
+			 framexleftmargin=0mm,
 			 framexrightmargin=0mm}
 \lstdefinestyle{mystyle}{basicstyle=\ttfamily,
-                         frame=trBL, 
-%                         numbers=left, 
-%			 gobble=0, 
-			 showstringspaces=false, 
-%			 linewidth=\textwidth, 
-			 frameround=fttt, 
+                         frame=trBL,
+%                         numbers=left,
+%			 gobble=0,
+			 showstringspaces=false,
+%			 linewidth=\textwidth,
+			 frameround=fttt,
 			 aboveskip=5mm,
 			 belowskip=5mm,
-			 framexleftmargin=0mm, 
+			 framexleftmargin=0mm,
 			 framexrightmargin=0mm}
 %\lstdefinestyle{mystyle}{basicstyle=\sffamily\small,
 %			 frame=tb,
@@ -158,7 +158,7 @@
 \newcommand{\Rule}[2]{
   \begin{quote}\begin{tabbing}
     #1\index{#1}\ \ \= = \ \ \= #2  ; %    Adds production rule to index
-    
+
   \end{tabbing}\end{quote}
   }
 \newcommand{\RuleTarget}[1]{\hypertarget{rule:#1}{}}
@@ -215,7 +215,7 @@
 \makeindex
 
 \begin{document}
- 
+
 \title{VDM-10 Language Manual}
 \author{Peter Gorm Larsen\\
         Kenneth Lausdahl\\
@@ -228,7 +228,7 @@
         Tomohiro Oda}
 
 \date{November 2014}
-\reportno{TR-001}     
+\reportno{TR-001}
 
 \pagenumbering{roman}
 \maketitle
@@ -254,7 +254,7 @@ Includes RMs \#25, \#26, \#29 \\ \hline
 \newpage
 \mbox{}
 \newpage
-\pagenumbering{arabic} 
+\pagenumbering{arabic}
 \setcounter{page}{1}
 
 \chapter{Introduction}
@@ -279,10 +279,10 @@ The syntax and semantics of the VDM-SL
 language is essentially the standard ISO/VDM-SL \cite{ISOVDM96}
 with a modular extension\footnote{A few other extensions are also included.}.
 Notice that all syntactically correct VDM-SL specifications are also correct in
- VDM-SL. 
+ VDM-SL.
 Even though we have tried to present the language in a
 clear and understandable way the document is not a complete VDM-SL
-reference manual. 
+reference manual.
 For a more thorough presentation of the language we refer to the
 existing literature\footnote{A more tutorial like
 presentation is given in \cite{Fitzgerald&98} whereas proofs in VDM-SL
@@ -338,7 +338,7 @@ Appendix~\ref{app-a}, the lexical specification in
 Appendix~\ref{app-b} and the operator precedence in
 Appendix~\ref{app-c}. Appendix~\ref{sec:diff} presents a list of the
 differences between symbols in the mathematical syntax and the ASCII
-concrete syntax. 
+concrete syntax.
 %In Appendex~\ref{stdlib} details of the Standard
 %libraries and how to use it are given. Finally, an index of the
 %defining occurrences of all the syntax rules in the document is given.
@@ -364,7 +364,7 @@ used employs the following special symbols:
   ;  & terminator symbol to denote the end of a rule \\
   (\ ) & used for grouping, e.g. ``a, (b\dsepl c)'' is equivalent to
     ``a, b\dsepl a, c''. \\
-  -- & denotes subtraction from a set of terminal symbols 
+  -- & denotes subtraction from a set of terminal symbols
     (e.g. ``character -- (\Lit{\singleQuote})'' denotes all characters
     excepting the double quote character.)
 \end{tabular}
@@ -388,7 +388,7 @@ stated that the values which belong to this type are natural numbers
 point about the type system of the VDM languages which is
 worth mentioning at this point is that equality and inequality can be
 used between any value. In programming languages it is often required
-that the operands have the same type. Because of a 
+that the operands have the same type. Because of a
 construct called a union type (described below) this is not the case
 for the VDM languages.
 
@@ -431,13 +431,13 @@ one in the following.
 
 In general the VDM languages allow one to specify systems in
 which computations may fail to terminate or to deliver a result. To
-deal with such potential undefinedness, 
+deal with such potential undefinedness,
 the VDM languages employs a three valued logic: values may be
-true, false or bottom (undefined). 
+true, false or bottom (undefined).
 The semantics of the VDM interpreters differs from the ISO/VDM-SL standard
 in that it does
 not have an LPF (Logic of Partial Functions) three valued logic where
-the order of the operands is  
+the order of the operands is
 unimportant (see \cite{Jones90a}).  The \keyw{and} operator, the
 \keyw{or} operator and the imply operator, though, have a conditional
 semantics meaning that if the first operand is sufficient to determine
@@ -480,7 +480,7 @@ VDM interpreter.
   are then%
   \footnote{Notice that in standard VDM-SL all these truth tables
   (except {\tt =>}) would be symmetric.}:
-     
+
   \begin{tabular}{ll}
     Negation {\tt \keyw{not} b} &
     \begin{tabular}{|l|l|l|l|}\hline
@@ -519,11 +519,11 @@ VDM interpreter.
       \keyw{false} & \keyw{false} & \keyw{true}  & $\perp$ \\
       $\perp$&$\perp$ &$\perp$ & $\perp$ \\ \hline
     \end{tabular}\\
-  \end{tabular}     
+  \end{tabular}
 
-\item[Examples:] 
+\item[Examples:]
   Let {\tt a = \keyw{true}} and {\tt b = \keyw{false}} then:
-  
+
   \begin{tabular}{lcl}
     {\tt \keyw{not} a} & $\equiv$ & \keyw{false} \\
     {\tt a \keyw{and} b} & $\equiv$ & \keyw{false} \\
@@ -556,7 +556,7 @@ VDM interpreter's point of view there is no
   numbers can be represented in a computer.}, \Index{\keyw{int}},
 \Index{\keyw{nat}} and \Index{\keyw{nat1}}. Note that no ``casting''
 like it is done in many programming languages is needed in the VDM
-languages. 
+languages.
 
 \vspace{1ex}
 \begin{tabular}{|l|l|} \hline
@@ -619,7 +619,7 @@ Note that all numbers are necessarily of type \keyw{real} (and
     {\tt x >= y}& Greater or equal & \TO{\PROD{\keyw{real}}{\keyw{real}}}{\keyw{bool}} \\
     {\tt x = y}& Equal  & \TO{\PROD{\keyw{real}}{\keyw{real}}}{\keyw{bool}} \\
     {\tt x <> y}& Not equal & \TO{\PROD{\keyw{real}}{\keyw{real}}}{\keyw{bool}} \\
-    \hline     
+    \hline
   \end{tabular}%
 \index{\texttt{-}}\index{Unary minus}\index{\keyw{abs}}\index{Absolute value}%
 \index{\keyw{floor}}\index{Floor}\index{\texttt{+}}\index{Sum}\index{Difference!numeric}%
@@ -633,7 +633,7 @@ Note that all numbers are necessarily of type \keyw{real} (and
   The types stated for operands are the most general types allowed.  This
   means for instance that unary minus works for operands of all five types
   (\keyw{nat1}, \keyw{nat}, \keyw{int}, \keyw{rat} and \keyw{real}).
-     
+
 \input{sem-numtypes}
 
 \item[Examples:] Let {\tt a = 7, b = 3.5, c = 3.1415, d = -3, e = 2} then:
@@ -663,7 +663,7 @@ Note that all numbers are necessarily of type \keyw{real} (and
     {\tt a = 7.0}&$\equiv$& \keyw{true}               \\
     {\tt c <> d}&$\equiv$& \keyw{true}                \\
     {\tt \keyw{abs} c < 0} & $\equiv$ & \keyw{false}  \\
-    {\tt (a \keyw{div} e) * e} & $\equiv$ & 6       
+    {\tt (a \keyw{div} e) * e} & $\equiv$ & 6
   \end{longtable}
 \end{description}
 
@@ -717,7 +717,7 @@ then let them be a part of a union type.
 \item[Values:] {\tt <RED>, <CAR>, <QuoteLit>,} \ldots
 \item[Operators:] Assume that \texttt{q} and \texttt{r} in the
   following denote arbitrary quote values belonging to an enumerated
-  type {\tt T}: 
+  type {\tt T}:
 
   \begin{tabular}{|l|l|l|}\hline
     Operator     & Name      & Type \\ \hline
@@ -815,7 +815,7 @@ definition of operator type, e.g.\ {\tt m}, {\tt m1}, {\tt s}, {\tt
 A set is an unordered collection of values, all of the same
 type\footnote{Note however that it is always possible to find a common
   type for two values by the use of a union type (see
-  section~\ref{unions}.)}, which is treated as a whole. All sets in 
+  section~\ref{unions}.)}, which is treated as a whole. All sets in
 VDM languages are finite, i.e.\ they contain only a finite
 number of elements. The elements of a set type can be arbitrarily
 complex, they could for example be sets themselves.
@@ -828,12 +828,12 @@ and {\tt en} are elements from the sets, {\tt bd1,} {\tt bd2}, \ldots,
 a logical predicate.
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{type}{
    \Ruleref{set type} \dsep
     \ldots
     }
-  
+
   \Rule{set type}{\Lop{set of}, \Ruleref{type}}
 
 \item[Equation:] {\tt S = \keyw{set of} A}\index{\keyw{set of}}
@@ -843,7 +843,7 @@ a logical predicate.
   \begin{description}
   \item[Set enumeration:] \verb|{e1, e2, ..., en}| constructs a set of the
     enumerated elements. The empty set is denoted by {\tt \{\}}.
-  
+
   \item[Set comprehension:] \verb+{e | bd1, bd2, ..., bdm & P}+
     constructs a set by evaluating the expression {\tt e} on all the
     bindings for which the predicate {\tt P} evaluates to \keyw{true}.
@@ -864,7 +864,7 @@ a logical predicate.
 \item[Operators:] \mbox{}
 
   \begin{tabular}{|l|l|l|}\hline
-    Operator & Name & Type \\ \hline 
+    Operator & Name & Type \\ \hline
     {\tt e \keyw{in set} s1} & Membership & \TO{\PROD{A}{\SET{A}}}{\keyw{bool}} \\
     {\tt e \keyw{not in set} s1} & Not membership & \TO{\PROD{A}{\SET{A}}}{\keyw{bool}} \\
     {\tt s1 \keyw{union} s2}& Union & \TO{\PROD{\SET{A}}{\SET{A}}}{\SET{A}} \\
@@ -888,18 +888,18 @@ a logical predicate.
 \index{\keyw{dunion}}\index{Distributed union}\index{\keyw{dinter}}\index{Distributed intersection}%
 \index{\keyw{power}}\index{Finite power set}
 
-  Note that the types {\tt A, \SET{A}} and {\tt \SET{\SET{A}}} are only 
+  Note that the types {\tt A, \SET{A}} and {\tt \SET{\SET{A}}} are only
   meant to illustrate the structure of the type. For instance it is
   possible to make
   a union between two arbitrary sets {\tt s1} and {\tt s2} and the type of
   the resultant set is the union type of the two set types. Examples
   of this will be given in section \ref{unions}.
-      
+
 \input{sem-settypes}
 
 \item[Examples:]%
- Let {\tt s1 = \{<France>,<Denmark>,<SouthAfrica>,<SaudiArabia>\}}, 
-{\tt s2 = \{2, 4, 6, 8, 11\}} and {\tt s3 = \{\}} then: 
+ Let {\tt s1 = \{<France>,<Denmark>,<SouthAfrica>,<SaudiArabia>\}},
+{\tt s2 = \{2, 4, 6, 8, 11\}} and {\tt s3 = \{\}} then:
 
   \begin{longtable}{lcl}
     {\tt <England> \keyw{in set} s1} & $\equiv$ & \keyw{false}\\
@@ -941,7 +941,7 @@ these sequences, {\tt i} will be a natural number, {\tt P} is a
 predicate and {\tt e} is an arbitrary expression.
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{type}{
     \Ruleref{seq type} \dsep
     \ldots
@@ -951,17 +951,17 @@ predicate and {\tt e} is an arbitrary expression.
     \Ruleref{seq1 type}}
 
   \Rule{seq0 type}{\Lop{seq of}, \Ruleref{type}}
-  
+
   \Rule{seq1 type}{\Lop{seq1 of}, \Ruleref{type}}
 \item[Equation:] {\tt L = \keyw{seq of} A} or {\tt L = \keyw{seq1 of} A}%
 \index{\keyw{seq of}}\index{\keyw{seq1 of}}
 
 %                 $L = \seqof*{A}$ or
 %                 $L = \seqof+{A}$ where the notation has been adopted
-%                 from regular expressions. Thus $\seqof*{A}$ means the type 
+%                 from regular expressions. Thus $\seqof*{A}$ means the type
 %                 containing sequences of $A$ elements (also the empty
 %                 sequence), while $\seqof+{A}$ means the type containing
-%                 non-empty sequences of $A$ elements. 
+%                 non-empty sequences of $A$ elements.
 
 \item[Constructors:] \mbox{}
 
@@ -982,11 +982,11 @@ predicate and {\tt e} is an arbitrary expression.
   section~\ref{seqexpr}.%
 \index{\texttt{[]}!sequence enumeration}\index{\texttt{["|]}!sequence comprehension}\index{\texttt{\&}!sequence comprehension}
 
-      
+
 \item[Operators:] \mbox{}
 
   \begin{tabular}{|l|l|l|}\hline
-    Operator & Name & Type \\ \hline 
+    Operator & Name & Type \\ \hline
     {\tt \keyw{hd} l} & Head & \TO{\NSEQ{A}}{A} \\
     {\tt \keyw{tl} l} & Tail & \TO{\NSEQ{A}}{\SEQ{A}} \\
     {\tt \keyw{len} l} & Length & \TO{\SEQ{A}}{\keyw{nat}} \\
@@ -1022,7 +1022,7 @@ predicate and {\tt e} is an arbitrary expression.
 \item[Examples:] Let \texttt{l1 = [3,1,4,1,5,9,2]}, \texttt{ l2 =
     [2,7,1,8]}, \newline
     \texttt{ l3 = [<England>, <Rumania>, <Colombia>,
-    <Tunisia>]} then: 
+    <Tunisia>]} then:
 
   \begin{longtable}{lcl}
     \texttt{\keyw{len} l1}        & $\equiv$ & \texttt{7}\\
@@ -1032,14 +1032,14 @@ predicate and {\tt e} is an arbitrary expression.
     \texttt{l3(\keyw{len} l3)}    & $\equiv$ & \texttt{<Tunisia>}\\
     \texttt{"England"(2)}       & $\equiv$ & \texttt{'n'}\\
     \texttt{\keyw{reverse} l1}  & $\equiv$ & \texttt{[2,9,5,1,4,1,3]} \\
-    \texttt{\keyw{conc} [l1,l2] = l1\char'136 l2} 
+    \texttt{\keyw{conc} [l1,l2] = l1\char'136 l2}
                                   & $\equiv$ & \keyw{true}\\
-    \texttt{\keyw{conc} [l1,l1,l2] = l1\char'136 l2} 
+    \texttt{\keyw{conc} [l1,l1,l2] = l1\char'136 l2}
                                   & $\equiv$ & \keyw{false}\\
     \texttt{\keyw{elems} l3}      & $\equiv$ & \{
       \parbox[t]{5cm}{\texttt{<England>, <Rumania>, }\\
                       \texttt{<Colombia>,<Tunisia>\}}}\\
-    \texttt{(\keyw{elems} l1) \keyw{inter} (\keyw{elems} l2)} 
+    \texttt{(\keyw{elems} l1) \keyw{inter} (\keyw{elems} l2)}
                                   & $\equiv$ & \texttt{\{1,2\}}\\
     \texttt{\keyw{inds} l1}       & $\equiv$ & \texttt{\{1,2,3,4,5,6,7\}}\\
     \texttt{(\keyw{inds} l1) \keyw{inter} (\keyw{inds} l2)}
@@ -1079,17 +1079,17 @@ In the following this convention will be used: {\tt m}, {\tt m1} and {\tt
 set.
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{type}{
     \Ruleref{map type} \dsep
     \ldots
     }
-  
+
   \Rule{map type}{\Ruleref{general map type} \dsep
     \Ruleref{injective map type}}
-  
+
   \Rule{general map type}{\Lop{map}, \Ruleref{type}, \Lop{to}, \Ruleref{type}}
-  
+
   \Rule{injective map type}{\Lop{inmap}, \Ruleref{type}, \Lop{to}, \Ruleref{type}}
 
 \item[Equation:] {\tt M = \keyw{map} A \keyw{to} B} or {\tt M =
@@ -1116,7 +1116,7 @@ set.
 \item[Operators:]\mbox{}
 
   \begin{tabular}{|l|l|l|}\hline
-    Operator & Name & Type \\ \hline 
+    Operator & Name & Type \\ \hline
     {\tt \keyw{dom} m} & Domain & \TO{(\MAP{A}{B})}{\SET{A}} \\
     {\tt \keyw{rng} m} & Range & \TO{(\MAP{A}{B})}{\SET{B}} \\
     {\tt m1 \keyw{munion} m2} & Merge & \TO{\PROD{(\MAP{A}{B})}{(\MAP{A}{B})}}{\MAP{A}{B}} \\
@@ -1145,7 +1145,7 @@ set.
 
 \input{sem-maptypes}
 
-\item[Examples:] Let 
+\item[Examples:] Let
 
   {\ttfamily\selectfont
   \begin{tabular}{l}
@@ -1158,7 +1158,7 @@ set.
   then:
 
   \begin{longtable}{lcl}
-    \texttt{\keyw{dom} m1}           & $\equiv$ & 
+    \texttt{\keyw{dom} m1}           & $\equiv$ &
        \texttt{\{}\parbox[t]{5.3cm}{%
            \texttt{<France>, <Denmark>,}\\
            \texttt{<SouthAfrica>, <SaudiArabia>\}}}\\
@@ -1166,12 +1166,12 @@ set.
     \texttt{\keyw{rng} m1}           & $\equiv$ & \texttt{\{1,2,4,9\}}\\
     \\
     \texttt{m1 \keyw{munion} \{<England> |-> 3\}}
-                                     & $\equiv$ & 
+                                     & $\equiv$ &
        \texttt{\{}%
        \parbox[t]{5.3cm}{\ttfamily\selectfont
           <France> |-> 9, \\
           <Denmark> |-> 4,\\
-          <England> |-> 3, \\ 
+          <England> |-> 3, \\
           <SaudiArabia> |-> 1,\\
           <SouthAfrica> |-> 2\}}\\
     \\
@@ -1182,11 +1182,11 @@ set.
            \parbox[t]{5.3cm}{\ttfamily\selectfont
               <France> |-> 8, \\
               <Denmark> |-> 4,\\
-              <SouthAfrica> |-> 2, 
+              <SouthAfrica> |-> 2,
               <SaudiArabia> |-> 1,\\
               <England> |-> 4\}}\\
     \\
-    
+
     \texttt{\keyw{merge}\{}
          \parbox[t]{6.5cm}{\ttfamily\selectfont
                  \{<France> |-> 9, \\
@@ -1221,7 +1221,7 @@ set.
        \texttt{\{<SaudiArabia> |-> 1\}}\\
     \\
     \texttt{m1 \keyw{comp} (\{"France" |-> <France>\})}
-                                     & $\equiv$ & 
+                                     & $\equiv$ &
        \texttt{\{"France" |-> 9\}}\\
     \\
     \texttt{m2 ** 3}                 & $\equiv$ &
@@ -1250,7 +1250,7 @@ length list where the i'th element of the tuple must belong to the
 i'th element of the product type.
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{type}{
     \Ruleref{product type} \dsep
     \ldots
@@ -1268,7 +1268,7 @@ i'th element of the product type.
     \ldots, an)}\index{\keyw{mk\_}!tuple constructor}
 
     The syntax and semantics for the tuple constructor are given in
-    section~\ref{tupexpr}. 
+    section~\ref{tupexpr}.
 \item[Operators:] \mbox{}
 
   \begin{tabular}{|l|l|l|} \hline
@@ -1285,7 +1285,7 @@ i'th element of the product type.
   and inequality. Tuple components may be accessed using the select
   operator or by matching against a tuple pattern. Details of the
   semantics of the tuple select operator and an example of its use are
-  given in section \ref{app-expr}. 
+  given in section \ref{app-expr}.
 
 \item[Examples:] Let {\tt a = \keyw{mk\_}(1, 4, 8)}, {\tt b =
     \keyw{mk\_}(2, 4, 8)} then:
@@ -1318,7 +1318,7 @@ It is often used to discriminate between the subtypes of a union type
 and will therefore be explained further in section~\ref{unions}. In
 addition to record types the \keyw{is\_} operator can also determine if
 a value is of one of the basic types.
- 
+
 In the following this convention will be used: {\tt A} is a record
 type, {\tt A1, \ldots, Am} are arbitrary types, {\tt r}, {\tt r1}, and
 {\tt r2} are record values, {\tt i1, \ldots, im} are selectors from
@@ -1326,28 +1326,28 @@ the {\tt r} record value, {\tt e1, \ldots, em} are arbitrary
 expressions.
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{type}{
     \Ruleref{composite type} \dsep
     \ldots
     }
-  
+
   \Rule{composite type}{
     \Lop{compose}, \Ruleref{identifier}, \Lop{of}, \Ruleref{field list},
     \Lop{end}
     }
-  
+
   \Rule{field list}{\SeqPt{\Ruleref{field}}}
-  
+
   \Rule{field}{\OptPt{\Ruleref{identifier}, \Lit{:}}, \Ruleref{type}
   \dsep  \OptPt{\Ruleref{identifier}, \Lit{:-}}, \Ruleref{type}
   }
-  
+
   or the shorthand notation
-  
+
   \Rule{composite type}{
     \Ruleref{identifier}, \Lit{::}, \Ruleref{field list}}
-  
+
   where identifier denotes both the type name and the tag name.
 
 \item[Equation:]\mbox{}\label{a-type}
@@ -1378,7 +1378,7 @@ expressions.
   operator.  In the last notation the fields of {\tt A} can only be
   accessed by pattern matching (like it is done for tuples) as the
   fields have not been named.
-  
+
   In the last notation the fields of {\tt A} can only be accessed by
   pattern matching (as is done for tuples) since the fields have not
   been named.
@@ -1394,7 +1394,7 @@ expressions.
   \end{lstlisting}
   It should be noted however that composite types can only be used in
   type definitions, and not e.g.\ in signatures to functions or
-  operations. 
+  operations.
 
   Typically composite types are used as alternatives in a union type
   definition (see section~\ref{unions}) such as:
@@ -1439,7 +1439,7 @@ expressions.
    Team = <Brazil> | <France> | ...
 \end{lstlisting}
 \label{scoredef}
-and let 
+and let
 
 \begin{tabular}{l}
 \texttt{sc1 = \keyw{mk\_}Score (<France>, 3, 0, 0, 9)}, \\
@@ -1454,16 +1454,16 @@ Then
   \begin{tabular}{lcl}
     \texttt{sc1.team}            & $\equiv$ & \texttt{<France>}\\
     \texttt{sc4.points}          & $\equiv$ & \texttt{1}\\
-    \texttt{sc2.points > sc3.points} 
+    \texttt{sc2.points > sc3.points}
                                  & $\equiv$ & \keyw{true}\\
-    \texttt{\keyw{is\_}Score(sc4)} 
+    \texttt{\keyw{is\_}Score(sc4)}
                                  & $\equiv$ & \keyw{true}\\
     \texttt{\keyw{is\_bool}(sc3)}
                                  & $\equiv$ & \keyw{false}\\
     \texttt{\keyw{is\_int}(sc1.won)}
                                  & $\equiv$ & \keyw{true}\\
     \texttt{sc4 = sc1}           & $\equiv$ & \keyw{false}\\
-    \texttt{sc4 <> sc2}          & $\equiv$ & \keyw{true}  
+    \texttt{sc4 <> sc2}          & $\equiv$ & \keyw{true}
   \end{tabular}
 
   The equality abstraction field, written using `{\tt :-}' instead of
@@ -1496,7 +1496,7 @@ Such a map will contain at most one index for a specific identifier,
 and a map lookup will be independent of the {\tt pos} field.
 
 Moreover, the equality abstraction field will affect set expressions.
-For example, 
+For example,
 \begin{lstlisting}
   {mk_Id("x",7),mk_Id("y",8),mk_Id("x",9)}
 \end{lstlisting}
@@ -1531,21 +1531,21 @@ The optional type {\tt [T]} is a kind of shorthand for a union type {\tt T |
   \keyw{nil}}, where \keyw{nil} is used to denote the absence of a
 value. However, it is not possible to use the set {\tt \{\keyw{nil}\}}
 as a type so the only types \keyw{nil} will belong to will be optional
-types. 
+types.
 
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{type}{
     \Ruleref{union type} \dsep
     \Ruleref{optional type} \dsep
     \ldots
     }
-  
+
   \Rule{union type}{
     \Ruleref{type}, \Lit{|}, \Ruleref{type}, \SeqPt{\Lit{|}, \Ruleref{type}}
     }
-  
+
   \Rule{optional type}{\Lit{[}, \Ruleref{type}, \Lit{]}}
 
 \item[Equation:] {\tt B = A1 | A2 | \ldots\ | An}%
@@ -1580,8 +1580,8 @@ types.
   Cond  :: test : Expr
            cons : Expr
            altn : Expr
-\end{lstlisting}  
-\label{exprdef}  
+\end{lstlisting}
+\label{exprdef}
   and let {\tt expr = \keyw{mk\_}Cond(\keyw{mk\_}Var("b",<Bool>),%
     \keyw{mk\_}Const(3),}\\ {\tt \keyw{mk\_}Var("v",\keyw{nil}))} then:
 
@@ -1595,17 +1595,17 @@ types.
   Using union types we can extend the use of previously defined
     operators. For instance, interpreting \texttt{=} as a test over
     \texttt{\keyw{bool} | \keyw{nat}} we have
- 
+
  \begin{tabular}{lcl}
     \texttt{1 = \keyw{false}}    & $\equiv$ & \keyw{false}
   \end{tabular}
 
   Similarly we can take use union types for taking unions of sets and
     concatenating sequences:
-  
+
   \begin{tabular}{lcl}
      \texttt{ \{1,2\} \keyw{union} \{\keyw{false},\keyw{true}\}}
-                                 & $\equiv$ & 
+                                 & $\equiv$ &
         \texttt{\{1,2, \keyw{false},\keyw{true}\}}\\
      \texttt{ ['a','b']\char'136 [<c>,<d>]}
                                  & $\equiv$ &
@@ -1615,7 +1615,7 @@ types.
   In the set union, we take the union over sets of type
     \texttt{\keyw{nat} | \keyw{bool}}; for the sequence concatenation
     we are manipulating sequences of type \texttt{\keyw{char} | <c> |
-    <d>}. 
+    <d>}.
 \end{description}
 
 \subsection{The Object Reference Type (VDM++ and VDM-RT)}
@@ -1667,7 +1667,7 @@ class Tree
 types
 
   protected tree = <Empty> | node;
-    
+
   public node :: lt   : Tree
                  nval : int
                  rt   : Tree
@@ -1719,7 +1719,7 @@ supplied (see the examples below).
     \Ruleref{partial function type} \dsep
     \ldots
     }
-  
+
   \Rule{function type}{
     \Ruleref{partial function type} \dsep
     \Ruleref{total function type}
@@ -1727,12 +1727,12 @@ supplied (see the examples below).
 
   \Rule{partial function type}{
     \Ruleref{discretionary type}, \Lit{->}, \Ruleref{type}}
-  
+
   \Rule{total function type}{
     \Ruleref{discretionary type}, \Lit{+>}, \Ruleref{type}}
-  
-  \Rule{discretionary type}{\Ruleref{type} \dsepl \Lit{(},\Lit{)}} 
-  
+
+  \Rule{discretionary type}{\Ruleref{type} \dsepl \Lit{(},\Lit{)}}
+
 \item[Equation:] {\tt F = A +> B}\footnote{Note that the total
 function arrow can only be used in signatures of totally defined
 functions and thus not in a type definition.} or {\tt F = A -> B}%
@@ -1762,7 +1762,7 @@ functions and thus not in a type definition.} or {\tt F = A -> B}%
 \index{\keyw{comp}!function composition}\index{Function composition}%
 \index{\texttt{**}!function iteration}\index{Function iteration}%
 \index{\texttt{()}!function apply}\index{Function apply}
-  
+
   Note that equality and inequality between type values should be used
   with great care. In the VDM languages this corresponds to the
   mathematical equality (and inequality) which is not computable for
@@ -1781,7 +1781,7 @@ functions and thus not in a type definition.} or {\tt F = A -> B}%
     inc2 = lambda y : nat & y + 1
   \end{lstlisting}
   then the following holds:
-  
+
   \begin{tabular}{lcl}
     {\tt f1(5)} &$\equiv$& {\tt \keyw{lambda} y :\keyw{nat} \& 5 + y}\\
     {\tt f2(4)} &$\equiv$& {\tt 6}\\
@@ -1790,7 +1790,7 @@ functions and thus not in a type definition.} or {\tt F = A -> B}%
     {\tt f2 ** 4}&$\equiv$& {\tt \keyw{lambda} x :\keyw{nat} \& x + 8}\\
     {\tt inc1 = inc2}&$\equiv$& \keyw{false}\\
   \end{tabular}
-  
+
   Notice that the equality test does not yield the expected result with
   respect to the semantics of the VDM languages. Thus, one should
   be {\bf very} careful with the usage of equality for infinite values
@@ -1839,7 +1839,7 @@ is consistent with the number of games won and drawn using an invariant:
 The invariant function implicitly created for this type is:
 \begin{lstlisting}
   inv_Score : Score +> bool
-  inv_Score (sc) == 
+  inv_Score (sc) ==
     sc.points = 3 * sc.won + sc.drawn;
 \end{lstlisting}
 
@@ -1882,10 +1882,10 @@ because their post-condition does not need to directly relate the
 output to the input. Often it is done by specifying the properties the
 output must satisfy.}. In the VDM languages it is also
 possible for explicit function and operation definitions to specify an
-additional pre- and a post-condition.  In the post-condition of 
+additional pre- and a post-condition.  In the post-condition of
 explicit function and operation definitions the result value must be
 referred to by the reserved word \keyw{RESULT}.
- 
+
 \chapter{Function Definitions}\label{functiondef}
 
 In the VDM languages we can define first order and higher order
@@ -1900,16 +1900,16 @@ and VDM-RT. In general, the syntax for the definition of a
 function is:
 
 \Rule{function definitions}{
-  \Lop{functions}, 
+  \Lop{functions},
   \OptPt{\Ruleref{access function definition}}, \lfeed
-         \SeqPt{\Lit{;}}, 
+         \SeqPt{\Lit{;}},
          \Ruleref{access function definition}%
-         \Ruleref{function definition}, 
+         \Ruleref{function definition},
          \OptPt{\Lit{;}}
   }
 
 \Rule{access function definition}{
-    \OptPt{\Ruleref{access}}, 
+    \OptPt{\Ruleref{access}},
       \Ruleref{function definition}
   }
 
@@ -1924,19 +1924,19 @@ function is:
   }
 
 \Rule{explicit function definition}{
-  \Ruleref{identifier}, 
+  \Ruleref{identifier},
 \lfeed
-  \OptPt{\Ruleref{type variable list}}, 
+  \OptPt{\Ruleref{type variable list}},
   \Lit{:}, \Ruleref{function type}, \lfeed
   \Ruleref{identifier}, \Ruleref{parameters list}, \Lit{$==$}, \lfeed
   \Ruleref{function body}, \lfeed
   \OptPt{\Lop{pre}, \Ruleref{expression}}, \lfeed
   \OptPt{\Lop{post}, \Ruleref{expression}}, \lfeed
   \OptPt{\Lop{measure}, \Ruleref{name}}
-  }                                 
+  }
 
 \Rule{implicit function definition}{
-  \Ruleref{identifier}, 
+  \Ruleref{identifier},
   \OptPt{\Ruleref{type variable list}},\lfeed
   \Ruleref{parameter types}, \Ruleref{identifier type pair list}, \lfeed
   \OptPt{\Lop{pre}, \Ruleref{expression}}, \lfeed
@@ -1997,7 +1997,7 @@ function is:
   }
 
 \Rule{function body}{
-  \Ruleref{expression} \dsep 
+  \Ruleref{expression} \dsep
   \Lop{is not yet specified}\index{\keyw{is not yet specified}!functions}
   \dsep \Lop{is subclass responsibility}\index{\keyw{is subclass responsibility}!functions}
   }
@@ -2041,12 +2041,12 @@ compatible maps over natural numbers and returns the map consisting of
 those maplets unique to one or other of the given maps:
 
 \begin{lstlisting}
-map_disj (m1:map nat to nat,m2:map nat to nat) 
+map_disj (m1:map nat to nat,m2:map nat to nat)
           res : map nat to nat ==
   (dom m1 inter dom m2) <-: m1 munion
   (dom m1 inter dom m2) <-: m2
 pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d)
-post dom res = (dom m1 union dom m2) ++ (dom m1 inter dom m2) 
+post dom res = (dom m1 union dom m2) ++ (dom m1 inter dom m2)
      and
      forall d in set dom res & res(d) = m1(d) or res(d) = m2(d)
 \end{lstlisting}
@@ -2149,11 +2149,11 @@ num_bag(e, m) ==
   then m(e)
   else 0;
 
-plus_bag[@elem] : @elem * (map @elem to nat1) +> 
+plus_bag[@elem] : @elem * (map @elem to nat1) +>
                   (map @elem to nat1)
 plus_bag(e, m) ==
   m ++ { e |-> num_bag[@elem](e, m) + 1 }
-\end{lstlisting} 
+\end{lstlisting}
 If pre- and or post-conditions are defined for polymorphic functions, the
 corresponding predicate functions are also polymorphic. For instance
 if \texttt{num\_bag} was defined as
@@ -2174,7 +2174,7 @@ used.\\
 \noindent Finally, VDM makes no assumptions about the type bound to a type parameter. This binding must be made explicitly, either by making an assertion as part of the pre-condition of the function, or by making a test before the part of the function body that restricts the type parameter. For an example, consider the function given below:
 
 \begin{lstlisting}
-public f[@T]: seq of @T -> seq of @T 
+public f[@T]: seq of @T -> seq of @T
 f(s) ==
   if is_(s, seq of real) then
   	[s(i) + 1 | i in set inds s]
@@ -2195,7 +2195,7 @@ subsequence that satisfies this predicate:
   nat_filter (p,ns) ==
     [ns(i) | i in set inds ns & p(ns(i))];
 \end{lstlisting}
-Then 
+Then
   \texttt{nat\_filter (\keyw{lambda} x:\keyw{nat} \& x \keyw{mod} 2 = 0, [1,2,3,4,5])} $\equiv$ \texttt{[2,4]}.
 In fact, this algorithm is not specific to natural numbers, so we may
 define a polymorphic version of this function:
@@ -2218,7 +2218,7 @@ the function \texttt{fmap}:
     then []
     else [f(hd l)] ^ (fmap[@elem] (f)(tl l));
 \end{lstlisting}
-So \texttt{fmap[\keyw{nat}](\keyw{lambda} x:\keyw{nat} \& x * x)([1,2,3,4,5])} $\equiv$ 
+So \texttt{fmap[\keyw{nat}](\keyw{lambda} x:\keyw{nat} \& x * x)([1,2,3,4,5])} $\equiv$
 \texttt{[ 1,4,9,16,25 ]}.
 
 \vspace{1ex}
@@ -2259,24 +2259,24 @@ one by one. Each of them will be described by means of:
     }
 
   \Rule{let expression}{
-    \Lop{let}, 
+    \Lop{let},
     \Ruleref{local definition}
     \SeqPt{\Lit{,}, \Ruleref{local definition}}, \lfeed
     \Lop{in}, \Ruleref{expression}
     }
 
-  \Rule{let be expression}{ 
+  \Rule{let be expression}{
     \Lop{let}, \Ruleref{multiple bind},
     \OptPt{\Lop{be}, \Lop{st}, \Ruleref{expression}}, \Lop{in}, \lfeed
     \Ruleref{expression}
-    } 
+    }
 
   \Rule{local definition}{
     \Ruleref{value definition} \dsep
     \Ruleref{function definition}
     }
 
-  \Rule{value definition}{ 
+  \Rule{value definition}{
     \Ruleref{pattern}, \OptPt{\Lit{:}, \Ruleref{type}}, \Lit{=}, \Ruleref{expression}
     }
 
@@ -2304,7 +2304,7 @@ one by one. Each of them will be described by means of:
   recursive.  However, in the VDM languages this is not
   supported by the VDM interpreters.  Furthermore, the definitions must be
   ordered such that all constructs are defined before they are used.
-     
+
   A {\it let-be-such-that expression} has the form:
   \begin{lstlisting}
     let mb be st e1 in e2
@@ -2328,7 +2328,7 @@ one by one. Each of them will be described by means of:
   more than once. For instance, we can improve the function
   \texttt{map\_disj} from page \pageref{mapdisj}:
 \begin{lstlisting}
-map_disj : (map nat to nat) * (map nat to nat) -> 
+map_disj : (map nat to nat) * (map nat to nat) ->
             map nat to nat
 map_disj (m1,m2) ==
   let inter_dom = dom m1 inter dom m2
@@ -2349,16 +2349,16 @@ pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d)
   particular example we extract the second and fifth components of the
   two scores. Note that don't care
   patterns (see page \pageref{patterns}) are used to indicate that the
-  remaining components are irrelevant 
+  remaining components are irrelevant
   for the processing done in the body of this expression.
-  
+
   {\it Let-be-such-that expressions} are useful for abstracting away
   the non-essential choice of an element from a set, in particular in
   formulating recursive definitions over sets. An example of this is a
   version of the sequence filter function (see page \pageref{filterdef})
   over sets:\label{setfilterdef}
   \begin{lstlisting}
-set_filter[@elem] : (@elem -> bool) -> (set of @elem) -> 
+set_filter[@elem] : (@elem -> bool) -> (set of @elem) ->
                     (set of @elem)
 set_filter(p)(s) ==
   if s = {}
@@ -2370,11 +2370,11 @@ set_filter(p)(s) ==
    We could alternatively have defined this function using a set
   comprehension (described in section \ref{setexpr}):
   \begin{lstlisting}
-    set_filter[@elem] : (@elem -> bool) -> (set of @elem) -> 
+    set_filter[@elem] : (@elem -> bool) -> (set of @elem) ->
                         (set of @elem)
     set_filter(p)(s) ==
       { x | x in set s & p(x)};
-  \end{lstlisting} 
+  \end{lstlisting}
 
    The last example shows how the optional ``be such that'' part
    (\keyw{be st}) can be used. This part is especially useful when it
@@ -2416,18 +2416,18 @@ inside operations.
 \begin{description}
 \item[Syntax:]
   \Rule{expression}{
-    \ldots \dsep 
+    \ldots \dsep
     \Ruleref{def expression} \dsep
     \ldots
     }
 
 \Rule{def expression}{
-  \Lop{def}, 
+  \Lop{def},
   \Ruleref{pattern bind}, \Lit{=}, \Ruleref{expression}, \lfeed
   \SeqPt{\Lit{;}, \Ruleref{pattern bind}, \Lit{=}, \Ruleref{expression}}, \OptPt{\Lit{;}},
   \lfeed
   \Lop{in}, \Ruleref{expression}
-  } 
+  }
 
 \item[Semantics:] A {\it define expression} has the form:
   \begin{lstlisting}
@@ -2454,12 +2454,12 @@ inside operations.
 
   This can be illustrated by a small example:
   \begin{lstlisting}
-    def user = lib(copy) 
+    def user = lib(copy)
     in
       if user = <OUT>
       then true
       else false
-  \end{lstlisting}      
+  \end{lstlisting}
   where {\tt copy} is defined in the context, {\tt lib} is global
   variable (thus {\tt lib(copy)} can be considered as looking up the
   contents of a part of the variable).
@@ -2493,7 +2493,7 @@ inside operations.
     \Lop{dinter} \dsep
     \Lop{hd} \dsepl \Lop{tl} \dsepl \Lop{len} \dsepl \Lop{elems} \dsepl
     \Lop{inds} \dsepl \Lop{conc} \dsep
-    \Lop{dom} \dsepl \Lop{rng} \dsepl \Lop{merge} 
+    \Lop{dom} \dsepl \Lop{rng} \dsepl \Lop{merge}
     }
 
 \Rule{map inverse}{
@@ -2545,7 +2545,7 @@ inside operations.
   \Rule{elseif expression}{
     \Lop{elseif}, \Ruleref{expression}, \Lop{then}, \Ruleref{expression}
     }
-                     
+
   \Rule{cases expression}{
     \Lop{cases}, \Ruleref{expression}, \Lit{:}, \lfeed
     \Ruleref{cases expression alternatives}, \lfeed
@@ -2559,7 +2559,7 @@ inside operations.
 
   \Rule{cases expression alternative}{
     \Ruleref{pattern list}, \Lit{->}, \Ruleref{expression}
-    } 
+    }
 
   \Rule{others expression}{
     \Lop{others}, \Lit{->}, \Ruleref{expression}
@@ -2603,8 +2603,8 @@ inside operations.
   none of the patterns match {\tt e} an \keyw{others} clause must be
   present, and then the cases expression denotes the value of {\tt emplus1}
   evaluated in the given context.
-     
-\item[Examples:] The if expression in the VDM languages 
+
+\item[Examples:] The if expression in the VDM languages
   corresponds to what is used in most programming languages, while the
   cases expression in the VDM languages is more general than
   most programming languages. This is shown by the fact that real
@@ -2616,9 +2616,9 @@ inside operations.
   \begin{lstlisting}
   lmerge : seq of nat * seq of nat -> seq of nat
   lmerge (s1,s2) ==
-    if s1 = [] 
+    if s1 = []
     then s2
-    elseif s2 = [] 
+    elseif s2 = []
     then s1
     elseif (hd s1) < (hd s2)
     then [hd s1] ^ (lmerge (tl s1, s2))
@@ -2665,7 +2665,7 @@ print_Const(mk_Const(c)) ==
 \begin{description}
 \item[Syntax:]
   \Rule{expression}{
-    \ldots \dsep \Ruleref{quantified expression} 
+    \ldots \dsep \Ruleref{quantified expression}
     \dsep \ldots
     }
 
@@ -2673,12 +2673,12 @@ print_Const(mk_Const(c)) ==
     \Ruleref{all expression} \dsep
     \Ruleref{exists expression} \dsep
     \Ruleref{exists unique expression}
-    } 
+    }
 
   \Rule{all expression}{
     \Lop{forall}, \Ruleref{bind list}, \Lit{\char'046}, \Ruleref{expression}
     }
-    
+
   \Rule{exists expression}{
       \Lop{exists}, \Ruleref{bind list}, \Lit{\char'046}, \Ruleref{expression}
     }
@@ -2729,10 +2729,10 @@ print_Const(mk_Const(c)) ==
   All quantified expressions have the lowest possible precedence. This
   means that the longest possible constituent expression is taken. The
   expression is continued to the right as far as it is syntactically
-  possible. 
-  
+  possible.
 
-\item[Examples:] 
+
+\item[Examples:]
   An example of an existential quantification is given in the function
   shown below, \texttt{QualificationOk}. This function, taken from the
   specification of a nuclear tracking system in \cite{Fitzgerald&98},
@@ -2753,10 +2753,10 @@ print_Const(mk_Const(c)) ==
     exists ex in set exs & reqquali in set ex.quali
   \end{lstlisting}
   The function \texttt{min} gives us an example of a universal
-  quantification: 
+  quantification:
   \begin{lstlisting}
   min(s: set of nat) x: nat
-  pre s <> {} 
+  pre s <> {}
   post x in set s and
        forall y in set s \ {x} & y < x
   \end{lstlisting}
@@ -2805,11 +2805,11 @@ print_Const(mk_Const(c)) ==
     sc4 = mk_Score (<SaudiArabia>, 0, 1, 2, 1);
   \end{lstlisting}
   we have
-  
+
   \begin{tabular}{lcl}
-    \texttt{ \keyw{iota} x \keyw{in set} \{sc1,sc2,sc3,sc4\} \& 
+    \texttt{ \keyw{iota} x \keyw{in set} \{sc1,sc2,sc3,sc4\} \&
       x.team = <France>} & $\equiv$ & \texttt{sc1}\\
-    \texttt{ \keyw{iota} x \keyw{in set} \{sc1,sc2,sc3,sc4\} \& 
+    \texttt{ \keyw{iota} x \keyw{in set} \{sc1,sc2,sc3,sc4\} \&
       x.points > 3} & $\equiv$ & $\perp$\\
     \texttt{ \keyw{iota} x : Score \& x.points < x.won} & $\equiv$ &
   $\perp$
@@ -2829,7 +2829,7 @@ print_Const(mk_Const(c)) ==
     \ldots \dsep \Ruleref{set enumeration} \dsep \Ruleref{set comprehension} \dsep
     \Ruleref{set range expression} \dsep \ldots
     }
-  
+
   \Rule{set enumeration}{
     \Lit{\{}, \OptPt{\Ruleref{expression list}}, \Lit{\}}
     }
@@ -2880,7 +2880,7 @@ print_Const(mk_Const(c)) ==
   where {\tt e1} and {\tt e2} are numeric expressions. The set range
   expression denotes the set of integers from {\tt e1} to {\tt e2}
   inclusive. If {\tt e2} is smaller than {\tt e1} the set range
-  expression denotes the empty set. 
+  expression denotes the empty set.
 
 \item[Examples:]
   Using  the values \texttt{Europe=\{<France>,<England>,<Denmark>,%
@@ -2936,7 +2936,7 @@ print_Const(mk_Const(c)) ==
     \Ruleref{expression}, \lfeed
     \Lit{(}, \Ruleref{expression},
     \Lit{,}, \Lit{\Range},
-    \Lit{,}, 
+    \Lit{,},
     \Ruleref{expression}, \Lit{)}
     }
 
@@ -2989,13 +2989,13 @@ print_Const(mk_Const(c)) ==
 %  sequence {\tt l} modified in a way so that element {\tt ni} has been
 %  replaced by {\tt ei}.
 
-\item[Examples:] Given that \texttt{GroupA} is equal to the sequence 
+\item[Examples:] Given that \texttt{GroupA} is equal to the sequence
   \begin{lstlisting}
-    [ mk_Score(<Brazil>,2,0,1,6), 
+    [ mk_Score(<Brazil>,2,0,1,6),
       mk_Score(<Norway>,1,2,0,5),
       mk_Score(<Morocco>,1,1,1,4),
       mk_Score(<Scotland>,0,1,2,1) ]
-  \end{lstlisting} 
+  \end{lstlisting}
 \label{GroupAdef}
 then:
 
@@ -3004,7 +3004,7 @@ then:
             [GroupA(i).team \\
             | i \keyw{in set inds} GroupA \\
             \& GroupA(i).won <> 0]}
-    &$\equiv$ & 
+    &$\equiv$ &
         \texttt{[}\parbox[t]{4cm}{\ttfamily\selectfont
                                  <Brazil>, \\
                                  <Norway>, \\
@@ -3014,8 +3014,8 @@ then:
             | i \keyw{in set inds} GroupA\\
             \& GroupA(i).won = 0]}
     &$\equiv$ & \texttt{[\keyw{mk\_}Score(<Scotland>,0,1,2,1)]}\\
-  \texttt{GroupA(1,...,2)} 
-    &$\equiv$ & 
+  \texttt{GroupA(1,...,2)}
+    &$\equiv$ &
     \texttt{[}\parbox[t]{4cm}{\ttfamily\selectfont
          \keyw{mk\_}Score(<Brazil>,2,0,1,6), \\
          \keyw{mk\_}Score(<Norway>,1,2,0,5)]}\\
@@ -3039,12 +3039,12 @@ then:
   \Rule{map enumeration}{
     \Lit{\{}, \Ruleref{maplet}, \SeqPt{\Lit{,}, \Ruleref{maplet}}, \Lit{\}} \dsep
     \Lit{\{}, \Lit{|->}, \Lit{\}}
-    } 
-  
+    }
+
   \Rule{maplet}{
     \Ruleref{expression}, \Lit{|->}, \Ruleref{expression}
     }
-  
+
   \Rule{map comprehension}{
     \Lit{\{}, \Ruleref{maplet}, \Lit{|}, \Ruleref{bind list},\lfeed
     \OptPt{\Lit{\char'046}, \Ruleref{expression}}, \Lit{\}}
@@ -3057,7 +3057,7 @@ then:
   where all the domain expressions {\tt di} and range expressions {\tt ri}
   are general expressions. The empty map
   must be written as {\tt \{|->\}}.
-      
+
   A {\it map comprehension} has the form:
   \begin{lstlisting}
     {ed |-> er | mbd1, !\ldots!, mbdn & P}
@@ -3068,7 +3068,7 @@ then:
   expressions {\tt ed} and {\tt er} on all the possible bindings for which
   the predicate {\tt P} evaluates to \keyw{true}.
 
-\item[Examples:] Given that \texttt{GroupG} is equal to the map 
+\item[Examples:] Given that \texttt{GroupG} is equal to the map
   \begin{lstlisting}
     { <Romania> |-> mk_(2,1,0), <England> |-> mk_(2,0,1),
       <Colombia> |-> mk_(1,0,2), <Tunisia> |-> mk_(0,1,2) }
@@ -3115,13 +3115,13 @@ then:
   \end{lstlisting}
   where {\tt ei} is a general expression. It can only be used by the
   equality and inequality operators.
-     
-\item[Examples:] Using the map \texttt{GroupG} defined in the preceding 
+
+\item[Examples:] Using the map \texttt{GroupG} defined in the preceding
 example, we have:
 
   \begin{tabular}{lcl}
   \texttt{\keyw{mk\_}(2,1,0) \keyw{in set rng} GroupG} & $\equiv$ \keyw{true}\\
-  \texttt{\keyw{mk\_}({\char'042}Romania{\char'042},2,1,0) \keyw{not in set rng} GroupG} 
+  \texttt{\keyw{mk\_}({\char'042}Romania{\char'042},2,1,0) \keyw{not in set rng} GroupG}
        & $\equiv$ \keyw{true}\\
   \texttt{\keyw{mk\_}(<Romania>,2,1,0) <> \keyw{mk\_}({\char'042}Romania{\char'042},2,1,0)}
        & $\equiv$ \keyw{true}
@@ -3133,18 +3133,18 @@ example, we have:
 \begin{description}
 \item[Syntax:]
   \Rule{expression}{
-    \ldots \dsep 
+    \ldots \dsep
     \Ruleref{record constructor} \dsep
     \Ruleref{record modifier} \dsep \ldots
     }
 
   \Rule{record constructor}{
-    \Lop{mk\_}, \Ruleref{name}, \Lit{(}, 
+    \Lop{mk\_}, \Ruleref{name}, \Lit{(},
     \OptPt{\Ruleref{expression list}}, \Lit{)}
     }
 
   \Rule{record modifier}{
-    \Lop{mu}, \Lit{(}, \Ruleref{expression}, \Lit{,}, 
+    \Lop{mu}, \Lit{(}, \Ruleref{expression}, \Lit{,},
     \Ruleref{record modification}, \lfeed \SeqPt{\Lit{,}, \Ruleref{record modification}}
     \Lit{)}
     }
@@ -3167,7 +3167,7 @@ example, we have:
   where the evaluation of the expression {\tt e} returns the record value
   to be modified. All the identifiers {\tt idi} must be distinct named
   entrances in the record type of {\tt e}.
-     
+
 \item[Examples:] If \texttt{sc} is the value \texttt{\keyw{mk\_}Score(<France>,3,0,0,9)} then
   \begin{lstlisting}
     mu (sc, drawn |-> sc.drawn + 1, points |-> sc.points + 1)
@@ -3184,7 +3184,7 @@ example, we have:
   win (wt,lt,gp) ==
     let wsc = iota sc in set gp & sc.team = wt,
         lsc = iota sc in set gp & sc.team = lt
-    in 
+    in
       let new_wsc = mu (wsc, won |-> wsc.won + 1,
                              points |-> wsc.points + 3),
           new_lsc = mu (lsc, lost |-> lsc.lost + 1)
@@ -3202,7 +3202,7 @@ example, we have:
 \begin{description}
 \item[Syntax:]
   \Rule{expression}{
-    \ldots \dsep 
+    \ldots \dsep
     \Ruleref{apply} \dsep
     \Ruleref{field select} \dsep
     \Ruleref{tuple select} \dsep
@@ -3225,18 +3225,18 @@ example, we have:
   \Rule{function type instantiation}{
     \Ruleref{name}, \Lit{[}, \Ruleref{type}, \SeqPt{\Lit{,}, \Ruleref{type}}, \Lit{]}
     }
-    
+
 \item[Semantics:] The {\it field select expression} can be used for records
   and it has already been explained in section~\ref{records} so no further
   explanation will be given here.
-     
+
   The {\it apply} is used for looking up in a map, indexing in a
   sequence, and finally for calling a function. In section~\ref{maps} it
   has already been shown what it means to look up in a map. Similarly in
   section~\ref{sequences} it is illustrated how indexing in a sequence is
   performed.
 
-  In the VDM languages an operation can also be called 
+  In the VDM languages an operation can also be called
   here. This is not allowed in standard VDM-SL and because this kind of
   operation call can modify the state such usage should be done with
   care in complex expressions. Note however that such operation calls
@@ -3263,12 +3263,12 @@ example, we have:
     t1, \ldots, tn} instead of the variable type names given in the
   function definition.
 
-\item[Examples:] Recall that \texttt{GroupA} is a sequence (see page 
-  \pageref{GroupAdef}), \texttt{GroupG} is a map (see page \pageref{GroupGdef}) 
+\item[Examples:] Recall that \texttt{GroupA} is a sequence (see page
+  \pageref{GroupAdef}), \texttt{GroupG} is a map (see page \pageref{GroupGdef})
   and \texttt{selection\_sort} is a function (see page \pageref{selectionSortdef}):
 
   \begin{tabular}{lcl}
-  \texttt{GroupA(1)} & $\equiv$ & 
+  \texttt{GroupA(1)} & $\equiv$ &
                            \texttt{\keyw{mk\_}Score(<Brazil>,2,0,1,6)}\\
   \texttt{GroupG(<Romania>)} & $\equiv$ &
                            \texttt{\keyw{mk\_}(2,1,0)}\\
@@ -3282,7 +3282,7 @@ example, we have:
   instantiation, we use the example functions from
   section~\ref{functiondef}:
   \begin{lstlisting}
-    let emptyInt = empty_bag[int] 
+    let emptyInt = empty_bag[int]
     in
       plus_bag[int](-1, emptyInt())
 
@@ -3297,10 +3297,10 @@ example, we have:
 \label{sec:creation}
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{expression}{
     \ldots \dsep
-    \Ruleref{new expression} 
+    \Ruleref{new expression}
     }
   \Rule{new expression}{
     \Lop{new}, \Ruleref{name}, \Lit{(}, \OptPt{\Ruleref{expression list}}, \Lit{)}
@@ -3330,7 +3330,7 @@ example, we have:
   that default instances of \texttt{Queue} are empty. Suppose also
   that this class contains a constructor (which will also be called
   \texttt{Queue}) which takes a single parameter which is a list of
-  values representing an arbitrary starting queue. Then we can 
+  values representing an arbitrary starting queue. Then we can
   create default  instances of \texttt{Queue} in which the actual
   queue is empty using the expression
 \begin{lstlisting}
@@ -3347,7 +3347,7 @@ new \texttt{Tree} instances to construct \texttt{node}s:
 \begin{lstlisting}
 mk_node(new Tree(), x, new Tree())
 \end{lstlisting}
-    
+
 
 \end{description}
 
@@ -3355,15 +3355,15 @@ mk_node(new Tree(), x, new Tree())
 \label{sec:self}
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{expression}{
     \ldots \dsep
-    \Ruleref{self expression} 
+    \Ruleref{self expression}
     }
   \Rule{self expression}{
     \Lop{self}
   }
-  
+
 \item[Semantics:] The {\it self expression} has the form:
 
   \begin{lstlisting}
@@ -3376,7 +3376,7 @@ mk_node(new Tree(), x, new Tree())
 \item[Examples:] Using the class \texttt{Tree} defined on page
 \pageref{TreeDef} we can specify a subclass called \texttt{BST} which
 stores data using the binary search tree approach.
-We can then specify an operation which performs a binary search tree 
+We can then specify an operation which performs a binary search tree
 insertion:
 \begin{lstlisting}
     Insert : int ==> ()
@@ -3399,29 +3399,29 @@ section \ref{call-stmt}.
 \label{sec:threadid}
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{expression}{
     \ldots \dsep
-    \Ruleref{threadid expression} 
+    \Ruleref{threadid expression}
     }
   \Rule{threadid expression}{
     \Lop{threadid}
   }
-  
+
 \item[Semantics:] The {\it threadid expression} has the form:
 
   \begin{lstlisting}
     threadid
   \end{lstlisting}
   The threadid expression returns a natural number which uniquely
-  identifies the thread in which the expression is executed. Note that 
+  identifies the thread in which the expression is executed. Note that
   periodic threads gets a new threadid at the start of each new period.
 
-\item[Examples:] 
+\item[Examples:]
 Using {\bf\ttfamily threadid}'s it is possible to provide a VDM++ base class that
 implements a Java-style wait-notify in VDM++ using permission
 predicates. Any object that should be available for the wait-notify
-mechanism must derive from this base class.  
+mechanism must derive from this base class.
 \begin{lstlisting}
 class WaitNotify
 
@@ -3430,7 +3430,7 @@ class WaitNotify
 
   operations
     protected wait: () ==> ()
-    wait() == 
+    wait() ==
       let p = threadid
       in (
         AddToWaitSet( p );
@@ -3440,14 +3440,14 @@ class WaitNotify
     AddToWaitSet : nat ==> ()
     AddToWaitSet( p ) ==
       waitset := waitset union { p };
-      
+
     Awake: () ==> ()
-    Awake() == 
+    Awake() ==
       skip;
-  
+
     protected notify: () ==> ()
-    notify() == 
-      if waitset <> {} 
+    notify() ==
+      if waitset <> {}
       then let arbitrary_process in set waitset
            in waitset := waitset \ {arbitrary_process};
 
@@ -3473,7 +3473,7 @@ In this example the {\bf\ttfamily threadid} expression is used in two places:
 
 %Note also that one needs to be careful about the use of the wait-notify
 %mechanism when having periodic threads (because they change their
-%{\bf\ttfamily threadid} 
+%{\bf\ttfamily threadid}
 %for each new period).
 \end{description}
 
@@ -3496,7 +3496,7 @@ In this example the {\bf\ttfamily threadid} expression is used in two places:
   \Rule{type bind}{
     \Ruleref{pattern}, \Lit{:}, \Ruleref{type}
     }
-        
+
 \item[Semantics:] A {\it lambda expression} is of the form:
   \begin{lstlisting}
     lambda pat1 : T1, !\ldots!, patn : Tn & e
@@ -3525,7 +3525,7 @@ In this example the {\bf\ttfamily threadid} expression is used in two places:
   \begin{lstlisting}
     Add(5) !\(\equiv\)! lambda b : nat & 5 + b
   \end{lstlisting}
-  Lambda expression can be useful when used in conjunction with higher-order 
+  Lambda expression can be useful when used in conjunction with higher-order
   functions. For instance using the function \texttt{set\_filter}
   defined on page \pageref{setfilterdef}:
   \begin{lstlisting}
@@ -3546,17 +3546,17 @@ In this example the {\bf\ttfamily threadid} expression is used in two places:
     }
 
   \Rule{narrow expression}{
-    \Lop{narrow\_},  \Lit{(}, \Ruleref{expression},  \Lit{,}, \Ruleref{type}, \Lit{)} 
+    \Lop{narrow\_},  \Lit{(}, \Ruleref{expression},  \Lit{,}, \Ruleref{type}, \Lit{)}
     }
-    
+
     \item[Semantics:] The {\it narrow expression} converts the given {\tt expression} value into the given {\tt type},
 returning a value of that type.
 It is legal to downcast a class to one of its subclasses, and it is legal to narrow an expression of a union type
 to one of its subtypes. However, a conversions between two completely unrelated types is a type error. Note that a
 narrow expression does not guarantee that its argument will be of the correct type at runtime, but using narrow gives
 extra type information to the specification.
-    
-    \item[Examples:] In following examples, the Test() and Test'() operations should give the same results, 
+
+    \item[Examples:] In following examples, the Test() and Test'() operations should give the same results,
     but there is a type error in Test() which is resolved in Test' using a narrow expression.
 
       \begin{lstlisting}
@@ -3603,7 +3603,7 @@ Test'() ==
                end | i in set inds list ];
 end A
       \end{lstlisting}
-      
+
       \begin{lstlisting}
 class A
 
@@ -3658,13 +3658,13 @@ end A
     }
 
   \Rule{is basic type}{
-    \Lop{is\_}, 
+    \Lop{is\_},
     \Brack{%
       \Lop{bool} \dsepl
-      \Lop{nat} \dsepl 
-      \Lop{nat1} \dsepl 
-      \Lop{int} \dsep 
-      \Lop{rat} \dsepl 
+      \Lop{nat} \dsepl
+      \Lop{nat1} \dsepl
+      \Lop{int} \dsep
+      \Lop{rat} \dsepl
       \Lop{real} \dsepl
       \Lop{char} \dsepl
       \Lop{token}
@@ -3685,10 +3685,10 @@ end A
      expressions whose types cannot be statically determined. The
      expression \texttt{\keyw{is}\_(e,t)} is equal to true if and only
      if \texttt{e} is of type \texttt{t}.
-     
-\item[Examples:] Using the record type \texttt{Score} defined on page 
+
+\item[Examples:] Using the record type \texttt{Score} defined on page
   \pageref{scoredef} we have:
-     
+
   \begin{tabular}{lcl}
     \texttt{\keyw{is\_}Score(\keyw{mk\_}Score(<France>,3,0,0,9))}
       & $\equiv$ & \keyw{true}\\
@@ -3726,21 +3726,21 @@ end A
   \Rule{isofbaseclass expression}{
     \Lop{isofbaseclass},
     \Lit{(}, \Ruleref{name}, \Ruleref{expression}, \Lit{)}}
-  
+
 \item[Semantic:] The function {\keyw{isofbaseclass}} when applied to an
   object reference \texttt{expression} and a class name \texttt{name}
   yields the boolean value {\bf\ttfamily true} if and only if \texttt{name} is a
   root superclass in the inheritance chain of the object referenced to
-  by {\texttt expression}, and {\bf\ttfamily false} otherwise. 
-  
+  by {\texttt expression}, and {\bf\ttfamily false} otherwise.
+
 \item[Examples:] \label{treeExDef}
   Suppose that \texttt{BinarySearchTree} is a subclass of
   \texttt{Tree}, \texttt{Tree} is not a subclass of any other class and
   \texttt{Queue} is not related by inheritance to either \texttt{Tree}
-  or \texttt{BinarySearchTree}. Let \texttt{t} be an instance of 
+  or \texttt{BinarySearchTree}. Let \texttt{t} be an instance of
   \texttt{Tree}, \texttt{b} is an instance of \texttt{BinarySearchTree}
   and \texttt{q} is an instance of \texttt{Queue}. Then:
-  
+
   \begin{tabular}{lcl}
     \keyw{isofbaseclass}\texttt{(Tree, t)} & $\equiv$ & \keyw{true}\\
     \keyw{isofbaseclass}\texttt{(BinarySearchTree, b)} & $\equiv$ & \keyw{false}\\
@@ -3752,7 +3752,7 @@ end A
 
 \section{Class Membership}\index{class membership expression}
 \begin{description}
-\item[Syntax] 
+\item[Syntax]
   \Rule{expression}{
     \ldots \dsep
     \Ruleref{isofclass expression} \dsep
@@ -3771,7 +3771,7 @@ end A
 \item[Examples:] Assuming the classes \texttt{Tree},
 \texttt{BinarySearchTree}, \texttt{Queue}, and identifiers \texttt{t},
 \texttt{b}, \texttt{q} as in the previous example, we have:
-  
+
   \begin{tabular}{lcl}
     \keyw{isofclass}\texttt{(Tree,t)} & $\equiv$ & \keyw{true}\\
     \keyw{isofclass}\texttt{(Tree,b)} & $\equiv$ & \keyw{true}\\
@@ -3797,14 +3797,14 @@ end A
   \Lit{(},
         \Ruleref{expression}, \Ruleref{expression}, \Lit{)}
     }
-  
+
 \item[Semantics:] The function \keyw{samebaseclass} when applied to
   object references \texttt{expression1} and \texttt{expression2} yields
   the boolean value {\bf\ttfamily true} if and only if the objects denoted by
   \texttt{expression1} and \texttt{expression2} are instances of classes
   that can be derived from the same root superclass, and {\bf\ttfamily false}
   otherwise.
-  
+
 \item[Examples:] Assuming the classes \texttt{Tree},
 \texttt{BinarySearchTree}, \texttt{Queue}, and identifiers \texttt{t},
 \texttt{b}, \texttt{q} as in the previous example, suppose that
@@ -3837,14 +3837,14 @@ is an instance of \texttt{AVLTree} and \texttt{bb} is an instance of
   \Lit{(}, \Ruleref{expression},
         \Ruleref{expression}, \Lit{)}
    }
-   
+
 \item[Semantics:] The function \keyw{sameclass} when applied to object
   references \texttt{expression1} and \texttt{expression2} yields the
   boolean value {\bf\ttfamily true} if and only if the objects denoted by
   \texttt{expression1} and \texttt{expression2} are instances of the same
   class, and {\bf\ttfamily false} otherwise.
 
-\item[Examples:] 
+\item[Examples:]
 Assuming the classes \texttt{Tree},
 \texttt{BinarySearchTree}, \texttt{Queue}, and identifiers \texttt{t},
 \texttt{b}, \texttt{q} from section \ref{treeExDef}, and assuming
@@ -3861,14 +3861,14 @@ Assuming the classes \texttt{Tree},
 \label{sec:historyexpr}
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{expression}{
     \ldots \dsep
     \Ruleref{act expression} \dsep
     \Ruleref{fin expression} \dsep
     \Ruleref{active expression} \dsep
     \Ruleref{req expression} \dsep
-    \Ruleref{waiting expression} \dsep 
+    \Ruleref{waiting expression} \dsep
     \ldots
   }
   \Rule{act expression}{
@@ -3895,7 +3895,7 @@ Assuming the classes \texttt{Tree},
 \item[Semantics:] History expressions can only be used in
 permission predicates (see section \ref{sec:permissionpred}). History
 expressions may contain one or more of the following expressions:
-  
+
 \begin{itemize}
 \item {\bf\ttfamily \#act}{\tt (}{\em operation name}{\tt )}. The number of times
   that {\em operation name} operation has been activated.
@@ -3912,7 +3912,7 @@ expressions may contain one or more of the following expressions:
 \item {\bf\ttfamily \#waiting}{\tt (}{\em operation name}{\tt )}. The number of
   outstanding requests for the {\em operation name} operation. \\
 Thus:
-  {\bf\ttfamily 
+  {\bf\ttfamily
     \#waiting}{\tt (}{\em operation name}{\tt )} $=$ {\bf\ttfamily
     \#req}{\tt (}{\em operation
     name}{\tt )} $-$ {\bf\ttfamily \#act}{\tt (}{\em operation name}{\tt )}.
@@ -3943,11 +3943,11 @@ values after the interval [\textbf{S},\textbf{T}]:
 & \texttt{{\bf\ttfamily \#act}(A,B,C) = 3}\\
 \texttt{{\bf\ttfamily \#fin}(A) = 1} & \texttt{{\bf\ttfamily \#fin}(B) = 1} & \texttt{{\bf\ttfamily \#fin}(C) = 0}
 & \texttt{{\bf\ttfamily \#fin}(A,B,C) = 2}\\
-\texttt{{\bf\ttfamily \#active}(A) = 0} & \texttt{{\bf\ttfamily \#active}(B) = 0} & 
+\texttt{{\bf\ttfamily \#active}(A) = 0} & \texttt{{\bf\ttfamily \#active}(B) = 0} &
 \texttt{{\bf\ttfamily \#active}(C) = 1} & \texttt{{\bf\ttfamily \#active}(A,B,C) = 1}\\
 \texttt{{\bf\ttfamily \#req}(A) = 2} & \texttt{{\bf\ttfamily \#req}(B) = 1} & \texttt{{\bf\ttfamily \#req}(C) = 3}
 & \texttt{{\bf\ttfamily \#req}(A,B,C) = 6}\\
-\texttt{{\bf\ttfamily \#waiting}(A) = 1} & \texttt{{\bf\ttfamily \#waiting}(B) = 0} & 
+\texttt{{\bf\ttfamily \#waiting}(A) = 1} & \texttt{{\bf\ttfamily \#waiting}(B) = 0} &
 \texttt{{\bf\ttfamily \#waiting}(C) = 2} & \texttt{{\bf\ttfamily \#waiting}(A,B,C) = 3}\\
 \end{tabular}
 \end{center}
@@ -3956,10 +3956,10 @@ values after the interval [\textbf{S},\textbf{T}]:
 \section{The Time Expression (VDM-RT)}\index{time expression}\label{sec:time}
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
  \Rule{time expression}{\Lop{time}}
 
-\item[Semantics:] This is simply an easy way to refer to the current time on 
+\item[Semantics:] This is simply an easy way to refer to the current time on
      a given CPU. The time is provided as a natural number, with a resolution of 1~nsec.
 \item[Examples:] If for example one would like to log when a certain operation takes place one can create an operation such as \texttt{logEnvToSys} below.
 \begin{lstlisting}
@@ -4002,7 +4002,7 @@ values after the interval [\textbf{S},\textbf{T}]:
   of only one identifier, the identifier is defined within scope, i.e.\ it
   is defined either locally as a pattern identifier or variable,
   or globally within the current module as a function, operation,
-  value or global variable. 
+  value or global variable.
   Otherwise, the identifier {\tt id1} indicates the
 module/class name
 where the
@@ -4016,9 +4016,9 @@ and appendix \ref{ap:lexis}.)
   chapter~\ref{op-def}) and in the post condition of specification
   statements (see section~\ref{se:specification}).  It has the form:
 
-  \begin{lstlisting} 
-    id~ 
-  \end{lstlisting} 
+  \begin{lstlisting}
+    id~
+  \end{lstlisting}
   where {\tt id} is a state component.
 
   {\it Symbolic literals\/} are constant values of some basic type.
@@ -4032,7 +4032,7 @@ and appendix \ref{ap:lexis}.)
 state sigma of
   numbers : seq of nat
   index   : nat
-inv mk_sigma(numbers, index) == 
+inv mk_sigma(numbers, index) ==
    index not in set elems numbers
 init s == s = mk_sigma([], 1)
 end
@@ -4058,17 +4058,17 @@ end
   value of {\tt index} is equal to the old value of {\tt index} plus
   \texttt{1}. (See more about operations in chapter~\ref{op-def}).
 
-  For a simple example of 
+  For a simple example of
 module/class
-  names, suppose that a function called 
-  \texttt{build\_rel} is defined (and exported) in a 
+  names, suppose that a function called
+  \texttt{build\_rel} is defined (and exported) in a
 module/class
-  called 
+  called
   \texttt{CGRel} as follows:
 \begin{lstlisting}
   types
 
-    Cg = <A> | <B> | <C> | <D> | <E> | <F> | 
+    Cg = <A> | <B> | <C> | <D> | <E> | <F> |
          <G> | <H> | <J> | <K> | <L> | <S>;
     CompatRel = map Cg to set of Cg
 
@@ -4077,11 +4077,11 @@ module/class
     build_rel : set of (Cg * Cg) -> CompatRel
     build_rel (s) == {|->}
 \end{lstlisting}
-In another 
+In another
 module/class
   we can access this function by in VDM-SL
-first importing the module \texttt{CGRel} then by 
-  using the following call 
+first importing the module \texttt{CGRel} then by
+  using the following call
   \begin{lstlisting}
   CGRel`build_rel({mk_(<A>, <B>)})
   \end{lstlisting}
@@ -4095,14 +4095,14 @@ an access modifier allowing access to it outside the defining class.
 \begin{description}
 \item[Syntax:]
   \Rule{expression}{
-    \ldots \dsep 
+    \ldots \dsep
     \Ruleref{undefined expression}
     }
 
   \Rule{undefined expression}{
     \Lop{undefined}
     }
-  
+
 \item[Semantics:] The {\it undefined expression} is used to state
   explicitly that the result of an expression is undefined. This could
   for instance be used if it has not been decided what the result of
@@ -4132,7 +4132,7 @@ an access modifier allowing access to it outside the defining class.
 \begin{description}
 \item[Syntax:]
   \Rule{expression}{
-    \ldots \dsep 
+    \ldots \dsep
     \Ruleref{precondition expression}
     }
   \Rule{precondition expression}{
@@ -4140,8 +4140,8 @@ an access modifier allowing access to it outside the defining class.
                           \OptPt{\SeqPt{\Lit{,}, \Ruleref{expression}}},
                  \Lit{)}
     }
-  
-\item[Semantics:] 
+
+\item[Semantics:]
   Assuming \texttt{e} is of function type the expression
   \keyw{pre\_}\texttt{(e,e1,...,en)} is true if and only if the
   pre-condition of \texttt{e} is true for arguments \texttt{e1,...,em}
@@ -4149,7 +4149,7 @@ an access modifier allowing access to it outside the defining class.
   \texttt{e} is not a function or \texttt{m} $>$ \texttt{n} then the
   result is {\bf\ttfamily true}. If \texttt{e} has no pre-condition then the
   expression equals true.
-\item[Examples:] 
+\item[Examples:]
   Consider the functions \texttt{f} and \texttt{g} defined below
   \begin{lstlisting}
   f : nat * nat -> nat
@@ -4163,16 +4163,16 @@ an access modifier allowing access to it outside the defining class.
   \end{lstlisting}
   Then the expression
   \begin{lstlisting}
-  pre_(let h in set {f,g,lambda mk_(x,y): nat * nat & x div y} 
+  pre_(let h in set {f,g,lambda mk_(x,y): nat * nat & x div y}
        in h, 1,0,-1)
-  \end{lstlisting}  
-  is equal to 
+  \end{lstlisting}
+  is equal to
   \begin{itemize}
   \item false if \texttt{h} is bound to \texttt{f} since this equates
         to \texttt{\keyw{pre}\_f(1,0)};
   \item true if \texttt{h} is bound to \texttt{g} since this equates
         to \texttt{\keyw{pre}\_g(1)};
-  \item true if \texttt{h} is bound to 
+  \item true if \texttt{h} is bound to
         \texttt{\keyw{lambda} \keyw{mk}\_(x,y):\keyw{nat} * \keyw{nat} \& x \keyw{div} y} since there is no
         pre-condition defined for this function.
   \end{itemize}
@@ -4248,7 +4248,7 @@ an access modifier allowing access to it outside the defining class.
   \Rule{tuple pattern}{
     \Lop{mk\_(}, \Ruleref{pattern}, \Lit{,}, \Ruleref{pattern list}, \Lit{)}
     }
- 
+
   \Rule{record pattern}{
     \Lop{mk\_}, \Ruleref{name}, \Lit{(}, [\Ruleref{pattern list}], \Lit{)}
     }
@@ -4257,7 +4257,7 @@ an access modifier allowing access to it outside the defining class.
   \Rule{object pattern}{
       \Lop{obj\_}, \Ruleref{identifier}, \Lit{(}, [ \Ruleref{field pattern list} ], \Lit{)}\nmk
     }
- \ntext{\Ruleref{object pattern} is only be used in VDM++ and VDM-RT.
+ \ntext{\Ruleref{object pattern} is only be used in VDM++ and VDM-RT. The
  	\Ruleref{object pattern} is explained in \ref{sec:object_pattern}}
 
   \Rule{field pattern list}{
@@ -4280,7 +4280,7 @@ an access modifier allowing access to it outside the defining class.
   can be used, a bind can be used as well (see next chapter). If a bind is
   used it simply means that additional information (a type or a set
   expression) is used to constrain the possible values which can match the
-  given pattern. 
+  given pattern.
 
   Matching is defined as follows
   \begin{enumerate}
@@ -4313,12 +4313,12 @@ an access modifier allowing access to it outside the defining class.
     VDM interpreters the two subsequences will always be chosen so that they
     are non-empty.
 
-  \item A {\it map enumeration pattern} fits only map values. 
+  \item A {\it map enumeration pattern} fits only map values.
 
-  \item A {\it maplet pattern list} are matched to distinct elements of a map; 
+  \item A {\it maplet pattern list} are matched to distinct elements of a map;
    all elements must be matched.
 
-  \item A {\it map munion pattern} fits only map values. 
+  \item A {\it map munion pattern} fits only map values.
    The two patterns are matched to a partition of two sub maps of a map.
    In the VDM interpreters the two sub maps will always be chosen such that they are non-empty and disjoint.
 
@@ -4330,7 +4330,7 @@ an access modifier allowing access to it outside the defining class.
     Each of the patterns are matched against the field of the record value.
     All the fields of the record must be matched.
 
-  \item A {\it object pattern} is explained in \ref{sec:object_pattern}
+  \item An {\it object pattern} is explained in section~\ref{sec:object_pattern}
   \end{enumerate}
 
 \item[Examples:] The simplest kind of pattern is the pattern
@@ -4360,10 +4360,10 @@ first clause is matched; if the team at the head of \texttt{GroupA} is
 \keyw{others} clause is matched. Note here that the use of brackets
 around \texttt{a} forces \texttt{a} to be considered as a match value.
 
-Set enumerations match patterns to elements of a set. For instance in
+Set enumerations match patterns to elements of a set. For instance in:
 \begin{lstlisting}
   let {sc1, sc2, sc3, sc4} = elems GroupA
-  in 
+  in
     sc1.points + sc2.points + sc3.points + sc4.points;
 \end{lstlisting}
 the identifiers \texttt{sc1}, \texttt{sc2}, \texttt{sc3} and
@@ -4388,7 +4388,7 @@ set2seq(s) ==
 In the third cases alternative we see the use of a set union pattern. This
 binds \texttt{s1} and \texttt{s2} to arbitrary subsets of \texttt{s}
 such that they partition \texttt{s}. The VDM interpreters always
-ensures a disjoint partition.
+ensure a disjoint partition.
 
 Sequence enumeration patterns can be used to extract specific elements
 from a sequence. An example of this is the function \texttt{promoted}
@@ -4403,7 +4403,7 @@ Here \texttt{sc1} is bound to the head of the argument sequence, and
 \texttt{promoted} is called with a sequence with fewer than two
 elements then a runtime error occurs. Note that as we are not
 interested in the remaining elements of the list we use a don't care
-pattern for the remainder. 
+pattern for the remainder.
 
 The preceding example also demonstrated the use of sequence
 concatenation patterns. Another example of this is the function
@@ -4439,20 +4439,19 @@ let {1 |-> a,a |-> b,b |-> c} = {1 |-> 4,2 |-> 3,4 |-> 2} in
 c = 3
 \end{lstlisting}
 
-Map munion pattern can be used to decompose a map for recursive function calls.
-Following \texttt{map2seq} function converts a map to a seq of maplet.
+Map munion pattern can be used to decompose a map for recursive function calls. The following \texttt{map2seq} function converts a map to a seq of maplet:
 \begin{lstlisting}
-public map2seq[@T1, @T2] : 
+public map2seq[@T1, @T2] :
     map @T1 to @T2 -> seq of (map @T1 to @T2)
 map2seq(m) ==
   cases m:
     ({|->})	-> [],
     {- |-> -}	-> [m],
-    m1 munion m2 -> 
+    m1 munion m2 ->
         map2seq[@T1, @T2] (m1) ^  map2seq[@T1, @T2] (m2)
  end;
 \end{lstlisting}
-Here, in the third cases clause a map munion pattern is used to decompose \texttt{m} 
+Here, in the third cases clause a map munion pattern is used to decompose \texttt{m}
 into two maps.
 
 Tuple patterns can be used to bind tuple components to
@@ -4493,20 +4492,19 @@ several examples of record patterns.
       \Ruleref{identifier},  \Lit{|->}, \Ruleref{pattern}
     }
 
-\item[Semantics:] An object pattern matches object references. An object is matched to the class identified by the class name led by the prefix \texttt{obj\_}. If the class of the object is class \texttt{identifier} or any of its subclasses, separate instance variables named in an object pattern are matched against the object from left to right.  It is not necessary to enumerate all the instance variables of a referred class in an object pattern.
+\item[Semantics:] An object pattern matches object references. An object is matched to the class identified by the class name led by the prefix \textbf{\texttt{obj\_}}. If the class of the object is class \texttt{identifier} or any of its subclasses, separate instance variables named in an object pattern are matched against the object from left to right.  It is not necessary to enumerate all the instance variables of a referenced class in an object pattern.
 
-Object patterns may appear only where access to the instance variables named in the pattern would be permitted. So private instance variables can only be matched within operations of the same class. This also implies an object pattern may not appear in function definitions, preconditions, postconditions or invariants. The type checker will validate accessibility of each instance variable in the pattern. The value of referred instance variables may or may not change during the matching.
+Object patterns may appear only where access to the instance variables named in the pattern would be permitted. So private instance variables can only be matched within operations of the same class. This also implies an object pattern may not appear in function definitions, preconditions, postconditions or invariants. The type checker will validate accessibility of each instance variable in the pattern. The value of referenced instance variables is not guaranteed to remain unchanged during matching.
 
-\item[Examples:] Using an object pattern, an object can be matched by the values of its instance variables. The following simple example evaluates to \texttt{<STUDENT>} if and only if the object reference person points at an instance of the class Student or any of its subclasses, otherwise \texttt{<NOT\_STUDENT>}.
+\item[Examples:] Using an object pattern, an object can be matched by the values of its instance variables. The following simple example evaluates to \texttt{<STUDENT>} if and only if the object reference person points at an instance of the class Student or any of its subclasses, otherwise \texttt{<NOT\_STUDENT>}:
 \begin{lstlisting}
 cases person:
    obj_Student() -> <STUDENT>,
    others -> <NOT_STUDENT>
 end
 \end{lstlisting}
-The object pattern \texttt{obj\_Student()} does not only match an instance of the class Student. If a class Undergraduate is a subclass of Student, the object pattern \texttt{obj\_Student()} also matches any instance of the class Undergraduate.
 
-The following example matches the instance variable name against \texttt{"John"}.
+The above object pattern would match any instance of the Student class, or any subclass, for example an Undergraduate if such a subclass existed. The following example matches the instance variable name against \texttt{"John"}:
 
 \begin{lstlisting}
 cases person:
@@ -4532,28 +4530,32 @@ cases person:
    others -> ""
 end
 \end{lstlisting}
-An object pattern may appear in conjunction with other kinds of patterns. The following operation takes a sequence of \texttt{Professor} objects and returns titled names sorted into initials.  For example, \texttt{professorDict([new Professor("Smith"), new Professor("Scott"), new Professor("Adams")])} evaluates to 
+An object pattern may appear in conjunction with other kinds of patterns. The following operation takes a sequence of \texttt{Professor} objects and returns titled names sorted into initials. The first pattern of the cases expression consists of a list concatenation pattern. The first element of the list is matched against an object pattern whose instance variable {\tt name} is also matched against another sequence concatenation pattern of the initial character {\tt initial} and the  {\tt remaining}:
+
 \begin{lstlisting}
-{'A' |-> {"Prof. Adams"}, 
- 'S' |-> {"Prof. Scott", "Prof. Smith"}}. 
-\end{lstlisting}
-The first pattern of the cases expression consists of a list concatenation pattern. The first element of the list is matched against an object pattern whose instance variable {\tt name} is also matched against another sequence concatenation pattern of the initial character {\tt initial} and the  {\tt remaining}.
-\begin{lstlisting}
-professorDict: seq of Professor 
+professorDict: seq of Professor
                         ==> map char to set of seq of char
 professorDict(ps) == return cases ps:
   [obj_Professor(name |-> [initial]^remaining)]^rest ->
     let
       dict = professorDict(rest),
       name = "Prof. "^[initial]^remaining,
-      names = if initial in set dom dict 
-                     then dict(initial) 
+      names = if initial in set dom dict
+                     then dict(initial)
                      else {}
     in
   dict ++ {initial |-> names union {name}},
   [-]^rest -> professorDict(rest),[] -> {|->}
   end;
+\end{lstlisting}  
+
+For example, the call \texttt{professorDict([new Professor("Smith"), \\new Professor("Scott"), new Professor("Adams")])} evaluates to:
+\begin{lstlisting}
+{'A' |-> {"Prof. Adams"},
+ 'S' |-> {"Prof. Scott", "Prof. Smith"}}.
 \end{lstlisting}
+
+
 \end{description}
 
 \chapter{Bindings}\label{bind}
@@ -4603,7 +4605,7 @@ professorDict(ps) == return cases ps:
   comprehensions which can be seen from these examples:
   \begin{lstlisting}
 forall i, j in set inds list & i < j => list(i) <= list(j)
-      
+
 { y | y in set S & y > 2 }
 
 { y | y: nat & y > 3 }
@@ -4623,16 +4625,16 @@ traditional programming languages.
 \begin{description}
 \item[Syntax:]
   \Rule{value definitions}{
-    \Lop{values}, 
+    \Lop{values},
     \OptPt{\Ruleref{access value definition}}, \lfeed
-           \SeqPt{\Lit{;}, 
-                  \Ruleref{access value definition}}, 
+           \SeqPt{\Lit{;},
+                  \Ruleref{access value definition}},
            \OptPt{\Lit{;}}
     }
 
 %  \ifthenelse{\boolean{VDMpp}}{
     \Rule{access value definition}{
-       \OptPt{\Ruleref{access}},  
+       \OptPt{\Ruleref{access}},
          \Ruleref{value definition}
     }%}{}
 
@@ -4649,10 +4651,10 @@ traditional programming languages.
       access patn = en
   \end{lstlisting}
 where the {\tt access} part only can be used in VDM++ and VDM-RT.
-  
+
   The global values (defined in a value definition) can be referenced
   at all levels in a VDM specification.  However,
-  in order to be able to execute a specification these 
+  in order to be able to execute a specification these
   values must be defined before they are used in the sequence of value
   definitions. This ``declaration before use'' principle is only used
   by the VDM interpreters for value definitions.
@@ -4666,8 +4668,8 @@ Details of the VDM++ and VDM-RT access specifiers
 can be found in section \ref{ch:interface}.
 
 \item[Examples:] The example below, taken from \cite{Fitzgerald&98}
-  assigns token values to identifiers  
-  \texttt{p1} and \texttt{eid2}, an \texttt{Expert} record value to 
+  assigns token values to identifiers
+  \texttt{p1} and \texttt{eid2}, an \texttt{Expert} record value to
   \texttt{e3} and an \texttt{Alarm} record value to \texttt{a1}.
 \begin{lstlisting}
 types
@@ -4682,7 +4684,7 @@ Alarm :: alarmtext : seq of char
          quali : Qualification
 
 values
- 
+
 public p1: Period = mk_token("Monday day");
 private eid2 : ExpertId = mk_token(145);
 protected e3 : Expert = mk_Expert(eid2, { <Mech>, <Chem> });
@@ -4721,12 +4723,12 @@ refer to this state as the global state of the object.
   \Rule{instance variable definitions}{
     \Lop{instance}, \Lop{variables}, \lfeed
     \OptPt{\Ruleref{instance variable definition}, \lfeed
-           \SeqPt{\Lit{;}, 
+           \SeqPt{\Lit{;},
                \Ruleref{instance variable definition}
                  }
           }
   }
-  
+
 
   \Rule{instance variable definition}{
     \Ruleref{access assignment definition} \dsep
@@ -4757,14 +4759,14 @@ instance variable definition consists of an instance variable name
 with its corresponding type indication and may also include an
 initial value and access and \keyw{static} specifiers. Details of the
 access and \keyw{static} specifiers can be found in section
-\ref{ch:interface}. 
+\ref{ch:interface}.
 
 It is possible to restrict the values of the instance variables by
 means of invariant definitions. Each invariant definition, involving
 one or more instance variables, may be defined over the values of the
 instance variables of objects of a class. All instance variables in
 the class including those inherited from superclasses are visible in
-the invariant expression. Each invariant definition must be a 
+the invariant expression. Each invariant definition must be a
 boolean expression that limits the values of the instance variables to
 those where the expression is true. All invariant expressions must be
 true during the entire lifetime of each object of the class.
@@ -4784,7 +4786,7 @@ and 2) the class itself.
 \item[Example:]
 
 The following examples show instance variable definitions. The first
-class specifies one instance variable: 
+class specifies one instance variable:
   \begin{lstlisting}
 class GroupPhase
 
@@ -4800,7 +4802,7 @@ Score::team : Team
 
 instance variables
 gps : map GroupName to set of Score;
-inv forall gp in set rng gps & 
+inv forall gp in set rng gps &
       (card gp = 4 and
        forall sc in set gp & sc.won + sc.lost + sc.drawn <= 3)
 
@@ -4878,18 +4880,18 @@ the VDM interpreters.
 
 \item[Examples:] In the following example we create one state variable:
   \begin{lstlisting}
-types 
+types
 
 GroupName = <A> | <B> | <C> | <D> | <E> | <F> | <G> | <H>
 
 state GroupPhase of
   gps : map GroupName to set of Score
 inv mk_GroupPhase(gps) ==
-  forall gp in set rng gps & 
+  forall gp in set rng gps &
     (card gp = 4 and
     forall sc in set gp & sc.won + sc.lost + sc.drawn <= 3)
 init gp ==
-  gp = mk_GroupPhase({<A> |-> init_sc({<Brazil>, <Norway>, 
+  gp = mk_GroupPhase({<A> |-> init_sc({<Brazil>, <Norway>,
                                       <Morocco>, <Scotland>}),
                       ...})
 end
@@ -4900,7 +4902,7 @@ init_sc : set of Team -> set of Score
 init_sc (ts) ==
   { mk_Score (t,0,0,0,0) | t in set ts }
   \end{lstlisting}
-  In the invariant we state that each group has four teams, and no team 
+  In the invariant we state that each group has four teams, and no team
   plays more than three games. Initially no team has played any games.
 
 \end{description}
@@ -4917,15 +4919,15 @@ only be used in the VDM-RT dialect.
 \begin{description}
 \item[Syntax:]
   \Rule{operation definitions}{
-    \Lop{operations}, 
+    \Lop{operations},
     \OptPt{\Ruleref{access operation definition}}, \lfeed
-           \SeqPt{\Lit{;}, 
+           \SeqPt{\Lit{;},
                   \Ruleref{access operation definition}} ,  \OptPt{\Lit{;}
     }}
 
     \Rule{access operation definition}{(
       \OptPt{\Lop{async}}
-      \OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep\  
+      \OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep\
      (
       \OptPt{\Lop{async}}
       \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
@@ -4987,7 +4989,7 @@ only be used in the VDM-RT dialect.
   }
 
 \Rule{operation body}{
-  \Ruleref{statement} \dsep 
+  \Ruleref{statement} \dsep
   \Lop{is not yet specified}\index{\keyw{is not yet specified}!operations}
   \dsep \Lop{is subclass responsibility}\index{\keyw{is subclass responsibility}!operations}
   }
@@ -5027,12 +5029,12 @@ only be used in the VDM-RT dialect.
   a return type and the thread calling an asynchronous operation will
   continue its own execution after having requested the invocation of
   the asynchronous operation. Note that constructors cannot be
-  declared asynchronous.  
+  declared asynchronous.
   In both VDM++ and VDM-RT the details of the
   access and \keyw{static} specifiers can be found in section
   \ref{ch:interface}. Note that a static operation may not call
   non-static operations, and self expressions cannot be
-  used in the definition of a static operation. 
+  used in the definition of a static operation.
 
 The following example of an explicit operation updates the VDM-SL
 state \texttt{GroupPhase} and the VDM++ instance variables of class
@@ -5040,22 +5042,22 @@ state \texttt{GroupPhase} and the VDM++ instance variables of class
 \begin{lstlisting}
 Win : Team * Team ==> ()
 Win (wt,lt) ==
-  let gp in set dom gps be st 
+  let gp in set dom gps be st
        {wt,lt} subset {sc.team | sc in set gps(gp)}
-  in gps := gps ++ { gp |-> 
+  in gps := gps ++ { gp |->
                       {if sc.team = wt
                        then mu(sc, won |-> sc.won + 1,
                                    points |-> sc.points + 3)
                        elseif sc.team = lt
                        then mu(sc, lost |-> sc.lost + 1)
-                       else sc 
+                       else sc
                   | sc in set gps(gp)}}
-pre exists gp in set dom gps & 
+pre exists gp in set dom gps &
        {wt,lt} subset {sc.team | sc in set gps(gp)};
 \end{lstlisting}
 \label{winDef}
 An explicit operation consists of a statement (or several composed
-using a block statement), as described in chapter~\ref{sec:stmt}. The 
+using a block statement), as described in chapter~\ref{sec:stmt}. The
 statement may access any state/instance
 variables it wishes, reading and writing to them as it sees fit.
 
@@ -5065,29 +5067,29 @@ and a mandatory post-condition. For example we could specify the
 \begin{lstlisting}
 Win (wt,lt: Team)
 ext wr gps : map GroupName to set of Score
-pre exists gp in set dom gps & 
+pre exists gp in set dom gps &
         {wt,lt} subset {sc.team | sc in set gps(gp)}
 post exists gp in set dom gps &
        {wt,lt} subset {sc.team | sc in set gps(gp)}
-       and gps = gps~ ++ 
-                     { gp |-> 
+       and gps = gps~ ++
+                     { gp |->
                        {if sc.team = wt
                         then mu(sc, won |-> sc.won + 1,
                                    points |-> sc.points + 3)
                         elseif sc.team = lt
                         then mu(sc, lost |-> sc.lost + 1)
-                        else sc 
+                        else sc
                    | sc in set gps(gp)}};
 \end{lstlisting}
 
 The externals field lists the state/instance
 variables that the
-operation will manipulate. The 
+operation will manipulate. The
 state/instance
 variables listed after the reserved
 word \keyw{rd} can only be read whereas the operation can both read and
-write the variables listed after \keyw{wr}. 
- 
+write the variables listed after \keyw{wr}.
+
 In VDM-SL these pre- and post-conditions the VDM interpreters also
 creates new functions as with the pre- and post-conditions of operation
 definitions.  However, if a specification contains a global state, the
@@ -5116,7 +5118,7 @@ with the following exceptions:
 \end{itemize}
 
 In the {\tt \keyw{post\_}Op} signature, the first {\tt State} part is for
-the old state, whereas the second {\tt State} part is for the 
+the old state, whereas the second {\tt State} part is for the
 state after the operation call.
 
 For instance, consider the following specifications:
@@ -5170,15 +5172,15 @@ defined in this specification as illustrated below
 
 \begin{tabular}{|p{0.4\textwidth}|p{0.4\textwidth}|} \hline
 \textrm{Quote expression} & Explanation \\ \hline
-\keyw{pre}\_Op1(1,\keyw{mk}\_St(2))              
+\keyw{pre}\_Op1(1,\keyw{mk}\_St(2))
   & \texttt{a} bound to 1 in state \texttt{St} with \texttt{n}  bound to 2 \\
-\keyw{post}\_Op1(1,2,\keyw{mk}\_St(1), \keyw{mk}\_St(2)) 
+\keyw{post}\_Op1(1,2,\keyw{mk}\_St(1), \keyw{mk}\_St(2))
   & \texttt{a} bound to 1, \texttt{b} bound to 2, state before with
     \texttt{n} bound to 1, state after with \texttt{n} bound to 2 \\
-\keyw{post}\_Op2(2,\keyw{mk}\_St(1), \keyw{mk}\_St(2))   
+\keyw{post}\_Op2(2,\keyw{mk}\_St(1), \keyw{mk}\_St(2))
   & \texttt{b} bound to 2, state before with \texttt{n} bound to 1, state
     after with \texttt{n} bound to 2 \\
-\keyw{post}\_Op3(\keyw{mk}\_St(1), \keyw{mk}\_St(2))     
+\keyw{post}\_Op3(\keyw{mk}\_St(1), \keyw{mk}\_St(2))
   & state before with \texttt{n} bound to 1, state after with
     \texttt{n} bound to 2 \\
 \hline
@@ -5228,7 +5230,7 @@ identifier and old values of global variables (which can be written
 to) can also be used. Thus, the scope corresponds to the scope of the
 post-condition.
 
-An operation definition making use of an \keyw{errs} clause 
+An operation definition making use of an \keyw{errs} clause
 essentially gets an effective pre-condition which is a disjunction of
 the original pre-condition and all the condition expressions {\tt c1},
 \ldots, {\tt cn}. The effective post-condition in these cases becomes
@@ -5249,14 +5251,14 @@ The next VDM-SL example of an operation uses the following state definition:
   state qsys of
     q : Queue
   end
-\end{lstlisting}    
+\end{lstlisting}
 
 The next VDM++/VDM-RT example of an operation uses the following
 instance variable definition:
 \begin{lstlisting}
   instance variables
     q : Queue
-\end{lstlisting}    
+\end{lstlisting}
 
 This example shows how exceptions with an implicit definition can be used:
 \begin{lstlisting}
@@ -5289,7 +5291,7 @@ name, and if a return value is specified this should be \keyw{self}
 though this can optionally be omitted.
 
 Multiple constructors can be defined in a single class using
-operation overloading as described in section~\ref{sec:classdep}. 
+operation overloading as described in section~\ref{sec:classdep}.
 
 
 \chapter{Statements}\label{sec:stmt}
@@ -5327,7 +5329,7 @@ one by one. Each of them will be described by means of:
     \Ruleref{value definition} \dsep \Ruleref{function definition}
     }
 
-  \Rule{value definition}{ 
+  \Rule{value definition}{
     \Ruleref{pattern}, \OptPt{\Lit{:}, \Ruleref{type}}, \Lit{=}, \Ruleref{expression}
     }
 
@@ -5366,26 +5368,26 @@ one by one. Each of them will be described by means of:
   {\tt s} in the context where all the patterns from {\tt mb} has been matched
   against an element in the set (or type) from {\tt mb}\footnote{Remember
     that only the set bindings can be executed by means of the
-    VDM interpreters.}. 
+    VDM interpreters.}.
   If the \keyw{be st}
   expression {\tt e} is present, only such bindings where {\tt e} evaluates
   to true in the matching context are used.
-     
+
 \item[Examples:] An example of a \keyw{let be st} statement is provided in the
-  operation \texttt{GroupWinner} 
+  operation \texttt{GroupWinner}
 from the class \texttt{GroupPhase}
-  which returns the winning team in a given group: 
+  which returns the winning team in a given group:
   \begin{lstlisting}
   GroupWinner : GroupName ==> Team
   GroupWinner (gp) ==
     let sc in set gps(gp) be st
-        forall sc' in set} gps(gp) \ {sc} & 
+        forall sc' in set} gps(gp) \ {sc} &
           (sc.points > sc'.points) or
           (sc.points = sc'.points and sc.won > sc'.won)
-    in 
+    in
       return sc.team
   \end{lstlisting}
-  The companion operation \texttt{GroupRunnerUp} gives an example of a simple 
+  The companion operation \texttt{GroupRunnerUp} gives an example of a simple
   let statement as well:
   \begin{lstlisting}
   GroupRunnerUp_expl : GroupName ==> Team
@@ -5394,16 +5396,16 @@ from the class \texttt{GroupPhase}
     in let sct = iota sc in set gps(gp) & sc.team = t
        in
          let sc in set gps(gp) \ {sct} be st
-             forall sc' in set gps(gp) \ {sc,sct} & 
+             forall sc' in set gps(gp) \ {sc,sct} &
              (sc.points > sc'.points) or
              (sc.points = sc'.points and sc.won > sc'.won)
-         in 
+         in
            return sc.team
   \end{lstlisting}
   Note the use of the {\bf\ttfamily def} statement (section~\ref{defstmt})
   here; this is used rather than a {\bf\ttfamily let} statement since the
   right-hand side is an operation call, and therefore is not an
-  expression. 
+  expression.
 
 \end{description}
 
@@ -5417,12 +5419,12 @@ from the class \texttt{GroupPhase}
     }
 
   \Rule{def statement}{
-    \Lop{def}, 
+    \Lop{def},
     \Ruleref{equals definition}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{equals definition}},\OptPt{\Lit{;}},
     \Lop{in}, \lfeed
     \Ruleref{statement}
-    } 
+    }
 
   \Rule{equals definition}{
     \Ruleref{pattern bind}, \Lit{=},
@@ -5454,19 +5456,19 @@ from the class \texttt{GroupPhase}
   secondRoundRunnersUp = [<B>,<A>,<D>,<C>,<F>,<E>,<H>,<G>]
   \end{lstlisting}
   The operation \texttt{SecondRound}, in VDM++ from class \texttt{GroupPhase}
-  returns the sequence of pairs 
-  representing the second round games gives an example of a \keyw{def} 
+  returns the sequence of pairs
+  representing the second round games gives an example of a \keyw{def}
   statement:
   \begin{lstlisting}
 SecondRound : () ==> seq of (Team * Team)
 SecondRound () ==
-  def winners = { gp |-> GroupWinner(gp) 
+  def winners = { gp |-> GroupWinner(gp)
                 | gp in set dom gps };
-      runners_up = { gp |-> GroupRunnerUp(gp) 
+      runners_up = { gp |-> GroupRunnerUp(gp)
                    | gp in set dom gps}
-  in 
+  in
     return ([mk_(winners(secondRoundWinners(i)),
-                runners_up(secondRoundRunnersUp(i))) 
+                runners_up(secondRoundRunnersUp(i)))
             | i in set {1,...,8}])
   \end{lstlisting}
 
@@ -5496,7 +5498,7 @@ SecondRound () ==
     \Ruleref{expression}}}
 
 \item[Semantics:] The {\it block statement} corresponds to block statements
-  from traditional high-level imperative 
+  from traditional high-level imperative
 programming languages.  It enables the use of
   locally defined variables (by means of the declare statement) which can
   be modified inside the body of the block statement. It simply denotes the
@@ -5508,7 +5510,7 @@ programming languages.  It enables the use of
   the last statement in the block has been evaluated. When the block
   statement is left the values of the local variables are discharged. Thus,
   the scope of these variables is simply inside the block statement.
-      
+
 \item[Examples:] In the context of a VDM-SL
 state definition
   \begin{lstlisting}
@@ -5557,7 +5559,7 @@ or in the context of a VDM++ instance variables
 %{}
 
 \Rule{assign statement}{
-  \Ruleref{state designator}, \Lit{:=}, 
+  \Ruleref{state designator}, \Lit{:=},
     \Ruleref{expression}
   }
 
@@ -5578,7 +5580,7 @@ or in the context of a VDM++ instance variables
 
 %\ifthenelse{\boolean{VDMpp}}{%
   \Rule{multiple assign statement}{
-    \Lop{atomic}, 
+    \Lop{atomic},
     \Lit{(}
       \Ruleref{assign statement}, \Lit{;}, \lfeed
       \Ruleref{assign statement},
@@ -5639,19 +5641,19 @@ or in the context of a VDM++ instance variables
         ...
         sdN := tN;
         -- turn on invariants, threading and durations
-        -- and check that invariants hold. 
+        -- and check that invariants hold.
     );
   \end{lstlisting}
-  
 
-\item[Examples:] The operation in the previous example (\texttt{Swap}) 
-  illustrated normal assignment. The operation \texttt{Win\_sd}, a 
-  refinement of \texttt{Win} on page~\pageref{winDef} illustrates the use of 
+
+\item[Examples:] The operation in the previous example (\texttt{Swap})
+  illustrated normal assignment. The operation \texttt{Win\_sd}, a
+  refinement of \texttt{Win} on page~\pageref{winDef} illustrates the use of
   state designators to assign to a specific map key:
   \begin{lstlisting}
 Win_sd : Team * Team ==> ()
 Win_sd (wt,lt) ==
-  let gp in set dom gps be st 
+  let gp in set dom gps be st
       {wt,lt} subset {sc.team | sc in set gps(gp)}
   in
     gps(gp) := { if sc.team = wt
@@ -5659,24 +5661,24 @@ Win_sd (wt,lt) ==
                              points |-> sc.points + 3)
                  elseif sc.team = lt
                  then mu(sc, lost |-> sc.lost + 1)
-                 else} sc 
+                 else} sc
                | sc in set gps(gp)}
-pre exists gp in set dom gps & 
+pre exists gp in set dom gps &
                {wt,lt} subset {sc.team | sc in set gps(gp)}
   \end{lstlisting}
-  The operation \texttt{SelectionSort} is a state based version of the 
+  The operation \texttt{SelectionSort} is a state based version of the
   function \texttt{selection\_sort} on page \pageref{selectionSortdef}. It 
-  demonstrates the use of state designators to modify the contents of a 
+  demonstrates the use of state designators to modify the contents of a
   specific sequence index, using the VDM-SL
 state \texttt{St} or the VDM++
 instance variables
- defined on page~\pageref{stdef}. 
+ defined on page~\pageref{stdef}.
   \begin{lstlisting}
 functions
- 
+
 min_index : seq1 of nat -> nat
 min_index(l) ==
-  if len l = 1 
+  if len l = 1
   then 1
   else let mi = min_index(tl l)
        in if l(mi+1) < hd l
@@ -5768,21 +5770,21 @@ invariant is preserved.
   alternatives which are statements (and that the \keyw{else} part is
   optional)\footnote{If the \keyw{else} part is omitted
   semantically it is like using \keyw{else skip}.}.
-  
+
   The semantics for the {\it cases statement} corresponds
   to the {\it cases expression} described in section~\ref{cases-exp} except
   for the alternatives which are statements.
 
-\item[Examples:] Assuming functions \texttt{clear\_winner} and 
-  \texttt{winner\_by\_more\_wins} and operation \texttt{RandomElement} 
+\item[Examples:] Assuming functions \texttt{clear\_winner} and
+  \texttt{winner\_by\_more\_wins} and operation \texttt{RandomElement}
   with the following signatures:
   \begin{lstlisting}
     clear_winner : set of Score -> bool
     winner_by_more_wins : set of Score -> bool
     RandomElement : set of Team ==> Team
   \end{lstlisting}
-  then the operation \texttt{GroupWinner\_if} demonstrates the use of a 
-  nested if statement (the iota expression is presented on page 
+  then the operation \texttt{GroupWinner\_if} demonstrates the use of a
+  nested if statement (the iota expression is presented on page
   \pageref{iotaexpr}):
   \begin{lstlisting}
 GroupWinner_if : GroupName ==> Team
@@ -5799,21 +5801,21 @@ GroupWinner_if (gp) ==
   then return ((iota sc in set gps(gp) &
             forall sc' in set gps(gp) \ {sc} &
               (sc.points > sc'.points) or
-              (sc.points = sc'.points and 
+              (sc.points = sc'.points and
                sc.won > sc'.won)).team)
-  -- no outright winner, so choose random score 
+  -- no outright winner, so choose random score
   -- from joint top scores
   else RandomElement ( {sc.team | sc in set gps(gp) &
                           forall sc' in set gps(gp) &
                           sc'.points <= sc.points} );
   \end{lstlisting}
   Alternatively, we could use a cases statement with match value patterns for
-  this operation: 
+  this operation:
   \begin{lstlisting}
 GroupWinner_cases : GroupName ==> Team
 GroupWinner_cases (gp) ==
   cases true:
-    (clear_winner(gps(gp))) -> 
+    (clear_winner(gps(gp))) ->
          return ((iota sc in set gps(gp) &
                    forall sc' in set gps(gp) \ {sc} &
                     sc.points > sc'.points).team),
@@ -5821,7 +5823,7 @@ GroupWinner_cases (gp) ==
          return ((iota sc in set gps(gp) &
                    forall sc' in set gps(gp) \ {sc} &
                      (sc.points > sc'.points) or
-                     (sc.points = sc'.points and 
+                     (sc.points = sc'.points and
                         sc.won > sc'.won)).team),
     others -> RandomElement ( {sc.team | sc in set gps(gp) &
                                 forall sc' in set gps(gp) &
@@ -5843,7 +5845,7 @@ GroupWinner_cases (gp) ==
     }
 
   \Rule{sequence for loop}{
-    \Lop{for}, \Ruleref{pattern bind}, \Lop{in}, 
+    \Lop{for}, \Ruleref{pattern bind}, \Lop{in},
     \Ruleref{expression}, \lfeed
     \Lop{do}, \Ruleref{statement}
     }\index{for loop}
@@ -5898,10 +5900,10 @@ GroupWinner_cases (gp) ==
   \end{lstlisting}
   where {\tt l} is a sequence expression. The statement {\tt s} is
   evaluated in the current environment extended with a binding of e to
-  subsequent values from the sequence {\tt l}. 
+  subsequent values from the sequence {\tt l}.
 
-\item[Examples:] The operation \texttt{Remove} demonstrates the use of a 
-  \textit{sequence-for} loop to remove all occurences of a given number from a 
+\item[Examples:] The operation \texttt{Remove} demonstrates the use of a
+  \textit{sequence-for} loop to remove all occurences of a given number from a
   sequence of numbers:
   \begin{lstlisting}
   Remove : (seq of nat) * nat ==> seq of nat
@@ -5927,7 +5929,7 @@ GroupWinner_cases (gp) ==
    return winners
    );
   \end{lstlisting}
-  An example of a \textit{index-for} loop is the classic bubblesort 
+  An example of a \textit{index-for} loop is the classic bubblesort
   algorithm:
   \begin{lstlisting}
   BubbleSort : seq of nat ==> seq of nat
@@ -5953,7 +5955,7 @@ GroupWinner_cases (gp) ==
     \ldots \dsep
     \Ruleref{while loop} \dsep \ldots
     }
-  
+
   \Rule{while loop}{
     \Lop{while}, \Ruleref{expression}, \Lop{do}, \Ruleref{statement}
     }
@@ -5995,7 +5997,7 @@ GroupWinner_cases (gp) ==
     \ldots \dsep
     \Ruleref{nondeterministic statement} \dsep \ldots
     }
-  
+
   \Rule{nondeterministic statement}{
     \Lit{||}, \Lit{(}, \Ruleref{statement},\lfeed
     \SeqPt{\Lit{,}, \Ruleref{statement}}, \Lit{)}
@@ -6068,7 +6070,7 @@ or the VDM++ instance variables
 \texttt{BubbleMax} operates in a similar fashion. It iterates through the
   subsequence to find the index of the maximum value, then swaps the
   contents of this index with the contents of the last element of the
-  subsequence. 
+  subsequence.
 \begin{lstlisting}
   BubbleMax : () ==> ()
   BubbleMax () ==
@@ -6148,9 +6150,9 @@ and returns the result of
   be specified as public. If no \emph{object designator} is specified
   the operation will be called in the current object. If the operation
   is defined in a superclass, it must have been defined as public or
-  protected. 
+  protected.
 
-\item[Examples:] \mbox{} 
+\item[Examples:] \mbox{}
   In VDM-SL the operation {\tt ResetStack} given below does not
   have any parameter and does not return a value whereas the operation {\tt
     PopStack} returns the top element of the stack.
@@ -6183,7 +6185,7 @@ and returns the result of
 
     public Reset: () ==> ()
     Reset() ==
-      stack := []; 
+      stack := [];
 
     public Pop: () ==> Elem
     Pop() ==
@@ -6206,14 +6208,14 @@ and returns the result of
       top := stack.Pop();
     )
   \end{lstlisting}
- 
-  Inside class {\tt Stack} the operations can be called as shown below:   
+
+  Inside class {\tt Stack} the operations can be called as shown below:
   \begin{lstlisting}
     Reset();
     ....
     top := Pop();
   \end{lstlisting}
-  
+
   Or using the \keyw{self}\index{self expressions} reference:
   \begin{lstlisting}
     self.Reset();
@@ -6331,8 +6333,8 @@ pre stack <> [];
 
   The {\it trap statement\/} only evaluates the handler statement,
 {\tt s1}, when certain conditions are fulfilled. It has the form:
-\begin{lstlisting} 
-    trap pat with s1 in s2 
+\begin{lstlisting}
+    trap pat with s1 in s2
 \end{lstlisting}
 where {\tt pat} is a pattern or bind used to select certain
 exceptions, {\tt s1} and {\tt s2} are statements. First, we evaluate
@@ -6417,7 +6419,7 @@ also the result of the complete {\it trap statement}.
   exception raised. If the value of the exception is {\tt <BUSY>} we try to
   perform the operation {\tt DoCommand} again. If this raises an exception,
   this is also handled by the {\it recursive trap statement}. All other
-  exceptions result in the return of the value {\tt -2}.  
+  exceptions result in the return of the value {\tt -2}.
 \end{description}
 
 \section{The Error Statement}
@@ -6444,7 +6446,7 @@ error statement} was evaluated.
 
   Pragmatically use of error statements differs from
   pre-conditions as was the case with undefined expressions: use of a
-  pre-condition means it is the caller's 
+  pre-condition means it is the caller's
   responsibility to ensure that the pre-condition is satisfied when
   the operation is called; if an error statement is used it is the
   called operation's responsibility to deal with error handling.
@@ -6453,7 +6455,7 @@ error statement} was evaluated.
 \item[Examples:] The operation \texttt{SquareRoot} on page
   \pageref{squarerootDef} does not exclude
   the possibility that the number to be square rooted might be
-  negative. If we do not wish this to be a pre-condition we can 
+  negative. If we do not wish this to be a pre-condition we can
 remedy this in the operation \texttt{SquareRootErr}:
   \begin{lstlisting}
   SquareRootErr : real * real ==> real
@@ -6497,7 +6499,7 @@ remedy this in the operation \texttt{SquareRootErr}:
   Remove2 (k,z) ==
     (dcl nk : seq of nat := [];
      for elem in k do
-       if elem <> z 
+       if elem <> z
        then nk := nk^[elem]
        else skip;
      return nk
@@ -6514,7 +6516,7 @@ remedy this in the operation \texttt{SquareRootErr}:
 \label{sc:startstmt}
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{statement}{
     \ldots \dsep
     \Ruleref{start statement} \dsep
@@ -6527,7 +6529,7 @@ remedy this in the operation \texttt{SquareRootErr}:
   \Rule{start list statement}{
     \Lop{startlist}, \Lit{(}, \Ruleref{expression}, \Lit{)}
   }
-    
+
 \item[Semantics:] The {\it start} and {\it start list} statements have
 the form:
   \begin{lstlisting}
@@ -6558,7 +6560,7 @@ statement}. The parameter {\tt aRef\_s} to \keyw{startlist} must be a
 set of object references to objects instantiated from classes
 containing a thread.
 
-\item[Examples:] 
+\item[Examples:]
 Consider the specification of an operating system. A component of this
 would be the daemons and other processes started up during the boot
 sequence. From this perspective, the following definitions are
@@ -6574,7 +6576,7 @@ relevant:
     pInit : map runLevel to set of Process
 \end{lstlisting}
 where \texttt{Kerneld} is an object reference type specified
-elsewhere, and similarly for the other processes listed. 
+elsewhere, and similarly for the other processes listed.
 
 We can then model the boot sequence as an operation:
 \begin{lstlisting}
@@ -6595,7 +6597,7 @@ bootSequenceList(rl) ==
 \label{sc:stopstmt}
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{statement}{
     \ldots \dsep
     \Ruleref{stop statement} \dsep
@@ -6608,7 +6610,7 @@ bootSequenceList(rl) ==
   \Rule{stop list statement}{
     \Lop{stoplist}, \Lit{(}, \Ruleref{expression}, \Lit{)}
   }
-    
+
 \item[Semantics:] The {\it stop} and {\it stop list} statements have the following form:
   \begin{lstlisting}
     stop(aRef)
@@ -6630,7 +6632,7 @@ The stop statement can be used to terminate a thread or to prevent a periodic th
 \section{The Specification Statement} \label{se:specification}
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{statement}{
     \ldots \dsep
     \Ruleref{specification statement}
@@ -6639,7 +6641,7 @@ The stop statement can be used to terminate a thread or to prevent a periodic th
     \Lit{[}, \Ruleref{implicit operation body}, \Lit{]}
   }
 
-\item[Semantics:] 
+\item[Semantics:]
 
 The specification statement can be used to describe a desired effect a
 statement in terms of a pre- and a post-condition. Thus, it captures
@@ -6692,19 +6694,19 @@ be used instead of the increment which would normally be computed for that
 statement. Thus the duration statement provides a mechanism to
 override the VDM interpreter's default execution time computation. Note that the execution
 of the expression is done in zero time and cannot cause thread switches.
- 
+
 
 \item[Example:] First a simple example:
 \begin{lstlisting}
   while n < 10 do
-    duration(10) n := n + 1; 
+    duration(10) n := n + 1;
 \end{lstlisting}
 In this example, assuming that this loop is not executed in the
 context of an enclosing duration statement, on each iteration of the
 loop the VDM interpreters will increment its internal clock by 10 time
 units (nanoseconds),
 rather than computing the amount of time required to execute the
-statement \texttt{n := n + 1}. 
+statement \texttt{n := n + 1}.
 
 If duration statements are nested, the outermost one takes precedence
 and the remainder are ignored. For instance
@@ -6712,7 +6714,7 @@ and the remainder are ignored. For instance
   duration(30)
   ( n := 1;
     while n < 10 do
-      duration(10) n := n + 1; 
+      duration(10) n := n + 1;
   )
 \end{lstlisting}
 The outer duration statement takes precedence, so assuming this is not
@@ -6731,14 +6733,14 @@ op2 : () ==> nat
 op2() ==
 ( dcl n : nat := 3;
   duration(10)  n := op1(1);
-  return n) 
+  return n)
 \end{lstlisting}
 When executing \texttt{op2}, if the call to \texttt{op1} is
 executed, the duration statement in \texttt{op1} will be overridden by
 the duration statement in the environment of the call. Thus in
-\texttt{op2} following execution of the statement 
+\texttt{op2} following execution of the statement
 \texttt{n := op1(1);} the internal clock is incremented by 10 time units
-only. 
+only.
 
 \begin{lstlisting}
   ( n := 1; while n < 10 do duration(n) n := n + 1 )
@@ -6778,14 +6780,14 @@ of the expression is done in zero time and cannot cause thread switches.
 \item[Example:] First a simple example:
 \begin{lstlisting}
   while n < 10 do
-    cycles(1000) n := n + 1; 
+    cycles(1000) n := n + 1;
 \end{lstlisting}
 In this example, assuming that this loop is not executed in the
 context of an enclosing cycles statement, on each iteration of the
 loop the VDM interpreters will increment its internal clock by the time it will
 take to process 1000 instructions on the given \texttt{CPU} (relative
 to its capacity), rather than computing the amount of time required to
-execute the statement \texttt{n := n + 1}. 
+execute the statement \texttt{n := n + 1}.
 
 If cycles statements are nested, the outermost one takes precedence
 and the remainder are ignored. For instance
@@ -6793,7 +6795,7 @@ and the remainder are ignored. For instance
   cycles(3000)(
         n := 1;
         while n < 10 do
-           cycles(1000) n := n + 1; 
+           cycles(1000) n := n + 1;
         )
 \end{lstlisting}
 The outer cycles statement takes precedence, so assuming this is not
@@ -6813,15 +6815,15 @@ following example:
       op2() ==
       (dcl n : nat := 3;
        cycles(1000)  n := op1(1);
-       return n) 
+       return n)
 \end{lstlisting}
 When executing \texttt{op2}, if the call to \texttt{op1} is
 executed, the cycles statement in \texttt{op1} will be overridden by
 the cycles statement in the environment of the call. Thus in
-\texttt{op2} following execution of the statement 
+\texttt{op2} following execution of the statement
 \texttt{n := op1(1);} the internal clock is incremented by the time
 it takes to process 1000 instructions on the given \texttt{CPU}
-only. 
+only.
 
 \begin{lstlisting}
   ( n := 1; while n < 10 do cycles(n) n := n + 1 )
@@ -6842,7 +6844,7 @@ is also enabled using imports and exprts primitives. In VDM++ and
 VDM-RT structuring is done using object-oriented classes that can
 inherit constructs between them controlled by access modifiers. These
 two different approaches are explained in the two sections in this
-chapter. 
+chapter.
 
 \section{Top-level Specification in VDM-SL}\label{modules}
 
@@ -6867,7 +6869,7 @@ Thus, a complete specification, or document, has the following syntax.
   }
 
 \Rule{any module}{
-  \Ruleref{module} 
+  \Ruleref{module}
 %\dsep
 %  \Ruleref{dynamic link module}
   }
@@ -6924,7 +6926,7 @@ operations
     if i < len l
     then (dcl temp: nat;
           dcl mi : nat := min_index(l(i,...,len l)) + i - 1;
-         
+
           temp := l(mi);
           l(mi) := l(i);
           l(i) := temp;
@@ -6965,7 +6967,7 @@ modules and consists of two sections. These sections are:
 \item An {\it imports section}. In the imports section, all the
   constructs that are going to be used from other modules are
   described. If constructs are going to be renamed it has to be done
-  in the imports section. 
+  in the imports section.
 
 \item An {\it exports section}. Here all the constructs that are going
   to be used in other modules are defined.
@@ -7011,7 +7013,7 @@ unimportant parts of the flat specification are left out for clarity.
     \Ruleref{export signature}, \lfeed
     \SeqPt{\Ruleref{export signature}}
     }
-  
+
   \Rule{export signature}{
     \Ruleref{export types signature} \dsep
     \Ruleref{values signature} \dsep
@@ -7020,25 +7022,25 @@ unimportant parts of the flat specification are left out for clarity.
 %    \dsep
 %    state signature
     }
-  
+
   \Rule{export types signature}{
     \Lop{types}, \Ruleref{type export}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{type export}}, \OptPt{\Lit{;}}
     }
-  
+
   \Rule{type export}{
     \OptPt{\Lop{struct}}, \Ruleref{name}
     }
-  
+
   \Rule{values signature}{
     \Lop{values}, \Ruleref{value signature}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{value signature}}, \OptPt{\Lit{;}}
     }
-  
+
   \Rule{value signature}{
     \Ruleref{name list}, \Lit{:}, \Ruleref{type}
     }
-  
+
   \Rule{export functions signature}{
     \Lop{functions} \Ruleref{function export}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{function export}}
@@ -7048,25 +7050,25 @@ unimportant parts of the flat specification are left out for clarity.
     \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \Lit{:}, \lfeed
     \Ruleref{function type}
     }
-  
+
   \Rule{functions signature}{
     \Lop{functions} \Ruleref{function signature}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{function signature}}, \OptPt{\Lit{;}}
     }
-  
+
   \Rule{function signature}{
     \Ruleref{name list}, \Lit{:}, \Ruleref{function type}
     }
-  
+
   \Rule{operations signature}{
     \Lop{operations} \Ruleref{operation signature}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{operation signature}}, \OptPt{\Lit{;}}
     }
-  
+
   \Rule{operation signature}{
     \Ruleref{name list}, \Lit{:}, \Ruleref{operation type}
     }
-  
+
 %  \Rule{state signature}{
 %    \Lop{state}, name, \SeqPt{\Lit{,}, name}
 %    }
@@ -7075,7 +7077,7 @@ unimportant parts of the flat specification are left out for clarity.
   visible to other modules. Some or all of the defined
   constructs from a module can be exported. In the latter case, the keyword
   \keyw{all} is used. However, imported constructs are not exported
-  from the module. If only part 
+  from the module. If only part
   of the constructs are exported, the visible constructs with
   the appropriate signatures are stated.
 
@@ -7095,7 +7097,7 @@ unimportant parts of the flat specification are left out for clarity.
     values of type {\tt T}. This means that the exporting module ({\tt A})
     must provide functions and/or operations to directly create and manipulate
     values of type {\tt T} by means of the constructors related to the
-    representation of {\tt T}. 
+    representation of {\tt T}.
 
     If we export the structure of the type by using the keyword
     \keyw{struct}, the other module can create and manipulate values of
@@ -7134,7 +7136,7 @@ types
 
   digit = nat
   inv d == d < 10;
-  
+
   account::  holder : seq1 of char
              number : seq1 of digit
              branchcode : seq1 of digit
@@ -7149,11 +7151,11 @@ functions
     digval(d) == d;
 
     deposit: account * real -> account
-    deposit(acc,r) == 
+    deposit(acc,r) ==
       mu(acc,balance |-> acc.balance + r);
 
     withdrawal : account * real -> account
-    withdrawal (acc,r) == 
+    withdrawal (acc,r) ==
       mu(acc,balance |-> acc.balance - r);
 
     isPin : account * nat -> bool
@@ -7170,7 +7172,7 @@ In this module we export two types and five functions. Note that since
 we have enumerated the entities we are exporting, but have not
 exported \texttt{digit} or \texttt{account} using the \keyw{struct}
 keyword, the internals of \texttt{account} values may not be accessed
-by other modules, neither may the invariant for \texttt{digit}. If 
+by other modules, neither may the invariant for \texttt{digit}. If
 such access is necessary, the types should be exported with the
 \keyw{struct} keyword, or all constructs in the module should be
 exported using the \keyw{exports all} clause.
@@ -7277,7 +7279,7 @@ module. However the state constructor
     }
 
   \Rule{function import}{
-    \Ruleref{name}, \OptPt{\OptPt{\Ruleref{type variable list}},  
+    \Ruleref{name}, \OptPt{\OptPt{\Ruleref{type variable list}},
     \Lit{:}, \Ruleref{function type}}, \lfeed
     \OptPt{\Lop{renamed}, \Ruleref{name}}
     }
@@ -7315,14 +7317,14 @@ such that
   this information will only be used by the static semantics check of the
   complete module. If no type information is given, the static semantics
   can also find this information in the exporting module.
-  
+
   When a type which has been exported with the \keyw{struct} keyword
   (with its structure) is imported the
   importing module may only make use of this structure if it repeats
   the type definition from the exporting module in its type import. In
   case such a type is a composite type and it is also renamed this has
   the consequence that the tag is renamed as well.
-  
+
 \item[Examples:] We can model an ATM card as consisting of a
 card number and an expiry date. This requires the \texttt{digit} type
 defined in the module \texttt{BankAccount}. It also uses the function
@@ -7331,7 +7333,7 @@ defined in the module \texttt{BankAccount}. It also uses the function
 module ATMCard
 
 imports
-from BankAccount types digit 
+from BankAccount types digit
                  functions digval renamed atmc_digval
 
 exports all
@@ -7363,7 +7365,7 @@ long. Note that since \texttt{digit} is not exported with the
 access the invariant for \texttt{digit} in module
 \texttt{ATMCard}. However this notwithstanding, all values of type
 \texttt{digit} manipulated in \texttt{ATMCard} must satisfy the
-invariant. 
+invariant.
 
 \end{description}
 
@@ -7379,7 +7381,7 @@ is possible to have a \keyw{system} class.
 \begin{description}
 \item[Syntax:]
 \Rule{document}{
-   \Ruleref{class} 
+   \Ruleref{class}
    \dsepl\ \Ruleref{system}
    ,\SeqPt{\Ruleref{class}
    \dsepl\ \Ruleref{system}
@@ -7390,15 +7392,15 @@ is possible to have a \keyw{system} class.
 \section{System (VDM-RT) }\label{sec:system}
 
 In order to be able to describe distributed systems in VDM-RT includes
-a notion of a system that describes how different parts of the system 
-modelled are deployed to different Core Processing Units (CPUs) and 
-communication busses connecting the CPUs together. Syntactically the 
-system is described exactly like ordinary classes described below in 
-Section~\ref{sec:classdep}, except that the keyword ``\keyw{system}'' 
-instead of the keyword ``\keyw{class}''. 
+a notion of a system that describes how different parts of the system
+modelled are deployed to different Core Processing Units (CPUs) and
+communication busses connecting the CPUs together. Syntactically the
+system is described exactly like ordinary classes described below in
+Section~\ref{sec:classdep}, except that the keyword ``\keyw{system}''
+instead of the keyword ``\keyw{class}''.
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
 \Rule{system}{
   \Lop{system}, \Ruleref{identifier},  \lfeed
   \OptPt{\Ruleref{class body}}, \lfeed
@@ -7432,21 +7434,21 @@ name in the system tail.  Furthermore, defining system names must be unique
 throughout the specification.
 
 The special thing about the system is that it can make use of special
-implicitly defined classes called \texttt{CPU} and \texttt{BUS}. It is 
+implicitly defined classes called \texttt{CPU} and \texttt{BUS}. It is
 not possible to create instances of the system, but instances made of
-\texttt{CPU} and \texttt{BUS} will be created at initialisation time. 
+\texttt{CPU} and \texttt{BUS} will be created at initialisation time.
 Note that \texttt{CPU} and \texttt{BUS} cannot be used outside the
 system definition.
 
-The instances of \texttt{CPU} and \texttt{BUS} must be made as instance 
+The instances of \texttt{CPU} and \texttt{BUS} must be made as instance
 variables and the definition must use constructors. The constructor for the
-\texttt{CPU} class takes two parameters: the first one indicate the 
-primary scheduling policy used for the \texttt{CPU} whereas the second 
+\texttt{CPU} class takes two parameters: the first one indicate the
+primary scheduling policy used for the \texttt{CPU} whereas the second
 parameter provides the capacity of the \texttt{CPU} (indicated as number of 
-instructions Per Second or Hz -- NB. the (time unit) step size of time is 1 nanosecond). 
+instructions Per Second or Hz -- NB. the (time unit) step size of time is 1 nanosecond).
 The constructor for the \texttt{BUS}
 class takes three parameters. The first one indicates the kind of bus, the
-second one the capacity of the bus (its band width in bytes per second) and finally the third 
+second one the capacity of the bus (its band width in bytes per second) and finally the third
 parameter gives a set of \texttt{CPU} instances connected together by the
 given \texttt{BUS} instance.
 
@@ -7455,16 +7457,16 @@ are:
 \begin{description}
 \item[\texttt{<FP>}:] Fixed Priority
 \item[\texttt{<FCFS>}:] First Come First Served
-\end{description} 
+\end{description}
 
 The currently supported primary scheduling policy for the \texttt{BUS}
 is:
 \begin{description}
 %\item[\texttt{<TDMA>}:] Time Division Multiple Access
 \item[\texttt{<FCFS>}:] First Come First Served
-%\item[\texttt{<CSMACD>}:] Carrier Sense Multiple Access with Collision 
+%\item[\texttt{<CSMACD>}:] Carrier Sense Multiple Access with Collision
 %                          Detection
-\end{description} 
+\end{description}
 
 The \texttt{CPU} class have member operations called \texttt{deploy} and
 \texttt{setPriority}. The \texttt{deploy} operation takes one
@@ -7474,10 +7476,10 @@ inside the system\footnote{It is also allowed to take a string as a
 second parameter for future extensions but that is ignored at the
 moment.}. The semantics of the deploy operation is that execution
 of all functionality inside this object will take place on the CPU that it
-has been deployed to. The \texttt{setPriority} operation takes two 
-parameters where the first must be the name of a public operation that 
+has been deployed to. The \texttt{setPriority} operation takes two
+parameters where the first must be the name of a public operation that
 has been deployed to the CPU and the second parameter is a natural number.
-The semantics of the \texttt{setPriority} operation is that the given 
+The semantics of the \texttt{setPriority} operation is that the given
 operation is assigned the given priority (the second parameter). This will
 be used when fixed priority scheduling is used on the given CPU. Per
 default operations that are not explicitly assigned a priority using
@@ -7487,7 +7489,7 @@ The system ``class'' is limited in the way that it can only contain:
 \begin{description}
 \item[Instance variables:] The only instances that can be declared in the 
 system ``class'' is of the special classes \texttt{CPU} and \texttt{BUS} 
-as well as static instances of the different system components that one 
+as well as static instances of the different system components that one
 wish to allocate to different CPU's.
 \item[Constructor:] The actual deployment of instances to CPU's and setting
 of priorities for the different operations is set inside the
@@ -7514,16 +7516,16 @@ system Simple
 instance variables
   static public a : A := new A();
   static public b : B := new B();
-  -- define the first CPU with fixed priority scheduling 
+  -- define the first CPU with fixed priority scheduling
   -- and 22E6 Hz
   CPU1 : CPU := new CPU (<FP>, 22E6);
 
   static public c : C := new C();
-  -- define the second CPU with fixed priority scheduling 
+  -- define the second CPU with fixed priority scheduling
   -- and 11E6 Hz
   CPU2 : CPU := new CPU (<FP>, 11E6);
 
-  -- create a communication bus that links the three 
+  -- create a communication bus that links the three
   -- CPU's together
   BUS1 : BUS := new BUS (<CSMACD>, 72E3, {CPU1, CPU2})
 
@@ -7535,12 +7537,12 @@ operations
       -- deploy b on CPU1
       CPU1.deploy(b);
       -- deploy c on CPU2
-      CPU2.deploy(c,"CT"); 
+      CPU2.deploy(c,"CT");
       -- "CT" is a label here which is ignored
     );
 
 end Simple
-\end{lstlisting} 
+\end{lstlisting}
 \noindent where \texttt{A}, \texttt{B} and \texttt{C} all are defined
 as classes.
 \end{description}
@@ -7567,7 +7569,7 @@ Before the actual facilities are described, the general layout of a
 class is described.
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
 \Rule{class}{
   \Lop{class}, \Ruleref{identifier}, \OptPt{\Ruleref{inheritance clause}}, \lfeed
   \OptPt{\Ruleref{class body}}, \lfeed
@@ -7617,14 +7619,14 @@ The (optional) class body may consist of:
 %\item A set of {\em time variable definitions} describing
 %  the internal state of an object as a function of time.
 \item A set of {\it operation definitions} that can act on the internal state.
-\item A set of the {\it synchronization definitions}, specified either 
+\item A set of the {\it synchronization definitions}, specified either
   in terms of permission predicates or using mutex constraints.
 % or in terms of traces.
 %  Each trace represents an allowed sequence of invocations of the
 %  functions and operations by other objects.
 \item A set of {\it thread definitions} that describe the thread of control
   for active objects.
-\item A set of {\it traces} that are used to indicate the sequences of 
+\item A set of {\it traces} that are used to indicate the sequences of
 operation calls for which test cases are desired to be produced automatically.
 \end{itemize}
 
@@ -7651,15 +7653,15 @@ The concept of inheritance is essential to object orientation.  When
 one defines a class as a subclass of an already existing class, the
 definition of the subclass introduces an extended class, which is
 composed of the definitions of the superclass together with the
-definitions of the newly defined subclass. 
+definitions of the newly defined subclass.
 
 Through inheritance, a subclass inherits from the superclass:
 \begin{itemize}
-\item Its instance variables. %and time variables. 
+\item Its instance variables. %and time variables.
   This also includes
   all invariants and their restrictions on the allowed modifications of
   the state.
-\item Its operation and function definitions. 
+\item Its operation and function definitions.
 \item Its value and type definitions.
 \item Its synchronization definitions as described in
   section \ref{ch:sync-inh}.
@@ -7686,7 +7688,7 @@ class Sort
   operations
 
     initial_data : seq of int ==> ()
-    initial_data (l) == 
+    initial_data (l) ==
       data := l;
 
     sort_ascending : () ==> ()
@@ -7716,9 +7718,9 @@ class SelectionSort is subclass of Sort
     selectSort (i) ==
       if i < len data
       then (dcl temp: nat;
-            dcl mi: nat := min_index(data(i,...,len data)) + 
+            dcl mi: nat := min_index(data(i,...,len data)) +
                           i - 1;
-         
+
            temp := data(mi);
            data(mi) := data(i);
            data(i) := temp;
@@ -7729,7 +7731,7 @@ end SelectionSort
 \end{lstlisting}
 Here the class \texttt{Sort} defines an abstract interface to be
 implemented by different sorting algorithms. One implementation is
-provided by the \texttt{SelectionSort} class. 
+provided by the \texttt{SelectionSort} class.
 
 The next example clarifies how name space clashes are resolved.
   \begin{lstlisting}
@@ -7801,11 +7803,11 @@ Functions, operations, instance variables and constants\footnote{In
   practice, constants will generally be static -- a non-static
   constant would represent a constant whose value may vary from one
   instance of the class to another which would be more naturally
-  represented by an instance variable.} in a class may 
+  represented by an instance variable.} in a class may
 be either class attributes or instance attributes. This is indicated
 by the keyword \keyw{static}: if the declaration is preceded by the
 keyword \keyw{static} then it represents a class attribute, otherwise
-it denotes an instance attribute. 
+it denotes an instance attribute.
 
 Other class components are by default always either class attributes
 or instance attributes as follows:
@@ -7813,16 +7815,16 @@ or instance attributes as follows:
 \begin{itemize}
 \item Type definitions are always class attributes.
 %  Thus, they can be quoted directly in a class. E.g.\ {\tt
-%    ClassName`val} refers to the value {\tt val} defined in 
+%    ClassName`val} refers to the value {\tt val} defined in
 %  class {\tt ClassName}.
 % \item Function and operation definitions are instance
 %   attributes.  Thus, they are quoted in objects. E.g.\ {\tt
 %   object.op()} invokes the operation {\tt op} in the object denoted by
 %   {\tt object} (provided that \texttt{op} is visible to \texttt{object}).
-% \item Instance variables %and time variables 
+% \item Instance variables %and time variables
 %   are instance
 %   attributes. Thus, each object has its own copy
-%   of the instance %and time 
+%   of the instance %and time
 %   variables.
 \item Thread definitions are always instance attributes. Thus, each active
   object has its own thread(s).
@@ -7846,10 +7848,10 @@ The default access to any class member is \keyw{private}. That is,
 if no access specifier is given for a member it is private.
 
 This is summarized in table \ref{table:access}. A few provisos apply
-here: 
+here:
 \begin{itemize}
 \item Granting access to instance variables (i.e.\ through
-a \keyw{public} or \keyw{protected} access specifier) gives 
+a \keyw{public} or \keyw{protected} access specifier) gives
 both read and write access to these instance variables.
 % ***** Change this in the future if o.v := expr is possible
 \item Public instance variables may be read (but not written) using
@@ -7863,11 +7865,11 @@ both read and write access to these instance variables.
   attribute, or vice-versa.
 \item For inherited classes, the interface to the subclass is the same
   as the interface to its superclasses extended with the new
-  definitions within the subclass.  
+  definitions within the subclass.
 \item Access to an inherited member cannot be made more restrictive
   e.g.\ a public instance variable in a superclass cannot be
   redeclared as a private instance variable in a subclass.
-\end{itemize} 
+\end{itemize}
 
 \begin{table}
 \begin{center}
@@ -7875,7 +7877,7 @@ both read and write access to these instance variables.
                  & \keyw{public} & \keyw{protected} & \keyw{private}\\ \hline
 Within the class & $\surd$       & $\surd$          & $\surd$ \\
 In a subclass    & $\surd$       & $\surd$          & $\times$\\
-In an arbitrary 
+In an arbitrary
 external class   & $\surd$       & $\times$         & $\times$ \\
 \hline
 \end{tabular}
@@ -7903,7 +7905,7 @@ compare(x) ==
   elseif x = Avalue
   then <B>
   else <C>
- 
+
 instance variables
 public v1: nat;
 private v2: bool := false;
@@ -7929,7 +7931,7 @@ BInit() ==
   (AInit(1,true,2.718); --OK: can access protected members
                         --in superclass
    v4 := compare(v1);   --OK since v1 is public
-   v3 := 3.5;           --OK since v3 protected and this 
+   v3 := 3.5;           --OK since v3 protected and this
                         --is a subclass of A
    v2 := false          --illegal since v2 is private to A
   )
@@ -7946,12 +7948,12 @@ operations
 
 CInit: () ==> A`Atype--types are class attributes
 CInit() ==
-  (a.AInit(3,false,1.1);  
+  (a.AInit(3,false,1.1);
                      --illegal since AInit is protected
-   b.BInit();        --illegal since BInit is (by default) 
+   b.BInit();        --illegal since BInit is (by default)
                      --private
    let - = a.compare(b.v3) in skip;
-                     --illegal since C is not subclass 
+                     --illegal since C is not subclass
                      --of A so b.v3 is not available
    return b.compare(B`Avalue)
                      --OK since compare is a public instance
@@ -7961,9 +7963,9 @@ CInit() ==
 
 end C
 \end{lstlisting}
-%       b.v1 := 4;           --OK since v1 public in A so is 
+%       b.v1 := 4;           --OK since v1 public in A so is
 %                            --public by inheritance
-  
+
 
 
 \end{description}
@@ -7994,7 +7996,7 @@ The following default synchronization rules for each object apply in
 VDM++ and VDM-RT:
 \begin{itemize}
 \item operations are to be viewed as though they are atomic, from the
-point of the caller; 
+point of the caller;
 \item operations which have no corresponding permission predicate are
   subject to no restrictions at all;
 \item synchronization constraints apply equally to calls within an
@@ -8014,7 +8016,7 @@ The synchronization definition blocks of the class description provide the
 user with ways to override the defaults described above.
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{synchronization definitions}{
     \Lop{sync}, \OptPt{\Ruleref{synchronization}}
   }
@@ -8022,7 +8024,7 @@ user with ways to override the defaults described above.
     \Ruleref{permission predicates}
   }
 
-\item[Semantics:] 
+\item[Semantics:]
 
 Synchronization is specified in VDM++ and VDM-RT using permission predicates.
 
@@ -8037,7 +8039,7 @@ rules for accepting the execution of concurrently callable operations.
 Some notes are given explaining these features.
 
 \begin{description}
-\item[Syntax:] 
+\item[Syntax:]
   \Rule{permission predicates}{
     \Ruleref{permission predicate}, \SeqPt{\Lit{;}, \lfeed
     \Ruleref{permission predicate}}
@@ -8097,14 +8099,14 @@ other. Operations that appear in one mutex predicate are allowed to
 appear in other mutex predicates as well, and may also be used in the
 usual permission predicates. Each mutex predicate will implicitly be
 translated to permission predicates using history guards for each
-operation mentioned in the name list. For instance,  
+operation mentioned in the name list. For instance,
 \begin{lstlisting}
 sync
   mutex(opA, opB);
   mutex(opB, opC, opD);
   per opD => someVariable > 42;
 \end{lstlisting}
-would be translated to the following permission predicates: 
+would be translated to the following permission predicates:
 \begin{lstlisting}
 sync
   per opA => #active(opB) = 0;
@@ -8124,7 +8126,7 @@ is explained below.
 
 A \keyw{mutex(all)} constraint specifies that all of the operations
 specified in that class \textit{and any superclasses} are to be
-executed mutually exclusively. 
+executed mutually exclusively.
 \end{description}
 
 
@@ -8136,10 +8138,10 @@ expressed in terms of history expressions (see section
 \ref{sec:historyexpr}). History expressions denotes the number
 of activations and completions of the operations, given as functions
 
-\keyw{\#act} and \keyw{\#fin}, respectively. 
+\keyw{\#act} and \keyw{\#fin}, respectively.
 \begin{quote}
 \keyw{\#act}: operation name $\rightarrow$ $\Nat$ \\
-\keyw{\#fin}: operation name $\rightarrow$ $\Nat$ 
+\keyw{\#fin}: operation name $\rightarrow$ $\Nat$
 \end{quote}
 
 Furthermore, a derived function {\bf\ttfamily \#active} is available such that
@@ -8149,7 +8151,7 @@ instances of {\tt A}. Another history function -- {\bf\ttfamily{\#req}} -- is
 defined in section~\ref{queuesec}.
 \item[Examples:]
 Consider a Web server\label{example:webserver} that is capable of
-supporting 10 simultaneous 
+supporting 10 simultaneous
 connections and can buffer a further 100 requests. In this case we
 have one instance variable, representing the mapping from URLs to
 local filenames:
@@ -8182,7 +8184,7 @@ number already active is less than 10:
 
 \subsection{The object state guard}
 \begin{description}
-\item[Semantics:] 
+\item[Semantics:]
 The object state guard is a boolean expression which depends on the values of
 one (or more) instance variable(s) of the object itself. Object state
 guards differ from operation pre-conditions in that a call to an an
@@ -8191,7 +8193,7 @@ blocking until the predicate is satisfied, whereas a call to an
 operation whose pre-condition is false means the operation's behaviour
 is unspecified.
 
-\item[Examples:] 
+\item[Examples:]
 Using the web server example again, we can only allow file removal if
 some files already exist:
 \begin{lstlisting}
@@ -8231,7 +8233,7 @@ of history.
 
 \subsection{Queue condition guards}\label{queuesec}
 \begin{description}
-\item[Semantics:] 
+\item[Semantics:]
 A queue condition guard acts on requests waiting in the queues for the
 execution of the operations.
 This requires use of a third history function {\bf\ttfamily \#req} such that
@@ -8241,7 +8243,7 @@ Again it is useful to introduce the function {\bf\ttfamily \#waiting} such that:
 {\bf\ttfamily \#waiting}{\tt (A}{\tt )} $=$ {\bf\ttfamily \#req}{\tt (A}{\tt )} $-$ {\bf\ttfamily \#act}{\tt (A}{\tt )},
 which counts the number of items in the queue.
 
-\item[Examples:] 
+\item[Examples:]
 Once again, with the web server we can only activate the
 \texttt{ServerBusy} operation if 100 or more connections are waiting:
 \begin{lstlisting}
@@ -8282,13 +8284,13 @@ requests (from objects $O_1$ and $O_2$) and one \texttt{ExecuteCGI}
 request (from object $O_3$) are received. The permission predicates
 for these two operations are false since the number of active
 \texttt{RetrieveURL} operations is already 10. Thus these objects
-block. 
+block.
 
 Then, one of the active \texttt{RetrieveURL} operations reaches
 completion. The permission predicate so far blocking $O_1$, $O_2$ and
 $O_3$ will become ``true'' simultaneously.
 This raises the question: which object is allowed to proceed? Or even
-all of them? 
+all of them?
 
 Guard expressions are only reevaluated when an event occurs (in this
 case the completion of a \texttt{RetrieveURL} operation). In addition to
@@ -8297,23 +8299,23 @@ activation is an atomic operation. This means, that when the first
 object evaluates its guard expression, it will find it to be true and
 activate the corresponding operation (\texttt{RetrieveURL} or
 \texttt{ExecuteCGI} in this case). The other objects evaluating their
-guard expressions afterwards will find that 
+guard expressions afterwards will find that
 \keyw{\#active}{\tt (RetrieveURL) +} \keyw{\#active}{\tt (ExecuteCGI) = 10}
 and thus remain blocked. \textit{Which object is allowed to evaluate the guard
 expression first is undefined.}
 
-It is important to understand that the guard expression need only 
+It is important to understand that the guard expression need only
 evaluate to \keyw{true} at the time of the activation. In the
 example as soon as $O_1$, $O_2$ or $O_3$'s request is activated its
-guard expression becomes false again. 
+guard expression becomes false again.
 
 
 \section{Inheritance of Synchronization Constraints}
 \label{ch:sync-inh}
 
 Synchronization constraints specified in a superclass are inherited by
-its subclass(es). 
-The manner in which this occurs depends on 
+its subclass(es).
+The manner in which this occurs depends on
 the kind of synchronization.
 
 \subsection{Mutex constraints}
@@ -8345,30 +8347,30 @@ must be possible to strengthen the synchronization constraints. This
 can be necessary if the derived class adds new operations as in the
 following example:
 \begin{lstlisting}
-class A 
+class A
 operations
-    
-  writer: () ==> () 
+
+  writer: () ==> ()
   writer() == is not yet specified
-    
-  reader: () ==> () 
+
+  reader: () ==> ()
   reader() == is not yet specified
-    
+
   sync
-  per reader => #active(writer) = 0; 
-  per writer => #active(reader, writer) = 0; 
+  per reader => #active(writer) = 0;
+  per writer => #active(reader, writer) = 0;
 end A
 
-class B is subclass of A 
+class B is subclass of A
 operations
 
-  newWriter: () ==> () 
+  newWriter: () ==> ()
   newWriter() == is not yet specified
 
   sync
-  per reader => #active(newWriter) = 0; 
-  per writer => #active(newWriter) = 0; 
-  per newWriter => #active(reader, writer, newWriter) = 0; 
+  per reader => #active(newWriter) = 0;
+  per writer => #active(newWriter) = 0;
+  per newWriter => #active(reader, writer, newWriter) = 0;
 
 end B
 \end{lstlisting}
@@ -8382,7 +8384,7 @@ predicates for the inherited operations.
 The actual permission predicates in the derived class
 are therefore:
 \begin{lstlisting}
-per reader => #active(writer)=0 and #active(newWriter)=0; 
+per reader => #active(writer)=0 and #active(newWriter)=0;
 per writer => #active(reader, writer)=0 and #active(newWriter)=0;
 per newWriter => #active(reader, writer, newWriter)=0;
 \end{lstlisting}
@@ -8424,7 +8426,7 @@ explained in Chapter~\ref{ch:sync}.
 \begin{description}
 \item[Syntax:]  \Ruledef{thread definitions}{ \Lop{thread},
 \OptPt{\Ruleref{thread definition}} } \Rule{thread definition}{
-    \Ruleref{periodic thread definition} \dsep 
+    \Ruleref{periodic thread definition} \dsep
     \Ruleref{procedural thread definition} }
 
   \Ruledef{periodic thread definition}{
@@ -8433,10 +8435,10 @@ explained in Chapter~\ref{ch:sync}.
   }
 \end{description}
 
-Subclasses inherit threads from superclasses. 
+Subclasses inherit threads from superclasses.
 If a class inherits from several classes only one of these may declare
 its own thread (possibly through inheritance). Furthermore, explicitly
-declaring a thread in a subclass will override any inherited thread.  
+declaring a thread in a subclass will override any inherited thread.
 
 \section{Periodic Thread Definitions (VDM-RT)}\label{se:periodic-thread}
 
@@ -8445,7 +8447,7 @@ As the `period' implies a explicit notion of time, this construct is only availa
 
 \begin{description}
 %\item[Syntax (VDM++):] For VDM++, where time is not explicit, it looks like:
-% 
+%
 %\Ruledef{periodic obligation}{
 %  \Lop{periodic},\Lit{(}, \Ruleref{expression}, \Lit{)}, \Lit{(}, \Ruleref{name}, \Lit{)}
 %}
@@ -8455,16 +8457,16 @@ As the `period' implies a explicit notion of time, this construct is only availa
 \item[Syntax(VDM-RT):] Time is explicit in VDM-RT, using a discrete clock with a 1~nsec resolution, where the periodic obligation looks like:
 
   \Ruledef{periodic obligation}{
-    \Lop{periodic}, \lfeed 
+    \Lop{periodic}, \lfeed
     \Lit{(}, \Ruleref{expression}, \Ruleref{expression}, \Ruleref{expression},  \Ruleref{expression}, \Lit{)}, \lfeed \Lit{(}, \Ruleref{name}, \Lit{)}
   }
 
 \item[Semantics (VDM-RT):] The type of the expressions should all yield a natural number (as we use a natural number valued wall-clock in the VDM-RT interpreter), otherwise a run-time error will occur. Note that the evaluation of the expressions also causes time to elapse whenever the \Lop{start} or \Lop{start\_list} statement is executed. The expressions all denote a time value with a resolution of 1~nsec.
-For each periodic obligation, four different numbers are used. They are, in order 
-of appearance (also illustrated in Figure~\ref{fig:PeriodJitterDelayOffset}): 
+For each periodic obligation, four different numbers are used. They are, in order
+of appearance (also illustrated in Figure~\ref{fig:PeriodJitterDelayOffset}):
 
 \begin{enumerate}
-\item \textbf{period:} This is a non-negative, non-zero value that describes the length of the 
+\item \textbf{period:} This is a non-negative, non-zero value that describes the length of the
 time interval between two adjacent events in a strictly periodic event stream (where jitter = 0). Hence, a value of 1E9 denotes a period of 1~second.
 \item \textbf{jitter:} This is a non-negative value that describes the amount of time variance that is allowed
 around a single event. We assume that the interval is balanced [-j, j]. Note that jitter is
@@ -8505,13 +8507,13 @@ available for external invocations.
 
 Note that a periodic thread is \textit{neither} created \textit{nor} started when an instance
 of the corresponding class is created. Instead, as with procedural threads,
-\Lop{start} (or \Lop{start\_list}) statements should be used with periodic threads. 
+\Lop{start} (or \Lop{start\_list}) statements should be used with periodic threads.
 
 
 \item[Examples:]
 Consider a timer class which periodically increments its  clock in its
 own thread. It provides operations for starting, and stopping timing,
-and reading the current time. 
+and reading the current time.
 
 \begin{lstlisting}
 class Timer
@@ -8529,7 +8531,7 @@ instance variables
 \end{lstlisting}
 
 The Timer provides straightforward operations which need no further
-explanation. 
+explanation.
 \begin{lstlisting}
 operations
   public Start : () ==> ()
@@ -8537,7 +8539,7 @@ operations
     (acti := true;
      curTime := 0);
 
-  public Stop : () ==> () 
+  public Stop : () ==> ()
   Stop() ==
     acti := false;
 
@@ -8575,12 +8577,12 @@ of describing stochastic activities in a class.
 \begin{description}
 \item[Syntax: (VDM-RT)]
   \Ruledef{sporadic obligation}{
-    \Lop{sporadic}, \lfeed \Lit{(}, \Ruleref{expression},  \Ruleref{expression},   \Ruleref{expression}, 
+    \Lop{sporadic}, \lfeed \Lit{(}, \Ruleref{expression},  \Ruleref{expression},   \Ruleref{expression},
     \Lit{)}, \lfeed \Lit{(}, \Ruleref{name}, \Lit{)}
   }
 
 \item[Semantics: (VDM-RT)] The type of the expressions should all yield a natural number (as we use a natural number valued wall-clock in the VDM-RT interpreter), otherwise a run-time error will occur. Note that the evaluation of the expressions also causes time to elapse whenever the \Lop{start} or \Lop{start\_list} statement is executed. The expressions all denote a time value with a resolution of 1~nsec.
-For each sporadic obligation, three different numbers are used. They are, in order 
+For each sporadic obligation, three different numbers are used. They are, in order
 of appearance:
 
 \begin{enumerate}
@@ -8613,7 +8615,7 @@ end Timer
 A procedural thread provides a mechanism to explicitly define the
 external behaviour of an active object through the use of {\em
 statements}, which are executed when the object is started (see
-section \ref{sec:start}).  
+section \ref{sec:start}).
 %Apart from the statements which are allowed
 %in operation bodies (as described in  section \ref{sec:stmt}), it is
 %also possible to use {\em answer statements} and {\em select
@@ -8626,33 +8628,33 @@ section \ref{sec:start}).
 %statement specifies the conditional execution of operations.
 
 \begin{description}
-\item[Syntax:]  
+\item[Syntax:]
   \Ruledef{procedural thread definition}{
-    \Ruleref{statement} } 
+    \Ruleref{statement} }
 
-%  \Rule{select statement}{ 
-%    \Lop{sel}, 
+%  \Rule{select statement}{
+%    \Lop{sel},
 %    \Lit{(},
-%    \Ruleref{guarded command}, \lfeed 
-%    \SeqPt{\Lit{,}, 
-%          \Ruleref{guarded command}}, 
-%    \Lit{)} 
-%  } 
-
-%  \Rule{guarded command}{
-%    \OptPt{\Ruleref{expression}}, 
-%    \OptPt{\Ruleref{answer statement}}, \lfeed 
-%    \OptPt{\Lop{$->$}, 
-%    \Ruleref{statement}} 
-%  } 
-
-%  \Rule{answer statement}{ 
-%    \Lop{answer}, 
-%    \Brack{\Ruleref{name} \dsepl 
-%    \Lop{all}} 
+%    \Ruleref{guarded command}, \lfeed
+%    \SeqPt{\Lit{,},
+%          \Ruleref{guarded command}},
+%    \Lit{)}
 %  }
 
-\item[Semantics:] \mbox{} 
+%  \Rule{guarded command}{
+%    \OptPt{\Ruleref{expression}},
+%    \OptPt{\Ruleref{answer statement}}, \lfeed
+%    \OptPt{\Lop{$->$},
+%    \Ruleref{statement}}
+%  }
+
+%  \Rule{answer statement}{
+%    \Lop{answer},
+%    \Brack{\Ruleref{name} \dsepl
+%    \Lop{all}}
+%  }
+
+\item[Semantics:] \mbox{}
 A procedural thread is scheduled for execution following the
 application of a start statement to the object owning the thread. The
 statements in the thread are then executed sequentially, and when
@@ -8689,9 +8691,9 @@ permission predicates on shared objects.
 %
 %The general form of the select statement is
 %\begin{lstlisting}
-%  \keyw{sel} 
-%     guard1, \keyw{answer} o1 -> s1, 
-%       \vdots 
+%  \keyw{sel}
+%     guard1, \keyw{answer} o1 -> s1,
+%       \vdots
 %     guardN, \keyw{answer} oN -> sN;
 %\end{lstlisting}
 %Each line after the \texttt{sel} is a guarded command. For each
@@ -8754,7 +8756,7 @@ permission predicates on shared objects.
 %
 \item[Examples:]  \mbox{}
 The example below demonstrates procedural threads by using them to
-compute the factorial of a given integer concurrently. 
+compute the factorial of a given integer concurrently.
 
 \begin{lstlisting}
 class Factorial
@@ -8764,8 +8766,8 @@ instance variables
 operations
 
 public factorial : nat ==> nat
-factorial(n) == 
-  if n = 0 
+factorial(n) ==
+  if n = 0
   then return 1
   else (dcl m : Multiplier;
         m := new Multiplier();
@@ -8781,40 +8783,40 @@ class Multiplier
 
 instance variables
   i : nat1;
-  j : nat1; 
-  k : nat1;  
+  j : nat1;
+  k : nat1;
   result : nat1
 
 operations
 
 public calculate : nat1 * nat1 ==> ()
-calculate (first, last) ==  
+calculate (first, last) ==
   (i := first; j := last);
 
 doit : () ==> ()
 doit() ==
-( if i = j 
+( if i = j
   then result := i
   else (dcl p : Multiplier;
         dcl q : Multiplier;
-        p := new Multiplier();  
-        q := new Multiplier();  
+        p := new Multiplier();
+        q := new Multiplier();
         start(p);
-        start(q);  
+        start(q);
         k := (i + j) div 2;
         -- division with rounding down
-        p.calculate(i,k);  
-        q.calculate(k+1,j);  
+        p.calculate(i,k);
+        q.calculate(k+1,j);
         result := p.giveResult() *  q.giveResult ()
        )
 );
 
 public giveResult : () ==> nat1
-giveResult() ==  
+giveResult() ==
   return result;
 
 sync
--- cyclic constraints allowing only the 
+-- cyclic constraints allowing only the
 -- sequence calculate; doit; giveResult
 
 per doit => #fin (calculate) > #act(doit);
@@ -8827,7 +8829,7 @@ thread
 end Multiplier
 \end{lstlisting}
 
-        
+
 
 %First we consider some examples which illustrate the
 %basic mechanism of select statements. Suppose we have a thread with
@@ -8835,8 +8837,8 @@ end Multiplier
 %\texttt{l:\keyw{seq1 of nat}}, and operations \texttt{o1} and
 %\texttt{o2}. Consider the following select statement:
 %\begin{lstlisting}
-%  \keyw{sel} ( 
-%    x <= 0, \keyw{answer} o1 -> x:= 1,     -- gc1 
+%  \keyw{sel} (
+%    x <= 0, \keyw{answer} o1 -> x:= 1,     -- gc1
 %    x >= 0,\mbox{\hspace{0.2em}}          -> y := x,    -- gc2
 %            \keyw{answer} o2 -> l := [1]   -- gc3 )
 %\end{lstlisting}
@@ -8928,14 +8930,14 @@ end Multiplier
 %behaviour of an ATM machine. We might have the following instance
 %variables:
 %\begin{lstlisting}
-%  \keyw{instance variables} 
-%    status : <InService> | <OutOfService> |  <CardInserted> |  
-%             <CardAccepted> := <InService>; 
-%    currentCard : [ATMCard] := \keyw{nil}; 
-%    pinTries : \keyw{nat} := 0; 
-%    balance :  \keyw{nat} := 10000; 
+%  \keyw{instance variables}
+%    status : <InService> | <OutOfService> |  <CardInserted> |
+%             <CardAccepted> := <InService>;
+%    currentCard : [ATMCard] := \keyw{nil};
+%    pinTries : \keyw{nat} := 0;
+%    balance :  \keyw{nat} := 10000;
 %    keypad : Keypad := \keyw{new} Keypad();
-%    accountDB : AccountDB := \keyw{new} AccountDB(); 
+%    accountDB : AccountDB := \keyw{new} AccountDB();
 %    retained : \keyw{set} of ATMCard := \{\};
 %\end{lstlisting}
 %Here \texttt{ATMCard} is a class representing an ATM card,
@@ -8948,22 +8950,22 @@ end Multiplier
 %
 %\begin{tabular}{lll}
 %\texttt{EnterCard :} & \texttt{ATMCard ==> ()}  & Enter a card into
-%                          the machine\\ 
+%                          the machine\\
 %\texttt{GetPin :}    & \texttt{() ==> ()}       & Get the PIN digits typed
-%                                                  at \\ 
+%                                                  at \\
 %                     &                          & the keypad\\
 %\texttt{VerifyPin:}  & \texttt{\keyw{nat} ==> ()}
 %                                                & Check the validity of the PIN \\
 %                     &                          & given\\
 %\texttt{RetainCard :}& \texttt{() ==> ()}       & Retain the card if three failed\\
 %                     &                          & attempts to enter the PIN\\
-%\texttt{WithdrawCash :} 
+%\texttt{WithdrawCash :}
 %                     & \texttt{\keyw{nat} ==> ()}
 %                                                & Withdraw cash\\
-%\texttt{WithdrawCard :} 
+%\texttt{WithdrawCard :}
 %                     & \texttt{() ==> ()}       & Withdraw card from the \\
 %                     &                          & machine\\
-%\texttt{ReplenishMachine :} 
+%\texttt{ReplenishMachine :}
 %                    & \texttt{() ==> ()}        & Refill machine with cash
 %\end{tabular}
 %
@@ -8976,9 +8978,9 @@ end Multiplier
 %        \keyw{while} status <> <InService> \keyw{do}
 %          \keyw{sel} ( status = <CardInserted> \keyw{and} pinTries < 3
 %                               \keyw{answer} GetPin,
-%               status = <CardInserted> \keyw{and} pinTries = 3 
+%               status = <CardInserted> \keyw{and} pinTries = 3
 %                               -> RetainCard(),
-%               status = <CardAccepted> \keyw{and} balance > 300 
+%               status = <CardAccepted> \keyw{and} balance > 300
 %                               \keyw{answer} WithdrawCash,
 %               status = <CardAccepted> \keyw{answer} WithdrawCard
 %              );
@@ -9009,19 +9011,19 @@ end Multiplier
 %In the \texttt{else} clause, it can be seen that the only way this
 %clause can be entered is if the status is
 %\texttt{<OutOfService>}. Thus the thread waits until the machine is
-%replenished. 
+%replenished.
 %
 %Observe that in the second \keyw{sel} statement, if (\texttt{status =
-%<CardAccepted> 
+%<CardAccepted>
 %\keyw{and} balance > 300}) then the thread could behave
 %non-deterministically, since two guards would be open simultaneously.
 %
 \end{description}
 %
 %Note that the two methods of specifying synchronization (permission
-%predicates %, trace structures 
+%predicates %, trace structures
 %and answer statements) should not be
-%mixed in a class specification: only one of these may be used. 
+%mixed in a class specification: only one of these may be used.
 %
 %A procedural thread definition has precedence over a
 %synchronization specification in a class; when using this way of
@@ -9083,14 +9085,14 @@ end Multiplier
 %The {\em write-set} $W$ for statement $S_i$, $\fnapply{W}{S_i}= \setrange{b_1,
 %b_2}{b_n}$, is then defined as:
 %\begin{quote}
-%the set of all variables referenced in 
+%the set of all variables referenced in
 %statement $S_i$ such that each $b_j$ is
 %updated (i.e. gets a new value) in $S_i$.
 %\end{quote}
 %
-%The following three conditions must hold for two successive statements 
+%The following three conditions must hold for two successive statements
 %(say: $S_1$ and $S_2$) in order to be executed concurrently and always
-%produce the same result as if they were executed sequentially (the 
+%produce the same result as if they were executed sequentially (the
 %Bernstein conditions):
 %\begin{enumerate}
 %\item
@@ -9103,7 +9105,7 @@ end Multiplier
 %
 %As an example, consider two statements $S_1$ and $S_2$. Suppose that
 %$S_1$ updates a variable $b$, and that $S_2$ is defined as
-%$\ass{c}{a + b}$. Since 
+%$\ass{c}{a + b}$. Since
 %$\fnapply{W}{S_1} \Inter \fnapply{R}{S_2} = \set{b}$, concurrent
 %execution of $S_1$ and $S_2$ is not allowed.
 %
@@ -9117,7 +9119,7 @@ end Multiplier
 %
 %\subsection{Declarative Threads}\label{decinh}
 %
-%Consider two classes {\tt A} and {\tt B} with a periodic obligation, 
+%Consider two classes {\tt A} and {\tt B} with a periodic obligation,
 %for {\tt A}, say, defined as:
 %  \begin{lstlisting}
 %    periodic (intervalA)(mA)
@@ -9190,7 +9192,7 @@ end Multiplier
 %Because the scope in which the instance variables of
 %an object are visible includes the procedural thread, a proof obligation is
 %raised to satisfy the Bernstein conditions.
-%No problems arise in the simple case where {\tt C} is a subclass of 
+%No problems arise in the simple case where {\tt C} is a subclass of
 %{\tt A} and {\tt B} and no further coupling is made in {\tt C}
 %between the instance variables of {\tt A} and {\tt B} -- the threads of
 %{\tt A} and {\tt B} in {\tt C} only affect the {\tt A} and {\tt B} part
@@ -9224,11 +9226,11 @@ end Multiplier
 %additional descriptions and rules for their time behaviour. The
 %resulting time behaviour of the lower level objects in the
 %specification will give the limitations/requirements for the component
-%implementation. 
+%implementation.
 %
 %Time continuous variables appear in classes with a special role
 %in the specification. Spreading these functions in arbitrary places is not
-%foreseen. 
+%foreseen.
 %
 %\section{Time continuous Functions}
 %\label{sec:timeexpr}
@@ -9259,7 +9261,7 @@ end Multiplier
 %value of a physical quantity in the environment.
 %
 %\begin{description}
-%\item[Syntax:] 
+%\item[Syntax:]
 %\Rule{time variable definitions}{\Lop{time}, \Lop{variables},
 %      time spec, \SeqPt{\Lit{;}, time spec}, \OptPt{\Lop{;}}}
 %\Rule{time spec}{time var decl \dsep assumption \dsep effect}
@@ -9288,7 +9290,7 @@ end Multiplier
 %
 %This interpretation can be used e.g. with a number of sensors for the
 %temperature in a room; they measure the local temperature in a certain area
-%Sharing of the information available can be achieved by using 
+%Sharing of the information available can be achieved by using
 %an object as server form more
 %than one client object.
 %The local temperature variations are discarded and
@@ -9303,11 +9305,11 @@ end Multiplier
 %behaviour and provides the specification of a sampling mechanism, when
 %used on continuous variables.
 %
-%\item[Examples:] \mbox{} 
+%\item[Examples:] \mbox{}
 %
 %  \begin{lstlisting}
 %  class SensorBehaviour
-%  
+%
 %    time variables
 %      input theta: real;
 %      input myinput: real;
@@ -9327,7 +9329,7 @@ end Multiplier
 %  \end{lstlisting}
 %
 %\end{description}
-% 
+%
 %\section{From Continuous Time to Discrete Time}
 %
 %\subsection{The input side}
@@ -9370,7 +9372,7 @@ end Multiplier
 %
 %    values
 %      fs: real = undefined
-%  
+%
 %    instance variables
 %      tempvalues: seq of real := [];
 %      currvalue: real;
@@ -9382,7 +9384,7 @@ end Multiplier
 %      ( currvalue := theta(t);
 %        tempvalues := tempvalues ^ [currvalue]
 %      )
-%  
+%
 %   thread
 %     periodic (1/fs)(gettemp)
 %
@@ -9404,7 +9406,7 @@ end Multiplier
 %If the discrete class is the `producer' of a series of discrete values over
 %time, the output of the system itself will be continuous again.
 %Therefore, the impossibility for real signals to perform discontinuous behaviour
-%has to be build in. 
+%has to be build in.
 %
 %\begin{description}
 %\item[Example:] In class {\tt HeaterController} there is an instance
@@ -9429,7 +9431,7 @@ end Multiplier
 %
 %    instance variables
 %      controlvalue: nat
-%      
+%
 %    operations
 %      setheatercontrol: () ==> ()
 %      setheatercontrol() ==
@@ -9450,13 +9452,13 @@ end Multiplier
 %do not change in time between two successive updates by the operation.
 %Given a sampling distance $\Delta t$ and an interval beginning at $t_i$ with
 %a value $F(t_i)$, the step reaction
-%of the system will take some time constant say $\tau$ with 
+%of the system will take some time constant say $\tau$ with
 %$\tau \leq \Delta t$ to stabilise the output value. This value $\tau$ can be
 %derived from the effect constraint. This gives the following continuous time
 %behaviour:
 %\begin{itemize}
 %\item
-%$<t_i,t_i + \tau>$: the rate defined by constraint, 
+%$<t_i,t_i + \tau>$: the rate defined by constraint,
 %value within $F \ll t_{i-1} \ldots t_i \gg$ or equivalently
 %$[F(t_{i-1}),F(t_i)]$ excluding possible `overshoot';
 %\item
@@ -9480,7 +9482,7 @@ sequences of operations that wish to be tested in all possible
 combinations. In a sense this is similar to model checking limitations
 except that this is done with real and not symbolic values. However,
 errors in test cases are filtered away so other test cases with the
-same prefix will be skipped automatically. 
+same prefix will be skipped automatically.
 
 \begin{description}
 \item[Syntax:]
@@ -9494,7 +9496,7 @@ same prefix will be skipped automatically.
 }
 
 \Ruledef{trace definition list}{
-  \Ruleref{trace definition term}, 
+  \Ruleref{trace definition term},
   \SeqPt{\Lit{;}, \Ruleref{trace definition term}}
 }
 
@@ -9509,35 +9511,35 @@ same prefix will be skipped automatically.
 }
 
 \Ruledef{trace binding definition}{
-  \Ruleref{trace let def binding} \dsep 
+  \Ruleref{trace let def binding} \dsep
   \Ruleref{trace let best binding}
 }
- 
-\Ruledef{trace let def binding}{ 
-  \Lop{let}, \Ruleref{local definition}, 
-  \SeqPt{ \Lit{,}, \Ruleref{local definition}}, \lfeed 
-  \Lop{in}, \Ruleref{trace definition}
-} 
 
-\Ruledef{trace let best binding}{ 
-  \Lop{let} \Ruleref{multiple bind}, 
+\Ruledef{trace let def binding}{
+  \Lop{let}, \Ruleref{local definition},
+  \SeqPt{ \Lit{,}, \Ruleref{local definition}}, \lfeed
+  \Lop{in}, \Ruleref{trace definition}
+}
+
+\Ruledef{trace let best binding}{
+  \Lop{let} \Ruleref{multiple bind},
   \OptPt{\Lop{be}, \Lop{st}, \Ruleref{expression}}, \lfeed
   \Lop{in}, \Ruleref{trace definition}
 }
 
 \Ruledef{trace repeat definition}{
-  \Ruleref{trace core definition}, 
+  \Ruleref{trace core definition},
   \OptPt{\Ruleref{trace repeat pattern}}
 }
- 
+
 \Ruledef{trace repeat pattern}{
-  \Lit{*} \dsep 
+  \Lit{*} \dsep
   \Lit{+} \dsep
   \Lit{?} \dsep
   \Lit{\{}, \Ruleref{numeric literal}, \Lit{\}} \dsep
-  \Lit{\{}, \Ruleref{numeric literal}, \Lit{,} 
+  \Lit{\{}, \Ruleref{numeric literal}, \Lit{,}
   \Ruleref{numeric literal}, \Lit{\}}
-} 
+}
 
 \Rule{trace core definition}{
   \Ruleref{trace apply expression} \dsep
@@ -9550,7 +9552,7 @@ same prefix will be skipped automatically.
 }
 
 \Rule{trace concurrent expression}{
-  \Lit{||}, \Lit{(}, \Ruleref{trace definition}, \lfeed 
+  \Lit{||}, \Lit{(}, \Ruleref{trace definition}, \lfeed
   \Lit{,}, \Ruleref{trace definition}, \lfeed
   \SeqPt{\Lit{,}, \Ruleref{trace definition}}, \Lit{)}
 }
@@ -9599,25 +9601,25 @@ possible bindings.
 
 The \emph{trace repeat definition} is used to introduce the
 possibility of having repetitions of the operation calls used in the
-trace. 
+trace.
 The different kinds of repeat patterns have the following meanings:
 \begin{itemize}
-\item  \Lit{*} means 0 to n occurences (n is tool specific). 
-\item  \Lit{+} means 1 to n occurences (n is tool specific). 
-\item  \Lit{?} means 0 or 1 occurences. 
+\item  \Lit{*} means 0 to n occurences (n is tool specific).
+\item  \Lit{+} means 1 to n occurences (n is tool specific).
+\item  \Lit{?} means 0 or 1 occurences.
 \item  \Lit{\{}, n, \Lit{\}} means n occurences.
 \item  \Lit{\{}, n, \Lit{,} m \Lit{\}} means between n and m occurences.
 \end{itemize}
 
 The \emph{trace core definitions} have three possibilities. These are
 ordinary operation calls, trace concurrency expressions and bracketed
-trace definitions respectively. 
+trace definitions respectively.
 The \emph{trace concurrency expressions} are similar to the
 \emph{nondeterministic statements} in the sense that the trace
 definition lists inside it will be executed in all possible
 permulations of the elements. This is particular useful for concurrent
 VDM++ models where potential deadlocks can occur under some
-circumstances. 
+circumstances.
 
 \item[Examples:] In an example like the one below test cases will be
 generated in all possible combination starting with a call
@@ -9660,10 +9662,10 @@ instance variables
 
 traces
 
-  PushBeforePop : s.Reset(); 
-                  (let x in set {1,2} in s.Push(x)){1,4}; 
+  PushBeforePop : s.Reset();
+                  (let x in set {1,2} in s.Push(x)){1,4};
                   s.Pop(){1,3}
- 
+
 end UseStack
 \end{lstlisting}
 \end{description}
@@ -9681,7 +9683,7 @@ end UseStack
 
 \chapter{The Syntax of the VDM Languages} \label{app-a}
 
-This appendix specifies the complete syntax for 
+This appendix specifies the complete syntax for
 the VDM languages.
 
 \section{VDM-SL Document}
@@ -9692,7 +9694,7 @@ the VDM languages.
   }
 
 \Ruledef{any module}{
-  \Ruleref{module} 
+  \Ruleref{module}
 %\dsep
 %  \Ruleref{dynamic link module}
   }
@@ -9761,7 +9763,7 @@ VDM-SL standard.
   }
 
 \Ruledef{function import}{
-  \Ruleref{name}, \OptPt{\OptPt{type variable list}, 
+  \Ruleref{name}, \OptPt{\OptPt{type variable list},
   \Lit{:}, \Ruleref{function type}}, \lfeed
   \OptPt{\Lop{renamed}, \Ruleref{name}}
   }
@@ -9821,7 +9823,7 @@ VDM-SL standard.
   \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \Lit{:}, \lfeed
   \Ruleref{function type}
   }
-  
+
 \Ruledef{functions signature}{
   \Lop{functions} \Ruleref{function signature}, \lfeed
   \SeqPt{\Lit{;}, \Ruleref{function signature}}, \OptPt{\Lit{;}}
@@ -9839,11 +9841,11 @@ VDM-SL standard.
 \Ruledef{operation signature}{
   \Ruleref{name list}, \Lit{:}, \Ruleref{operation type}
   }
-  
+
 %\Ruledef{state signature}{
 %  \Lop{state}, \Ruleref{name}, \SeqPt{\Lit{,}, \Ruleref{name}}
 %  }
- 
+
 %\Ruledef{dynamic link module}{
 %  \Lop{dlmodule}, \Ruleref{identifier}, \lfeed
 %  \Ruleref{dynamic link interface},\lfeed
@@ -9947,10 +9949,10 @@ VDM-SL standard.
 \label{mathCSTypeDefs}
 
 \Ruledef{type definitions}{
-  \Lop{types}, 
+  \Lop{types},
   \OptPt{\Ruleref{access type definition}}
          , \lfeed
-         \SeqPt{\Lit{;}, 
+         \SeqPt{\Lit{;},
                {\Ruleref{access type definition}}},
          \OptPt{\Lit{;}}
         }
@@ -9958,7 +9960,7 @@ VDM-SL standard.
   \nonstandard{1}
 
   \Ruledef{access type definition}{
-     (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsepl\ (\OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed 
+     (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsepl\ (\OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
      \Ruleref{type definition}
     }
 
@@ -10001,7 +10003,7 @@ The access part is only possible in VDM++ and VDM-RT.
   \Lop{rat} \dsep
   \Lop{real} \dsepl
   \Lop{char} \dsepl
-  \Lop{token} 
+  \Lop{token}
   }
 
 \Ruledef{quote type}{
@@ -10119,11 +10121,11 @@ The access part is only possible in VDM++ and VDM-RT.
 \subsection{Value Definitions}
 
 \Ruledef{value definitions}{
-  \Lop{values}, 
+  \Lop{values},
   \OptPt{\Ruleref{access value definition}}, \lfeed
-         \SeqPt{\Lit{;}, 
+         \SeqPt{\Lit{;},
                \Ruleref{access value definition}
-               }, 
+               },
          \OptPt{\Lit{;}}
         }
 %  }
@@ -10131,12 +10133,12 @@ The access part is only possible in VDM++ and VDM-RT.
 
 %  \ifthenelse{\boolean{VDMpp}}{
     \Rule{access value definition}{
-       \OptPt{\Ruleref{access}}, 
+       \OptPt{\Ruleref{access}},
          \Ruleref{value definition}
     }
 %}{}
 
-\Ruledef{value definition}{ 
+\Ruledef{value definition}{
   \Ruleref{pattern}, \OptPt{\Lit{:}, \Ruleref{type}}, \Lit{=}, \Ruleref{expression}
   }
   \nonstandard{1}
@@ -10144,10 +10146,10 @@ The access part is only possible in VDM++ and VDM-RT.
 \subsection{Function Definitions}\label{functiondef2}
 
 \Ruledef{function definitions}{
-  \Lop{functions}, 
+  \Lop{functions},
   \OptPt{\Ruleref{access function definition}}, \lfeed
-         \SeqPt{\Lit{;}, 
-                \Ruleref{access function definition}}, 
+         \SeqPt{\Lit{;},
+                \Ruleref{access function definition}},
          \OptPt{\Lit{;}
         }
   }
@@ -10181,7 +10183,7 @@ The access part is only possible in VDM++ and VDM-RT.
   \nonstandard{1}
 
 \Ruledef{implicit function definition}{
-  \Ruleref{identifier}, \OptPt{\Ruleref{type variable list}}, \lfeed 
+  \Ruleref{identifier}, \OptPt{\Ruleref{type variable list}}, \lfeed
   \Ruleref{parameter types}, \lfeed
   \Ruleref{identifier type pair list}, \lfeed
   \OptPt{\Lop{pre}, \Ruleref{expression}}, \lfeed
@@ -10219,7 +10221,7 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
 \Ruledef{type variable list}{
   \Lit{[}, \Ruleref{type variable identifier}, \lfeed
   \SeqPt{\Lit{,}, \Ruleref{type variable identifier}}, \Lit{]}
-  }             
+  }
 
 \Ruledef{identifier type pair}{
   \Ruleref{identifier}, \Lit{:}, \Ruleref{type}
@@ -10250,17 +10252,17 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
 \Ruledef{function body}{
   \Ruleref{expression} \dsep
   \Lop{is subclass responsibility} \dsep
-  \Lop{is not yet specified} 
+  \Lop{is not yet specified}
   } \nonstandard{1}
 
 \subsection{Operation Definitions}\label{op-def2}
 
 \Ruledef{operation definitions}{
-  \Lop{operations}, 
+  \Lop{operations},
   \OptPt{\Ruleref{access operation definition}}, \lfeed
-         \SeqPt{\Lit{;}, 
+         \SeqPt{\Lit{;},
                 \Ruleref{access operation definition}
-               }, 
+               },
          \OptPt{\Lit{;}}
   }\nonstandard{1}
 
@@ -10269,7 +10271,7 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
 %#ifdef VICEMAN
       \OptPt{\Lop{async}}
 %#endif VICEMAN
-      \OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep\  
+      \OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep\
      (
 %#ifdef VICEMAN
       \OptPt{\Lop{async}}
@@ -10325,7 +10327,7 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
   }
 
 \Ruledef{operation body}{
-  \Ruleref{statement} \dsep 
+  \Ruleref{statement} \dsep
   \Lop{is subclass responsibility} \dsep
   \Lop{is not yet specified}
   } \nonstandard{1}
@@ -10359,7 +10361,7 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
 \Ruledef{instance variable definitions}{
   \Lop{instance}, \Lop{variables}, \lfeed
   \OptPt{\Ruleref{instance variable definition}, \lfeed
-         \SeqPt{\Lit{;}, 
+         \SeqPt{\Lit{;},
                \Ruleref{instance variable definition}
                }
         }
@@ -10397,7 +10399,7 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
 %      \Lop{assumption}, \Ruleref{name list}, \Lit{==}, \Ruleref{expression}}
 %\Ruledef{effect}{
 %      \Lop{effect}, \Ruleref{name list}, \Lit{==}, \Ruleref{expression}}
-      
+
 \subsection{Synchronization Definitions (VDM++ and VDM-RT)}
 
 \Ruledef{synchronization definitions}{
@@ -10458,10 +10460,10 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
 \subsection{Thread Definitions (VDM++ and VDM-RT)}
 
 \Ruledef{thread definitions}{ \Lop{thread},
-    \OptPt{\Ruleref{thread definition}} } 
+    \OptPt{\Ruleref{thread definition}} }
 
 \Rule{thread definition}{
-    \Ruleref{periodic thread definition} \dsep 
+    \Ruleref{periodic thread definition} \dsep
     \Ruleref{procedural thread definition} }
 
 \Ruledef{periodic thread definition}{
@@ -10469,7 +10471,7 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
     \Ruleref{sporadic obligation} }
 
 %For VDM++ where time is not explicit, it looks like:
-% 
+%
 %\Ruledef{periodic obligation}{
 %  \Lop{periodic},\Lit{(}, \Ruleref{expression}, \Lit{)}, \Lit{(}, \Ruleref{name}, \Lit{)}
 %}
@@ -10478,7 +10480,7 @@ For VDM-RT where time is explicit, it looks like:
 
 \Ruledef{periodic obligation}{
   \Lop{periodic}, \lfeed \Lit{(}, \Ruleref{expression},
-  \Ruleref{expression}, \Ruleref{expression}, \Ruleref{expression}, 
+  \Ruleref{expression}, \Ruleref{expression}, \Ruleref{expression},
   \Lit{)},\lfeed \Lit{(}, \Ruleref{name}, \Lit{)}
 }
 
@@ -10488,7 +10490,7 @@ For VDM-RT where time is explicit, it looks like:
 }
 
 For both VDM++ and VDM-RT, we can define:
-   
+
 \Ruledef{procedural thread definition}{
       \Ruleref{statement}}
 
@@ -10504,7 +10506,7 @@ For both VDM++ and VDM-RT, we can define:
 }
 
 \Ruledef{trace definition list}{
-  \Ruleref{trace definition term}, 
+  \Ruleref{trace definition term},
   \SeqPt{\Lit{;}, \Ruleref{trace definition term}}
 }
 
@@ -10519,35 +10521,35 @@ For both VDM++ and VDM-RT, we can define:
 }
 
 \Ruledef{trace binding definition}{
-  \Ruleref{trace let def binding} \dsep 
+  \Ruleref{trace let def binding} \dsep
   \Ruleref{trace let best binding}
 };
- 
-\Ruledef{trace let def binding}{ 
-  \Lop{let}, \Ruleref{local definition}, 
-  \SeqPt{ \Lit{,}, \Ruleref{local definition}}, \lfeed 
-  \Lop{in}, \Ruleref{trace definition}
-} 
 
-\Ruledef{trace let best binding}{ 
-  \Lop{let} \Ruleref{multiple bind}, 
+\Ruledef{trace let def binding}{
+  \Lop{let}, \Ruleref{local definition},
+  \SeqPt{ \Lit{,}, \Ruleref{local definition}}, \lfeed
+  \Lop{in}, \Ruleref{trace definition}
+}
+
+\Ruledef{trace let best binding}{
+  \Lop{let} \Ruleref{multiple bind},
   \OptPt{\Lop{be}, \Lop{st}, \Ruleref{expression}}, \lfeed
   \Lop{in}, \Ruleref{trace definition}
 }
 
 \Ruledef{trace repeat definition}{
-  \Ruleref{trace core definition}, 
+  \Ruleref{trace core definition},
   \OptPt{\Ruleref{trace repeat pattern}}
 }
- 
+
 \Ruledef{trace repeat pattern}{
-  \Lit{*} \dsep 
+  \Lit{*} \dsep
   \Lit{+} \dsep
   \Lit{?} \dsep
   \Lit{\{}, \Ruleref{numeric literal}, \Lit{\}} \dsep
-  \Lit{\{}, \Ruleref{numeric literal}, \Lit{,} 
+  \Lit{\{}, \Ruleref{numeric literal}, \Lit{,}
   \Ruleref{numeric literal}, \Lit{\}}
-} 
+}
 
 \Rule{trace core definition}{
   \Ruleref{trace apply expression} \dsep
@@ -10560,7 +10562,7 @@ For both VDM++ and VDM-RT, we can define:
 }
 
 \Rule{trace concurrent expression}{
-  \Lit{||}, \Lit{(}, \Ruleref{trace definition}, \lfeed 
+  \Lit{||}, \Lit{(}, \Ruleref{trace definition}, \lfeed
   \Lit{,}, \Ruleref{trace definition}, \lfeed
   \SeqPt{\Lit{,}, \Ruleref{trace definition}}, \Lit{)}
 }
@@ -10595,7 +10597,7 @@ For both VDM++ and VDM-RT, we can define:
   \Ruleref{map enumeration} \dsep
   \Ruleref{map comprehension} \dsep
   \Ruleref{tuple constructor} \dsep
-  \Ruleref{record constructor} \dsep 
+  \Ruleref{record constructor} \dsep
   \Ruleref{record modifier}  \dsep
   \Ruleref{apply} \dsep
   \Ruleref{field select} \dsep
@@ -10645,7 +10647,7 @@ For both VDM++ and VDM-RT, we can define:
   }
 
 \Ruledef{def expression}{
-  \Lop{def}, 
+  \Lop{def},
   \Ruleref{pattern bind}, \Lit{=}, \Ruleref{expression}, \lfeed
   \SeqPt{\Lit{;}, \Ruleref{pattern bind}, \Lit{=}, \Ruleref{expression}}, \OptPt{\Lit{;}},
   \lfeed
@@ -10666,7 +10668,7 @@ For both VDM++ and VDM-RT, we can define:
   }
 
 \Ruledef{cases expression}{
-  \Lop{cases}, \Ruleref{expression}, \Lit{:},\lfeed 
+  \Lop{cases}, \Ruleref{expression}, \Lit{:},\lfeed
   \Ruleref{cases expression alternatives}, \lfeed
   \OptPt{\Lit{,}, \Ruleref{others expression}}, \Lop{end}
   }
@@ -10836,7 +10838,7 @@ For both VDM++ and VDM-RT, we can define:
   \Ruleref{map range restrict to} \dsep
   \Ruleref{map range restrict by} \dsep
   \Ruleref{composition} \dsep
-  \Ruleref{iterate} 
+  \Ruleref{iterate}
 }
 
 \Ruledef{arithmetic plus}{
@@ -11036,7 +11038,7 @@ For both VDM++ and VDM-RT, we can define:
 \Ruledef{subsequence}{
   \Ruleref{expression}, \Lit{(}, \Ruleref{expression}, \Lit{,},
   \Lit{\Range}, \Lit{,}, \lfeed
-  \Ruleref{expression}, \Lit{)} 
+  \Ruleref{expression}, \Lit{)}
   }
 
 \subsection{Map Expressions}
@@ -11096,7 +11098,7 @@ For both VDM++ and VDM-RT, we can define:
 \Ruledef{function type instantiation}{
   \Ruleref{name}, \Lit{[}, \Ruleref{type}, \SeqPt{\Lit{,}, \Ruleref{type}}, \Lit{]}
   }
-  
+
 \subsection{The Lambda Expression}
 
 \Ruledef{lambda expression}{
@@ -11106,7 +11108,7 @@ For both VDM++ and VDM-RT, we can define:
 \subsection{The narrow Expression}
 
 \Ruledef{narrow expression}{
-  \Lop{narrow\_},  \Lit{(}, \Ruleref{expression},  \Lit{,}, \Ruleref{type}, \Lit{)} 
+  \Lop{narrow\_},  \Lit{(}, \Ruleref{expression},  \Lit{,}, \Ruleref{type}, \Lit{)}
   }
 
 
@@ -11248,7 +11250,7 @@ For both VDM++ and VDM-RT, we can define:
   %\ifthenelse{\boolean{VDMpp}}{
   \Ruleref{general assign statement}
 %}%
-%                              {\Ruleref{assign statement}} 
+%                              {\Ruleref{assign statement}}
   \dsep
   \Ruleref{if statement} \dsep
   \Ruleref{cases statement} \dsep
@@ -11256,7 +11258,7 @@ For both VDM++ and VDM-RT, we can define:
   \Ruleref{set for loop} \dsep
   \Ruleref{index for loop} \dsep
   \Ruleref{while loop} \dsep
-  \Ruleref{nondeterministic statement} \dsep 
+  \Ruleref{nondeterministic statement} \dsep
   \Ruleref{call statement} \dsep
   \Ruleref{specification statement} \dsep
 %#ifdef VDMPP
@@ -11277,7 +11279,7 @@ For both VDM++ and VDM-RT, we can define:
   \Ruleref{recursive trap statement} \dsep
   \Ruleref{exit statement} \dsep
   \Ruleref{error statement} \dsep
-  \Ruleref{identity statement} 
+  \Ruleref{identity statement}
   }
   \nonstandard{2}
 
@@ -11289,7 +11291,7 @@ For both VDM++ and VDM-RT, we can define:
   }
 
 \Ruledef{local definition}{
-  \Ruleref{value definition} \dsep 
+  \Ruleref{value definition} \dsep
   \Ruleref{function definition}
   }
 
@@ -11315,7 +11317,7 @@ For both VDM++ and VDM-RT, we can define:
 
 \Ruledef{block statement}{
   \Lit{(}, \SeqPt{\Ruleref{dcl statement}}, \lfeed
-  \Ruleref{statement}, \SeqPt{\Lit{;},  \Ruleref{statement}}, \OptPt{\Lit{;}}, 
+  \Ruleref{statement}, \SeqPt{\Lit{;},  \Ruleref{statement}}, \OptPt{\Lit{;}},
   \Lit{)}
   }\nonstandard{1}
 
@@ -11325,7 +11327,7 @@ For both VDM++ and VDM-RT, we can define:
   }
 
 \Ruledef{assignment definition}{
-  \Ruleref{identifier}, \Lit{:}, \Ruleref{type}, \OptPt{\Lit{:=}, 
+  \Ruleref{identifier}, \Lit{:}, \Ruleref{type}, \OptPt{\Lit{:=},
     \Ruleref{expression} }
   }
 
@@ -11338,13 +11340,13 @@ For both VDM++ and VDM-RT, we can define:
 %{}
 
 \Ruledef{assign statement}{
-  \Ruleref{state designator}, \Lit{:=}, 
+  \Ruleref{state designator}, \Lit{:=},
     \Ruleref{expression}
   }
 
 %\ifthenelse{\boolean{VDMpp}}{%
   \Ruledef{multiple assign statement}{
-    \Lop{atomic}, 
+    \Lop{atomic},
     \Lit{(}
       \Ruleref{assign statement}, \Lit{;}, \lfeed
       \Ruleref{assign statement},
@@ -11371,7 +11373,7 @@ For both VDM++ and VDM-RT, we can define:
 
 \Ruledef{cases statement}{
   \Lop{cases}, \Ruleref{expression}, \Lit{:}, \lfeed
-  \Ruleref{cases statement alternatives}, \lfeed 
+  \Ruleref{cases statement alternatives}, \lfeed
   \OptPt{\Lit{,}, \Ruleref{others statement}}, \Lop{end}
   }
 
@@ -11592,7 +11594,7 @@ In VDM++ and VDM-RT a call statement looks like:
   \Ruleref{pattern}, \Lit{\char'136}, \Ruleref{pattern}
   }
 
-\Ruledef{map enumeration pattern}{ 
+\Ruledef{map enumeration pattern}{
 \Lit{\{}, \Ruleref{maplet pattern list}, \Lit{\}} \dsep \Lit{\{}, \Lit{|->}, \Lit{\}}
 }
 
@@ -11610,7 +11612,7 @@ In VDM++ and VDM-RT a call statement looks like:
 
 \Ruledef{tuple pattern}{
   \Lit{mk\_}, \Lit{(}, \Ruleref{pattern}, \Lit{,}, \Ruleref{pattern list}, \Lit{)}
-  } 
+  }
 
 \Ruledef{record pattern}{
   \Lit{mk\_},\nmk \Ruleref{name}, \Lit{(}, \OptPt{\Ruleref{pattern list}}, \Lit{)}
@@ -11621,7 +11623,7 @@ In VDM++ and VDM-RT a call statement looks like:
   \Ruledef{object pattern}{
       \Lop{obj\_}, \Ruleref{identifier}, \Lit{(}, [ \Ruleref{field pattern list} ], \Lit{)}\nmk
     }
- \ntext{\Ruleref{object pattern} is only be used in VDM++ and VDM-RT.}
+ \ntext{\Ruleref{object pattern} is only be used in VDM++ and VDM-RT}
 
   \Ruledef{field pattern list}{
       \Ruleref{field pattern}, \SeqPt{\Lit{,},  \Ruleref{field pattern}}
@@ -11682,13 +11684,13 @@ The characters that comprise a valid VDM specification are defined in
 terms of Unicode codepoints. The actual character encoding of a VDM
 source file (for example UTF-8, ISO-Latin-1 or Shift-JIS) is not
 defined, and the tool support is responsible for converting whatever
-encoding is used into Unicode during the parse of the file. 
+encoding is used into Unicode during the parse of the file.
 
 All VDM keywords and delimiter tokens are composed of characters from
 the Basic Latin block (``ASCII'' codepoints less than U+0080). On the
 other hand, user identifiers (variable names, function names and so
 on) can be composed of a rich variety of Unicode codepoints,
-reflecting the need for fully internationalized specifications. 
+reflecting the need for fully internationalized specifications.
 
 All Unicode codepoints have a ``category''. Certain categories are
 entirely excluded from the set of codepoints that are permitted in
@@ -11698,10 +11700,10 @@ original VDM ISO standard, and for backward compatibility, there are
 different rules for the formation of user identifiers that only use
 ASCII characters. For example, the underscore is permitted in
 identifiers (U+005F), even though this is in the connecting
-punctuation category, which would not normally be allowed. 
+punctuation category, which would not normally be allowed.
 
 See \url{http://www.fileformat.info/info/unicode/category/index.htm} for
-more information about categories. 
+more information about categories.
 
 \begin{table}[ht]
 \setlength{\tabcolsep}{3.5mm}
@@ -11720,24 +11722,24 @@ more information about categories.
 \begin{tabular}{lp{13cm}}
         \multicolumn{2}{l}{following letter: }\\
         if   & codepoint $<$ U+0100 \\
-        then & Any character in categories Ll, Lm, Lo, Lt, Lu, Nd or 
+        then & Any character in categories Ll, Lm, Lo, Lt, Lu, Nd or
                U+0024 (a dollar sign) or U+005F (underscore) or U+0027 (apostrophe) \\
-        else & Any character except categories Cc, Zl, Zp, Zs, Cs, Cn 
+        else & Any character except categories Cc, Zl, Zp, Zs, Cs, Cn
     \end{tabular}
 
 \blankline
     \begin{tabular}{*{10}{l}}
         \multicolumn{10}{l}{digit:} \\
         {\tt 0}
-        & {\tt 1} 
-        & {\tt 2} 
-        & {\tt 3} 
-        & {\tt 4} 
+        & {\tt 1}
+        & {\tt 2}
+        & {\tt 3}
+        & {\tt 4}
         & {\tt 5}
-        & {\tt 6} 
-        & {\tt 7} 
-        & {\tt 8} 
-        & {\tt 9} 
+        & {\tt 6}
+        & {\tt 7}
+        & {\tt 8}
+        & {\tt 9}
      \end{tabular}
 
 \blankline
@@ -11745,20 +11747,20 @@ more information about categories.
         \multicolumn{10}{l}{hexadecimal digit:} \\
         {\tt 0} & {\tt 1} & {\tt 2} & {\tt 3} & {\tt 4} & {\tt 5} & {\tt 6} & {\tt 7} & {\tt 8} & {\tt 9} \\
         {\tt A} & {\tt B} & {\tt C} & {\tt D} & {\tt E} & {\tt F} \\
-        {\tt a} & {\tt b} & {\tt c} & {\tt d} & {\tt e} & {\tt f} 
+        {\tt a} & {\tt b} & {\tt c} & {\tt d} & {\tt e} & {\tt f}
      \end{tabular}
 
 \blankline
     \begin{tabular}{*{8}{l}}
         \multicolumn{8}{l}{octal digit:} \\
         {\tt 0}
-        & {\tt 1} 
-        & {\tt 2} 
-        & {\tt 3} 
-        & {\tt 4} 
+        & {\tt 1}
+        & {\tt 2}
+        & {\tt 3}
+        & {\tt 4}
         & {\tt 5}
-        & {\tt 6} 
-        & {\tt 7} 
+        & {\tt 6}
+        & {\tt 7}
      \end{tabular}
 
 \rule{\textwidth}{.5mm}
@@ -11767,7 +11769,7 @@ more information about categories.
 
 \end{table}
 
-        
+
 
 \clearpage % to force table to appear *here*
 
@@ -11807,7 +11809,7 @@ consecutive symbols must be separated by a separator.
   \Lks{char}
   \Lksb{class}
   \Lks{comp}
-  \Lks{compose} 
+  \Lks{compose}
   \Lks{conc}
 %#ifdef VICEMAN
   \Lks{cycles}
@@ -11816,7 +11818,7 @@ consecutive symbols must be separated by a separator.
   \Lksb{def}
   \Lks{definitions}
 %  \Lks{delay}
-  \Lks{dinter} 
+  \Lks{dinter}
   \Lks{div}
   \Lks{dlmodule}
   \Lksb{do}
@@ -11833,19 +11835,19 @@ consecutive symbols must be separated by a separator.
   \Lks{errs}
   \Lks{exists}
   \Lks{exists1}
-  \Lksb{exit} 
+  \Lksb{exit}
   \Lks{exports}
-  \Lks{ext} 
-  \Lks{false} 
+  \Lks{ext}
+  \Lks{false}
   \Lksb{floor}
-  \Lks{for} 
+  \Lks{for}
   \Lks{forall}
   \Lks{from}
   \Lks{functions}
 %  \Lks{general}
-  \Lks{hd} 
+  \Lks{hd}
   \Lks{if}
-  \Lksb{in} 
+  \Lksb{in}
   \Lks{inds}
  % \Lks{init}
   \Lks{inmap}
@@ -11862,12 +11864,12 @@ consecutive symbols must be separated by a separator.
   \Lks{isofbaseclass}
   \Lks{isofclass}
   \Lks{lambda}
-  \Lks{len} 
+  \Lks{len}
   \Lksb{let}
   \Lks{map}
   \Lks{measure}
-  \Lks{merge} 
-  \Lks{mod} 
+  \Lks{merge}
+  \Lks{mod}
   \Lks{module}
   \Lksb{mu}
   \Lks{munion}
@@ -11875,7 +11877,7 @@ consecutive symbols must be separated by a separator.
   \Lks{nat}
   \Lks{nat1}
   \Lks{new}
-  \Lks{nil} 
+  \Lks{nil}
   \Lks{not}
   \Lksb{of}
   \Lks{operations}
@@ -11884,7 +11886,7 @@ consecutive symbols must be separated by a separator.
   \Lks{per}
   \Lks{periodic}
   \Lksb{post}
-  \Lks{power} 
+  \Lks{power}
   \Lks{pre}
   \Lks{private}
   \Lks{protected}
@@ -11893,7 +11895,7 @@ consecutive symbols must be separated by a separator.
  % \Lksb{qsync}
   \Lks{rat}
   \Lks{rd}
-  \Lks{real} 
+  \Lks{real}
   \Lks{rem}
   \Lksb{renamed}
   \Lks{responsibility}
@@ -11936,30 +11938,30 @@ consecutive symbols must be separated by a separator.
   \Lks{to}
   \Lks{token}
   \Lks{traces}
-  \Lks{trap} 
+  \Lks{trap}
   \Lks{true}
   \Lksb{types}
   \Lks{undefined}
   \Lks{union}
   \Lks{uselib}
-  \Lksb{values} 
+  \Lksb{values}
   \Lks{variables}
 %  \Lks{w\_}
-  \Lks{while} 
+  \Lks{while}
   \Lks{with}
   \Lks{wr}
   \Lks{yet}
-  \Lop{RESULT} 
+  \Lop{RESULT}
 %#endif VDMPP
   }
 
 %\Ruledef{separator}{
-%  \hyperlink{charSetTable}{newline} \dsepl 
+%  \hyperlink{charSetTable}{newline} \dsepl
 %  \hyperlink{charSetTable}{white space}
 %  }
 
 \Ruledef{identifier}{
-  \Ruleref{initial letter}, 
+  \Ruleref{initial letter},
   \SeqPt{following letter}
   }
 
@@ -11980,13 +11982,13 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
   }
 
 \Ruledef{is basic type}{
-  \Lop{is\_}, 
+  \Lop{is\_},
   \Brack{%
     \Lop{bool} \dsepl
-    \Lop{nat} \dsepl 
-    \Lop{nat1} \dsepl 
-    \Lop{int} \dsepl 
-    \Lop{rat} \dsep 
+    \Lop{nat} \dsepl
+    \Lop{nat1} \dsepl
+    \Lop{int} \dsepl
+    \Lop{rat} \dsep
     \Lop{real} \dsepl
     \Lop{char} \dsepl
     \Lop{token}
@@ -12035,8 +12037,8 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
   }
 
 \Ruledef{character literal}{
-  \Lit{\mbox{\,}'\mbox{\,}}, \Ruleref{character} \dsepl 
-  \Ruleref{escape sequence} \dsep 
+  \Lit{\mbox{\,}'\mbox{\,}}, \Ruleref{character} \dsepl
+  \Ruleref{escape sequence} \dsep
   \Lit{\mbox{\,}'\mbox{\,}}
   }\nonstandard{1}
 
@@ -12097,11 +12099,11 @@ Sequence & Interpretation\\ \hline
   \Lit{{\char'134}u} hexadecimal digit, hexadecimal digit,
                            & U+abcd (hex representation of character\\
 hexadecimal digit, hexadecimal digit  & (e.g.\ \texttt{{\char'134}u0041} is `A'))\\
-  \Lit{{\char'134}c} character 
+  \Lit{{\char'134}c} character
                            & U+00nn (control character)\\
-                           & (e.g.\ \texttt{{\char'134}cA} $\equiv$ 
+                           & (e.g.\ \texttt{{\char'134}cA} $\equiv$
                                     \texttt{{\char'134}x01})\\
-  \Lit{{\char'134}} octal digit, octal digit, octal digit 
+  \Lit{{\char'134}} octal digit, octal digit, octal digit
                            & U+00nn (octal representation of character)\\
   \Lit{{\char'134}{\char'042}}       & U+0022 (double quote)\\
   \Lit{{\char'134}'}       & U+0027 (apostrophe) \\ \hline
@@ -12218,7 +12220,7 @@ All applicators have equal precedence.
   }
 
 \Rule{field select}{
-  \Ruleref{expression}, \Lit{.}, \Ruleref{identifier} 
+  \Ruleref{expression}, \Lit{.}, \Ruleref{identifier}
   }
 
 \section{The Family of Evaluators}
@@ -12426,7 +12428,7 @@ The grouping of operands of the binary operators are as follows:
 \item[Connectives:] The `{\tt =>}' operator has right grouping.  The other
   operators are associative and therefore right and left grouping are
   equivalent.
-  
+
 \item[Evaluators:] Left grouping\footnote{Except the ``map domain restrict
     to'' and the ``map domain restrict by'' operators which have a right
     grouping. This is not standard.}.
