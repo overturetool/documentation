@@ -46,3 +46,16 @@ Icon[^-0-9a-zA-Z]
 .#*
 \#*#
 *.swp
+
+# maven target directories #
+############################
+target/
+
+# eclipse noise #
+#################
+.metadata/
+.classpath
+.settings/
+.metadata/
+.project
+bin
