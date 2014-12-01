@@ -18,6 +18,5 @@ Software and Informatics, Vol 3., No 2-3, June/September 2009, pp. 305-341.
 #DYNAMIC_TYPE_CHECKS=true
 #SUPPRESS_WARNINGS=false
 #ENTRY_POINT=new TestComplete().Execute()
-#LIB=IO
 #EXPECTED_RESULT=NO_ERROR_INTERPRETER
 #******************************************************
