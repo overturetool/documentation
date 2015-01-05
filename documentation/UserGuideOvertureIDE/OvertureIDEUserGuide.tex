@@ -184,7 +184,7 @@ Fujitsu UK\\
 Lovelace Road, Bracknell, \\
 Berkshire. RG12 8SN, UK}
 
-\date{April 2013}
+\date{January 2015}
 
 \reportno{TR-002}
 
@@ -201,15 +201,18 @@ May     & 2010 & 1       & 0.2   \\ \hline
 February& 2011 & 2       & 1.0.0   \\ \hline
 June    & 2011 & 3       & 1.0.1   \\ \hline
 August  & 2013 & 4       & 2.0.0 \\ \hline
+January  & 2015 & 5       & 2.0.? \\ \hline
 \end{tabular}
 
 \tableofcontents
 
 \begin{abstract}
 This document is the user manual for the Overture Integrated Development
-Environment (IDE) version 2.0.0 for
+Environment (IDE) version 2.1.? for
 VDM. It serves as a reference for anybody wishing to make use of
-the tool with one of the VDM dialects (VDM-SL, VDM++ or VDM-RT).
+the tool with one of the VDM dialects (VDM-SL, VDM++ or VDM-RT). 
+The different dialects are controlled by a VDM language Board that 
+evaluates possible Requests for Modifications.
 Overture tool support is built on top of the Eclipse platform. The
 objective of the Overture initiative is to create and support an open source
 platform that can be used for both experimentation with new VDM dialects,
@@ -256,7 +259,8 @@ supports object-oriented structuring of models and permits direct
 modelling of concurrency \cite{Fitzgerald&05}. A further extension
 to VDM++, called VDM Real Time (VDM-RT\footnote{Formerly called VDM In a
 Constrained Environment (VICE).}), includes support for discrete
-time models \cite{Mukherjee&00,Verhoef&06b}. All
+time models \cite{Mukherjee&00,Verhoef&06b}. The VDM-RT dialect is also used inside 
+the Crescendo tool\footnote{See \url{http://crescendotool.org/}.} supporting collaborative modelling and co-simulation \cite{Fitzgerald&14c}. All
 three VDM dialects are supported by Overture.
 
 Since VDM modelling languages have a formal mathematical semantics,
@@ -268,9 +272,7 @@ offers tool support for building models in collaboration with other
 modelling tools, to execute and test models and to carry out different
 forms of static analysis \cite{Larsen&13b}. It can be seen as an open
 source version of the closed (but now freely available) tool called VDMTools
-\cite{Elmstrom&94,Larsen01,Fitzgerald&08a} although features to
-generate executable code in high-level programming languages are
-not yet available in Overture.
+\cite{Elmstrom&94,Larsen01,Fitzgerald&08a}.
 
 This guide explains how to use the Overture IDE for developing models
 for different VDM dialects. It starts with an explanation
@@ -291,7 +293,8 @@ Chapters~\ref{sec:POmanagement} to \ref{sec:showlog} cover various
 VDM specific features: Chapter~\ref{sec:POmanagement}
 explains the notion of proof obligations and their support in
 Overture; Chapter~\ref{sec:testing} explains
-combinatorial testing and the automation support for that;
+combinatorial testing and the automation support for that; Chapter~\ref{sec:codegen} explains
+how it is possible automatically to generate executable code in programming languages such as Java and C++ for a subset of VDM models;
 Chapter~\ref{sec:vdmuml} explains the support for mapping between
 object-oriented VDM models and UML models; Chapter~\ref{sec:ToVDMRT}
 shows how a VDM++ project can be
@@ -714,7 +717,7 @@ where the library is to be added and then selecting \emph{New} $\rightarrow$
   different kind of VDM values mainly to and from files and strings.
 \item[CSV:] This library is an extension of the IO library which
   provides additional functionality for saving and reading VDM values
-  to/from comma seperate format used by excel spreadsheets.
+  to/from comma separate format used by excel spreadsheets.
 \item[VDM-Unit:] This library provides functionality for unit testing
   of VDM models similar to the well-known JUnit library.
 \end{description}
@@ -1310,7 +1313,20 @@ variables in scope.
 
 \chapter{Automatic Generation of Code}\label{sec:codegen}
 
-For a subset of VDM models it is possible to automatically produce code either in Java or C++.
+For a subset of VDM models it is possible to automatically produce code either in Java or C++. \index{code generation}
+This kind of feature is also available in VDMTools \cite{Java2VDMMan,CGMan,CGManPP}. 
+
+\section{Configuration of the Code Generator}
+
+
+\section{Use of the Code Generator}
+
+
+\section{Limitations of the Code Generator}
+
+
+\section{Incorporation of Standard Libraries}
+
 
 \chapter{Mapping VDM++ To and From UML}\label{sec:vdmuml}
 
