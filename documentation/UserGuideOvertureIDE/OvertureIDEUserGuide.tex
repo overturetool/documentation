@@ -175,7 +175,7 @@
 \makeindex
 
 \begin{document}
-\title{Overture VDM-10 Tool Support: User Guide \\{\large Version 2.0.0}}
+\title{Overture VDM-10 Tool Support: User Guide \\{\large Version 2.1.6}}
 \author{Peter Gorm Larsen, Kenneth Lausdahl, Peter J\o{}rgensen,\\ Joey Coleman, Sune Wolff and  Lu\'{i}s Diogo Couto \\
 Aarhus University, Department of Engineering\\
 Finlandsgade 22, DK-8000 \AA{}rhus C, Denmark\\[3mm]
@@ -201,15 +201,15 @@ May     & 2010 & 1       & 0.2   \\ \hline
 February& 2011 & 2       & 1.0.0   \\ \hline
 June    & 2011 & 3       & 1.0.1   \\ \hline
 August  & 2013 & 4       & 2.0.0 \\ \hline
-January  & 2015 & 5       & 2.0.? \\ \hline
+January  & 2015 & 5       & 2.1.6 \\ \hline
 \end{tabular}
 
 \tableofcontents
 
 \begin{abstract}
 This document is the user manual for the Overture Integrated Development
-Environment (IDE) version 2.1.? for
-VDM. It serves as a reference for anybody wishing to make use of
+Environment (IDE) version 2.1.6 for the Vienna Development Method
+(VDM). It serves as a reference for anybody wishing to make use of
 the tool with one of the VDM dialects (VDM-SL, VDM++ or VDM-RT). 
 The different dialects are controlled by a VDM language Board that 
 evaluates possible Requests for Modifications.
@@ -219,7 +219,7 @@ platform that can be used for both experimentation with new VDM dialects,
 as well as new features for analysing VDM
 models in different ways. The tool is entirely open source, so anybody
 can join the development team and influence future
-developments. The long term goal is to ensure that stable
+developments. The goal is to ensure that stable
 versions of the tool suite can be used for large scale industrial
 applications of VDM technology.
 \end{abstract}
@@ -241,10 +241,10 @@ application, in many cases has been used
 by practitioners who were not specialists in
 the underlying formalism or logic
 \cite{Larsen&96b,Clement&99,Kurita&09}. Experience with the method
-suggests that the effort expended on formal modelling and analysis can
+suggests that the effort spend on formal modelling and analysis can
 be recovered in reduced rework costs arising from design errors.
 
-VDM models are expressed in a specification language (VDM-SL) which
+VDM models can be expressed in a Specification Language (VDM-SL) which
 supports the description of data and functionality
 \cite{ISOVDM96a,Fitzgerald&98b,Fitzgerald&09}. Data are defined by
 means of types built using constructors that define structured data
@@ -264,7 +264,7 @@ the Crescendo tool\footnote{See \url{http://crescendotool.org/}.} supporting col
 three VDM dialects are supported by Overture.
 
 Since VDM modelling languages have a formal mathematical semantics,
-a wide range of analyses can be performed on models, both to check
+a wide range of ana\-ly\-ses can be performed on models, both to check
 internal consistency and to confirm that models have emergent
 properties. Analyses may be performed by inspection, static analysis,
 testing or mathematical proof. To assist in this process, Overture
@@ -311,7 +311,7 @@ to~\ref{app:POcategories} give complete lists of possible errors,
 warnings and proof obligation categories. Appendix~\ref{chap:umlrules} provides
 an overview of the VDM++/VDM-RT to UML mapping rules. 
 Appendix~\ref{cha:VDMvalues} provides details about how to represent VDM 
-values in order to combine Java with VDM as described in Chapter~\ref{sec:linkToJava}
+values in order to combine Java with VDM as described in Chapter~\ref{sec:linkToJava}.
 Finally, there is an \hyperref[sec:index]{index} of significant terms used in this
 manual.
 
@@ -322,12 +322,12 @@ manual.
 \item[\textbf{Overture:}] This
  is an open source tool, developed by volunteers and built on
 the Eclipse platform. The project is managed on
-SourceForge\footnote{\url{https://sourceforge.net/projects/overture/}}.
+GitHub\footnote{\url{https://github.com/overturetool/overture}}.
 The best way to run Overture is to download a special version of
 Eclipse with the Overture functionality already pre-installed. If you
 go to:
   \begin{quote}
-  \texttt{http://sourceforge.net/projects/overture/files/}
+  \url{http://overturetool.org/download}
   \end{quote}
   \noindent you will find pre-installed versions of Overture for
   Windows, Linux and Mac\footnote{It is planned to develop an update
@@ -342,15 +342,16 @@ go to:
       setting from a company called Softeam. Just like Overture this tool is
       built on top of the Eclipse platform. The product can be obtained from
 \begin{quote}
-\texttt{http://www.modelio.org/}.
+\url{http://www.modelio.org/}.
 \end{quote}
 \end{description}
 
-For Overture, a link is offered at the top with the latest version (2.0.0) for
-your operating system.  Supported systems are: Windows, Linux and Mac. If you
-wish another version, simply browse the \texttt{Overture\_IDE} section.  Simply
-extract the zip file downloaded and run the Overture executable
-file at the top level to start the tool. Note that in order to be able
+%For Overture, a link is offered at the top with the latest version (2.1.6) for
+%your operating system.  Supported systems are: Windows, Linux and Mac. If you
+%wish another version, simply browse the \texttt{Overture\_IDE} section.  Simply
+%extract the zip file downloaded and run the Overture executable
+%file at the top level to start the tool. 
+Note that in order to be able
 to execute Overture you need to have Java Runtime Environment (minimum
 version~1.6) installed on your computer.
 When you start Overture for the first time, it will request a workspace
@@ -372,19 +373,19 @@ can always get back to this page using \emph{Help} $ \rightarrow$
 \end{center}
 \end{figure}
 
-Large libraries of sample VDM-SL, VDM++ and VDM-RT models are available
-and can be downloaded from SourceForge under the
-\texttt{files/Examples} section using the URL\footnote{The library
-  files are intended to be used with Eclipse, but can also be opened with
-  file compression programs like \texttt{Winrar} on Windows}:
-\begin{quote}
-\url{https://sourceforge.net/projects/overture/files/Examples/}
-\end{quote}
+%Large libraries of sample VDM-SL, VDM++ and VDM-RT models are available
+%and can be downloaded from SourceForge under the
+%\texttt{files/Examples} section using the URL\footnote{The library
+%  files are intended to be used with Eclipse, but can also be opened with
+%  file compression programs like \texttt{Winrar} on Windows}:
+%\begin{quote}
+%\url{https://sourceforge.net/projects/overture/files/Examples/}
+%\end{quote}
 
-Such existing projects can be downloaded and manually imported into Overture as
-described in section~\ref{subsec:importproj}. However, the examples are 
-also bundled with Overture and be automatically imported without the need for
-a download. See \autoref{ssec:importexamples} for more details.
+%Existing projects can be downloaded and manually imported into Overture as
+%described in section~\ref{subsec:importproj}. However, the examples are 
+%also bundled with Overture and be automatically imported without the need for
+%a download. See \autoref{ssec:importexamples} for more details.
 
 Finally, in order to make use of the
 test coverage feature described in Section~\ref{sec:testcoverage} it is
@@ -607,19 +608,20 @@ bar, at the bottom of the workspace, when an editor has focus.
 It is possible to import Overture projects by
 right-clicking in the Explorer view and selecting \emph{Import}, followed
 by \emph{General} $\rightarrow$ \emph{Existing Projects into
-  Workspace}.  In this way the projects from \texttt{.zip} files
-mentioned in Chapter~\ref{sec:install} can be imported very
-easily.\index{project!import}
+  Workspace}.  
+  %In this way the projects from \texttt{.zip} files
+%mentioned in Chapter~\ref{sec:install} can be imported very
+%easily.\index{project!import}
 
-\subsection{Importing Overture Examples}
-\label{ssec:importexamples}
+%\subsection{Importing Overture Examples}
+%\label{ssec:importexamples}
 
-It is possible to automatically import the Overture examples mentioned in
-Chapter \ref{sec:install}. To do this, right click the Explorer view and select
+It is possible to automatically import a large collection of existing examples. 
+To do this, right click the Explorer view and select
 \emph{Import} $\rightarrow$ \emph{Overture} $\rightarrow$ \emph{Overture
 Examples}.  You can then select which VDM dialect you wish to import examples
 for. Finally, a selection screen with all examples will be shown\footnote{Note
-that any previously imported examples will be greyed out}. Simply pick the ones
+that any previously imported examples will be greyed out.}. Simply pick the ones
 you wish to import. See Figure \ref{fig:example_import} for more
 details.\index{examples!import}
 
@@ -627,7 +629,7 @@ details.\index{examples!import}
 \begin{figure}[!htb]
 	\begin{center}
 	  \includegraphics[width=0.9\textwidth]{figures/ImportExamples}
-	  \caption[Import VDM Examples]{Import VDM Examples}
+	  \caption[Import existing VDM Examples]{Import VDM Examples}
 	  \label{fig:example_import}
 	\end{center}
 \end{figure}
@@ -730,8 +732,8 @@ where the library is to be added and then selecting \emph{New} $\rightarrow$
 	\end{center}
 \end{figure}
 
-These libraries are available for all VDM dialects also when a flat
-VDM-SL specification is used.
+All these libraries except \texttt{VDM-Unit} are available for all VDM dialects also when a flat
+VDM-SL specification is used. \texttt{VDM-Unit} use object-orientation and thus it cannot be used with VDM-SL.
 
 \section{Setting Project Options}\label{subsec:options}
 
@@ -739,7 +741,7 @@ There are various VDM
 specific settings for an Overture project. You can change these by
 selecting a project
 in the \emph{Explorer} view and then right clicking and selecting
-\emph{Properties}. See Figure~\ref{fig:VDMSettings}. The options
+\emph{Properties}, See Figure~\ref{fig:VDMSettings}. The options
 that can be set for each VDM project are:\index{project!options}
 
 \begin{figure}[!hbt]
@@ -755,7 +757,7 @@ that can be set for each VDM project are:\index{project!options}
   \emph{classic} version which is similar to that used in
   VDMTools. Alternatively you can select VDM-10 which
   is a new improved (but not necessarily backwards compatible) version of
-  the VDM dialects developed by the Overture Language Board.
+  the VDM dialects developed by the Overture VDM Language Board.
 \item[Suppress type checking warnings:] Warnings are enabled
   by default but you can change it here.
 \end{description}
@@ -788,8 +790,8 @@ It is also possible to set various preferences that apply to
 all projects. This is done in the general VDM preferences dialog under
 \emph{Window} $\rightarrow$ \emph{Preferences} $\rightarrow$
 \emph{VDM}. Here, for example, it is possible to link projects to
-VDMTools if you have the appropriate SCSK executables installed on
-the computer. Figure~\ref{fig:SCSKPreferences} shows how it is possible to
+VDMTools if you have the appropriate SCSK VDMTools executables installed on
+the computer\footnote{This does not work for VDM-RT models since that dialect is no longer supported by VDMTools.}. Figure~\ref{fig:SCSKPreferences} shows how it is possible to
 set up paths to the corresponding VDMTools executables. If these paths have
 been set, it is possible to right click on a project in the VDM
 Explorer view and select \emph{VDM Tools} $\rightarrow$
@@ -829,7 +831,7 @@ these preferences can be found in Chapter~\ref{sec:vdmuml}.
 
 \section{VDM Dialect Editors}
 
-VDM model files are always changed in the dialect Editor view. Syntax checking
+VDM model files are always ment to be changed in the dialect Editor view. Syntax checking
 is carried out continuously as source files are
 changed (even before the files are saved). Whenever files are saved, assuming
 there are no syntax errors, a full type check of the \emph{entire} VDM model is
@@ -841,7 +843,7 @@ identified.
 
 \section{Using Templates}\label{sec:templates}
 
-Eclipse templates can be particularly useful when writing VDM models. If you
+Eclipse templates can be particularly useful when you are new to writing VDM models. If you
 press \textit{CTRL+space} after typing the first few characters of a template name,
 Overture will offer a proposal. For example, if you type ''fun'' followed
 by \textit{CTRL+space}, the IDE will propose the use of an implicit or explicit
@@ -890,15 +892,15 @@ create a new launch specification of that type and give it a name. The
 launch dialog requires you to identify the VDM project name,
 the class/module name and the initial operation/function to call in that
 class/module. Figure~\ref{fig:userguide:launchconfig} shows a launch
-dialog. The standard Eclipse strategy is the launch mode called
+dialog. The standard Eclipse strategy is the launch mode called an
 ``Entry point'' and then you simply click
-the Browse button and it will let you select a project from
-those available in the workspace. Clicking the Search button will search the chosen
+the \emph{Browse} button and it will let you select a project from
+those available in the workspace. Clicking the \emph{Search} button will search the chosen
 project for classes and modules to select a public operation or function from.
 If the chosen operation or function has parameters, the types and names of those
 parameters will be copied into the Operation box -- these \emph{must} be replaced with
 valid argument values\footnote{You will see type checking errors at the top of the
-dialog if you do not do this, such as "Error 3063: Too few arguments in ..."}.
+dialog if you do not do this, such as ``\texttt{Error 3063: Too few arguments in ...}"}.
 
 However, there are other launch mode possibilities here as
 well.\index{launch configuration mode} The
@@ -943,7 +945,7 @@ in the \emph{Common} tab on the dialog. This is standard Eclipse behaviour.
 Whenever a launch configuration is started up it is also possible to
 decide upon which additional run-time checks to carry out. By default
 all possible run-time checks are swiched on but if desired (some of)
-these can be swiched off using the ``Runtime'' pane (see
+these can be swiched off using the ``\emph{Runtime}'' pane (see
 Figure~\ref{fig:userguide:launchconfigRToptions}). Note that for
 VDM-RT debugging it is also possible to switch off the logging of all
 events appearing during the debugging. The different run-time checks
@@ -974,7 +976,7 @@ presence of mutually recursive function definitions.}.
 \end{description}
 
 In the launch
-configuration the ``Debugger'' pane shown in
+configuration the ``\emph{Debugger}'' pane shown in
 Figure~\ref{fig:userguide:launchconfigSpecialoptions} can also be
 useful in rare cases where one has particularly deep recursion for
 example. This is an advanced setting where one can decide the
@@ -1108,7 +1110,7 @@ equal to, greater than, or a multiple of the given value, or a general
 expression using the variables in scope at the breakpoint.
 
 A normal breakpoint can be made conditional by right clicking on the breakpoint
-mark in the Editor view\footnote{Note this is not possible from the Breakpoint view}
+mark in the Editor view\footnote{Note this is not possible from the Breakpoint view.}
 and selecting \emph{Breakpoint Properties}. This opens a dialog like the one shown in
 Figure~\ref{fig:userguide:BreakpointConditional}.
 
@@ -1167,7 +1169,7 @@ construct: a \verb+\documentclass, \section, \subsection+ or a \LaTeX\ comment.
 When using this functionality, it is possible to configure additional options
 for the PdfLatex generation in the project properties (see
 \autoref{fig:latexProperties}). For example, you can choose whether to use an
-auto generated main Tex file or a user provided one.  It is also possible to
+auto generated main \texttt{.tex} file or a user provided one.  It is also possible to
 generate a pdf containing only the model (all text outside \texttt{vdm\_al}
 will be ignored).
 
@@ -1253,10 +1255,10 @@ problems and re-run the trace to check they are fixed.
 \section{Using the Combinatorial Testing GUI}
 
 The syntax for trace definitions is defined in the VDM-10 Language
-Manual.\index{traces}
+Manual \cite{Larsen&10b}.\index{traces}
 If you have created a {\textbf\texttt{traces}} entry for a module or class it
 can be executed via the \emph{Combinatorial Testing}
-perspective\index{combinatorial testing}. See
+perspective\index{combinatorial testing}, see
 Figure~\ref{fig:tracesalarm}.\index{perspective!combinatorial testing}
 
 Different icons are used to indicate the verdict in a test
@@ -1342,7 +1344,7 @@ used statically inside classes and their usage in class diagrams that is used.
 
 To convert a UML class diagram model to a VDM++ model, you first need to export
 the UML model from Modelio to the Eclipse XMI\index{XMI} format, called UML
-using the EMF UML3.0.0 format At the moment, Modelio\index{Modelio} is the only
+using the EMF UML3.0.0 format. At the moment, Modelio\index{Modelio} is the only
 UML tool supported. Export from Modelio is done as illustrated in
 Figure~\ref{fig:exportfromUML}.
 
@@ -1414,7 +1416,7 @@ Whenever a VDM-RT model is executed a binary logfile with \texttt{.rtbin} extens
 is created in the \texttt{generated/logs} subfolder. In order to distinguish between multiple runs,
 the name of the logfile indicates the time at which the model was executed. Logfiles can be
 viewed with the built-in \emph{RealTime Log Viewer},\index{RealTime Log viewer}
-by double-clicking the .rtbin file in the Explorer view. In addition, Overture provides
+by double-clicking the \texttt{.rtbin} file in the Explorer view. In addition, Overture provides
 a textual version of the log file with \texttt{.rt} extension,
 which can be inspected using any text editor.
 
@@ -1456,7 +1458,7 @@ $ button or moving to the next time index using the $
 \begin{array}{l}
 \includegraphics{screenDumps/moveNextIcon}
 \end{array}
-$ button .\index{Go to time} Also, Overture enables you to move to the previous
+$ button.\index{Go to time} Also, Overture enables you to move to the previous
 time index using the $
 \begin{array}{l}
 \includegraphics{screenDumps/movePreviousIcon}
@@ -1467,9 +1469,9 @@ using the $
 \begin{array}{l}
 \includegraphics{screenDumps/exportImagesIcon}
 \end{array}
-$ button.\index{export image button} All
+$ button.\index{export image button}  All
 the generated images will be placed in the logfile directory, where each image holds a name
-indicating the time of execution and the specific view (Execution overview, CPU1, CPU2 etc.).
+indicating the time of execution and the specific view (\texttt{Execution overview}, \texttt{CPU1}, \texttt{CPU2} etc.).
 
 The RealTime Log Viewer also provides an overview of all executions on a single CPU.
 Each CPU shows a detailed description of all operations and functions invoked
@@ -1887,7 +1889,7 @@ In Eclipse a Jar file can be created through the Export function, as illustrated
 \end{center}
 \end{figure}
 
-Note that it can be very beneficial to check ``Save the description of this JAR …'', illustrated on Figure~\ref{fig:gui:SaveExport}, as this saves the export configuration and makes it a lot faster to redeploy the JAR file to VDM project during development.
+Note that it can be very beneficial to check ``Save the description of this JAR2.1.6'', illustrated on Figure~\ref{fig:gui:SaveExport}, as this saves the export configuration and makes it a lot faster to redeploy the JAR file to VDM project during development.
 
 \begin{figure}[h]
 \begin{center}
@@ -1917,12 +1919,12 @@ as it can be used independently of the Eclipse interface of Overture.
 
 \section{Starting Overture at the Command-Line}
 
-The \texttt{Overture-2.0.0.jar} file contains a MANIFEST that identifies the main class to start the
+The \texttt{Overture-2.1.6.jar} file contains a MANIFEST that identifies the main class to start the
 tool, so the minimum command line invocation is as follows:
 
 \lstset{style=tool,language=}
 \begin{lstlisting}
-$ !\textbf{java -jar Overture-2.0.0.jar}!
+$ !\textbf{java -jar Overture-2.1.6.jar}!
 Overture: You must specify either -vdmsl, -vdmpp or -vdmrt
 Usage: Overture <-vdmsl | -vdmpp | -vdmrt> [<options>] [<files>]
 \end{lstlisting}
@@ -2010,7 +2012,7 @@ specification, assuming the specification has no type checking errors.
 \lstset{style=tool,language=}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl flat.vdmsl}!
+%$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl flat.vdmsl}!
 %Parsed 1 module in 0.202 secs. No syntax errors
 %Warning 5012: Recursive function has no measure in (flat.vdmsl) at
 %line 3:1
@@ -2018,12 +2020,12 @@ specification, assuming the specification has no type checking errors.
 %\end{lstlisting}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl -q -w flat.vdmsl}!
+%$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl -q -w flat.vdmsl}!
 %<quiet>
 %\end{lstlisting}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl -w -e "fac(10)" flat.vdmsl}!
+%$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl -w -e "fac(10)" flat.vdmsl}!
 %Parsed 1 module in 0.28 secs. No syntax errors
 %Type checked 1 module in 0.031 secs. No type errors,
 %suppressed 1 warning
@@ -2033,12 +2035,12 @@ specification, assuming the specification has no type checking errors.
 %\end{lstlisting}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl -e "fac(10)" -q -w flat.vdmsl}!
+%$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl -e "fac(10)" -q -w flat.vdmsl}!
 %3628800
 %\end{lstlisting}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar overture-2.0.0.jar -vdmsl -i -w flat.vdmsl}!
+%$ !\textbf{java -jar overture-2.1.6.jar -vdmsl -i -w flat.vdmsl}!
 %Parsed 1 module in 0.202 secs. No syntax errors
 %Type checked 1 module in 0.016 secs. No type errors,
 %suppressed 1 warning
@@ -2052,7 +2054,7 @@ specification, assuming the specification has no type checking errors.
 %\end{lstlisting}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl -p -w flat.vdmsl}!
+%$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl -p -w flat.vdmsl}!
 %Parsed 1 module in 0.218 secs. No syntax errors
 %Type checked 1 module in 0.015 secs. No type errors,
 %suppressed 1 warning
@@ -2066,7 +2068,7 @@ specification, assuming the specification has no type checking errors.
 %\end{lstlisting}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl -w -e "fac(0)" -w flat.vdmsl}!
+%$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl -w -e "fac(0)" -w flat.vdmsl}!
 %Parsed 1 module in 0.203 secs. No syntax errors
 %Type checked 1 module in 0.015 secs. No type errors,
 %suppressed 1 warning
@@ -2084,7 +2086,7 @@ specification, assuming the specification has no type checking errors.
 %\end{lstlisting}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl -w -pre -e "fac(0)"
+%$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl -w -pre -e "fac(0)"
 %-w flat.vdmsl}!
 %Parsed 1 module in 0.218 secs. No syntax errors
 %Type checked 1 module in 0.016 secs. No type errors,
@@ -2095,7 +2097,7 @@ specification, assuming the specification has no type checking errors.
 %\end{lstlisting}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl -w -o flat.lib flat.vdmsl}!
+%$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl -w -o flat.lib flat.vdmsl}!
 %Parsed 1 module in 0.203 secs. No syntax errors
 %Type checked 1 module in 0.016 secs. No type errors,
 %suppressed 1 warning
@@ -2103,7 +2105,7 @@ specification, assuming the specification has no type checking errors.
 %\end{lstlisting}
 
 %\begin{lstlisting}
-%$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl flat.lib -e "fac(10)"}!
+%$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl flat.lib -e "fac(10)"}!
 %Loaded 1 module from flat.lib in 0.187 secs
 %Initialized 1 module in 0.0 secs.
 %3628800
@@ -2142,7 +2144,7 @@ VDM-SL specification from a single file called \texttt{shmem.vdmsl},
 the following options would be used:
 
 \begin{lstlisting}
-$ !\textbf{java -jar Overture-2.0.0.jar -vdmsl -i shmem.vdmsl}!
+$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl -i shmem.vdmsl}!
 Parsed 1 module in 0.14 secs. No syntax errors
 Warning 5000: Definition 'i' not used in 'M' (shmem.vdmsl) 
   at line 129:7
@@ -2559,7 +2561,7 @@ This appendix gives a list of the internal errors in Overture
 and the circumstances under which each internal error can be expected.
 Most of these errors should \emph{never} be seen, so if they appear
 please report the occurrence via the Overture bug reporting utility
-(\url{https://sourceforge.net/p/overture/bugs/}).
+(\url{https://github.com/overturetool/overture/issues/new}).
 
 \input{MESSAGES_Internal}
 
@@ -2650,7 +2652,7 @@ Instance variable and value definitions are mapped as the UML meta-class \texttt
 
 \begin{formationRule}
 \label{rule:InstanceVarsAndValuesAsProp}
-Instance variable and value definitions are mapped as the UML meta-class \texttt{Property} \cite[p48,p139]{UMLSuperstructure2.1.2}, if the type is a \textit{basic data type} \cite[p71]{Fitzgerald&05}. Instance variables and values are distinguished by the meta-attribute \texttt{isReadOnly}. Notice: rule 
+Instance variable and value definitions are mapped as the UML meta-class \texttt{Property}, if the type is a \textit{basic data type} \cite[p71]{Fitzgerald&05}. Instance variables and values are distinguished by the meta-attribute \texttt{isReadOnly}. Notice: rule 
 %\ref{rule:transformationRuleConstraint} and 
 \ref{rule:transformationRuleMap} is an exception to this rule.
 \begin{center}
