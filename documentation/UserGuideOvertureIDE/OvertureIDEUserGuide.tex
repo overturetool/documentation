@@ -1315,22 +1315,22 @@ variables in scope.
 
 \chapter{Automatic Generation of Code}\label{sec:codegen}
 
-It is possible to generate Java code\index{code generation} for a subset of VDM models. Currently, the Java code generator only supports VDM++ specifications, but there is ongoing work on extending the coverage of the Java code generator to include VDM-RT as well as plans to have it support VDM-SL. In addition to Java, a C++ code generator is currently being developed, but this work is in its early stages of development, and it is not included with releases of Overture yet. For comparison, code generation of VDM-SL and VDM++ specifications to both Java and C++ is a feature that is available in VDMTools~\cite{Java2VDMMan,CGMan,CGManPP}. The sections below focus solely on the Java code generator available in Overture.
+It is possible to generate Java code\index{code generation} for a subset of VDM models. Currently, the Java code generator only supports VDM++ specifications, but there is ongoing work on extending the coverage of the Java code generator to include VDM-RT as well as plans to support VDM-SL. In addition to Java, a C++ code generator is currently being developed, but this work is in its early stages of development, and it is not included with releases of Overture yet. For comparison, code generation of VDM-SL and VDM++ specifications to both Java and C++ is a feature that is available in VDMTools~\cite{Java2VDMMan,CGMan,CGManPP}. The sections below focus solely on the Java code generator available in Overture.
 
 \section{Use of the Java Code Generator}
 \label{sec:javacg_use}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=12cm]{screenDumps/javacg_output}
-\caption{The status of code generating the \texttt{AlarmPP} example.\label{fig:javacg_output}}
+\includegraphics[width=9cm]{screenDumps/javacg_menu}
+\caption{Launching the Java code generator.\label{fig:javacg_menu}}
 \end{center}
 \end{figure}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=9cm]{screenDumps/javacg_menu}
-\caption{Launching the Java code generator.\label{fig:javacg_menu}}
+\includegraphics[width=12cm]{screenDumps/javacg_output}
+\caption{The status of code generating the \texttt{AlarmPP} example.\label{fig:javacg_output}}
 \end{center}
 \end{figure}
 
@@ -1361,7 +1361,7 @@ If the user does not rely on the concurrency mechanisms of VDM++ and does not wa
 
 \subsection{Skip classes during the code generation process}
 
-It may not always make sense to code generate every class in project. Classes that can often be skipped include classes that act as execution entry points or classes that are used to load input for the specification. Classes that the user wants to skip can be specified in the text box in the Java code generator preference page by separating the class names by a semicolon. As an example, \texttt{World;Env} makes the code generator skip code generation of the \texttt{World} and \texttt{Env} classes, while generating code for any other class. For convenience the output of the Java code generator will also inform the user about what classes are being skipped (see Figure~\ref{fig:javacg_output}).
+It may not always make sense to code generate every class in a project. Classes that can often be skipped include classes that act as execution entry points or classes that are used to load input for the specification. Classes that the user wants to skip can be specified in the text box in the Java code generator preference page by separating the class names by a semicolon. As an example, \texttt{World;Env} makes the code generator skip code generation of the \texttt{World} and \texttt{Env} classes, while generating code for any other class. For convenience the output of the Java code generator will also inform the user about what classes are being skipped.
 
 \section{Limitations of the Java Code Generator}
 
@@ -1373,17 +1373,17 @@ In case the Java code generator encounters a construct that it cannot code gener
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=\linewidth]{screenDumps/javacg_unsupported}
-\caption{Configuration of the Java code generator.\label{fig:javacg_unsupported}}
+\caption{Reporting of unsupported constructs in the console.\label{fig:javacg_unsupported}}
 \end{center}
 \end{figure}
 
-The user will get similar messages and markers for other unsupported VDM constructs. To summarise, the Java code generator currently does not support code generation of multiple inheritance and neither does it support traces, type bind, invariant checks and pre and post conditions. Furthermore, let expressions appearing on the right-hand side of an assignment will also be reported as unsupported. Code generation of patterns is also fairly limited and includes support for the the character, boolean, identifier, ignore, integer, nil, quote, real, string, record and tuple patterns.
+The user will get similar messages and markers for other unsupported VDM constructs. To summarise, the Java code generator currently does not support code generation of multiple inheritance and neither does it support traces, type bind, invariant checks and pre and post conditions. Furthermore, let expressions appearing on the right-hand side of an assignment will also be reported as unsupported. Code generation of patterns is also fairly limited and includes the identifier, ignore, record and tuple patterns as well as the character, boolean, integer, nil, quote, real and string match values.
 
 \section{Incorporation of the Code Generation Runtime}
 
-The generated code relies on a runtime used to represent some of the types available in VDM (tokens, tuples etc.) as well as collections and support for some of the complex operators such as sequence modifications. The runtime is imported by every code generated class using the Java import statement \texttt{\textbf{import} org.overture.codegen.runtime.*;} and in order to compile the generated Java code the runtime must be visible to the Java compiler. This can be done by compiling the generated Java code together with the runtime sources available at the Overture Github page\footnote{The Java code generator runtime is available at: \url{https://github.com/overturetool/overture/tree/development/core/codegen-runtime}} or by exporting the sources to a \texttt{jar} file and making the \texttt{jar} visible via the Java \texttt{CLASSPATH}.
+The generated code relies on a runtime library used to represent some of the types available in VDM (tokens, tuples etc.) as well as collections and support for some of the complex operators such as sequence modifications. The runtime library is imported by every code generated class using the Java import statement \texttt{\textbf{import} org.overture.codegen.runtime.*;} and in order to compile the generated Java code the runtime library must be visible to the Java compiler. This can be done by compiling the generated Java code together with the runtime library sources available at the Overture Github page\footnote{The Java code generator runtime library is available at: \url{https://github.com/overturetool/overture/tree/development/core/codegen-runtime}} or by exporting the sources to a \texttt{jar} file and making the \texttt{jar} visible via the Java \texttt{CLASSPATH}.
 
-Similar to VDMTools the runtime also provides implementation for subset of the functionality available in the standard libraries: The runtime provides a full implementation of the \texttt{MATH} library, support for conversion of values into character sequences as provided by the \texttt{VDMUtil}, and finally functionality to write to the console as available in the \texttt{IO} library.
+Similar to VDMTools the runtime library also provides implementation for subset of the functionality available in the standard libraries: The runtime library provides a full implementation of the \texttt{MATH} library, support for conversion of values into character sequences as provided by the \texttt{VDMUtil}, and finally functionality to write to the console as available in the \texttt{IO} library.
 
 \chapter{Mapping VDM++ To and From UML}\label{sec:vdmuml}
 
