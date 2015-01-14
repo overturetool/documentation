@@ -9,6 +9,7 @@
 *.ilg
 *.ind
 *.fdb_latexmk
+*.log
 
 # Packages #
 ############
