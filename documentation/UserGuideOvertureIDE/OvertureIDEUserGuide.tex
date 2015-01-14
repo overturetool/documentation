@@ -1836,11 +1836,33 @@ public class Graphics implements Serializable {
 }
 \end{lstlisting}
 
-In order to use the VDM Types the Java implementation must have the Overture java library in its build path. The library can be found in Overture installation directory:
+In order to use the VDM Types the Java implementation must have the Overture java library in its build path. The library can be found in Overture installation directories under:
 
- \textless  Overturedir\textgreater\textbackslash Plugins\textbackslash org.overture.ide.generated.vdmj:\_x.x\textbackslash lib,
+ \texttt{\textless  Overturedir\textgreater\textbackslash Plugins\textbackslash }:
 
-\noindent which can then be added to the Java build path, as shown in Figure~\ref{fig:gui:VDMJBuildPath}.
+\begin{itemize}
+\item \texttt{org.overture.ide.core:\_x.x\textbackslash jars,} 
+
+\begin{description}
+\item[\texttt{Ast.jar}] Contains the Abstract Syntax Tree with all the static language definitions
+\item[\texttt{Parser.jar}] Contains the VDM parser
+\end{description}
+
+\item \texttt{org.overture.ide.debug:\_x.x\textbackslash jars\textbackslash}
+
+\begin{description}
+\item[\texttt{Interpreter.jar}] Contains the interpreter and the values which is what external Java implementations mainly will use)
+\end{description}
+
+\item \texttt{org.overture.ide.builder.vdmj:\_x.x\textbackslash jars\textbackslash}
+
+\begin{description}
+\item[\texttt{TypeChecker.jar}] Contains the type checker, this is used when e.g. comparing types
+\end{description}
+
+\end{itemize}
+
+\noindent These can then be added to the Java build path, as shown in Figure~\ref{fig:gui:VDMJBuildPath}. The alternative is to use the command line \texttt{Overture.x.x.x.Jar} file and add that to the Java build path, since this contains all of the above Jars in a single file.
 
 \begin{figure}[h]
 \begin{center}
