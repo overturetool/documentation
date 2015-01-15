@@ -208,7 +208,7 @@ January  & 2015 & 5       & 2.1.6 \\ \hline
 
 \begin{abstract}
 This document is the user manual for the Overture Integrated Development
-Environment (IDE) version 2.1.6 for the Vienna Development Method
+Environment (IDE) for the Vienna Development Method
 (VDM). It serves as a reference for anybody wishing to make use of
 the tool with one of the VDM dialects (VDM-SL, VDM++ or VDM-RT). 
 The different dialects are controlled by a VDM language Board that 
@@ -1862,11 +1862,11 @@ In order to use the VDM Types the Java implementation must have the Overture jav
 
 \end{itemize}
 
-\noindent These can then be added to the Java build path, as shown in Figure~\ref{fig:gui:VDMJBuildPath}. The alternative is to use the command line \texttt{Overture.x.x.x.Jar} file and add that to the Java build path, since this contains all of the above Jars in a single file.
+\noindent These can then be added to the Java build path, as shown in Figure~\ref{fig:gui:VDMJBuildPath}. The alternative is to use the command line \texttt{Overture.x.x.x.Jar} file, as described in \autoref{sec:commandline}, and add that to the Java build path, since this contains all of the above Jars in a single file.
 
 \begin{figure}[h]
 \begin{center}
-  \includegraphics[width=\textwidth]{figures/SmokersVDMJBuildPath}
+  \includegraphics[width=0.7\textwidth]{figures/SmokersVDMJBuildPath}
   \caption[labelInTOC]{Adding VDMJ library to the build path in Eclipse}
   \label{fig:gui:VDMJBuildPath}
 \end{center}
@@ -1966,7 +1966,7 @@ In Eclipse a Jar file can be created through the Export function, as illustrated
 \end{center}
 \end{figure}
 
-Note that it can be very beneficial to check ``Save the description of this JAR2.1.6'', illustrated on Figure~\ref{fig:gui:SaveExport}, as this saves the export configuration and makes it a lot faster to redeploy the JAR file to VDM project during development.
+Note that it can be very beneficial to check ``Save the description of this JAR'', illustrated on Figure~\ref{fig:gui:SaveExport}, as this saves the export configuration and makes it a lot faster to redeploy the JAR file to VDM project during development.
 
 \begin{figure}[h]
 \begin{center}
@@ -1992,16 +1992,16 @@ Before running the model in Overture the debug configuration needs to be changed
 
 At the centre of the Overture tool there is a Java implementation of VDM
 forming a core. This provides a command-line interface that may be valuable
-as it can be used independently of the Eclipse interface of Overture.
+as it can be used independently of the Eclipse interface of Overture. The command-line Jar is both bundled with the Overture tool, located in the \texttt{commandline} folder, and available as a standalone download.
 
 \section{Starting Overture at the Command-Line}
 
-The \texttt{Overture-2.1.6.jar} file contains a MANIFEST that identifies the main class to start the
+The \texttt{Overture-x.x.x.jar} file contains a MANIFEST that identifies the main class to start the
 tool, so the minimum command line invocation is as follows:
 
 \lstset{style=tool,language=}
 \begin{lstlisting}
-$ !\textbf{java -jar Overture-2.1.6.jar}!
+$ !\textbf{java -jar Overture-x.x.x.jar}!
 Overture: You must specify either -vdmsl, -vdmpp or -vdmrt
 Usage: Overture <-vdmsl | -vdmpp | -vdmrt> [<options>] [<files>]
 \end{lstlisting}
@@ -2221,7 +2221,7 @@ VDM-SL specification from a single file called \texttt{shmem.vdmsl},
 the following options would be used:
 
 \begin{lstlisting}
-$ !\textbf{java -jar Overture-2.1.6.jar -vdmsl -i shmem.vdmsl}!
+$ !\textbf{java -jar Overture-x.x.x.jar -vdmsl -i shmem.vdmsl}!
 Parsed 1 module in 0.14 secs. No syntax errors
 Warning 5000: Definition 'i' not used in 'M' (shmem.vdmsl) 
   at line 129:7
