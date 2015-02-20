@@ -1,7 +1,7 @@
 package gui;
 
-import org.overturetool.vdmj.debug.RemoteInterpreter;
-import org.overturetool.vdmj.values.Value;
+import org.overture.interpreter.debug.RemoteInterpreter;
+import org.overture.interpreter.values.Value;
 
 public class SmokingControl implements ISmokingControl
 {
