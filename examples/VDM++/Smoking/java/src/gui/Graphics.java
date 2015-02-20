@@ -26,7 +26,6 @@ public class Graphics implements Serializable  {
     	
         return new VoidValue();
     }
-
     public Value tobaccoAdded()  {
     
         model.tobaccoAdded();
@@ -61,7 +60,7 @@ public class Graphics implements Serializable  {
         return new VoidValue();
     }
 
-    public Value nowSmoking(Value smokeid) throws ValueException{
+    public Value nowSmoking(Value smokeid) throws ValueException {
 
     	final Value temp = smokeid;
     	model.nowSmoking(temp.intValue(null));

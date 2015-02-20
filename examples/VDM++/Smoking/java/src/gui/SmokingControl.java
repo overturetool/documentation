@@ -18,7 +18,7 @@ public class SmokingControl implements ISmokingControl
 	{
 		try
 		{
-			execute("create w := new World()");
+			execute("create w := new World(100)");
 			execute("w.Run()");
 		} catch (Exception e)
 		{

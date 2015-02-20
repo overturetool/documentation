@@ -58,7 +58,6 @@ public class Controller extends JFrame  {
 
     	addTobaccoButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	
             	smoke.AddTobacco();
             }
         });
