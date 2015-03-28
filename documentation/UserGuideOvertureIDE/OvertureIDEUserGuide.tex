@@ -1640,7 +1640,8 @@ underlying Java-based Overture interpreter. In addition it is possible
 to link a
 Java implementation with a VDM model.
 
-Overture supplies two different techniques for linking between VDM and Java; (1) the functionality which allow VDM to interact with an ``External Java Library'' is described in Section~\ref{sec:javalibs} and (2) the method used to allow a Java implementation to ``Remote Control'' a VDM model is explained in Section~\ref{sec:remote}. An example of how these methods can be used to create a GUI for a model is supplied in Section~\ref{sec:gui}.
+Overture supplies two different techniques for linking between VDM and Java; (1) the functionality which allow VDM to interact with an ``External Java Library'' is described in Section~\ref{sec:javalibs} and (2) the method used to allow a Java implementation to ``Remote Control'' a VDM model is explained in Section~\ref{sec:remote}. An example of how these methods can be used to create a GUI for a model is supplied in Section~\ref{sec:gui}. These methods are also used to enable control of models with a generic
+GUI as explained in \autoref{sec:guibuilder}.
 
 \section{Defining Your Own Java Libraries to be used from Overture}\label{sec:javalibs}
 
@@ -2007,6 +2008,7 @@ Before running the model in Overture the debug configuration needs to be changed
 \end{figure}
 
 
+\input{sections/guibuilder}
 
 \chapter{A Command-Line Interface to Overture}\label{sec:commandline}
 
