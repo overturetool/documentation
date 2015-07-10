@@ -5288,7 +5288,7 @@ Constructors are operations which have the same name as the class in
 which they are defined and which create new instances of that
 class. Their return type must therefore be the same class
 name, and if a return value is specified this should be \keyw{self}
-though this can optionally be omitted.
+though this can optionally be omitted. Finally, since a constructor is used for initialising a new instance of a class, it is not permitted to declare a constructor \keyw{static}.
 
 Multiple constructors can be defined in a single class using
 operation overloading as described in section~\ref{sec:classdep}.
