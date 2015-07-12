@@ -224,7 +224,7 @@
         Sune Wolff\\
         Shin Sahara\\
         Marcel Verhoef\\
-        Peter J\o{}rgensen\\
+        Peter W. V. Tran-J\o{}rgensen\\
         Tomohiro Oda}
 
 \date{November 2014}
@@ -5288,7 +5288,7 @@ Constructors are operations which have the same name as the class in
 which they are defined and which create new instances of that
 class. Their return type must therefore be the same class
 name, and if a return value is specified this should be \keyw{self}
-though this can optionally be omitted.
+though this can optionally be omitted. Finally, since a constructor is used for initialising a new instance of a class, it is not permitted to declare a constructor \keyw{static}.
 
 Multiple constructors can be defined in a single class using
 operation overloading as described in section~\ref{sec:classdep}.
@@ -5629,12 +5629,12 @@ or in the context of a VDM++ instance variables
   and thread switching and statement durations can occur. But once all
   of the right-hand values have been obtained, they are assigned to the
   left-hand variables in one atomic step, which occurs without invariant
-  checking, thread switching or extra duration. It is as if the
-  statement is as follows:
+  checking, thread switching or extra duration. Given the types \texttt{T1,...,TN} of the respective state designators \texttt{sd1,...,sdN} it is as if the
+  \keyw{atomic} statement is evaluated as follows:
   \begin{lstlisting}
-    let t1 = ec1,
+    let t1 : T1 = ec1,
         ...
-        tN = ecN in
+        tN : TN = ecN in
     (
         -- turn off invariants, threading and durations
         sd1 := t1;
