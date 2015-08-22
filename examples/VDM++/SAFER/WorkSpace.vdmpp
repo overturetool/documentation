@@ -45,7 +45,7 @@ operations
      vda.ThrustersOn())
   post card RESULT <= 4 and ThrusterConsistency(RESULT);
 
-  ThrusterConsistency : set of ThrusterControl`ThrusterPosition ==> bool 
+  pure ThrusterConsistency : set of ThrusterControl`ThrusterPosition ==> bool 
   ThrusterConsistency(thrusters) ==
     return 
     (not({<B1>, <F1>} subset thrusters) and

@@ -15,7 +15,7 @@ FO(idarg,coordarg,altarg) ==
   alt := altarg;
  );
     
-public getId : () ==> FOId
+pure public getId : () ==> FOId
 getId() ==
   return id;
 

@@ -18,7 +18,7 @@ class Tree
 
   operations
 
-    protected
+    pure protected
     nodes : () ==> set of node
     nodes () ==
       cases root:
@@ -32,13 +32,12 @@ class Tree
     addRoot (x) ==
       root := mk_node(new Tree(),x,new Tree());
 
-
     protected
     rootval : () ==> int
     rootval () == return root.nval
     pre root <> <Empty>;
 
-    protected
+    pure protected
     gettree : () ==> tree
     gettree () == return root;
 
@@ -52,7 +51,7 @@ class Tree
     rightBranch () == return root.rt
     pre not isEmpty();
 
-    public
+    pure public
     isEmpty : () ==> bool
     isEmpty () == return (root = <Empty>);
 

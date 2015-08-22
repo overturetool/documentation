@@ -59,7 +59,7 @@ operations
 The getDisplay operation returns the state of the lamps.
 
 \begin{vdm_al}
-  public
+  pure public
   getDisplay: () ==> bool * bool * bool
   getDisplay () ==
     return mk_(alarm, emergencybreak, groundfault);

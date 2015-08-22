@@ -2,7 +2,7 @@
 #******************************************************
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=VDM10
 #AUTHOR= Sten Agerholm
 #INV_CHECKS=true
 #POST_CHECKS=true

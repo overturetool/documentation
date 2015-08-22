@@ -18,7 +18,7 @@ class Queue
            return x)
     pre not isEmpty();
 
-    public
+    pure public
     isEmpty : () ==> bool
     isEmpty () == 
       return(vals = [])

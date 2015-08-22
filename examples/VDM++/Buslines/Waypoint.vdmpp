@@ -15,10 +15,10 @@ class Waypoint
 			id := s;
 		);
 
-		public GetId : () ==> WaypointsEnum
+		pure public GetId : () ==> WaypointsEnum
 		GetId()== return id;
 
-		public IsStop: () ==> bool
+		pure public IsStop: () ==> bool
 		IsStop()== return isStop;
 
 

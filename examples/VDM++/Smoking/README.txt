@@ -2,7 +2,7 @@
 #******************************************************
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=VDM10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true
@@ -12,5 +12,6 @@
 #ENCODING=
 #DOCUMENT=
 #LIB=
-#AUTHOR=
+#AUTHOR= Claus Ballegaard Nielsen
+#ENTRY_POINT=new World().Run()
 #******************************************************

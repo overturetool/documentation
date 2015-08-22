@@ -15,7 +15,7 @@ FO(i,c,a) ==
   alt := a;
  );
     
-public getId : () ==> FOId
+pure public getId : () ==> FOId
 getId() ==
   return id;
 

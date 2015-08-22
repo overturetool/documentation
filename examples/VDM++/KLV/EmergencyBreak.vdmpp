@@ -24,7 +24,7 @@ operations
   unsetEmergencyBreak () ==
     emergencybreak := false;
 
-  public
+  pure public
   getEmergencyBreak : () ==> bool
   getEmergencyBreak () ==
     return emergencybreak;

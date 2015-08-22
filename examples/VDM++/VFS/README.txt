@@ -11,7 +11,7 @@ Ferreira
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Miguel Ferreira
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=VDM10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

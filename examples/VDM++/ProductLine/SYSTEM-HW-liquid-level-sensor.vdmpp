@@ -9,7 +9,7 @@ operations
   Setup(realworld) ==
     realworld_liquid := realworld.liquid;
 
-  public
+  pure public
   IsOn: () ==> bool
   IsOn() ==
     return realworld_liquid.GetAmount() > 0;
