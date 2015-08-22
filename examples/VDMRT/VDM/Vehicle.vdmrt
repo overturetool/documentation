@@ -95,7 +95,7 @@ setTurnIndicator(indicator) ==
  turnIndicator := indicator;
 );
 	
-public GetPosition: () ==> Position 
+pure public GetPosition: () ==> Position 
 GetPosition() ==
 return pos.deepCopy();
 
@@ -153,10 +153,10 @@ values
 --
 sync
  mutex(Move);
- mutex(Move, SetPosition, GetPosition);
+ mutex(Move, SetPosition);
  mutex(SetPosition);
  mutex(SetDirection);
- mutex(GetDirection, SetDirection);
+ --mutex(GetDirection, SetDirection);
  mutex(SetSpeed);
  mutex(GetSpeed, SetSpeed);
  mutex(setLowGrip);

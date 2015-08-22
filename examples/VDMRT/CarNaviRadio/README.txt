@@ -9,7 +9,7 @@ coherent application in a distributed application.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR=Marcel Verhoef
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

@@ -57,7 +57,7 @@ public GreenLightPath: () ==> Types`Direction
 GreenLightPath() ==
  return greenDir;
 
-public GetID: () ==> nat
+pure public GetID: () ==> nat
 GetID() ==
  return id;
 	

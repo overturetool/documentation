@@ -11,7 +11,7 @@ through the first author.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR=Marcel Verhoef and Bert Bos and Ken Pierce
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

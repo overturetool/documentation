@@ -18,7 +18,7 @@ Springer-Verlag, Lecture Notes in Computer Science 5014, pp. 181--197.
 #------------------------------------------------------
 #AUTHOR= Hugo Macedo
 #LIB= IO
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

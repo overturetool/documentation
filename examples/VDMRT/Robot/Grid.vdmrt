@@ -40,7 +40,7 @@ operations
  pre forall p in set dom mapping & IsValidGridPoint(p);
  
  
- public IsValidGridPoint : Point ==> bool
+ pure public IsValidGridPoint : Point ==> bool
  IsValidGridPoint(p)==
    return maxPoint.X >= p.X and p.X >= 0 and maxPoint.Y >= p.Y and p.Y >=0
    

@@ -31,7 +31,7 @@ InRange(fo) ==
   in 
     return isPointInRange(location,range,foLocation); 
    
-public getDetected : () ==> set of FO
+pure public getDetected : () ==> set of FO
 getDetected() == 
   return rng detected;
 

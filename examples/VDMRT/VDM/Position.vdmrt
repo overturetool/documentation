@@ -36,13 +36,13 @@ Position(x_, y_) ==
  y := y_;
 );
 		
-public X: () ==> int
+pure public X: () ==> int
 X() ==
 (
 	return x;
 );
 
-public Y: () ==> int
+pure public Y: () ==> int
 Y() ==
 (
 	return y;
@@ -70,13 +70,13 @@ toString() ==
 	^ " Y: " ^ Printer`intToString(y) 
 );
 
-public inRange : Position * int ==> bool
+pure public inRange : Position * int ==> bool
 inRange(p, range) ==
 (
 return (abs(x -p.X()) <= range) and (abs(y -p.Y()) <= range);  
 );
 
-public deepCopy : () ==> Position
+pure public deepCopy : () ==> Position
 deepCopy() ==
 (
  let newPos = new Position(x,y)

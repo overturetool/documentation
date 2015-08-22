@@ -77,7 +77,7 @@ recAlgo(grid, plan, station) ==
  	return grid_temp;
 );
 
-public getGrid: () ==> Grid
+pure public getGrid: () ==> Grid
 getGrid()==
 (
 	return grid;

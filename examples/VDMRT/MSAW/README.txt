@@ -6,7 +6,7 @@ that thus this model is not in a state where it makes sense to execute it.
 #------------------------------------------------------
 #AUTHOR= Augusto Ribeiro
 #LIB=IO;MATH
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

@@ -24,15 +24,15 @@ public getType : () ==> ObstacleType
 getType() == 
   return type;
  
-public getCoordinates : () ==> Coordinates
+pure public getCoordinates : () ==> Coordinates
 getCoordinates() ==
   return location;
 
-public getSecureRange : () ==> nat1
+pure public getSecureRange : () ==> nat1
 getSecureRange() ==
   return radius + securityRadius;
   
-public getMSA : () ==> MinimumSafetyAltitude
+pure public getMSA : () ==> MinimumSafetyAltitude
 getMSA() == 
   return MSA;
  

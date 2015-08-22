@@ -17,7 +17,7 @@ operations
   public AbstractTask: seq of char * EventDispatcher ==> AbstractTask
   AbstractTask (pnm, ped) == atomic ( name := pnm; dispatcher := ped; );
 
-  public getName: () ==> seq of char
+  pure public getName: () ==> seq of char
   getName () == return name;
 
   -- setEvent is a call-back used by the EventDispatcher to insert

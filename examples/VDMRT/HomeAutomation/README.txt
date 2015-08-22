@@ -11,7 +11,7 @@ Software and Informatics, Vol 3., No 2-3, June/September 2009, pp. 305-341.
 #------------------------------------------------------
 #AUTHOR= Sune Wolff
 #LIB= IO
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

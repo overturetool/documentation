@@ -36,13 +36,13 @@ Position(x_, y_) ==
  y := y_;
 );
 		
-public X: () ==> int
+pure public X: () ==> int
 X() ==
 (
 	return x;
 );
 
-public Y: () ==> int
+pure public Y: () ==> int
 Y() ==
 (
 	return y;
@@ -70,7 +70,7 @@ toString() ==
 	 ^ " Y: " ^ VDMUtil`val2seq_of_char[int](y) -- Printer`intToString(y) 
 );
 
-public inRange : Position * int ==> bool
+pure public inRange : Position * int ==> bool
 inRange(p, range) ==
 (
     let xd = x - p.X(), yd = y -p.Y() in 

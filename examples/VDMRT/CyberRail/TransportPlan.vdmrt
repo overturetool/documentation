@@ -75,7 +75,7 @@ routeTraveled () == (
 )
 pre len routeList > 0;
 
-public routesRemaining : () ==> nat
+pure public routesRemaining : () ==> nat
 routesRemaining() == ( return len routeList;);
 
 public getByValue : () ==> DTO

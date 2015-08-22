@@ -157,10 +157,10 @@ values
 --
 sync
  mutex(Move);
- mutex(Move, SetPosition, GetPosition);
+ mutex(Move, SetPosition); --, GetPosition);
  mutex(SetPosition);
  mutex(SetDirection);
- mutex(GetDirection, SetDirection);
+ --mutex(GetDirection, SetDirection);
  mutex(SetSpeed);
  mutex(GetSpeed, SetSpeed);
  mutex(setLowGrip);

@@ -116,16 +116,16 @@ return [ new TrafficData(internalTrafficData(i).GetMessage(),
 						| i in set inds internalTrafficData ];
 
 
-public GetVehicleID : () ==> nat
+pure public GetVehicleID : () ==> nat
 GetVehicleID()== return vdmVehicle.GetID();
 
 
-public GetPosition : () ==> Position
+pure public GetPosition : () ==> Position
 GetPosition() ==
 return vdmVehicle.GetPosition();
 
 
-public GetDirection: () ==> Types`Direction 
+pure public GetDirection: () ==> Types`Direction 
 GetDirection() ==
 return vdmVehicle.GetDirection();
 

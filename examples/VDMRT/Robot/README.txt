@@ -5,7 +5,7 @@ a cave aiming at avioding different obstacles on its path.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR=Lasse Lorentzen and Kenneth Lausdahl
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #LIB= IO; MATH
 #INV_CHECKS=true
 #POST_CHECKS=true
