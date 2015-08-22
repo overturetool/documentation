@@ -37,12 +37,12 @@ class Item
 	);
 	
 	-- Return item id
-	public GetId: () ==> nat
+	pure public GetId: () ==> nat
 	GetId() == 
 		return id;
 	
 	-- Returns the number of trays the item occupies
-	public GetSizeOfTrays: () ==> ItemTraySize
+	pure public GetSizeOfTrays: () ==> ItemTraySize
 	GetSizeOfTrays() ==
 		return sizeOfTrays;
 

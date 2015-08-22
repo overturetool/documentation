@@ -104,7 +104,7 @@ Evaluate(expr,env) ==
     others                    -> MId(expr,env)
   end;
 
-private MId : Id * Env ==> Val
+pure private MId : Id * Env ==> Val
 MId(Id,env) == 
 	return env.GetVal(Id); 
 

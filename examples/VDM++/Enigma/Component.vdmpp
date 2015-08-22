@@ -5,7 +5,7 @@ instance variables
   protected alph : Alphabet
 
 operations
-  public Successors: () ==> set of Component
+  pure public Successors: () ==> set of Component
   Successors () ==
     if next = nil
     then return {self}

@@ -36,7 +36,7 @@ class Road
 		)
 		pre card waypoints > 1;
 
-		public Covers : set of Waypoint ==> bool
+		pure public Covers : set of Waypoint ==> bool
 		Covers(waypoints) == 
 			 return {w.GetId() | w in set waypoints} = {w.GetId() | w in set wps};  --does road cover the waypoints in arg
 

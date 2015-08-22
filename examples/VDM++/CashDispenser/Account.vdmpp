@@ -84,7 +84,7 @@ are not overdrawn.
 
 The GetCardIds operation is used to obtain all cards associated with the account.
 \begin{vdm_al}
-  public GetCardIds: () ==> set of Card`CardId
+  pure public GetCardIds: () ==> set of Card`CardId
   GetCardIds() ==
     return dom cards;
 \end{vdm_al}

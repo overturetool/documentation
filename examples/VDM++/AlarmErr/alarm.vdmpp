@@ -18,7 +18,7 @@ Alarm(quali,str) ==
   return 7
 );
 
-public GetReqQuali: () ==> Expert`Qualification
+pure public GetReqQuali: () ==> Expert`Qualification
 GetReqQuali() ==
   return reqQuali;
   

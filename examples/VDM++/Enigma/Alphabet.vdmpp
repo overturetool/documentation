@@ -27,7 +27,7 @@ operations
       return pidx
   pre pch in set elems alph;
 
-  public GetIndices: () ==> set of nat
+  pure public GetIndices: () ==> set of nat
   GetIndices () == return inds alph;
 
   public GetSize: () ==> nat

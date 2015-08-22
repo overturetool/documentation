@@ -38,25 +38,24 @@ class Stock is subclass of GLOBAL
    and (currentRateOfChange = <constant> => valueHistory(1) = valueHistory(2))
    and hd valueHistory >= 0;
 
-  public GetName: () ==> StockIdentifier 
+  pure public GetName: () ==> StockIdentifier 
   GetName() == 
    return name; 
 
-  public GetCurrentValue : () ==> StockValue 
+  pure public GetCurrentValue : () ==> StockValue 
   GetCurrentValue() == 
    return hd valueHistory; 
 
-  public GetValueHistory : () ==> seq of StockValue 
+  pure public GetValueHistory : () ==> seq of StockValue 
   GetValueHistory() == (
    return valueHistory; 
   );
-  
- functions
-  
-  InitialRateOfChange : (StockValue) -> RateOfChange
+   
+  InitialRateOfChange : (StockValue) ==> RateOfChange
   InitialRateOfChange(sv) == 
    let r = MATH`rand(21) mod 3 
    in
+    return 
     if(sv > 0)
     then
      cases r:
@@ -71,18 +70,20 @@ class Stock is subclass of GLOBAL
       2 -> <constant>
      end;
 
-  NextRateOfChange : RateOfChange * StockValue -> RateOfChange
+  NextRateOfChange : RateOfChange * StockValue ==> RateOfChange
   NextRateOfChange(roc,sv) == 
    let r = MATH`rand(10), 
     other = MakelistFromSet({x | x : RateOfChange & x <> roc and (x=<negative> => sv > 0) })   
    in
+    return 
     if r >= 0 and r <= 7 and (roc = <negative> => sv > 0)  
     then roc
     else  
      other((MATH`rand(20) mod len other) + 1);
 
-  MakelistFromSet : set of RateOfChange -> seq of RateOfChange
+  MakelistFromSet : set of RateOfChange ==> seq of RateOfChange
   MakelistFromSet(roc) ==
+   return
    if( card roc > 0) then 
     let r in set roc 
      in 

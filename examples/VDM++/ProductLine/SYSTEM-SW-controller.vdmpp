@@ -25,6 +25,6 @@ operations
       do
         heater.On()
   pre  liquid_level_sensor.IsOn()
-  post liquid_level_sensor.IsOn();
+  post not liquid_level_sensor.IsOn();
 
 end Software

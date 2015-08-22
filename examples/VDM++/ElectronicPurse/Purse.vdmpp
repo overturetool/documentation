@@ -19,11 +19,11 @@ DecreaseBal(sum)==
   balance := balance - sum
 pre sum <= balance;
 
-public GetBalance:() ==> nat
+pure public GetBalance:() ==> nat
 GetBalance() == 
   return balance;
 
-public GetCardNo: () ==> CardId
+pure public GetCardNo: () ==> CardId
 GetCardNo() == 
   return cardNo;
 

@@ -30,7 +30,7 @@ class InductionController
 	);
 	
 	-- Returns induction controller UID
-	public GetId: () ==> nat
+	pure public GetId: () ==> nat
 	GetId() == 
 		return id;
 	

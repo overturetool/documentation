@@ -11,7 +11,7 @@ operations
 public Slide : int ==> Slide
 Slide(id) == ID := id;
 
-public getID : () ==> int
+pure public getID : () ==> int
 getID() ==
  return ID;
 

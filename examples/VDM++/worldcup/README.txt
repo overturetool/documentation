@@ -11,7 +11,7 @@ using the traces primitives used for test automation.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR=Yves Ledru
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=VDM10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

@@ -76,7 +76,7 @@ The Withdrawal operation checks that an account and the daily limit are not over
 The GetCardIds operation is used to obtain all cards associated with the account.
 
 \begin{vdm_al}
-  public GetCardIds: () ==> set of Card`CardId
+  pure public GetCardIds: () ==> set of Card`CardId
   GetCardIds() == 
     return dom cards;
 \end{vdm_al}

@@ -21,12 +21,12 @@ class StockMarket is subclass of GLOBAL
   pre stock.GetName() in set dom stocks
   post stock.GetName() not in set dom stocks;
 
-  public GetStock:(StockIdentifier)==> Stock 
+  pure public GetStock:(StockIdentifier)==> Stock 
   GetStock(name) == 
    return stocks(name)
   pre name in set dom stocks;
 
-  public GetStockNames: () ==> set of StockIdentifier 
+  pure public GetStockNames: () ==> set of StockIdentifier 
   GetStockNames() ==
    return dom stocks;
   

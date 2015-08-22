@@ -46,19 +46,24 @@ public MakePasswordMap: () -> map POP3Types`UserName to POP3Types`Password
 MakePasswordMap() ==
   { users(i) |-> passwords(i) | i in set inds users };
 
+operations
 
-public MakeMailDrop: () -> POP3Server`MailDrop
+public MakeMailDrop: () ==> POP3Server`MailDrop
 MakeMailDrop() ==
+  return
   { users(i) |-> mk_POP3Server`MailBox(MakeMessages(users(i)),
                                        false) 
   | i in set inds users};
 
-public MakeMessages: POP3Types`UserName -> seq of POP3Message
+public MakeMessages: POP3Types`UserName ==> seq of POP3Message
 MakeMessages (user) ==
+  return
   [ new POP3Message(headers(i), 
                     bodies(i) ^ " to " ^ user,
                     user ^ POP3ClientHandler`int2string(i))
   | i in set inds headers ];
+
+functions
 
 TestRun1: () -> seq of POP3Types`ClientCommand
 TestRun1() ==

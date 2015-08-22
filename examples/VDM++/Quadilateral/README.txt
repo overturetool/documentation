@@ -7,7 +7,7 @@ code automatically generated using VDMTools.
 #******************************************************
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=VDM10
 #AUTHOR= Stephen Goldsack
 #INV_CHECKS=true
 #POST_CHECKS=true

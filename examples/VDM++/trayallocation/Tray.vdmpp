@@ -34,22 +34,22 @@ class Tray
 	);
 
  	-- Return tray id
-	public GetId: () ==> nat
+	pure public GetId: () ==> nat
 	GetId() == 
 		return id;
 		
     -- Returns true if tray is empty
-	public IsTrayEmpty: () ==> bool
+	pure public IsTrayEmpty: () ==> bool
 	IsTrayEmpty () ==
 		return state = <Empty>;
 
     -- Returns true if tray is full
-	public IsTrayFull: () ==> bool
+	pure public IsTrayFull: () ==> bool
 	IsTrayFull () ==
 		return state = <Full>;
 	
 	-- Returns item on tray
-	public GetItem: () ==> [Item]
+	pure public GetItem: () ==> [Item]
 	GetItem () ==
 		return item;
 		

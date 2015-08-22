@@ -28,7 +28,7 @@ public Time = nat
 
 operations
 
-public canObserve: Angle * Angle * Angle ==> bool
+pure public canObserve: Angle * Angle * Angle ==> bool
 canObserve (pangle, pleft, psize) ==
   def pright = (pleft + psize) mod 360 in
     if pright < pleft

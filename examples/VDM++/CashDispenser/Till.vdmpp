@@ -125,11 +125,11 @@ The IsLegalCard operation below is only used internally to validate a card.
       resource.IsLegalCard(curCard.GetAccountId(),curCard.GetCardId())
   pre CardInside();
 
-  public CardValidated: () ==> bool
+  pure public CardValidated: () ==> bool
   CardValidated() ==
     return curCard <> nil and cardOk;
 
-  public CardInside: () ==> bool
+  pure public CardInside: () ==> bool
   CardInside() ==
     return curCard <> nil;
 
