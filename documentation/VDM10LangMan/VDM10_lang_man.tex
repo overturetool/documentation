@@ -247,6 +247,8 @@ March & 2014 & 5 & 2.0.4 &
 Includes RMs \#16, \#17, \#18, \#20 \\ \hline
 November & 2014 & 6 & 2.1.2 &
 Includes RMs \#25, \#26, \#29 \\ \hline
+August & 2015 & 7 & 2.3.0 &
+Includes RMs \#27 \\ \hline
 \end{tabular}
 
 %\addtocounter{page}{2}
@@ -285,7 +287,7 @@ clear and understandable way the document is not a complete VDM-SL
 reference manual.
 For a more thorough presentation of the language we refer to the
 existing literature\footnote{A more tutorial like
-presentation is given in \cite{Fitzgerald&98} whereas proofs in VDM-SL
+presentation is given in \cite{Fitzgerald&98b,Fitzgerald&09} whereas proofs in VDM-SL
 are treated best in \cite{Jones90a} and \cite{Bicarregui&94}.}.
 Wherever the  VDM-SL notation differs from
 the VDM-SL standard notation the semantics will of course be carefully
@@ -307,7 +309,7 @@ The VDM-RT language (formerly called VICE as an acronym for ``VDM++ In
 Constrained Environments'') is used to appropriately model and analyse
 Real-Time embedded and distributed
 systems~\cite{Mukherjee&00,Verhoef&06b,Verhoef&07,Verhoef08,Larsen&09b}. Thus
-VDM-RT is a pure extension of the VDM++ language.
+VDM-RT is an extension of the VDM++ language.
 
 
 \section{Purpose of The Document}
@@ -4926,10 +4928,11 @@ only be used in the VDM-RT dialect.
     }}
 
     \Rule{access operation definition}{(
+      \OptPt{\Lop{pure}},
       \OptPt{\Lop{async}}
       \OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep\
      (
-      \OptPt{\Lop{async}}
+      \OptPt{\Lop{pure}}, \OptPt{\Lop{async}}
       \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
       \Ruleref{operation definition}
     }
@@ -5029,7 +5032,8 @@ only be used in the VDM-RT dialect.
   a return type and the thread calling an asynchronous operation will
   continue its own execution after having requested the invocation of
   the asynchronous operation. Note that constructors cannot be
-  declared asynchronous.
+  declared asynchronous. If an operation is declared to be ``\keyw{pure}"
+  it means that it is executed atomically and it is allowed to be called in a functional context. Such operations cannot have any side effect and thus they can also not be used in synchronisation constraints.
   In both VDM++ and VDM-RT the details of the
   access and \keyw{static} specifiers can be found in section
   \ref{ch:interface}. Note that a static operation may not call
@@ -10269,12 +10273,12 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
 %  \ifthenelse{\boolean{VDMpp}}{
     \Ruledef{access operation definition}{(
 %#ifdef VICEMAN
-      \OptPt{\Lop{async}}
+      \OptPt{\Lop{pure}}, \OptPt{\Lop{async}}
 %#endif VICEMAN
       \OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep\
      (
 %#ifdef VICEMAN
-      \OptPt{\Lop{async}}
+      \OptPt{\Lop{pure}}, \OptPt{\Lop{async}}
 %#endif VICEMAN
       \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
       \Ruleref{operation definition}
@@ -11892,6 +11896,7 @@ consecutive symbols must be separated by a separator.
   \Lks{protected}
   \Lksb{psubset}
   \Lks{public}
+  \Lks{pure}
  % \Lksb{qsync}
   \Lks{rat}
   \Lks{rd}
