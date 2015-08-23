@@ -1,4 +1,4 @@
-﻿This example was used in the MSc thesis for Claus Ballegaard
+This example was used in the MSc thesis for Claus Ballegaard
 Nielsen in order to illustrate how dynamic deployment with advantage 
 could be added to VDM-RT.
 
@@ -11,7 +11,7 @@ Master's thesis, Aarhus University (December 2010).
 #------------------------------------------------------
 #AUTHOR= Claus Ballegaard Nielsen
 #LIB=IO,MATH,VDMUtil
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

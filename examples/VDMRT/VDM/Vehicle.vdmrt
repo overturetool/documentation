@@ -55,7 +55,7 @@ Vehicle(vdDTO) ==
 );
 
 
-public GetDirection: () ==> Types`Direction 
+pure public GetDirection: () ==> Types`Direction 
 GetDirection() ==
 return dir;
 
@@ -103,7 +103,7 @@ async public SetPosition: Position ==> ()
 SetPosition(p) ==
 pos := p;
 
-public GetID: () ==> nat
+pure public GetID: () ==> nat
 GetID() ==
 return id;
 
