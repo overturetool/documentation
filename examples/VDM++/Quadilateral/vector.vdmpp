@@ -26,9 +26,7 @@ class Vector
     length: vector -> real
     length (v) ==
       let mk_vector (mk_(hdx, hdy), mk_(tlx, tly)) = v in
-        let math = new MATH ()
-        in
-          math.sqrt ((tlx - hdx)**2 + (tly - hdy)**2);              
+        MATH`sqrt ((tlx - hdx)**2 + (tly - hdy)**2);              
  
     public
     add: vector * vector -> vector

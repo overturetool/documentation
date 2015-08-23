@@ -13,7 +13,7 @@ where the VDMUnit testing approach was introduced.
 #------------------------------------------------------
 #AUTHOR= Marvel Verhoef
 #LIB= IO
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

@@ -7,7 +7,7 @@ distributed real time version of this example.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR=Peter Gorm Larsen and Marcel Verhoef
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

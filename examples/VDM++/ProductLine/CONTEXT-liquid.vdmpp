@@ -49,7 +49,7 @@ operations
   post
     temperature <= boiling_point(aap.GetAtm());
 
-  public
+  pure public
   GetAmount: () ==> real
   GetAmount() ==
     return amount;

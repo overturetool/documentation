@@ -4,10 +4,10 @@ types
   Atmosphere = real;
 
 instance variables
-  protected atm : real;
+  protected atm : real := 0.9;
 
 operations
-  public
+  pure public
   GetAtm: () ==> real
   GetAtm() == return atm;
 

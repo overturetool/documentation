@@ -18,7 +18,7 @@ to extend the model with.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR=Niels Kirkegaard
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true
