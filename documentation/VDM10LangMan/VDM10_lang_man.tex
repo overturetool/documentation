@@ -5033,7 +5033,8 @@ only be used in the VDM-RT dialect.
   continue its own execution after having requested the invocation of
   the asynchronous operation. Note that constructors cannot be
   declared asynchronous. If an operation is declared to be ``\keyw{pure}"
-  it means that it is executed atomically and it is allowed to be called in a functional context. Such operations cannot have any side effect and thus they can also not be used in synchronisation constraints.
+  it means that it is executed atomically if it is called from a functional context (from normal functions, invariants, pre or post-conditions). Such operations cannot call ordinary operations nor update the instance variables, i.e.\ have any side effects, and thus they can also not be used in synchronisation constraints.
+  
   In both VDM++ and VDM-RT the details of the
   access and \keyw{static} specifiers can be found in section
   \ref{ch:interface}. Note that a static operation may not call
