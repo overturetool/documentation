@@ -8,7 +8,7 @@ in 1999 in connection with FM'99.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Sten Agerholm, Peter Gorm Larsen and Kim Sunesen
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

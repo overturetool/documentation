@@ -105,14 +105,14 @@ class StockWatcher is subclass of GLOBAL
   updateStockRecord(sr) == 
    stockRecord := sr;
 
-  public GetStockValue : nat ==> StockValue
+  pure public GetStockValue : nat ==> StockValue
   GetStockValue(time) == 
    if World`simulate
    then return eventHistory(1).Value
    else return eventHistory(len eventHistory - time).Value
   pre len eventHistory > 0;
        
-  public GetTriggeredAction : () ==> [ActionType]
+  pure public GetTriggeredAction : () ==> [ActionType]
   GetTriggeredAction() ==
    return currentlyTriggeredAction; 
 
