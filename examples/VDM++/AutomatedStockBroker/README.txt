@@ -16,7 +16,7 @@ the ProjectReport.pdf file included in the zip file with the source files.
 #------------------------------------------------------
 #AUTHOR= Anders Kaels Malmos
 #LIB=IO;MATH
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true
