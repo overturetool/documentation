@@ -21,7 +21,7 @@ Expert(qs) ==
 \end{vdm_al}
   
 \begin{vdm_al}
-public GetQuali: () ==> set of Qualification
+pure public GetQuali: () ==> set of Qualification
 GetQuali() ==
   return quali;
   
