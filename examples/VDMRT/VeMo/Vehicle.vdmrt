@@ -95,7 +95,7 @@ setTurnIndicator(indicator) ==
  turnIndicator := indicator;
 );
 	
-public GetPosition: () ==> Position 
+pure public GetPosition: () ==> Position 
 GetPosition() ==
 --return pos.deepCopy();
 return pos;

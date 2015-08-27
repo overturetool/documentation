@@ -10,7 +10,7 @@ inv PlantInv(alarms,schedule);
 
 operations
 
-PlantInv: set of Alarm * map Period to set of Expert ==> 
+pure PlantInv: set of Alarm * map Period to set of Expert ==> 
           bool
 PlantInv(as,sch) ==
   return
