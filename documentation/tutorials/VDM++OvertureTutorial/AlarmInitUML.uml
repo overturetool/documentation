@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_WQ5EwEy_EeWKrLz0_e4S3A" name="project1">
+  <eAnnotations xmi:id="_WQ5EwUy_EeWKrLz0_e4S3A" source="Objing">
+    <contents xmi:type="uml:Property" xmi:id="_WQ5Ewky_EeWKrLz0_e4S3A" name="exporterVersion">
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_WQ5Ew0y_EeWKrLz0_e4S3A" value="3.0.0"/>
+    </contents>
+  </eAnnotations>
+  <packagedElement xmi:type="uml:Class" xmi:id="_WQ5ExEy_EeWKrLz0_e4S3A" name="Plant">
+    <ownedAttribute xmi:id="_WQ5ExUy_EeWKrLz0_e4S3A" name="schedule" visibility="private" type="_WQ5E10y_EeWKrLz0_e4S3A" association="_WQ5E0Ey_EeWKrLz0_e4S3A">
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_WQ5Exky_EeWKrLz0_e4S3A" value="*"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_WQ5Ex0y_EeWKrLz0_e4S3A"/>
+      <qualifier xmi:id="_WQ5EyEy_EeWKrLz0_e4S3A" name="Period" visibility="public">
+        <ownedComment xmi:id="_WQ5EyUy_EeWKrLz0_e4S3A">
+          <body></body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </qualifier>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_WQ5Eyky_EeWKrLz0_e4S3A" name="alarms" visibility="public" type="_WQ5E1Ey_EeWKrLz0_e4S3A" association="_WQ5E0ky_EeWKrLz0_e4S3A">
+      <ownedComment xmi:id="_WQ5Ey0y_EeWKrLz0_e4S3A">
+        <body></body>
+      </ownedComment>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_WQ5EzEy_EeWKrLz0_e4S3A" value="*"/>
+    </ownedAttribute>
+    <ownedOperation xmi:id="_WQ5EzUy_EeWKrLz0_e4S3A" name="ExpertToPage" visibility="public"/>
+    <ownedOperation xmi:id="_WQ5Ezky_EeWKrLz0_e4S3A" name="ExpertIsOnDuty" visibility="public"/>
+    <ownedOperation xmi:id="_WQ5Ez0y_EeWKrLz0_e4S3A" name="NumberOfExperts" visibility="public"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_WQ5E0Ey_EeWKrLz0_e4S3A" memberEnd="_WQ5ExUy_EeWKrLz0_e4S3A _WQ5E0Uy_EeWKrLz0_e4S3A">
+    <ownedEnd xmi:id="_WQ5E0Uy_EeWKrLz0_e4S3A" visibility="public" type="_WQ5ExEy_EeWKrLz0_e4S3A" association="_WQ5E0Ey_EeWKrLz0_e4S3A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_WQ5E0ky_EeWKrLz0_e4S3A" memberEnd="_WQ5Eyky_EeWKrLz0_e4S3A _WQ5E00y_EeWKrLz0_e4S3A">
+    <ownedEnd xmi:id="_WQ5E00y_EeWKrLz0_e4S3A" visibility="public" type="_WQ5ExEy_EeWKrLz0_e4S3A" association="_WQ5E0ky_EeWKrLz0_e4S3A"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_WQ5E1Ey_EeWKrLz0_e4S3A" name="Alarm">
+    <ownedAttribute xmi:id="_WQ5E1Uy_EeWKrLz0_e4S3A" name="reqQuali" visibility="public" isUnique="false">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_WQ5E1ky_EeWKrLz0_e4S3A" name="descr" visibility="public" isUnique="false">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_WQ5E10y_EeWKrLz0_e4S3A" name="Expert">
+    <ownedComment xmi:id="_WQ5E2Ey_EeWKrLz0_e4S3A">
+      <body>&lt;Enter note text here></body>
+    </ownedComment>
+    <ownedAttribute xmi:id="_WQ5E2Uy_EeWKrLz0_e4S3A" name="quali" visibility="public" isUnique="false">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_WQ5E2ky_EeWKrLz0_e4S3A" name="Basic VDM Types">
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_WQ5E20y_EeWKrLz0_e4S3A" name="token"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_WQ5E3Ey_EeWKrLz0_e4S3A" name="&lt;Bio>"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_WQ5E3Uy_EeWKrLz0_e4S3A" name="&lt;Chem>"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_WQ5E3ky_EeWKrLz0_e4S3A" name="&lt;Elec>"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_WQ5E30y_EeWKrLz0_e4S3A" name="&lt;Mech>"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_WQ5E4Ey_EeWKrLz0_e4S3A" name="nat"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_WQ5E4Uy_EeWKrLz0_e4S3A" name="Composite VDM Types">
+    <packagedElement xmi:type="uml:Class" xmi:id="_WQ5E4ky_EeWKrLz0_e4S3A" name="Seq&lt;T>">
+      <ownedTemplateSignature xmi:type="uml:RedefinableTemplateSignature" xmi:id="_WQ5E40y_EeWKrLz0_e4S3A" name="T" visibility="public" parameter="_WQ5E5Ey_EeWKrLz0_e4S3A">
+        <ownedParameter xmi:type="uml:ClassifierTemplateParameter" xmi:id="_WQ5E5Ey_EeWKrLz0_e4S3A" parameteredElement="_WQ5E5Uy_EeWKrLz0_e4S3A" default="_WQ5E5ky_EeWKrLz0_e4S3A">
+          <ownedParameteredElement xmi:type="uml:Class" xmi:id="_WQ5E5Uy_EeWKrLz0_e4S3A" name="T" templateParameter="_WQ5E5Ey_EeWKrLz0_e4S3A"/>
+          <ownedDefault xmi:type="uml:LiteralString" xmi:id="_WQ5E5ky_EeWKrLz0_e4S3A" value=""/>
+        </ownedParameter>
+      </ownedTemplateSignature>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_WQ5E50y_EeWKrLz0_e4S3A" name="Set&lt;T>">
+      <ownedTemplateSignature xmi:type="uml:RedefinableTemplateSignature" xmi:id="_WQ5E6Ey_EeWKrLz0_e4S3A" name="T" visibility="public" parameter="_WQ5E6Uy_EeWKrLz0_e4S3A">
+        <ownedParameter xmi:type="uml:ClassifierTemplateParameter" xmi:id="_WQ5E6Uy_EeWKrLz0_e4S3A" parameteredElement="_WQ5E6ky_EeWKrLz0_e4S3A" default="_WQ5E60y_EeWKrLz0_e4S3A">
+          <ownedParameteredElement xmi:type="uml:Class" xmi:id="_WQ5E6ky_EeWKrLz0_e4S3A" name="T" templateParameter="_WQ5E6Uy_EeWKrLz0_e4S3A"/>
+          <ownedDefault xmi:type="uml:LiteralString" xmi:id="_WQ5E60y_EeWKrLz0_e4S3A" value=""/>
+        </ownedParameter>
+      </ownedTemplateSignature>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_WQ5E7Ey_EeWKrLz0_e4S3A" name="Map&lt;D,R>">
+      <ownedTemplateSignature xmi:type="uml:RedefinableTemplateSignature" xmi:id="_WQ5E7Uy_EeWKrLz0_e4S3A" name="D,R" visibility="public" parameter="_WQ5E7ky_EeWKrLz0_e4S3A _WQ5E8Uy_EeWKrLz0_e4S3A">
+        <ownedParameter xmi:type="uml:ClassifierTemplateParameter" xmi:id="_WQ5E7ky_EeWKrLz0_e4S3A" parameteredElement="_WQ5E70y_EeWKrLz0_e4S3A" default="_WQ5E8Ey_EeWKrLz0_e4S3A">
+          <ownedParameteredElement xmi:type="uml:Class" xmi:id="_WQ5E70y_EeWKrLz0_e4S3A" name="D" templateParameter="_WQ5E7ky_EeWKrLz0_e4S3A"/>
+          <ownedDefault xmi:type="uml:LiteralString" xmi:id="_WQ5E8Ey_EeWKrLz0_e4S3A" value=""/>
+        </ownedParameter>
+        <ownedParameter xmi:type="uml:ClassifierTemplateParameter" xmi:id="_WQ5E8Uy_EeWKrLz0_e4S3A" parameteredElement="_WQ5E8ky_EeWKrLz0_e4S3A" default="_WQ5E80y_EeWKrLz0_e4S3A">
+          <ownedParameteredElement xmi:type="uml:Class" xmi:id="_WQ5E8ky_EeWKrLz0_e4S3A" name="R" templateParameter="_WQ5E8Uy_EeWKrLz0_e4S3A"/>
+          <ownedDefault xmi:type="uml:LiteralString" xmi:id="_WQ5E80y_EeWKrLz0_e4S3A" value=""/>
+        </ownedParameter>
+      </ownedTemplateSignature>
+    </packagedElement>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_WQ5E9Ey_EeWKrLz0_e4S3A" name="Binding classes">
+    <packagedElement xmi:type="uml:Class" xmi:id="_WQ5E9Uy_EeWKrLz0_e4S3A" name="Seq&lt;char>">
+      <templateBinding xmi:id="_WQ5E9ky_EeWKrLz0_e4S3A">
+        <parameterSubstitution xmi:id="_WQ5E90y_EeWKrLz0_e4S3A" formal="_WQ5E5Ey_EeWKrLz0_e4S3A">
+          <actual xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EChar"/>
+        </parameterSubstitution>
+      </templateBinding>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_WQ5r0Ey_EeWKrLz0_e4S3A" name="Set&lt;Alarm>">
+      <templateBinding xmi:id="_WQ5r0Uy_EeWKrLz0_e4S3A">
+        <parameterSubstitution xmi:id="_WQ5r0ky_EeWKrLz0_e4S3A" formal="_WQ5E6Uy_EeWKrLz0_e4S3A" actual="_WQ5E1Ey_EeWKrLz0_e4S3A"/>
+      </templateBinding>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_WQ5r00y_EeWKrLz0_e4S3A" name="Map&lt;Plant::Period,Set&lt;Expert>>">
+      <templateBinding xmi:id="_WQ5r1Ey_EeWKrLz0_e4S3A">
+        <parameterSubstitution xmi:id="_WQ5r1Uy_EeWKrLz0_e4S3A" formal="_WQ5E7ky_EeWKrLz0_e4S3A"/>
+        <parameterSubstitution xmi:id="_WQ5r1ky_EeWKrLz0_e4S3A" formal="_WQ5E8Uy_EeWKrLz0_e4S3A" actual="_WQ5r10y_EeWKrLz0_e4S3A"/>
+      </templateBinding>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_WQ5r10y_EeWKrLz0_e4S3A" name="Set&lt;Expert>">
+      <templateBinding xmi:id="_WQ5r2Ey_EeWKrLz0_e4S3A">
+        <parameterSubstitution xmi:id="_WQ5r2Uy_EeWKrLz0_e4S3A" formal="_WQ5E6Uy_EeWKrLz0_e4S3A" actual="_WQ5E10y_EeWKrLz0_e4S3A"/>
+      </templateBinding>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_WQ5r2ky_EeWKrLz0_e4S3A" name="Set&lt;Plant::Period>">
+      <templateBinding xmi:id="_WQ5r20y_EeWKrLz0_e4S3A">
+        <parameterSubstitution xmi:id="_WQ5r3Ey_EeWKrLz0_e4S3A" formal="_WQ5E6Uy_EeWKrLz0_e4S3A"/>
+      </templateBinding>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_WQ5r3Uy_EeWKrLz0_e4S3A" name="Set&lt;Expert::Qualification>">
+      <templateBinding xmi:id="_WQ5r3ky_EeWKrLz0_e4S3A">
+        <parameterSubstitution xmi:id="_WQ5r30y_EeWKrLz0_e4S3A" formal="_WQ5E6Uy_EeWKrLz0_e4S3A"/>
+      </templateBinding>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>

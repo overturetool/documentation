@@ -16,7 +16,7 @@ Object-oriented Systems''\footnote{John Fitzgerald, Peter Gorm Larsen,
     Designs for Object-oriented Systems}, Springer, New York. 2005,
   ISBN 1-85233-881-4.} or as a free-standing guide. Additional material
 is available on the book's web
-site\footnote{\url{www.vdmbook.com}.}. Throughout this guide we will refer to
+site\footnote{\url{http://overturetool.org/publications/books/vdoos/}.}. Throughout this guide we will refer to
 the textbook as ``the book'' and the book's web site simply as ``the
 web site''.
 
@@ -128,20 +128,9 @@ go to:
 \end{quote}
 \end{description}
 
-A library of sample VDM-RT models, including all those needed
-for the exercises in the book, is available and can be downloaded from
-the
-URL\footnote{The library files are created to be used with Eclipse,
-  but can be opened with file compression programs like \texttt{Winrar} on
-  Windows.}:
-\begin{quote}
-\url{http://overturetool.org/download/examples/Examples-VDMRT.zip}
-\end{quote}
-You can import the example library zip folder as described in
-Section~\ref{sec:vdmsupport}.  Finally, the web site
-\texttt{www.vdmbook.com} contains all the examples used in this book
-as plain text files but these are also all present in the above
-mentioned zip file. Finally, in order to make use of the
+A library of sample VDM-RT models is available and can be imported.  Finally, the web site
+\texttt{http://overturetool.org/download/examples/} contains all the examples used in this book
+as plain text files but these are also all present as importable examples. Finally, in order to make use of the
 test coverage feature described in Section~\ref{sec:testcov} it is
 necessary to have the text processing system called \LaTeX\ and its
 \texttt{pdflatex} feature. This can for example be obtained from:
@@ -172,15 +161,14 @@ collection of panels designed to assist a specific activity is called a
 Figure~\ref{fig:userguide:OverturePerspective} shows the standard
 Overture perspective which contains views for managing Overture
 projects, and viewing and editing files. As we shall show later,
-several other perspectives are avilable in Overture.
+several other perspectives are available in Overture.
 
 The \emph{VDM Explorer view} helps you create, select, and delete
 Overture projects and navigate between the files in these
 projects. Start by importing the car navigation project from the
 book's web site. This can be done by right clicking the project view
-and selecting \emph{Import}, followed by \emph{General} $\rightarrow$
-\emph{Existing Projects into Workspace}.  In this way the projects
-from \texttt{.zip} file mentioned above can be imported very easily.
+and selecting \emph{Import}, followed by \emph{Overture} $\rightarrow$
+\emph{Overture Examples}.  
 
 The panel to the right of the Explorer is the \emph{editor area}. An
 editor customised to the dialect of VDM being used in the project will
@@ -769,7 +757,7 @@ the model in order to ensure that the model is internally consistent
 satisfied). Proof obligations are generated to ensure, for example,
 that operations will always respect invariants on instance
 variables. Each proof obligation generated from a model should
-evaluate to \emph{true}.
+evaluate to \emph{true}2.3.0.
 
 The proof obligation generator is invoked by right clicking on the
 project in the \emph{Explorer view} and then selecting the \emph{Proof
@@ -831,7 +819,7 @@ should be executed with a Java JRE (version 7 or later):
 
 \lstset{style=tool,language=}
 \begin{lstlisting}
-java -jar Overture-2.0.0.jar
+java -jar Overture-2.3.0.jar
 \end{lstlisting}
 
 \noindent If the jar file is executed with no further options like this, it will
@@ -842,7 +830,7 @@ specify the names of the VDM-RT model files to load, or the name of a directory
 in which all the files reside:
 
 \begin{lstlisting}
-java -jar Overture-2.0.0.jar -vdmrt CarNaviRadio
+java -jar Overture-2.3.0.jar -vdmrt CarNaviRadio
 \end{lstlisting}
 
 \noindent That will perform a syntax and type check of all the VDM-RT model
@@ -867,7 +855,7 @@ option useful, as this suppresses the informational messages about the parsing
 and type checking:
 
 \begin{lstlisting}
-java -jar Overture-2.0.0.jar -vdmrt -w -q -e 
+java -jar Overture-2.3.0.jar -vdmrt -w -q -e 
     "new World().RunScenario1()" CarNaviRadio
 \end{lstlisting}
 

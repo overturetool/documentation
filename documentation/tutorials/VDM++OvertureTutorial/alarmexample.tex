@@ -177,12 +177,13 @@ public Expert: set of Qualification ==> Expert
 Expert(qs) ==
   quali := qs;
 
-public GetQuali: () ==> set of Qualification
+pure public GetQuali: () ==> set of Qualification
 GetQuali() ==
   return quali;
 
 end Expert
 \end{lstlisting}
+Note that the \kw{pure} keyword is a new addition in the VDM-10 dialect to indicate that the operation does not change the state and thus there are more places it is allowed to be called.
 
 \subsection{the Alarm Class}
 
@@ -207,7 +208,7 @@ Alarm(quali,str) ==
 \end{lstlisting}
 
 \begin{lstlisting}
-public GetReqQuali: () ==> Expert`Qualification
+pure public GetReqQuali: () ==> Expert`Qualification
 GetReqQuali() ==
   return reqQuali;
 

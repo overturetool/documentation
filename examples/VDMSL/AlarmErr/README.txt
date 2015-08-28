@@ -1,5 +1,5 @@
 
-This is an erronerous version of the alarm example from the VDM-SL
+This is an erroneous version of the alarm example from the VDM-SL
 book, John Fitzgerald and Peter Gorm Larsen, Modelling Systems --
 Practical Tools and Techniques in Software Development}, Cambridge
 University Press, 2nd edition 2009. This version of the example is
@@ -15,7 +15,7 @@ alarms. A comparable model of this example also exists in VDM++.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR=John Fitzgerald and Peter Gorm Larsen
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

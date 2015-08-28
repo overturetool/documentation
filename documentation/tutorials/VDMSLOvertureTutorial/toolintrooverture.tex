@@ -12,7 +12,7 @@ Development''\footnote{John Fitzgerald and Peter Gorm
   Larsen. \emph{Modelling Systems -- Practical Tools and Techniques in
     Software Development}, Cambridge University Press, 2nd edition
   2009.} or as a free-standing guide. Additional material is available
-on the book's web site~\url{www.vdmbook.com}. Throughout this guide
+on the book's web site~\url{http://overturetool.org/publications/books/ms2/}. Throughout this guide
   we will refer to the textbook as ``the book'' and the book's web
   site simply as ``the web site''.
 
@@ -89,17 +89,10 @@ not ask again''. A welcome screen will also only the first time
 introduce you to the overall mission of the Overture open source
 initiative. 
 
-A large library of sample VDM-SL models, including all those needed
-for the exercises in the book, is available and can be downloaded from
-the
-URL\footnote{The library files are created to be used with Eclipse,
-  but can be opened with file compression programs like \texttt{Winrar} on
-  Windows but it is not necessary to open it at all.}: 
-\begin{quote}
-\url{http://overturetool.org/download/examples/Examples-VDMSL.zip}
-\end{quote}
-You can import the example library zip folder as described in
-Section~\ref{sec:vdmsupport}.  Finally, in order to make use of the
+A large library of sample VDM++ models, including all those needed
+for the exercises in the book, is available and can be imported as ``Overture examples" directly into the Overture tool. An overview of these can be found at \texttt{http://overturetool.org/download/examples/} as well.
+
+Finally, in order to make use of the
 test coverage feature described in Section~\ref{sec:testcov} it is
 necessary to have the text processing system called \LaTeX\ and its
 \texttt{pdflatex} feature. This can for example be obtained from:
@@ -146,9 +139,7 @@ The \emph{VDM Explorer view} allows you to create, select, and
 delete Overture projects and navigate between the files in these
 projects. Start by importing the alarm project. This can be done by
 right-clicking the explorer view and selecting \emph{Import}, followed
-by \emph{General} $\rightarrow$ \emph{Existing Projects into
-  Workspace}.  In this way the projects from \texttt{examplesSL.zip} file
-mentioned above can be imported very easily. Initially it is
+by \emph{Overture} $\rightarrow$ \emph{Overture Examples} $\rightarrow$ \emph{VDM-SL}.  Initially it is
 recommended that you only import the \texttt{AlarmErrSL} and the
 \texttt{AlarmSL} projects as shown in
 Figure~\ref{fig:importalarm}\footnote{You need both of these to
@@ -824,8 +815,8 @@ proof obligations automatically using formal proof and related
 techniques. You can also note in Figure~\ref{fig:POview} that in the
 \emph{Proof Obligation Explorer} view there is a status field and in there
 a few of the proof obligations have a checkmark. This is used to
-indidate that these proof obligations are trivially satisfied. It is
-also possible to get rid of such proof obligations in the list by
+indicate that these proof obligations are trivially satisfied. It is
+also possible to get rid of such proo2.3.0f obligations in the list by
 pressing the \emph{Filter proved} button at the top of the \emph{Proof
   Obligation Explorer} view.
 
@@ -846,7 +837,7 @@ should be executed with a Java JRE (version 7 or later):
 
 \lstset{style=tool,language=}
 \begin{lstlisting}
-java -jar Overture-2.0.0.jar
+java -jar Overture-2.3.0.jar
 \end{lstlisting}
 
 \noindent If the jar file is executed with no further options like
@@ -858,7 +849,7 @@ VDM-SL model files to load, or the name of a directory from which to
 load all VDM-SL model files:
 
 \begin{lstlisting}
-java -jar Overture-2.0.0.jar -vdmsl AlarmSL
+java -jar Overture-2.3.0.jar -vdmsl AlarmSL
 \end{lstlisting}
 
 \noindent That will perform a syntax and type check of all the
@@ -885,7 +876,7 @@ the \verb|-q| option useful, as this suppresses the informational
 messages about the parsing and type checking:
 
 \begin{lstlisting}[style=tool]
-java -jar Overture-2.0.0.jar -vdmsl -q -e 
+java -jar Overture-2.3.0.jar -vdmsl -q -e 
      "ExpertIsOnDuty(e1, pl)" AlarmSL
 \end{lstlisting}
 
