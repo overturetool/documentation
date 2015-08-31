@@ -2,14 +2,11 @@
 \chapter{Automatic Generation of Code}\label{sec:codegen}
 
 It is possible to generate Java code\index{code generation} for a
-subset of VDM models. Currently, the Java code generator only supports
-VDM++ specifications, but there is ongoing work on extending the
-coverage of the Java code generator to include VDM-RT as well as plans
-to support VDM-SL. In addition to Java, a C++ code generator is
-currently being developed, but this work is in its early stages of
-development, and it is not included with releases of Overture yet. For
-comparison, code generation of VDM-SL and VDM++ specifications to both
-Java and C++ is a feature that is available in
+large subset of VDM-SL and VDM++ models. In addition to Java, a C++
+code generator is currently being developed, but this work is in its
+early stages of development, and it is not included with releases of
+Overture yet. For comparison, code generation of VDM-SL and VDM++
+specifications to both Java and C++ is a feature that is available in
 VDMTools~\cite{Java2VDMMan,CGMan,CGManPP}. The sections below focus
 solely on the Java code generator available in Overture.
 
@@ -44,14 +41,14 @@ shortcuts associated to this plugin.\\
   generation in this mode can also be initiated using the
   \texttt{Ctrl+Alt+C} shortcut.
 
-\item \emph{Launch Configuration mode:} is like regular code
-  generation except that the Java code generator also prompts the user
-  for a launch configuration as input for the code generation
-  process. Based on this launch configuration the Java code generator
-  constructs an entry point (a \texttt{main} method really) that
-  serves as an entry point for the generated code. Launch
-  configuration based code generation can be initiated using the
-  \texttt{Ctrl+Alt+B} shortcut.
+\item \emph{Launch Configuration mode:}. Is currently limited to
+  VDM++. This mode is like regular code generation except that the
+  Java code generator also prompts the user for a launch configuration
+  as input for the code generation process. Based on this launch
+  configuration the Java code generator constructs an entry point (a
+  \texttt{main} method really) that serves as an entry point for the
+  generated code. Launch configuration based code generation can be
+  initiated using the \texttt{Ctrl+Alt+B} shortcut.
 
 \end{itemize}
 
@@ -127,6 +124,22 @@ does not want to include support for them in the generated code the
 corresponding option in the preference page must be unchecked. By
 default the behaviour of the Java code generator is to not include
 support for the concurrency mechanisms of VDM++ in the generated code.
+
+\subsection{Generate Java Modeling Language (JML) annotations}
+
+When a VDM model is code generated to Java all the contract-based
+elements of the model, i.e.\ the pre conditions, post conditions and
+invariants, are ignored by default. This feature does, however,
+provide limited support for translation of the contract-based elements
+of a VDM-SL model. When the corresponding option is checked the
+contract-based elements are translated to JML~\cite{Burdy&05}
+annotations which are added on top of the generated Java code as
+source code comments. This allows the system properties, expressed in
+terms of pre conditions, post conditions and invariants, to be checked
+against the generated code.\\
+
+\noindent Please note that this feature is still experimental and only
+has limited support for checking of named type invariants.
 
 \subsection{Choose output package}
 
