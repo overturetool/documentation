@@ -1,0 +1,214 @@
+
+\chapter{Automatic Generation of Code}\label{sec:codegen}
+
+It is possible to generate Java code\index{code generation} for a
+subset of VDM models. Currently, the Java code generator only supports
+VDM++ specifications, but there is ongoing work on extending the
+coverage of the Java code generator to include VDM-RT as well as plans
+to support VDM-SL. In addition to Java, a C++ code generator is
+currently being developed, but this work is in its early stages of
+development, and it is not included with releases of Overture yet. For
+comparison, code generation of VDM-SL and VDM++ specifications to both
+Java and C++ is a feature that is available in
+VDMTools~\cite{Java2VDMMan,CGMan,CGManPP}. The sections below focus
+solely on the Java code generator available in Overture.
+
+\section{Use of the Java Code Generator}
+\label{sec:javacg_use}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=10cm]{screenDumps/javacg_menu}
+\caption{Launching the Java code generator.\label{fig:javacg_menu}}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\linewidth]{screenDumps/javacg_output}
+\caption{The status of code generating the \texttt{AlarmPP} example.\label{fig:javacg_output}}
+\end{center}
+\end{figure}
+
+The Java code generator can be launched via the context menu as shown
+in Figure~\ref{fig:javacg_menu}. Alternatively, this can be done by
+highlighting the project in the VDM explorer and typing one of the
+shortcuts associated to this plugin.\\
+
+\noindent The Java code generator operates in two different modes:
+
+\begin{itemize}
+
+\item \emph{Regular mode:} In this mode the Java code generator
+  produces an Eclipse project with all the generated code. Java code
+  generation in this mode can also be initiated using the
+  \texttt{Ctrl+Alt+C} shortcut.
+
+\item \emph{Launch Configuration mode:} is like regular code
+  generation except that the Java code generator also prompts the user
+  for a launch configuration as input for the code generation
+  process. Based on this launch configuration the Java code generator
+  constructs an entry point (a \texttt{main} method really) that
+  serves as an entry point for the generated code. Launch
+  configuration based code generation can be initiated using the
+  \texttt{Ctrl+Alt+B} shortcut.
+
+\end{itemize}
+
+\noindent Upon completion of the code generation process the status is
+output to the console as shown in Figure~\ref{fig:javacg_output}. In
+particular this figure shows the status of code generating the
+\texttt{AlarmPP} model available in the Overture standard examples. As
+indicated by the console output, the generated code is available as an
+Eclipse project in the \texttt{<workspace>/<project>/generated/java}
+folder.
+
+\section{Configuration of the Java Code Generator}
+
+The Java code generator can be configured via a preference page as
+shown in Figure~\ref{fig:javacg_config}. The preference page can be
+accessed in the way you would normally access an Eclipse preference
+page or via the context menu shown above in
+Figure~\ref{fig:javacg_menu}. The Java code generator provides a few
+options that allows the user to configure the code generation process
+(see Figure~\ref{fig:javacg_config}). The sub-sections below treat
+each of these configuration parameters individually, in the order they
+appear in the preference page.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=13cm]{screenDumps/javacg_config}
+\caption{Configuration of the Java code generator.\label{fig:javacg_config}}
+\end{center}
+\end{figure}
+
+\subsection{Disable cloning}
+
+In order to respect the value semantics of VDM the Java code generator
+sometime needs to perform deep copying of certain objects that is uses
+to represent composite value types (records, tuples, tokens, sets,
+sequences and maps). For example, in VDM a record is a value type,
+which means that occurrences of the record must be copied when it
+appears in the right-hand side of an assignment, it is passed as an
+argument or returned as a result. However, Java does not support
+composite value types like structs and records, and as a consequence
+record types must be represented using classes, which use reference
+semantics. This means that an object reference, which is used to
+represent a composite value type in the generated Java code must be
+deep copied when it appears in the right-hand side of an assignment,
+it is passed as an argument or returned as a result. For arbitrarily
+complex value types (such as records composed of record or sets of
+composed of sets) deep copying may introduce a significant overhead in
+the generated code. If the specification subject to code generation
+does not truly rely on value semantics the user may wish to disable
+deep copying of value types in the generated code in order to remove
+this overhead. The user should, however, be aware that disabling of
+cloning may lead to code being generated that does not preserve the
+semantics of the input specification and in general disabling of
+cloning is discouraged. By default cloning is enabled.
+
+\subsection{Generate character sequences as strings}
+
+In VDM a string is a sequence of characters and there is no notion of
+a string type. Java in particular works differently since it uses a
+separate type to represent a string. The default behaviour of the Java
+code generator is to code generate sequences of characters as strings
+and subsequently do the necessary conversion between between strings
+and sequences in the generated code. Another possibility is to treat a
+string literal for what it truly is, namely a sequence of characters,
+and thereby avoid any conversion between strings and sequences. In
+order to do that, i.e.\ \textit{not} generating character sequences as
+strings, the corresponding option must be unchecked.
+
+\subsection{Generate concurrency mechanisms}
+
+If the user does not rely on the concurrency mechanisms of VDM++ and
+does not want to include support for them in the generated code the
+corresponding option in the preference page must be unchecked. By
+default the behaviour of the Java code generator is to not include
+support for the concurrency mechanisms of VDM++ in the generated code.
+
+\subsection{Choose output package}
+
+The Java code generator allows the output package of the generated
+code to be specified. If the user does not specify a package, the code
+generator outputs the generated Java code to a package with the same
+name as the VDM project. If the name of the project is not a valid
+java package, then the generated code is output to the default Java
+package.
+
+\subsection{Skip classes during the code generation process}
+
+It may not always make sense to code generate every class in a
+project. Classes that can often be skipped include classes that act as
+execution entry points or classes that are used to load input for the
+specification. Classes that the user wants to skip can be specified in
+the text box in the Java code generator preference page by separating
+the class names by a semicolon. As an example, \texttt{World;Env}
+makes the code generator skip code generation of the \texttt{World}
+and \texttt{Env} classes, while generating code for any other
+class. For convenience the output of the Java code generator will also
+inform the user about what classes are being skipped.
+
+\section{Limitations of the Java Code Generator}
+
+In case the Java code generator encounters a construct that it cannot
+code generate it will report it as unsupported to the user and the
+user can then try to rewrite that part of the specification using
+other (supported) constructs. Reporting of unsupported constructs is
+done via the console output and using editor markers. In order to
+demonstrate this, Figure~\ref{fig:javacg_unsupported} shows the
+console output of the Java code generator when it encounters a type
+bind, which is an example of an unsupported language construct. Note
+the small marker appearing in the editor in order to point out where
+use of the construct appears. By hovering the corresponding marker the
+user will see the reason for why the construct is unsupported. For the
+type bind example in Figure~\ref{fig:javacg_unsupported} the reason
+is:\\
+
+\noindent \texttt{Following constructs are not supported:\\ \{b |
+b:(bool * bool)\} (ASetCompSetExp) at 6:11. Reason:\\Generation of a
+set comprehension is only supported for\\multiple set binds. Got:
+b:(bool * bool)}\\
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\linewidth]{screenDumps/javacg_unsupported}
+\caption{Reporting of unsupported constructs in the
+console.\label{fig:javacg_unsupported}}
+\end{center}
+\end{figure}
+
+The user will get similar messages and markers for other unsupported
+VDM constructs. To summarise, the Java code generator currently does
+not support code generation of multiple inheritance and neither does
+it support traces, type bind, invariant checks and pre and post
+conditions. Furthermore, let expressions appearing on the right-hand
+side of an assignment will also be reported as unsupported. Code
+generation of patterns is also fairly limited and includes the
+identifier, ignore, record and tuple patterns as well as the
+character, boolean, integer, nil, quote, real and string match values.
+
+\section{The Code Generation Runtime Library}
+
+The generated code relies on a runtime library used to represent some
+of the types available in VDM (tokens, tuples etc.) as well as
+collections and support for some of the complex operators such as
+sequence modifications. For simplicity every Eclipse project generated
+by the Java code generator contains the runtime library. More
+specifically, there is a copy of the runtime library containing only
+the binaries (\texttt{lib/codegen-runtime.jar}) as well as a version
+of the runtime library that has the source code attached
+(\texttt{lib/codegen-runtime-sources.jar}). The runtime library is
+imported by every code generated class using the Java import statement
+\texttt{\textbf{import} org.overture.codegen.runtime.*;} and in order
+to compile the generated Java code the runtime library must be visible
+to the Java compiler.
+
+Similar to VDMTools the runtime library also provides implementation
+for subset of the functionality available in the standard libraries:
+The runtime library provides a full implementation of the
+\texttt{MATH} library, support for conversion of values into character
+sequences as provided by the \texttt{VDMUtil}, and finally
+functionality to write to the console as available in the \texttt{IO}
+library.
