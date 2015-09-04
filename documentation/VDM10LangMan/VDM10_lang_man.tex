@@ -1891,15 +1891,19 @@ referred to by the reserved word \keyw{RESULT}.
 \chapter{Function Definitions}\label{functiondef}
 
 In the VDM languages we can define first order and higher order
-functions. A higher order function is either a Curried function
-(a function that returns a function as result), or a function that takes
+functions. A higher order function is either a Curried function (a
+function that returns a function as result), or a function that takes
 functions as arguments. Furthermore, both first order and higher order
-functions can be polymorphic. In VDM++ and VDM-RT functions are
-automatically available in a static form (i.e.\ without having an
-instance of the defining class). Thus there is no need to use the
-{\bf\ttfamily static} keyword that can be used for operations in VDM++
-and VDM-RT. In general, the syntax for the definition of a
-function is:
+functions can be polymorphic.
+
+In VDM++ and VDM-RT functions are automatically available in a static
+form (i.e.\ without having an instance of the defining class). Thus
+there is no need to use the {\bf\ttfamily static} keyword that can be
+used for operations in VDM++ and VDM-RT. Functions are executed
+atomically - which is consistent with them being able to read instance
+variables of objects passed, and there being no sync clauses (see
+Chapter \ref{ch:sync}) for functions. In general, the syntax for the
+definition of a function is:
 
 \Rule{function definitions}{
   \Lop{functions},
@@ -5039,14 +5043,23 @@ only be used in the VDM-RT dialect.
   executed atomically when it is called from a functional context
   (from functions, invariants, pre or post-conditions). Otherwise
   calling a pure operation is no different to calling a normal
-  operation, except that a pure operation has various constraints: A
-  \keyw{pure} operation cannot call ordinary operations nor update
-  instance variables, i.e.\ have any side effects. As a consequence a
-  pure operation cannot be used in synchronisation
-  constraints. Functions, on the other hand, are always atomic - which
-  is consistent with them being able to read instance variables of
-  objects passed, and there being no ``\keyw{sync}'' clauses for
-  functions.
+  operation, except that a pure operation has various constraints. The
+  constraints are as follows:
+
+  \begin{itemize}
+  \item A pure operation cannot update state
+  \item A pure operation cannot call an impure operation
+  \item A pure operation cannot have permission predicates
+  \item An operation overriding a pure operation must also be pure
+  \item History counters cannot be used for pure operations
+  \item A mutex cannot refer to a pure operation
+  \item A pure operation must return a value
+  \item A pure operation cannot be declared \keyw{async} since an
+    asynchronous operation is required to have \keyw{void} as return
+    type.
+  \item The body of a thread cannot be a pure operation
+  \item It is not allowed to call \keyw{exit} in a pure operation
+  \end{itemize}
   
   In both VDM++ and VDM-RT the details of the
   access and \keyw{static} specifiers can be found in section
