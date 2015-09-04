@@ -5032,8 +5032,21 @@ only be used in the VDM-RT dialect.
   a return type and the thread calling an asynchronous operation will
   continue its own execution after having requested the invocation of
   the asynchronous operation. Note that constructors cannot be
-  declared asynchronous. If an operation is declared to be ``\keyw{pure}"
-  it means that it is executed atomically if it is called from a functional context (from normal functions, invariants, pre or post-conditions). Such operations cannot call ordinary operations nor update the instance variables, i.e.\ have any side effects, and thus they can also not be used in synchronisation constraints.
+  declared asynchronous.
+
+  % Pure operations
+  If an operation is declared ``\keyw{pure}'' it means that it is
+  executed atomically when it is called from a functional context
+  (from functions, invariants, pre or post-conditions). Otherwise
+  calling a pure operation is no different to calling a normal
+  operation, except that a pure operation has various constraints: A
+  \keyw{pure} operation cannot call ordinary operations nor update
+  instance variables, i.e.\ have any side effects. As a consequence a
+  pure operation cannot be used in synchronisation
+  constraints. Functions, on the other hand, are always atomic - which
+  is consistent with them being able to read instance variables of
+  objects passed, and there being no ``\keyw{sync}'' clauses for
+  functions.
   
   In both VDM++ and VDM-RT the details of the
   access and \keyw{static} specifiers can be found in section
