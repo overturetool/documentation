@@ -2,65 +2,29 @@
 
 \chapter{A Chemical Plant Example}\label{app:alarm}
 
-This appendix presents the requirements for a simple alarm system for a
-chemical plant. It forms a running example that serves to illustrate
-the process described earlier and to introduce elements of the VDM-SL
-modelling language. Although the modelling process is described here
-as though it were a single-pass activity, a real development would
-usually be iterative. 
-
-
+This appendix presents the requirements for a simple alarm system for a chemical plant. It forms a running example that serves to illustrate the process described earlier and to introduce elements of the VDM-SL modelling language. Although the modelling process is described here as though it were a single-pass activity, a real development would usually be iterative. 
+%
 \section{An informal description}
+The example is inspired by a subcomponent of a large alarm system developed by IFAD A/S and introduced in 
+\cite{Fitzgerald&98b}. Chapter~\ref{cha:toolbox} provides an interactive and hands-on tour of the tools available for supporting the development of the model.
 
-
-
-The example is inspired by a subcomponent of a large
-alarm system developed by IFAD A/S and introduced in 
-\cite{Fitzgerald&98b}. 
-Chapter~\ref{cha:toolbox} provides an interactive and hands-on tour of
-the tools available for supporting the development of the model.
-
-Imagine that you are developing a system that manages the calling out
-of experts to deal with operational faults discovered in a chemical
-plant.  The plant is equipped with sensors that are able to raise
-alarms in response to conditions in the plant.  When an alarm is
-raised, an expert must be called to the scene.  Experts have different
-qualifications for coping with different kinds of alarms. It has been
-decided to produce a model to ensure that the rules
-concerning the duty schedule and the calling out of experts are
-correctly understood and implemented. The individual requirements are
-labelled R1, R8 for further reference:
+Imagine that you are developing a system that manages the calling out of experts to deal with operational faults discovered in a chemical plant.  The plant is equipped with sensors that are able to raise alarms in response to conditions in the plant.  When an alarm is raised, an expert must be called to the scene.  Experts have different qualifications for coping with different kinds of alarms. It has been decided to produce a model to ensure that the rules concerning the duty schedule and the calling out of experts are correctly understood and implemented. The individual requirements are labelled R1 to R8 for further reference:
 
 \begin{reqs}
-\item A computer-based system is to be developed to manage the alarms 
-of this plant.
-\item Four kinds of qualifications are needed to cope with the alarms: 
- electrical, mechanical, biological, and chemical.
-\item There must be experts on duty during all periods allocated in 
-the system.
+\item A computer-based system is to be developed to manage the alarms of this plant.
+\item Four kinds of qualifications are needed to cope with the alarms: electrical, mechanical, biological, and chemical.
+\item There must be experts on duty during all periods allocated in the system.
 \item Each expert can have a list of qualifications.
-\item Each alarm reported to the system has a qualification associated 
-with it along with a description of the alarm that can be understood 
-by the expert.
-\item Whenever an alarm is received by the system an expert with the 
-right qualification should be found so that he or she can be 
-paged.
-\item The experts should be able to use the system database to check 
-when they will be on duty.
+\item Each alarm reported to the system has a qualification associated with it along with a description of the alarm that can be understood by the expert.
+\item Whenever an alarm is received by the system, an expert with the right qualification should be found so that he or she can be paged.
+\item The experts should be able to use the system database to check when they will be on duty.
 \item It must be possible to assess the number of experts on duty.
 \end{reqs}
 
-In the next section the development of a model of an alarm
-system to meet these requirements is initiated. The purpose of the model is to
-clarify the rules governing the duty roster and calling out of experts
-to deal with alarms.
-
+In the next section the development of a model of an alarm system to meet these requirements is initiated. The purpose of the model is to clarify the rules governing the duty roster and calling out of experts to deal with alarms.
+%
 \section{A VDM-SL model of the Alarm example}\label{sec:VDMModel}
-
-This section presents the full VDM-SL model
-of the alarm example. However, it does so without any explanatory
-text. That is placed in the VDM-SL book so if you are a newcommer to
-VDM-SL please read that there.
+This section presents the full VDM-SL model of the alarm example. However, it does so without any explanatory text. That is placed in the VDM-SL book.  If you are a newcomer to VDM-SL please read that there.
 
 \begin{vdmsl}
 types
@@ -119,8 +83,7 @@ functions
     exists ex in set exs & reqquali in set ex.quali
 \end{vdmsl}
 
-The \texttt{ChangeExpert} function below is not correct but it is used
-for exercise/test purposes in this tutorial.
+The \texttt{ChangeExpert} function below is not correct, but it is used for exercise/test purposes in this tutorial.
 
 \begin{vdmsl}
 functions
@@ -131,8 +94,7 @@ ChangeExpert(mk_Plant(plan,alarms),ex1,ex2,peri) ==
            alarms)
 \end{vdmsl}
 
-In order to test the model different values can be defined. Such value
-definitions make use of the types defined in the VDM-SL model.
+In order to test the model, different values can be defined. Such value definitions make use of the types defined in the VDM-SL model.
 
 
 \begin{vdmsl}
@@ -188,9 +150,7 @@ Run: Expert ==> set of Period
 Run(e) == return ExpertIsOnDuty(e, plant1);
 \end{vdmsl}
 
-In the new VDM-10 variant of VDM-SL {\bf\ttfamily traces} have been
-incorporated since they can be used with tool support for
-combinatorial testing purposes.
+In the new VDM-10 variant of VDM-SL, {\bf\ttfamily traces} have been incorporated since they can be used with tool support for combinatorial testing purposes.
 
 %\begin{minipage}{\linewidth}
 \begin{vdmsl}
