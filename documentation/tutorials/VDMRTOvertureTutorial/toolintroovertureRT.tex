@@ -7,9 +7,9 @@
 
 This is an introduction to the Overture Integrated Development
 Environment (IDE) and its facilities for supporting modelling and
-analysis in VDM-RT the VDM extended language for modelling real-time
+analysis in VDM-RT, the VDM extended language for modelling real-time
 systems, formerly known as VICE~(VDM in Constrained Environments). 
-Since there is not yet a book on VDM-RT it
+Since there is not yet a book on VDM-RT, this
 may be used as a substitute for Chapter 3 of ``Validated Designs for
 Object-oriented Systems''\footnote{John Fitzgerald, Peter Gorm Larsen,
   Paul Mukherjee, Nico Plat and Marcel Verhoef. \emph{Validated
@@ -39,13 +39,13 @@ from~\url{www.overturetool.org}.
 
 \section{Introduction}
 
-In this chapter, an in-car radio navigation system which supports the Traffic Message Channel (TMC) will used as example. 
+In this chapter, an in-car radio navigation system which supports the Traffic Message Channel (TMC) will be used as an example. 
 
 The system is composed of three main clusters of functionality; 
 \begin{itemize}
 \item The Man-Machine Interface (MMI) takes care of user interaction such as handling key press input and graphical display output. 
 \item The navigation is responsible for destination entry, route planning and turn-by-turn guidance. 
-\item The radio is responsible for basic tuner and volume control as well as handling traffic information from the TMC.
+\item The radio is responsible for basic tuner and volume control, as well as handling traffic information from the TMC.
 \end{itemize}
 
 Figure~\ref{fig:navigationoverview} gives an overview of the in-car navigation system. 
@@ -68,7 +68,7 @@ audible feedback.
 \item[\textbf{TMC Message Handling:}] Digital traffic information is important for in-car radio navigation systems. It enables features such as automatic re-planning of the planned route in case a traffic jam occurs ahead. It is also increasingly important to enhance road safety by warning the driver, for example when a ghost driver is spotted just ahead on the planned route. TMC is such a digital traffic information service.
 \end{description}
 
-When developing a Real-time model, it is adviced to create an object-oriented model first outside the real-time domain. This will enable the developer to focus on the structure of the system as well as eliminating any concurrency issues before moving on to the real-time domain. This proposed process is described in much more detail in \cite{Larsen&09b}.
+When developing a Real-time model, it is advised to create an object-oriented model first outside the real-time domain. This will enable the developer to focus on the structure of the system as well as eliminating any concurrency issues before moving on to the real-time domain. This proposed process is described in much more detail in \cite{Larsen&09b}.
 
 The rest of this chapter has the following outline; Section~\ref{sec:install} describes how to obtain the Overture tools.
 Section~\ref{sec:vdmsupport} provides an initial introduction to the
@@ -87,7 +87,7 @@ system.
 Section~\ref{sec:CT} shows how parts of the test process can be
 automated using Overture's combinatorial testing feature.
  Section~\ref{sec:RTLV} goes on
-to show the Real-Time Log Viewer which gives a graphical presentation
+to show the Real-Time Log Viewer, which gives a graphical presentation
 of thread execution.
 Section~\ref{sec:PO} demonstrates the automatic generation of the
 additional checks (called \emph{proof obligations}) needed to ensure
@@ -113,15 +113,13 @@ go to:
   \begin{quote}
   \texttt{http://overturetool.org/download/}
   \end{quote}
-  \noindent you will find pre-installed versions of Overture for
-  Windows, Linux and Mac\footnote{It is planned to develop an update
-    facility, allowing updates to be applied directly from within the
-    Overture tools without requiring a reinstallation. However, this
+  \noindent you will find pre-compiled versions of Overture for
+  Windows, Linux and Mac\footnote{Development of an update facility is planned, which will allow updates to be applied directly from within the generic Eclipse platform without requiring reinstallation. However, this
     can be a risky process because of the dependencies on non-Overture
     components and so is not yet supported.}.
 
-\item[\textbf{Modelio:}] This is a tool that is both available in a commercial version as well as in an open source setting from a
-  company called Softeam. Just like Overture this tool is built on top of the Eclipse platform. The product can be
+\item[\textbf{Modelio:}] This is a tool that is available both in a commercial version as well as in an open source setting from a
+  company called Softeam. Just like Overture, this tool is built on top of the Eclipse platform. The product can be
   obtained from
 \begin{quote}
 \texttt{http://www.modelio.org/}.
@@ -207,17 +205,17 @@ shown at the bottom.
 
 In the standard Overture perspective there is a \emph{VDM Quick
   Interpreter} view in a pane in the same area as the problems
-view. This can be used for evaluation of standard VDM expressions
-independent of all VDM projects incorporated in your Overture
-IDE. This can be very convenient to gain understanding of the
+view. This can be used for evaluation of standard VDM expressions,
+independent of the VDM projects loaded in your Overture
+IDE. This can be very convenient in gaining understanding of the
 different VDM operators. In Figure~\ref{fig:QuickIntView} it is
 possible to see how a couple of expressions (typed in at the box at
-the botton of the view) are evaluated\footnote{If errors appear in
-  this evaluation the current version of the Overture IDE simply yield
-  a \texttt{Fatal error} where it is anticipated that later releases
-  will provide more helpful run-time errors to the users.}. Note that
+the bottom of the view) are evaluated\footnote{If errors appear in
+  this evaluation, the current version of the Overture IDE simply yields
+  a \texttt{Fatal error}.  It is anticipated that later releases
+  will provide more helpful run-time error descriptions to the user.}. Note that
 in order to get a console where you are able to make use of
-definitions you need to use the console launch mode as described in
+definitions, you need to use the console launch mode as described in
 Section~\ref{sec:debugconfig} below. 
 
 \begin{figure}[!htb]
@@ -251,7 +249,7 @@ explicit operation template.
 	\end{center}
 \end{figure}
 
-The Overture IDE supports many templates for language constructs
+The Overture IDE supports many templates for language constructs,
 including cases statements, classes, quantified expressions, functions
 (explicit/implicit), operations (explicit/implicit) and many
 more\footnote{It is possible to see and enhance the complete list of
@@ -266,11 +264,11 @@ editor buffer continuously as changes are made. If there are any
 syntax errors, these will be reported in the problems view, as well as
 being highlighted in the editor. See the bottom of
 Figure~\ref{fig:userguide:OverturePerspective}. Each time a
-VDM-RT model file is saved the editor type checks the model and reports
+VDM-RT model file is saved, the editor type checks the model and reports
 any errors or warnings. Note also that the suggestions made about
 missing characters in the
 error messages may not always be entirely the action you may wish to
-take when correcting the source since the tool cannot guess what you
+take when correcting the source, since the tool cannot guess what you
 intended to write.
 
 %Most of the imported files in the car navigation project should be
@@ -295,14 +293,14 @@ intended to write.
 In order to map the UML class diagram created in Modelio
 to VDM, a new project must be created in the Overture IDE to receive
 it. This is done by right-clicking in the \emph{VDM Explorer} view,
-and creating a new VDM-RT project and for example naming it
-\texttt{CarRadioNavUML}. If the desired language dialect (say a VDM-RT 
+and creating a new VDM-RT project and naming it, for example,
+\texttt{CarNaviRadioUML}. If the desired language dialect (say a VDM-RT 
 project) is not directly available in the right-click menu, please choose
 \emph{Project} or 
 \emph{Other} and browse to the VDM-RT project. By right-clicking the new 
 project root in the \emph{VDM Explorer}, \emph{UML Transformation} can 
 be chosen, followed by \emph{Import XMI}. Now browse to the XMI/XML file
-exported from Modelio called \texttt{carradnavuml.uml} and open this.
+exported from Modelio called \texttt{carradnavuml.uml} and open it.
 
 %The three classes from the Alarm system will be converted to VDM++ format
 %(\texttt{.vdmpp}), one file per class.
@@ -335,13 +333,12 @@ exported from Modelio called \texttt{carradnavuml.uml} and open this.
 It is possible to automatically transform all the classes from the car
 radio navigation project to UML. To do this, simply right
 click the project root and choose \emph{UML Transformation} $
-\rightarrow $ \emph{Export XMI} (i EMF UML3.0.0 format som \texttt{.uml} 
-format). The UML/XMI file can subsequently be
+\rightarrow $ \emph{Export XMI} (exported in EMF UML3.0.0 format, with extension \texttt{.uml}). The UML/XMI file can subsequently be
 imported in Modelio, enabling the user to get an overview
 of the complete model.
 
 Note that state charts, activity
-diagrams, sequence diagrams, objects charts, package charts are not
+diagrams, sequence diagrams, objects charts and package charts are not
 used in the UML mapping. It is essentially only the information used
 statically inside classes and their usage in class diagrams that is
 used.
@@ -386,7 +383,7 @@ end World
 
 \subsection{The Debug Configuration}\label{sec:debugconfig}
 
-Before you start to debug a model in Overture, you need to set up a
+Before you start debugging a model in Overture, you need to set up a
 \emph{debug configuration}. Right click the project and choose
 \emph{Debug As} $ \rightarrow $ \emph{Debug configuration}.
 %\footnote{Note that the
@@ -397,7 +394,7 @@ Before you start to debug a model in Overture, you need to set up a
 %  interpreter. This is currently being redesigned and it is expected
 %  that in the next stable release this will be fully operational.}. 
 The debug configuration
-dialog have 3 different launch modes:
+dialog has 3 different launch modes:
 
 \begin{description}
 \item[Entry Point:] This is the standard Eclipse approach where one
@@ -405,16 +402,16 @@ dialog have 3 different launch modes:
 \item[Remote Console:] This is an anvanced option that enables remote
   control of the interpreter and this is described in the Overture
   user manual~\cite{Larsen&10d}.
-\item[Console:] This will simply start up a console where the user
-  interactive can debug different operations/functions defined in the
+\item[Console:] This will simply start up a console where the user can
+  interactively debug different operations/functions defined in the
   selected project\footnote{For VDMTools users this will be a familiar
     console corresponding to a VDM model that has been initialised in
     VDMTools' interpreter.}.
 \end{description}
 
-Here we will start with using 
+Here we will start by using 
 the traditional Eclipse approach with an ``Entry Point'' launch
-configuration which 
+configuration, which 
 requires the project name, the class, the operation/function used as
 the entry point of the test and the source file containing the entry
 point definition.  As an example,
@@ -433,7 +430,7 @@ between the brackets of the entry point function/operation.
 \end{figure}
 
 Once the configuration is ready, the model can be debugged. The
-Overture IDE will change to the \emph{Debug perspective} which
+Overture IDE will change to the \emph{Debug perspective}, which
 contains the views needed for debugging in VDM. Breakpoints can easily
 be set by double clicking in the left margin of the editor view. When
 the debugger reaches a breakpoint, evaluation suspends and the user
@@ -551,29 +548,28 @@ examined at the end.
 
 In our simple example, the different tests in the exercise above does
 cause the majority of the VDM-RT model to be executed, but for
-demonstration purposes let us start by cleaning the model (right click
-on the project and select \texttt{Clean}). Let us evaluate the
-\texttt{RunScenario1} and \texttt{RunScenario2} operations where the
-\texttt{Generate coverage} option is selected. 
+demonstration purposes let us start by cleaning the model (select the project and navigate to \texttt{Project} $\rightarrow$ \texttt{Clean}). Let us evaluate the
+\texttt{RunScenario1} and \texttt{RunScenario2} operations with the
+\texttt{Generate coverage} option selected. 
 Remember that whenever test coverage
 information is desired the \texttt{Generate Coverage} option
-must be selected as shown in Figure~\ref{fig:userguide:debugConfiguration}. 
+must be selected in the debug launch configuration, as shown in Figure~\ref{fig:userguide:debugConfiguration}. 
  Once the debugger
-has completed and the result is written out in the \texttt{console} it
-is possible to right click on the \texttt{CarRadioNavi} project and
+has completed and the result is written out in the \texttt{console}, it
+is possible to right click on the \texttt{CarNaviRadioRT} project and
 select the \emph{Latex} $ \rightarrow $ \emph{Latex coverage} the
 coverage information that have been gathered in any expressions that
 have been debugged since the last change to a file have been saved or
 the project have been cleaned will be turned into a pdf file. The
-\texttt{CarRadioNavi.pdf} file is placed in the
+\texttt{CarNaviRadioRT.pdf} file is placed in the
 \texttt{generated/latex} directory. Note that whenever the model is
 adjusted or it is cleaned so it gets type checked again all the files
 in the \texttt{generated} directory are deleted.
 
-The coverage information is provided in a way where uncovered
-expressions are shown in red in the generated pdf file. In addition
-after the content of each VDM-RT source file a table with coverage
-overview is provided in tabular form. So for example for the
+The coverage information is provided in such a way that expressions not covered 
+are shown in red in the generated pdf file. In addition,
+after the content of each VDM-RT source file, a table with coverage
+overview is provided. So for example for the
 \texttt{MMI} class this looks like:
 
 \begin{longtable}{|l|r|r|}
@@ -603,18 +599,18 @@ is called twice\footnote{Note that the coverage from the combinatorial
 The previous sections have shown how to manually test and debug models
 that use an executable subset of VDM-RT. However, Overture also
 contains a feature enabling more automation in the testing process. It
-is possible to write regular expressions, as \emph{traces}, that one
+is possible to write regular expressions, known as \emph{traces}, that one
 would like to expand into a large set of individual tests. When new
-traces are incorporated in a VDM project you may need to press the
+traces are incorporated in a VDM project, you may need to press the
 \textsf{Refresh} button
 (\includegraphics[width=0.02\textwidth]{figures/refresh}) in the
 \emph{CT Overview} view.
 
 In order to illustrate how this can be used, we have introduced a
-\texttt{Test} class which only in introduced in this example for
+\texttt{Test} class which is introduced in this example for
 illustration purposes.
 
-In order to do the automation, Overture needs to know about the
+In order carry out the automated testing procedure, Overture needs to know about the
 combinations of operation calls that you would like to have carried
 out, so it is necessary to write a kind of regular expression called a
 \emph{trace}. VDM-RT has been extended such that traces can be written
@@ -640,21 +636,21 @@ TT: let x in set {1,2,3}
 bindings to \texttt{x} (whereas manual debugging will select an
 arbitrary binding here). This is followed by the call of 6 different
 operations seperated by an alternative operator (\texttt{|}). The
-selected \texttt{x} value is then used as argument t each of these
-operations so in total this generates 18 (3 times 6) test cases. 
-Inside this combinatorial testing view you can
-select the \texttt{CarRadNav} project, right click it and 
+selected \texttt{x} value is then used as the argument to each of these
+operations, so in total this generates 18 (3 times 6) test cases. 
+Inside this combinatorial testing view of the Combinatorial Testing perspective, you can
+select the \texttt{CarNaviRadioRT} project, right click it and 
 choose the \textsf{Full
   Evaluation} option as shown in Figure~\ref{fig:CToptions}. 
 Now Overture expands
-and executes all 18 test cases one after each other. The results of these
+and executes all 18 test cases, one after the other. The results of these
 executions are illustrated with green check marks and red crosses, meaning that
 the tests passed or failed respectively (see Figure~\ref{fig:tracesradnav}). Note
 that in the Combinatorial Testing perspective, the view in the lower region is
 able to show the individual steps of a selected test case, along with the
 corresponding results from its four operation calls.
 
-Note that here \texttt{IsFinished} have been defined in the
+Note that here \texttt{IsFinished} has been defined in the
 \texttt{EnvironmentTask} class as:
 
 \begin{lstlisting}
@@ -666,9 +662,9 @@ sync
   per IsFinished => #fin(logSysToEnv) > 0;
 \end{lstlisting}
 This is necessary because the operations being tested are all defined
-as being asynchronous and thus the execution would complete before the
-system had a change to do its work if the \texttt{IsFinished}
-operation was not used.
+as being asynchronous and thus execution would complete before the
+system has a change to do its work if the \texttt{IsFinished}
+operation is not used.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -686,20 +682,19 @@ operation was not used.
 
 The syntax for traces also enables operation sequencing and repetition to be
 specified, but these were not needed for this simple case. Using the full power
-of traces it is possible to efficiently generate and execute very large test
+of traces, it is possible to efficiently generate and execute very large test
 suites. Naturally, this is most likely to find inconsistencies when the model
-attempts to define its essential predicates (invariants, pre and post-conditions).
+violates its essential predicates (invariants, pre and post-conditions).
 
 \section{Realtime Log Viewer}\label{sec:RTLV}
 
-When a VDM-RT model is being executed a textual logfile with
+When a VDM-RT model is being executed, a text log file with
 information about the time of the generation is created in
-a folder called ''\texttt{generated/logs/debugconfig}'' with the
-\emph{.logrt} extension. Note that \texttt{debugconfig} here will be
-the name of the launch configuration that the user have created so if
-several launch confugurations are used these will be separated in
-different directories. This logfile can be viewed in the build-in
-RealTime Log Viewer, by double-clicking the file in the project
+a folder called ''\texttt{generated/logs}'' with the
+\emph{.rt} extension.
+%Note that \texttt{debugconfig} here will be the name of the launch configuration that the user has created, so if several launch configurations are used, these will be separated in different directories.
+This log file can be fiewed in the editor by double-clicking it.  The corresponding binary log file, with extension \emph{.rtbin}, can be viewed in the built-in
+RealTime Log Viewer by double-clicking it in the project
 view. The viewer allows you to explore system execution in different
 ways. In Figure~\ref{fig:userguide:ArchitecturalOverview} the
 architectural overview of the system is given, describing the
@@ -727,16 +722,15 @@ different CPUs communicate via the BUSes of the system.
 \end{figure}
 
 Since the complete execution of the model cannot be shown in a normal
-sized window, you have the option of jumping to a certain time
-using the \emph{Go to time} button. It is also possible to export all
-the generated views to \emph{JPG} format using the \emph{Export Image}
-button. All the generated pictures will be placed in the ''log''
+sized window, you have the option of jumping time intervals by using the \emph{Move Previous} and \emph{Move Next} buttons. It is also possible to export all
+the generated views to \emph{JPG} format using the \emph{Save all diagrams as JPG}
+button. All the generated pictures will be placed in the ''logs''
 folder.
 
 In addition to the execution overview, the RealTime Log Viewer can
 also give an overview of all executions on a single CPU. This view
 gives a detailed description of all operations and functions invoked
-on the CPU as well as the scheduling of concurrent processes. This can
+on the CPU, as well as the scheduling of concurrent processes. This can
 be seen in Figure~\ref{fig:userguide:ExecutionCPU}.
 
 \begin{figure}[htp]
@@ -757,7 +751,7 @@ the model in order to ensure that the model is internally consistent
 satisfied). Proof obligations are generated to ensure, for example,
 that operations will always respect invariants on instance
 variables. Each proof obligation generated from a model should
-evaluate to \emph{true}2.3.0.
+evaluate to \emph{true}.
 
 The proof obligation generator is invoked by right clicking on the
 project in the \emph{Explorer view} and then selecting the \emph{Proof
@@ -791,8 +785,12 @@ application \texttt{envTasks(name)} is indeed defined (i.e.\ that the
 obligation in the following form:
 
 \begin{lstlisting}
-forall name in set (dom envTasks) &
-  name in set dom envTasks
+(forall envTasks1:map (seq of (char)) to (EnvironmentTask) & 
+ (true =>
+ (forall envTasks2:map (seq of (char)) to (EnvironmentTask) &
+  (true =>
+  (forall name in set (dom envTasks) &
+   (name in set (dom envTasks)))))))
 \end{lstlisting}
 Proof obligations represent checks that should be made on a model in
 order to gain confidence in its consistency. At present, proof
@@ -805,7 +803,7 @@ likely to be some that have to be checked manually.
 \section{A Command-Line Interface}\label{sec:cmdline}
 
 So far only the graphical user interface of Overture has been
-presented but the core of Overture also
+presented, but the core of Overture also
 provides a simple command line interface.  This is useful for the
 automatic batch execution of tests, though the command line also
 provides a full set of interactive execution and debugging commands
@@ -824,7 +822,7 @@ java -jar Overture-2.3.0.jar
 
 \noindent If the jar file is executed with no further options like this, it will
 print a list of available options and exit. The most important option is the VDM
-dialect that the tool should use. In the case of our alarm example, we want to
+dialect that the tool should use. In the case of our in-car navigation example, we want to
 use VDM-RT for which the option is \verb|-vdmrt|. After this, we can simply
 specify the names of the VDM-RT model files to load, or the name of a directory
 in which all the files reside:
@@ -833,8 +831,8 @@ in which all the files reside:
 java -jar Overture-2.3.0.jar -vdmrt CarNaviRadio
 \end{lstlisting}
 
-\noindent That will perform a syntax and type check of all the VDM-RT model
-files in the directory called \verb|CarNaviRadio|, producing any errors and warning
+\noindent In this case, this is the location of the imported CarNaviRadioRT project in the workspace directory selected when Overture first started up.  This will perform syntax and type checking of all the VDM-RT model
+files in the directory called \verb|CarNaviRadioRT|, producing any errors and warning
 messages on the console, before terminating:
 
 \begin{lstlisting}
@@ -842,10 +840,10 @@ Parsed 10 classes in 0.187 secs. No syntax errors
 Type checked 12 classes in 0.094 secs. No type errors
 \end{lstlisting}
 
-\noindent In the case of our example, there are no syntax or type checking
+\noindent In the case of our example, there are no syntax or type
 errors. Warnings can be suppressed using the \verb|-w| option.
 
-If a VDM-RT model has no type checking errors, it can either be given an
+If a VDM-RT model has no type errors, it can either be given an
 expression to evaluate as an option on the command line, or the user can enter
 an interactive mode to evaluate expressions and debug their execution.
 
@@ -954,7 +952,7 @@ support for VDM-RT:
 \item executing and debugging VDM-RT models;
 %\item a command-line interface;
 %\item pretty printing VDM++ models with test coverage information;
-\item combinatorial testing enabling automation of parts of the
+\item combinatorial testing, enabling automation of parts of the
   testing process; 
 \item proof obligation generation and
 \item a command-line interface enabling access to test coverage.
