@@ -1,5 +1,6 @@
 % $Revision: 1.28 $
-\chapter{Overture Tool Support for VDM-RT: an Introductory Guide}\label{cha:toolbox}
+\chapter{Overture Tool Support for VDM-RT}
+\label{cha:toolbox}
 % vppinput[guide/test1.vpp]
 \initexercise
 
@@ -21,9 +22,7 @@ the textbook as ``the book'' and the book's web site simply as ``the
 web site''.
 
 We use examples based on an \emph{in-car navigation} case study and
-VDM-RT model presented in Appendix~\ref{app:navigation}. 
-
-We introduce the features of Overture that support the combination of
+VDM-RT model presented in Appendix~\ref{app:navigation}. We introduce the features of Overture that support the combination of
 formal modelling in VDM++ with object-oriented design using UML. This
 is done by providing a ``hands-on'' tour of Overture, providing enough
 detail to allow you to use Overture for serious applications,
@@ -39,9 +38,8 @@ from~\url{www.overturetool.org}.
 
 \section{Introduction}
 
-In this chapter, an in-car radio navigation system which supports the Traffic Message Channel (TMC) will be used as an example. 
-
-The system is composed of three main clusters of functionality; 
+In this chapter, an in-car radio navigation system which supports the Traffic Message Channel (TMC) will be used as an example. The system is composed of three main clusters of functionality; 
+%
 \begin{itemize}
 \item The Man-Machine Interface (MMI) takes care of user interaction such as handling key press input and graphical display output. 
 \item The navigation is responsible for destination entry, route planning and turn-by-turn guidance. 
@@ -65,12 +63,12 @@ The system must be able to support the following three use cases:
 (the volume setting on the screen) should be timely and synchronized with the
 audible feedback.
 \item[\textbf{Address Look-up:}] Destination entry is supported by a smart ``typewriter'' style interface. By turning a knob the user can move from letter to letter; by pressing it the user will select the currently highlighted letter. The map database is searched for each letter that is selected and only those letters in the on-screen alphabet are enabled that are potential next letters in the list.
-\item[\textbf{TMC Message Handling:}] Digital traffic information is important for in-car radio navigation systems. It enables features such as automatic re-planning of the planned route in case a traffic jam occurs ahead. It is also increasingly important to enhance road safety by warning the driver, for example when a ghost driver is spotted just ahead on the planned route. TMC is such a digital traffic information service.
+\item[\textbf{TMC Message Handling:}] Digital traffic information is important for in-car radio navigation systems. It enables features such as automatic re-planning of the planned route in case a traffic jam occurs ahead. It is also increasingly important to enhance road safety by warning the driver, for example when a ghost driver\footnote{A motorist headed against the correct flow of traffic.} is spotted just ahead on the planned route. TMC is such a digital traffic information service.
 \end{description}
 
 When developing a Real-time model, it is advised to create an object-oriented model first outside the real-time domain. This will enable the developer to focus on the structure of the system as well as eliminating any concurrency issues before moving on to the real-time domain. This proposed process is described in much more detail in \cite{Larsen&09b}.
 
-The rest of this chapter has the following outline; Section~\ref{sec:install} describes how to obtain the Overture tools.
+The rest of this chapter has the following structure: Section~\ref{sec:install} describes how to obtain the Overture tools.
 Section~\ref{sec:vdmsupport} provides an initial introduction to the
 terminology used by Eclipse tools like Overture. 
 %% This section may be
@@ -119,16 +117,21 @@ go to:
     components and so is not yet supported.}.
 
 \item[\textbf{Modelio:}] This is a tool that is available both in a commercial version as well as in an open source setting from a
-  company called Softeam. Just like Overture, this tool is built on top of the Eclipse platform. The product can be
+  company called Softeam. Just like Overture, this tool is built on top of the Eclipse platform. The product, along with instructional materials, can be
   obtained from
 \begin{quote}
 \texttt{http://www.modelio.org/}.
 \end{quote}
 \end{description}
 
-A library of sample VDM-RT models is available and can be imported.  Finally, the web site
-\texttt{http://overturetool.org/download/examples/} contains all the examples used in this book
-as plain text files but these are also all present as importable examples. Finally, in order to make use of the
+A library of sample VDM-RT models is available and can be imported.  The web site
+%
+\begin{quote}
+\texttt{http://overturetool.org/download/examples/}
+\end{quote}
+%
+contains all the examples used in this book
+as plain text files, but these are also all present as importable examples in the Overture distribution. Finally, in order to make use of the
 test coverage feature described in Section~\ref{sec:testcov} it is
 necessary to have the text processing system called \LaTeX\ and its
 \texttt{pdflatex} feature. This can for example be obtained from:
@@ -166,7 +169,7 @@ Overture projects and navigate between the files in these
 projects. Start by importing the car navigation project from the
 book's web site. This can be done by right clicking the project view
 and selecting \emph{Import}, followed by \emph{Overture} $\rightarrow$
-\emph{Overture Examples}.  
+\emph{Overture Examples}.  In the \emph{VDM-RT} category, select the project \emph{CarNaviRadioRT}.
 
 The panel to the right of the Explorer is the \emph{editor area}. An
 editor customised to the dialect of VDM being used in the project will
@@ -180,7 +183,7 @@ appear here.
 \end{center}
 \end{figure}
 
-The \emph{Outline view}, to the right of the editor (see
+The \emph{Outline view} to the right of the editor (see
 Figure~\ref{fig:userguide:OutlineView}), displays an outline of the
 file selected in the editor. It shows all declared classes, their
 instance variables, values, types, functions, operations and traces.
@@ -213,10 +216,7 @@ possible to see how a couple of expressions (typed in at the box at
 the bottom of the view) are evaluated\footnote{If errors appear in
   this evaluation, the current version of the Overture IDE simply yields
   a \texttt{Fatal error}.  It is anticipated that later releases
-  will provide more helpful run-time error descriptions to the user.}. Note that
-in order to get a console where you are able to make use of
-definitions, you need to use the console launch mode as described in
-Section~\ref{sec:debugconfig} below. 
+  will provide more helpful run-time error descriptions to the user.}. Note that the \emph{Quick Interpreter} has no access to the models you are working with, so in order to get a console where you are able to inspect the models, you need to use the console launch mode, as described in Section~\ref{sec:debugconfig} below.
 
 \begin{figure}[!htb]
 \begin{center}
@@ -234,7 +234,7 @@ toolbar of shortcuts to switch between different perspectives that
 appears on the right side of the screen; these vary dynamically
 according to context and history.
 
-When making corrections to the model, you can use the Overture IDE
+When making corrections to the model, you can use so-called Overture IDE
 templates. When you hit the key combination \textit{CTRL+space} after
 entering the initial characters of the template needed, Overture will
 offer possible completions. For example, if you type ''op'' followed by
@@ -289,18 +289,17 @@ intended to write.
 
 \section{Mapping Between UML and  VDM}\label{sec:fromUMLtoVDM}\label{sec:syntaxcheck}
 \label{sec:typecheck}
-
-In order to map the UML class diagram created in Modelio
-to VDM, a new project must be created in the Overture IDE to receive
-it. This is done by right-clicking in the \emph{VDM Explorer} view,
-and creating a new VDM-RT project and naming it, for example,
-\texttt{CarNaviRadioUML}. If the desired language dialect (say a VDM-RT 
-project) is not directly available in the right-click menu, please choose
-\emph{Project} or 
-\emph{Other} and browse to the VDM-RT project. By right-clicking the new 
-project root in the \emph{VDM Explorer}, \emph{UML Transformation} can 
-be chosen, followed by \emph{Import XMI}. Now browse to the XMI/XML file
-exported from Modelio called \texttt{carradnavuml.uml} and open it.
+%In order to map the UML class diagram created in Modelio
+%to VDM, a new project must be created in the Overture IDE to receive
+%it. This is done by right-clicking in the \emph{VDM Explorer} view,
+%and creating a new VDM-RT project and naming it, for example,
+%\texttt{CarNaviRadioUML}. If the desired language dialect (say a VDM-RT 
+%project) is not directly available in the right-click menu, please choose
+%\emph{Project} or 
+%\emph{Other} and browse to the VDM-RT project. By right-clicking the new 
+%project root in the \emph{VDM Explorer}, \emph{UML Transformation} can 
+%be chosen, followed by \emph{Import XMI}. Now browse to the XMI/XML file
+%exported from Modelio called \texttt{carradnavuml.uml} and open it.
 
 %The three classes from the Alarm system will be converted to VDM++ format
 %(\texttt{.vdmpp}), one file per class.
@@ -331,11 +330,13 @@ exported from Modelio called \texttt{carradnavuml.uml} and open it.
 %\subsection{Mapping VDM to UML}
 
 It is possible to automatically transform all the classes from the car
-radio navigation project to UML. To do this, simply right
+radio navigation project to a UML representation that can be loaded in Modelio. To do this, simply right
 click the project root and choose \emph{UML Transformation} $
-\rightarrow $ \emph{Export XMI} (exported in EMF UML3.0.0 format, with extension \texttt{.uml}). The UML/XMI file can subsequently be
+\rightarrow $ \emph{Convert to UML} (exported in EMF UML3.0.0 format, with extension \texttt{.uml}). The UML/XMI file can subsequently be
 imported in Modelio, enabling the user to get an overview
-of the complete model.
+of the complete model.  The resulting file, \texttt{CarNaviRadioRT.uml}, is placed in the \texttt{generated} directory.
+
+To import the resulting file in Modelio, it is necessary to have an existing Modelio project.  For our purposes, simply create a new, blank project.  In the project explorer on the left side, right-click on the new project and navigate to \texttt{XMI} $\rightarrow$ \texttt{Import XMI}, then select the \texttt{.uml} file from the \texttt{generated} directory.
 
 Note that state charts, activity
 diagrams, sequence diagrams, objects charts and package charts are not
@@ -429,9 +430,9 @@ between the brackets of the entry point function/operation.
 \end{center}
 \end{figure}
 
-Once the configuration is ready, the model can be debugged. The
-Overture IDE will change to the \emph{Debug perspective}, which
-contains the views needed for debugging in VDM. Breakpoints can easily
+Once the configuration is ready, the model can be debugged\footnote{For those familiar with common object-oriented programming languages, the class defined as the entry point is instantiated when the debug process starts, and the function/operation selected is called on this new object.}. If any breakpoints are set, this will change the main perspective of the 
+Overture IDE to the \emph{Debug perspective}, which
+contains the views needed for debugging in VDM. If no breakpoints are set or reached, the result is simply shown in the \emph{Debug Console} view in the lower part of the VDM perspective.  Breakpoints can easily
 be set by double clicking in the left margin of the editor view. When
 the debugger reaches a breakpoint, evaluation suspends and the user
 can inspect the values of different variables and step through the VDM
@@ -542,28 +543,27 @@ been assessed, allowing new tests to be devised to cover these. When
 any evaluation is performed on a VDM-RT model, the interpreter records
 the lines of the VDM-RT model that are executed. This permits the line
 coverage to be examined after a test to identify the parts of the
-VDM++ model that have not yet been exercised -- coverage is
+VDM-RT model that have not yet been exercised -- coverage is
 cumulative, so a set of tests can be executed and their total coverage
 examined at the end.
 
-In our simple example, the different tests in the exercise above does
+In our simple example, the different tests in the exercise above do
 cause the majority of the VDM-RT model to be executed, but for
 demonstration purposes let us start by cleaning the model (select the project and navigate to \texttt{Project} $\rightarrow$ \texttt{Clean}). Let us evaluate the
 \texttt{RunScenario1} and \texttt{RunScenario2} operations with the
 \texttt{Generate coverage} option selected. 
 Remember that whenever test coverage
 information is desired the \texttt{Generate Coverage} option
-must be selected in the debug launch configuration, as shown in Figure~\ref{fig:userguide:debugConfiguration}. 
- Once the debugger
+must be selected in the debug launch configuration, as shown in Figure~\ref{fig:userguide:debugConfiguration}.  The options \emph{Insert coverage tables} and \emph{Mark coverage} must also be selected under \emph{Latex} in the project properties.  Once the debugger
 has completed and the result is written out in the \texttt{console}, it
 is possible to right click on the \texttt{CarNaviRadioRT} project and
-select the \emph{Latex} $ \rightarrow $ \emph{Latex coverage} the
-coverage information that have been gathered in any expressions that
-have been debugged since the last change to a file have been saved or
-the project have been cleaned will be turned into a pdf file. The
+select \emph{Latex} $ \rightarrow $ \emph{PdfLaTex}.  The
+coverage information that has been gathered in the expressions that
+have been debugged since the last change to a file was been saved, or
+the project was cleaned, will be turned into a pdf file. The
 \texttt{CarNaviRadioRT.pdf} file is placed in the
 \texttt{generated/latex} directory. Note that whenever the model is
-adjusted or it is cleaned so it gets type checked again all the files
+adjusted or it is cleaned so it is type checked again, all the files
 in the \texttt{generated} directory are deleted.
 
 The coverage information is provided in such a way that expressions not covered 
@@ -638,7 +638,7 @@ arbitrary binding here). This is followed by the call of 6 different
 operations seperated by an alternative operator (\texttt{|}). The
 selected \texttt{x} value is then used as the argument to each of these
 operations, so in total this generates 18 (3 times 6) test cases. 
-Inside this combinatorial testing view of the Combinatorial Testing perspective, you can
+Inside the CT Overview view of the Combinatorial Testing perspective, you can
 select the \texttt{CarNaviRadioRT} project, right click it and 
 choose the \textsf{Full
   Evaluation} option as shown in Figure~\ref{fig:CToptions}. 
@@ -767,7 +767,7 @@ shown in Figure~\ref{fig:POview}.
 \end{center}
 \end{figure}
 
-One of the first proof obligations listed for this example is related
+One of the proof obligations listed for this example is related
 to the \texttt{RunScenario1} operation, which is defined as:
 
 \begin{lstlisting}
@@ -828,7 +828,7 @@ specify the names of the VDM-RT model files to load, or the name of a directory
 in which all the files reside:
 
 \begin{lstlisting}
-java -jar Overture-2.3.0.jar -vdmrt CarNaviRadio
+java -jar Overture-2.3.0.jar -vdmrt CarNaviRadioRT
 \end{lstlisting}
 
 \noindent In this case, this is the location of the imported CarNaviRadioRT project in the workspace directory selected when Overture first started up.  This will perform syntax and type checking of all the VDM-RT model
@@ -854,7 +854,7 @@ and type checking:
 
 \begin{lstlisting}
 java -jar Overture-2.3.0.jar -vdmrt -w -q -e 
-    "new World().RunScenario1()" CarNaviRadio
+    "new World().RunScenario1()" CarNaviRadioRT
 \end{lstlisting}
 
 \noindent This produces a single line of output for the evaluation, since the
@@ -904,7 +904,7 @@ at line 12:5
 12:      ( envTasks := envTasks munion { pnm |-> penv };
 
 > p world.RunScenario2()
-Stopped break [1] in 'World' (CarNaviRadio\World.vdmrt) 
+Stopped break [1] in 'World' (CarNaviRadioRT\World.vdmrt) 
 at line 12:5
 12:      ( envTasks := envTasks munion { pnm |-> penv };
 [MainThread-164]> print penv
@@ -914,9 +914,9 @@ penv = InsertAddress{#77, max_stimuli:=10, e2s:={|->},
 [MainThread-164]> continue
 Runtime: Error 4021: Duplicate map keys have different 
 values:
-    "InsertAddress" in 'World' (CarNaviRadio\World.vdmrt) 
+    "InsertAddress" in 'World' (CarNaviRadioRT\World.vdmrt) 
 at line 12:28
-Stopped in 'World' (CarNaviRadio\World.vdmrt) 
+Stopped in 'World' (CarNaviRadioRT\World.vdmrt) 
 at line 12:28
 12:      ( envTasks := envTasks munion { pnm |-> penv };
 \end{lstlisting}

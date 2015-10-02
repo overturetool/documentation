@@ -24,7 +24,7 @@ Models in VDM are formal in the sense that they have a precisely described seman
 allowing these to be resolved before an expensive commitment is made to program code. The process of analysing claims about systems modelled in this way is termed \emph{validation} and is discussed in greater depth in Chapter~10 of the book.
 
 Section~\ref{sec:install} describes how to obtain the Overture tools.  Section~\ref{sec:vdmsupport} introduces terminology used by Eclipse-based tools like Overture. Section~\ref{sec:templates} describes the features that support the construction and editing of
-VDM-SL models.  Section~\ref{sec:debugging} describes the testing and debugging features and Section~\ref{sec:testcov} describes how line coverage information from using the debugger can be extracted and displayed. This is followed in Section~\ref{sec:CT} with an explanation about a combinatorial testing feature available in Overture.  Afterwards Section~\ref{sec:POtool} describes the facilities for automatically generating the checks~(called \emph{proof obligations}) that must be performed in order to ensure that a VDM-SL model is consistent and
+VDM-SL models.  Section~\ref{sec:debugging} describes the testing and debugging features and Section~\ref{sec:testcov} describes how line coverage information from using the debugger can be extracted and displayed. This is followed in Section~\ref{sec:CT} with an explanation of a combinatorial testing feature available in Overture.  Afterwards Section~\ref{sec:POtool} describes the facilities for automatically generating the checks~(called \emph{proof obligations}) that must be performed in order to ensure that a VDM-SL model is consistent and
 meaningful.  Finally, Section~\ref{sec:cmdline} shows how parts of Overture's functionality can be accessed through a command line interface, allowing batch-mode testing. 
 %
 \section{Getting Hold of the Software}\label{sec:install}
@@ -34,16 +34,12 @@ Overture is an open source tool, developed by a community of volunteers and buil
 \url{http://overturetool.org/}
 \end{quote}
 %
-\noindent you can use the various download links to automatically download pre-built versions of Overture for your operating system.  Supported systems are: Windows, Linux and Mac\footnote{Development of an update facility is planned, which will allow updates to be applied directly from within the generic Eclipse platform without requiring reinstallation. However, this can be a risky process because of the dependencies on non-Overture components and so is not yet supported.}.  Note that when you have extracted all files from the zip file with the Overture executable for your selected operating system you will find the first time you start it up it will ask you to select a workspace. Here we simply recommend you choose the default selected and tick off the box ``Use this as the default and do not ask again''. The first time the application is run, a welcome screen will introduce you to the overall mission of the Overture open source
+\noindent you can use the various download links to automatically download pre-built versions of Overture for your operating system.  Supported systems are: Windows, Linux and Mac\footnote{Development of an update facility is planned, which will allow updates to be applied directly from within the generic Eclipse platform without requiring reinstallation. However, this can be a risky process because of the dependencies on non-Overture components and so is not yet supported.}.  Note that when you have extracted all files from the zip file with the Overture executable for your selected operating system, you will find the first time you start it up it will ask you to select a workspace. Here we simply recommend you choose the default selected and tick off the box ``Use this as the default and do not ask again''. The first time the application is run, a welcome screen will introduce you to the overall mission of the Overture open source
 initiative. 
 
-A large library of sample VDM-SL models, including all those needed for the exercises in the book, is available and can be downloaded from the URL\footnote{The library files are created for use with Eclipse, but can be opened with file compression programs like \texttt{Winrar} on Windows, but it is not necessary to open them at all.}:
-%
-\begin{quote}
-\url{http://overturetool.org/download/examples/Examples-VDMSL.zip}
-\end{quote}
-%
-You can import the example library zip folder as described in Section~\ref{sec:vdmsupport}.  Finally, in order to make use of the test coverage feature described in Section~\ref{sec:testcov} it is necessary to have the text processing system called \LaTeX\ and its \texttt{pdflatex} feature. This can for example be obtained from:
+A large library of sample VDM-SL models, including all those needed for the exercises in the book, is available and can be imported as ``Overture examples'' directly into the Overture tool.  An overview of these can be found at \texttt{http://overturetool.org/download/examples/} as well.
+
+Finally, in order to make use of the test coverage feature described in Section~\ref{sec:testcov}, it is necessary to have the text processing system called \LaTeX\ and its \texttt{pdflatex} feature. This can for example be obtained from:
 %
 \begin{quote}
 \url{http://miktex.org/2.9/}
@@ -53,10 +49,7 @@ You can import the example library zip folder as described in Section~\ref{sec:v
 Overture provides a new open source VDM tool set, but it can also work with \vdmtools$^{\mbox{\small\textbf{{\textregistered}}}}$. \vdmtools, originally developed at IFAD A/S, is now maintained and developed by SCSK~(see \url{http://www.vdmtools.jp/en/}). From Overture it is also possible to automatically transfer a project over to \vdmtools.
 %
 \section{Using the Overture Perspective}\label{sec:vdmsupport}
-Eclipse is an open source platform based around a \emph{workbench} that provides a common look and feel to a large collection of extension products. Thus if a user is familiar with one Eclipse product, it will generally be easy to start using a different product on the same workbench. The Eclipse workbench consists of several panels known as \emph{views}, such as the VDM Explorer view at the top left of Figure~\ref{fig:OverturePerspective}. A collection of panels is called a \emph{perspective}, for example
-Figure~\ref{fig:OverturePerspective} shows the standard Overture perspective. This consists of views for managing Overture projects and viewing and editing files in an Overture project. The perspectives
-available in Overture will be described later, but for the moment think of a perspective as a particular composition of views that is useful for conducting a particular task. Note that the first time
-Overture would like to automatically change to a specific perspective it will ask you for permission to do so.  Note also that the first time Overture opens, it is possible that some or all the relevant panels in the perspective are minimized.
+Eclipse is an open source platform based around a \emph{workbench} that provides a common look and feel to a large collection of extension products. Thus if a user is familiar with one Eclipse product, it will generally be easy to start using a different product on the same workbench. The Eclipse workbench consists of several panels known as \emph{views}, such as the VDM Explorer view at the top left of Figure~\ref{fig:OverturePerspective}. A collection of panels is called a \emph{perspective}.  For example, Figure~\ref{fig:OverturePerspective} shows the standard Overture perspective. This consists of views for managing Overture projects and viewing and editing files in an Overture project. The perspectives available in Overture will be described later, but for the moment think of a perspective as a particular composition of views that is useful for conducting a particular task. Note that the first time Overture would like to automatically change to a specific perspective it will ask you for permission to do so.  Note also that the first time Overture opens, it is possible that some or all the relevant panels in the perspective are minimized.
 %
 \begin{figure}[tbh]
 \begin{center}
@@ -66,8 +59,7 @@ Overture would like to automatically change to a specific perspective it will as
 \end{center}
 \end{figure}
 %
-The \emph{VDM Explorer view} allows you to create, select, and delete Overture projects and navigate between the files in these projects. Start by importing the alarm project. This can be done by right-clicking the explorer view and selecting \emph{Import}, followed by \emph{General} $\rightarrow$ \emph{Existing Projects into Workspace}.  In this way the projects from \texttt{examplesSL.zip} file
-mentioned above can be imported very easily\footnote{When an existing project is imported in this way, a copy of the original is stored in the current workspace, where all further modifications are reflected.}. Initially it is recommended that you only import the \texttt{AlarmErrSL} and the \texttt{AlarmSL} projects as shown in Figure~\ref{fig:importalarm}\footnote{You need both of these to carry out various exercises throughout this chapter.}.
+The \emph{VDM Explorer view} allows you to create, select, and delete Overture projects and navigate between the files in these projects. Start by importing the alarm project. This can be done by right-clicking the explorer view and selecting \emph{Import}, followed by \emph{Overture} $\rightarrow$ \emph{Overture Examples}.  In this way, the example projects distributed with Overture can be imported very easily\footnote{When an existing project is imported in this way, a copy of the original is stored in the current workspace, where all further modifications are reflected.}. Initially it is recommended that you only import the \texttt{AlarmErrSL} and the \texttt{AlarmSL} projects as shown in Figure~\ref{fig:importalarm}\footnote{You need both of these to carry out various exercises throughout this chapter.}.
 %
 \begin{figure}[!htb]
 \begin{center}
@@ -89,8 +81,7 @@ Figure~\ref{fig:settings} will pop up. This includes the properties set for this
 \end{center}
 \end{figure}
 %
-The \emph{Outline view}, to the right of the editor (see Figure~\ref{fig:OutlineView}), presents an outline of the model in the file selected in the editor. It displays any declared VDM-SL modules, as well as their state components, values, types, functions and operations. In case of a flat VDM-SL model the module is called {\ttfamily{DEFAULT}}.
-Figure~\ref{fig:OverturePerspective} shows the outline view on the right hand side. Clicking on an operation or function name will move the cursor in the editor to the definition of the operation or function. At the top of the outline view there is a button to determine what is displayed in the outline view~(it is possible to hide different kinds of definitions, for example).
+The \emph{Outline view}, to the right of the editor (see Figure~\ref{fig:OutlineView}), presents an outline of the model in the file selected in the editor. It displays any declared VDM-SL modules, as well as their state components, values, types, functions and operations. In case of a flat VDM-SL model, the module is called {\ttfamily{DEFAULT}}.  Figure~\ref{fig:OverturePerspective} shows the outline view on the right hand side. Clicking on an operation or function name will move the cursor in the editor to the definition of the operation or function. At the top of the outline view there is a button to determine what is displayed in the outline view~(it is possible to hide different kinds of definitions, for example).
 %
 \begin{figure}[!htb]
 \begin{center}
@@ -103,8 +94,7 @@ Figure~\ref{fig:OverturePerspective} shows the outline view on the right hand si
 The \emph{Problems view} displays messages about the projects on which you are working. This includes information generated by Overture, such as warnings and errors. Note that all errors and warnings also appear as tooltips in the VDM-SL editor.
 
 In the standard Overture perspective there is a \emph{VDM Quick Interpreter} view in a pane in the same area as the problems view. This can be used for evaluation of standard VDM expressions independent of all VDM projects incorporated in your Overture IDE. This can be very convenient to gain understanding of the
-different VDM operators. In Figure~\ref{fig:QuickIntView} it is possible to see how a couple of expressions (typed in at the box at the bottom of the view) are evaluated\footnote{If errors appear in this evaluation, the current version of the Overture IDE simply yields a \texttt{Fatal error}.  It is anticipated that later releases will provide more helpful run-time error descriptions to the user.}. Note that
-in order to get a console where you are able to make use of definitions, you need to use the console launch mode as described in Section~\ref{sec:debugconfig} below. 
+different VDM operators. In Figure~\ref{fig:QuickIntView} it is possible to see how a couple of expressions (typed in at the box at the bottom of the view) are evaluated\footnote{If errors appear in this evaluation, the current version of the Overture IDE simply yields a \texttt{Fatal error}.  It is anticipated that later releases will provide more helpful run-time error descriptions to the user.}. Note that the \emph{Quick Interpreter} has no access to the models you are working with, so in order to get a console where you are able to inspect the models, you need to use the console launch mode, as described in Section~\ref{sec:debugconfig} below. 
 %
 \begin{figure}[!htb]
 \begin{center}
@@ -178,7 +168,7 @@ Insert this and later on when you have learned how to create a debug configurati
 \end{myexercise}
 %
 \section{Debugging}\label{sec:debugging}
-This section describes facilities for debugging a model by stepping through the evaluation of functions and operations. The alarm example is used. The following test file (\texttt{testalarm.vdmsl}) can be found in the alarm project and it is provided in Appendix~\ref{sec:VDMModel}. 
+This section describes facilities for debugging a model by stepping through the evaluation of functions and operations. The alarm example is used. The test file (\texttt{testalarm.vdmsl}) can be found in the alarm project, and is provided in Appendix~\ref{sec:VDMModel} for reference. 
 %
 %\lstset{language=VDM-SL}
 %\input{testalarm.vdmsl}
@@ -227,7 +217,7 @@ NumberOfExperts(p2, plant1)
 \end{center}
 \end{figure}
 %
-Once the configuration is ready, the model can be debugged. If one has already set a breakpoint on one of the lines that will be executed, this will change the main perspective of the Overture IDE to the \emph{Debug perspective}. If no breakpoints are set the result is simply shown in the \emph{Debug Console} view in the lower part of the Overture perspective. Breakpoints can easily be set by double clicking in the left margin in the editor view. When the debugger reaches the location of a breakpoint, evaluation suspends and the user can inspect the values of variables and step through the VDM-SL model line by line. So for \texttt{NumberOfExperts} (in the main model file) try to set such a breakpoint on line 34\footnote{Line numbers can be added in the editor by right clicking in the left-hand-side margin of the editor view and selecting \texttt{Show Line Numbers}.}
+Once the configuration is ready, the model can be debugged. If one has already set a breakpoint on one of the lines that will be executed, this will change the main perspective of the Overture IDE to the \emph{Debug perspective}. If no breakpoints are set or reached, the result is simply shown in the \emph{Debug Console} view in the lower part of the VDM perspective. Breakpoints can easily be set by double clicking in the left margin in the editor view. When the debugger reaches the location of a breakpoint, evaluation suspends and the user can inspect the values of variables and step through the VDM-SL model line by line. So for \texttt{ExpertIsOnDuty} (in the main model file) try to set such a breakpoint on line 39\footnote{Line numbers can be added in the editor by right clicking in the left-hand-side margin of the editor view and selecting \texttt{Show Line Numbers}.}
 and debug again.
 %
 \subsection{The Debug Perspective}
@@ -310,29 +300,13 @@ The \emph{Expressions view} allows you to enter \emph{watch} expressions whose v
 %previously executed commands can easily be run again. The interactive
 %console can be seen at the bottom of
 %Figure~\ref{fig:DebuggingVDM}.
-
-\begin{myexercise}
-\label{ex:tool-monitor}Use the interpreter to evaluate the
-  following expressions:
-\begin{vdmsl}
-NumberOfExperts(p2,plant1)
-NumberOfExperts(p3,plant1)
-ExpertIsOnDuty(e1,plant1)
-ExpertIsOnDuty(e2,plant1)
-ExpertIsOnDuty(e3,plant1)
-\end{vdmsl}
-%Rising([34,67,45,120,7])
-%OverLimit([333,321,345,399,357])
-%OverLimit([457,421,387,366,340])
-%OverLimit2([457,421,387,366,340])
-\end{myexercise}
 %
 \section{Test coverage}\label{sec:testcov}
 It is often useful to know how much of a model has been exercised by a set of tests\footnote{Note that this feature is not yet supported for models using unicode characters such as Japanese identifiers.}. 
 This gives some insight into the thoroughness of a test suite and may also help to identify parts of the model that have not been assessed, allowing new tests to be devised to cover these. When any evaluation is performed on a VDM-SL model, the interpreter records the lines of the VDM-SL model that are executed. This permits the line coverage to be examined after a test to identify the parts of the
 VDM-SL model that have not yet been exercised -- coverage is cumulative, so a set of tests can be executed and their total coverage examined at the end.
 
-In our simple example, the different tests in the exercise above do cause the majority of the VDM-SL model to be executed, but for demonstration purposes let us start by cleaning the model (select the project in the VDM Explorer panel and select \texttt{Clean} from the \texttt{Project} menu). If we simply take the \texttt{AlarmSL} debug launch configuration, the \verb|ExpertIsOnDuty| function in \verb|alarm.vdmsl| is called by the \texttt{Run} function. Remember that whenever test coverage information is desired, the \texttt{Generate Coverage} option must be selected as shown in Figure~\ref{fig:debugConfiguration}.  Once the debugger has completed and the result is written out in the \texttt{console}, it is possible to right click on the \texttt{AlarmSL} project and select the \emph{Latex} $\rightarrow $ \emph{PdfLatex} option.  The coverage information that has been gathered about any expressions that have been debugged since the last change to a file was saved, or the project was cleaned, will be turned into a pdf file. The \texttt{AlarmSL.pdf} file is placed in the \texttt{generated/latex} directory as shown in Figure~\ref{fig:testcov}, and it includes the VDM definitions from all the files included in the project, including coverage information. Note that whenever the model is adjusted, or it is cleaned so that it is type checked again, all the files in the \texttt{generated} directory are deleted.
+In our simple example, the different tests in the exercise above do cause the majority of the VDM-SL model to be executed, but for demonstration purposes let us start by cleaning the model (select the project in the VDM Explorer panel and select \texttt{Clean} from the \texttt{Project} menu). If we simply take the \texttt{AlarmSL} debug launch configuration, the \verb|ExpertIsOnDuty| function in \verb|alarm.vdmsl| is called by the \texttt{Run} function. Remember that whenever test coverage information is desired, the \texttt{Generate Coverage} option must be selected as shown in Figure~\ref{fig:debugConfiguration}.  The options \emph{Insert coverage tables} and \emph{Mark coverage} must also be selected under \emph{Latex} in the project properties.  Once the debugger has completed and the result is written out in the \texttt{console}, it is possible to right click on the \texttt{AlarmSL} project and select the \emph{Latex} $\rightarrow $ \emph{PdfLatex} option.  The coverage information that has been gathered about any expressions that have been debugged since the last change to a file was saved, or the project was cleaned, will be turned into a pdf file. The \texttt{AlarmSL.pdf} file is placed in the \texttt{generated/latex} directory as shown in Figure~\ref{fig:testcov}, and it includes the VDM definitions from all the files included in the project, including coverage information. Note that whenever the model is adjusted, or it is cleaned so that it is type checked again, all the files in the \texttt{generated} directory are deleted.
 %
 \begin{figure}[tb]
 \begin{center}
@@ -447,7 +421,7 @@ This feature is invoked by right clicking on the project in the \emph{Explorer v
 \end{center}
 \end{figure}
 %
-Here the eighth proof obligation is related to the satisfiability of the \texttt{ExpertToPage} function which is defined as follows: 
+Here one of the proof obligations is related to the satisfiability of the postcondition of the \texttt{ExpertToPage} function, which is defined as follows: 
 
 \begin{vdmsl}
 ExpertToPage(a:Alarm,peri:Period,plant:Plant) r: Expert
@@ -574,6 +548,21 @@ Executed in 18.281 secs.
 
 \noindent Notice that the \verb|print| command is available at the breakpoint to examine the runtime state of the system. In the example, we print out the value of the \verb|sch| variable. The \verb|help|
 command is context sensitive, and will list the extra debugging commands available at a breakpoint, such as \verb|continue|, \verb|step|, \verb|stack|, \verb|list| and so on. The full set of commands is described in the Overture User Guide\footnote{Supplied with the Overture documentation.}.
+
+\begin{myexercise}
+\label{ex:tool-monitor}Use the command line interface to evaluate the following expressions:
+\begin{vdmsl}
+NumberOfExperts(p2,plant1)
+NumberOfExperts(p3,plant1)
+ExpertIsOnDuty(e1,plant1)
+ExpertIsOnDuty(e2,plant1)
+ExpertIsOnDuty(e3,plant1)
+\end{vdmsl}
+%Rising([34,67,45,120,7])
+%OverLimit([333,321,345,399,357])
+%OverLimit([457,421,387,366,340])
+%OverLimit2([457,421,387,366,340])
+\end{myexercise}
 
 %\begin{lstlisting}
 %> coverage AlarmSL/alarm.vdmsl
