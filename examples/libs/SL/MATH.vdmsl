@@ -4,6 +4,7 @@ definitions
 
 -- 	Overture STANDARD LIBRARY: MATH
 --      --------------------------------------------
+-- Version 1.0.0 
 -- 
 -- Standard library for the Overture Interpreter. When the interpreter
 -- evaluates the preliminary functions/operations in this file,
