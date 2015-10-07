@@ -7,7 +7,7 @@ to the conveyer belt
 #******************************************************
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
-#LANGUAGE_VERSION=VDM10
+#LANGUAGE_VERSION=vdm10
 #AUTHOR= Kim Bjerge and José Antonio Esparza Jaesparza
 #INV_CHECKS=true
 #POST_CHECKS=true

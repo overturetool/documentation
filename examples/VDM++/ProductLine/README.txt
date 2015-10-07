@@ -3,7 +3,7 @@
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Naoyasu Ubayashi, Shin Nakajima and Masayuki Hirayama
-#LANGUAGE_VERSION=VDM10
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true
