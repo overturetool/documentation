@@ -6,7 +6,7 @@ quali : set of Qualification;
 
 types
  
-public Qualification = <Mech> <Chem> | <Bio> | <Elec>;
+public Qualification = <Mech> | <Chem> | <Bio> | <Elec>;
 
 operations
 
