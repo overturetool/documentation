@@ -17,5 +17,5 @@ coherent application in a distributed application.
 #SUPPRESS_WARNINGS=false
 #ENTRY_POINT= new World().RunScenario1()
 #ENTRY_POINT= new World().RunScenario2()
-#EXPECTED_RESULT=NO_ERROR_TYPE_CHECK
+#EXPECTED_RESULT=NO_CHECK
 #******************************************************
