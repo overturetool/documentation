@@ -34,7 +34,7 @@ More explanation about this work can be found in the papers:
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Sten Agerholm and Peter Gorm Larsen
-#LANGUAGE_VERSION=VDM10
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true
