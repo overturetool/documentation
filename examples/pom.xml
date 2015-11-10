@@ -16,7 +16,7 @@
   <name>Overture Examples</name>
 
   <properties>
-    <example-packager.version>2.1.2</example-packager.version>
+    <example-packager.version>3.0.2</example-packager.version>
   </properties>
 
   <build>
@@ -33,6 +33,7 @@
           <slExamples>
             <param>${project.basedir}/VDMSL</param>
           </slExamples>
+          <vdmLibs>${project.basedir}/libs</vdmLibs>
           <ppExamples>
             <param>${project.basedir}/VDM++</param>
           </ppExamples>
