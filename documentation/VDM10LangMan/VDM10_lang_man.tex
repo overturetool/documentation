@@ -3731,7 +3731,7 @@ end A
 
   \Rule{isofbaseclass expression}{
     \Lop{isofbaseclass},
-    \Lit{(}, \Ruleref{name}, \Ruleref{expression}, \Lit{)}}
+    \Lit{(}, \Ruleref{name}, \Lit{,}, \Ruleref{expression}, \Lit{)}}
 
 \item[Semantic:] The function {\keyw{isofbaseclass}} when applied to an
   object reference \texttt{expression} and a class name \texttt{name}
@@ -3765,7 +3765,7 @@ end A
     \ldots
     }
   \Rule{isofclass expression}{
-    \Lop{isofclass}, \Lit{(}, \Ruleref{name}, \Ruleref{expression}, \Lit{)}
+    \Lop{isofclass}, \Lit{(}, \Ruleref{name}, \Lit{,}, \Ruleref{expression}, \Lit{)}
   }
 
 \item[Semantics:] The function \keyw{isofclass} when applied to an
@@ -3801,7 +3801,7 @@ end A
     }
   \Rule{samebaseclass expression}{\Lop{samebaseclass}, \lfeed
   \Lit{(},
-        \Ruleref{expression}, \Ruleref{expression}, \Lit{)}
+        \Ruleref{expression}, \Lit{,}, \Ruleref{expression}, \Lit{)}
     }
 
 \item[Semantics:] The function \keyw{samebaseclass} when applied to
@@ -3840,7 +3840,7 @@ is an instance of \texttt{AVLTree} and \texttt{bb} is an instance of
     }
 
   \Rule{sameclass expression}{\Lop{sameclass}, \lfeed
-  \Lit{(}, \Ruleref{expression},
+  \Lit{(}, \Ruleref{expression}, \Lit{,},
         \Ruleref{expression}, \Lit{)}
    }
 
@@ -11194,23 +11194,23 @@ For both VDM++ and VDM-RT, we can define:
 \subsection{Base Class Membership (VDM++ and VDM-RT)}
 
 \Ruledef{isofbaseclass expression}{
-      \Lop{isofbaseclass}, \Lit{(}, \Ruleref{name}, \Ruleref{expression}, \Lit{)}}
+      \Lop{isofbaseclass}, \Lit{(}, \Ruleref{name}, \Lit{,}, \Ruleref{expression}, \Lit{)}}
 
 \subsection{Class Membership (VDM++ and VDM-RT)}
 
 \Ruledef{isofclass expression}{
-      \Lop{isofclass}, \Lit{(}, \Ruleref{name}, \Ruleref{expression}, \Lit{)}}
+      \Lop{isofclass}, \Lit{(}, \Ruleref{name}, \Lit{,}, \Ruleref{expression}, \Lit{)}}
 
 \subsection{Same Base Class Membership (VDM++ and VDM-RT)}
 
 \Ruledef{samebaseclass expression}{
-      \Lop{samebaseclass}, \Lit{(}, \Ruleref{expression}, \lfeed
+      \Lop{samebaseclass}, \Lit{(}, \Ruleref{expression}, \Lit{,}, \lfeed
       \Ruleref{expression}, \Lit{)}}
 
 \subsection{Same Class Membership (VDM++ and VDM-RT)}
 
 \Ruledef{sameclass expression}{
-      \Lop{sameclass}, \Lit{(}, \Ruleref{expression}, \lfeed
+      \Lop{sameclass}, \Lit{(}, \Ruleref{expression}, \Lit{,}, \lfeed
       \Ruleref{expression}, \Lit{)}}
 
 \subsection{History Expressions (VDM++ and VDM-RT)}
