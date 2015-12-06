@@ -12265,7 +12265,6 @@ of expression they are used in.
   \Ruleref{set prefix operator} \dsep
   \Ruleref{sequence prefix operator} \dsep
   \Ruleref{map prefix operator} \dsep
-  \Ruleref{map inverse} \dsep
   \Ruleref{arithmetic infix operator} \dsep
   \Ruleref{set infix operator} \dsep
   \Ruleref{sequence infix operator} \dsep
@@ -12292,7 +12291,8 @@ of expression they are used in.
   \Lop{len} \dsep
   \Lop{inds} \dsepl
   \Lop{elems} \dsepl
-  \Lop{conc}
+  \Lop{conc} \dsepl
+  \Lop{reverse}
   }
 
 \Ruledef{map prefix operator}{
@@ -12335,7 +12335,7 @@ of expression they are used in.
 family is defined in the following table.
 
 \blankline
-\begin{table}{thb}
+\begin{table}[thb]
 \begin{center}
   \begin{tabular}{ccccc}
     \hline
@@ -12353,6 +12353,7 @@ family is defined in the following table.
                      & \keyw{abs}       & \keyw{dinter}         & \keyw{merge}           & \keyw{hd} \keyw{tl} \\
                      & \keyw{floor}     & \keyw{dunion}         &                        & \keyw{conc}        \\
                      &                  &                       &                        & \keyw{inds}        \\
+                     &                  &                       &                        & \keyw{reverse}        \\
     \hline
   \end{tabular}
 \end{center}
