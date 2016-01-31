@@ -538,7 +538,11 @@ ToStringInt(val) ==
   in if rest > 0 then
        ToStringInt(rest) ^ GetStringFromNum(result)
      else GetStringFromNum(result)
-pre val >= 0;
+pre val >= 0
+measure ToStringIntMeasure;
+
+private ToStringIntMeasure : nat -> nat
+ToStringIntMeasure(a) == a;
     
 -------------------------------------
 -- Convert a int < 10 to a String
