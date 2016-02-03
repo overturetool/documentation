@@ -1,6 +1,6 @@
 --  Overture STANDARD LIBRARY: VDM-Unit
 --      --------------------------------------------
--- Version 2.0.0 
+-- Version 2.1.0 
 --
 -- Standard library for the Overture Interpreter. When the interpreter
 -- evaluates the preliminary functions/operations in this file,
@@ -538,7 +538,11 @@ ToStringInt(val) ==
   in if rest > 0 then
        ToStringInt(rest) ^ GetStringFromNum(result)
      else GetStringFromNum(result)
-pre val >= 0;
+pre val >= 0
+measure ToStringIntMeasure;
+
+private ToStringIntMeasure : nat -> nat
+ToStringIntMeasure(a) == a;
     
 -------------------------------------
 -- Convert a int < 10 to a String

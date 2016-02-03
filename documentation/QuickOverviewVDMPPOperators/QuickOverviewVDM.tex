@@ -165,6 +165,8 @@
     {\tt m :-> s} & Range restrict by & \TO{\PROD{(\MAP{A}{B})}{(\SET{B})}}{\MAP{A}{B}} \sindex{mapping!range subtraction}\\
     {\tt m(d)} & Mapping apply & \TO{\PROD{(\MAP{A}{B})}{A}}{B} \sindex{mapping!application}\\
   {\tt \keyw{inverse} m} & Map inverse & \TO{{\INMAP{A}{B}}}{\INMAP{B}{A}} \sindex{inverse}\\
+     {\tt m1 \keyw{comp} m2} & Map composition & \TO{\PROD{(\MAP{B}{C})}{(\MAP{A}{B})}}{\MAP{A}{C}} \\
+    {\tt m ** n} & Map iteration & \TO{\PROD{(\MAP{A}{A})}{\keyw{nat}}}{\MAP{A}{A}} \\
     {\tt m1 = m2} & Equality & \TO{\PROD{(\MAP{A}{B})}{(\MAP{A}{B})}}{\keyw{bool}} \sindex{equality}\\
     {\tt m1 <> m2} & Inequality & \TO{\PROD{(\MAP{A}{B})}{(\MAP{A}{B})}}{\keyw{bool}} \sindex{inequality}\\
     \hline
