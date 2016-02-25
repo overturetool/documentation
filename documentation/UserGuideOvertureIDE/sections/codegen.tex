@@ -153,6 +153,22 @@ checks. Note that the \vdmkw{invariant\_for} construct is currently
 not supported by OpenJML, which is the reason why this option is not
 enabled by default.
 
+\subsection{Generate VDM location information for code generated constructs}
+\label{sec:vdm-loc}
+
+When a VDM model is code generated it can be helpful to know where the
+constructs in the generated code originate from. When this option is
+enabled the Java code generator will generate VDM location information
+for methods, statements and local declarations in the generated
+code. More specifically, the Java code generator will generate a Java
+source code comment containing the name of the VDM source file and the
+line number and the position, for each method, statement and local
+declaration. As an example, the code fragment below says that the Java
+return statement originates from a VDM construct at line 25,
+position 12 in \texttt{File.vdmsl}.\\
+
+\noindent \texttt{/* File.vdmsl 25:12 */\\return 42;}
+
 \subsection{Choose output package}
 \label{sec:javapackage}
 
