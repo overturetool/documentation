@@ -76,7 +76,7 @@ appear in the preference page.
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=13cm]{screenDumps/javacg_config}
+\includegraphics[width=15cm]{screenDumps/javacg_config}
 \caption{Configuration of the Java code generator.\label{fig:javacg_config}}
 \end{center}
 \end{figure}
@@ -132,17 +132,26 @@ support for the concurrency mechanisms of VDM++ in the generated code.
 
 When a VDM model is code generated to Java all the contract-based
 elements of the model, i.e.\ the pre conditions, post conditions and
-invariants, are ignored by default. This feature does, however,
-provide limited support for translation of the contract-based elements
-of a VDM-SL model. When the corresponding option is checked the
-contract-based elements are translated to JML~\cite{Burdy&05}
-annotations which are added on top of the generated Java code as
-source code comments. This allows the system properties, expressed in
-terms of pre conditions, post conditions and invariants, to be checked
-against the generated code.\\
+invariants, are ignored by default. When this option is selected the
+contract-based elements of a VDM-SL model are translated to JML
+annotations~\cite{Burdy&05} that are added to the generated Java
+code. This allows the system properties, expressed in terms of pre
+conditions, post conditions and invariants, to be checked against the
+generated code. The generated JML annotated programs can be checked
+for corrected using a JML tool such as
+OpenJML\footnote{\url{http://www.openjml.org}}.\\
 
-\noindent Please note that this feature is still experimental and only
-has limited support for checking of named type invariants.
+\subsection{Use JML \textbackslash invariant\_for to explicitly check record invariants}
+\label{sec:inv-for}
+
+The JML generator offers two ways to perform the invariant check of a
+record. By default the JML generator does this by invoking a
+\texttt{valid} method generated for each record definition. When this
+option is enabled the JML generator instead uses the JML
+\vdmkw{invariant\_for} construct to perform the record invariant
+checks. Note that the \vdmkw{invariant\_for} construct is currently
+not supported by OpenJML, which is the reason why this option is not
+enabled by default.
 
 \subsection{Choose output package}
 \label{sec:javapackage}
