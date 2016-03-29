@@ -1,4 +1,5 @@
 
+\newcommand{\vdmkw}[1]{\texttt{\textbf{#1}}}
 \chapter{Automatic Generation of Code}\label{sec:codegen}
 
 It is possible to generate Java code\index{code generation} for a
@@ -23,7 +24,8 @@ solely on the Java code generator available in Overture.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=\linewidth]{screenDumps/javacg_output}
-\caption{The status of code generating the \texttt{AlarmPP} example.\label{fig:javacg_output}}
+\caption{The status of code generating the \texttt{AlarmPP}
+example.\label{fig:javacg_output}}
 \end{center}
 \end{figure}
 
@@ -74,7 +76,7 @@ appear in the preference page.
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=13cm]{screenDumps/javacg_config}
+\includegraphics[width=15cm]{screenDumps/javacg_config}
 \caption{Configuration of the Java code generator.\label{fig:javacg_config}}
 \end{center}
 \end{figure}
@@ -105,6 +107,7 @@ specification and in general disabling of cloning is discouraged. By
 default cloning is enabled.
 
 \subsection{Generate character sequences as strings}
+\label{sec:charseqs-as-strings}
 
 In VDM a string is a sequence of characters and there is no notion of
 a string type. Java in particular works differently since it uses a
@@ -129,19 +132,45 @@ support for the concurrency mechanisms of VDM++ in the generated code.
 
 When a VDM model is code generated to Java all the contract-based
 elements of the model, i.e.\ the pre conditions, post conditions and
-invariants, are ignored by default. This feature does, however,
-provide limited support for translation of the contract-based elements
-of a VDM-SL model. When the corresponding option is checked the
-contract-based elements are translated to JML~\cite{Burdy&05}
-annotations which are added on top of the generated Java code as
-source code comments. This allows the system properties, expressed in
-terms of pre conditions, post conditions and invariants, to be checked
-against the generated code.\\
+invariants, are ignored by default. When this option is selected the
+contract-based elements of a VDM-SL model are translated to JML
+annotations~\cite{Burdy&05} that are added to the generated Java
+code. This allows the system properties, expressed in terms of pre
+conditions, post conditions and invariants, to be checked against the
+generated code. The generated JML annotated programs can be checked
+for corrected using a JML tool such as
+OpenJML\footnote{\url{http://www.openjml.org}}.\\
 
-\noindent Please note that this feature is still experimental and only
-has limited support for checking of named type invariants.
+\subsection{Use JML \textbackslash invariant\_for to explicitly check record invariants}
+\label{sec:inv-for}
+
+The JML generator offers two ways to perform the invariant check of a
+record. By default the JML generator does this by invoking a
+\texttt{valid} method generated for each record definition. When this
+option is enabled the JML generator instead uses the JML
+\vdmkw{invariant\_for} construct to perform the record invariant
+checks. Note that the \vdmkw{invariant\_for} construct is currently
+not supported by OpenJML, which is the reason why this option is not
+enabled by default.
+
+\subsection{Generate VDM location information for code generated constructs}
+\label{sec:vdm-loc}
+
+When a VDM model is code generated it can be helpful to know where the
+constructs in the generated code originate from. When this option is
+enabled the Java code generator will generate VDM location information
+for methods, statements and local declarations in the generated
+code. More specifically, the Java code generator will generate a Java
+source code comment containing the name of the VDM source file and the
+line number and the position, for each method, statement and local
+declaration. As an example, the code fragment below says that the Java
+return statement originates from a VDM construct at line 25,
+position 12 in \texttt{File.vdmsl}.\\
+
+\noindent \texttt{/* File.vdmsl 25:12 */\\return 42;}
 
 \subsection{Choose output package}
+\label{sec:javapackage}
 
 The Java code generator allows the output package of the generated
 code to be specified. If the user does not specify a package, the code
@@ -223,3 +252,47 @@ The runtime library provides a full implementation of the
 sequences as provided by the \texttt{VDMUtil}, and finally
 functionality to write to the console as available in the \texttt{IO}
 library.
+
+\section{Translation of the VDM types and type constructors}
+\label{sec:type-mappings}
+
+Table ~\ref{tbl:type-mappings} describes how the VDM type(s) in the
+left column are represented in the generated Java code (the right
+column). In this table \texttt{pack} is the user-specified root
+package of the generated Java code (see section \ref{sec:javapackage})
+and \texttt{E}, \texttt{D} and \texttt{R} represent arbitrary VDM
+types. The type mapping in the last row is only used when the
+\emph{Generate character sequences as strings} option is selected (see
+section \ref{sec:charseqs-as-strings}). Some of the types used to
+represent the VDM types are native Java types (from package
+\texttt{java.lang}), others are part of the Java code generator
+runtime library (from package \texttt{org.overture.codegen.runtime}),
+and some are generated.
+
+\begin{center}
+    \begin{tabular}{| l | l |}
+    \hline
+    VDM type(s) & Java type \\ \hline
+    \vdmkw{bool} & \texttt{java.lang.Boolean} \\ \hline
+    \vdmkw{nat}, \vdmkw{nat1}, \vdmkw{int}, \vdmkw{rat}, \vdmkw{real} & \texttt{java.lang.Number} \\ \hline
+    \vdmkw{char} & \texttt{java.lang.Character} \\ \hline
+    \vdmkw{token} & \texttt{org.overture.codegen.runtime.Token} \\ \hline
+    Tuple types (e.g.\ \vdmkw{nat} \texttt{*} \vdmkw{nat}) & \texttt{org.overture.codegen.runtime.Tuple} \\ \hline
+    Union types (e.g.\ \vdmkw{nat} \texttt{|} \vdmkw{nat}) & \texttt{java.lang.Object} \\ \hline
+    Quote type \texttt{ <T>} & \texttt{pack.quotes.TQuote} \\ \hline
+    User-defined types \texttt{T = D} & Represented using the representation of type \texttt{D} \\ \hline
+    A class \texttt{C} & \texttt{pack.C} \\ \hline
+    Record type \texttt{R} defined in class or module \texttt{M} & Inner class \texttt{pack.M.R}  \\ \hline
+    \vdmkw{set of} \texttt{ E} & \texttt{org.overture.codegen.runtime.VDMSet} \\  \hline
+    \vdmkw{map} \texttt{ D } \vdmkw{to} \texttt{ R}, \vdmkw{inmap} \texttt{ D } \vdmkw{to} \texttt{ R} & \texttt{org.overture.codegen.runtime.VDMMap} \\  \hline
+    \vdmkw{seq of} \texttt{ E}, \vdmkw{seq1 of} \texttt{ E}  & \texttt{org.overture.codegen.runtime.VDMSeq} \\  \hline
+    \vdmkw{seq of char}, \vdmkw{seq1 of char} & \texttt{java.lang.String} \\  \hline
+    \end{tabular}
+  \captionof{table}{The type mappings used by the Java code generator.}
+  \label{tbl:type-mappings}
+\end{center}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../OvertureIDEUserGuide"
+%%% End:

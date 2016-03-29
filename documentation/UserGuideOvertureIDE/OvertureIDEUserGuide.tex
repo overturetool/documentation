@@ -338,11 +338,13 @@ go to:
     can be a risky process because of the dependencies on non-Overture
     components and so is not yet supported.}.
 
-  \item[\textbf{Modelio:}]   In order to take advantage of the UML-VDM mapping,
-      a tool for UML modelling is needed. We recommend Modelio. This is a tool that
-      is both available in a commercial version as well as in an open source
-      setting from a company called Softeam. Just like Overture this tool is
-      built on top of the Eclipse platform. The product can be obtained from
+\item[\textbf{Modelio:}] In order to take advantage of the UML-VDM
+  mapping, a tool for UML modelling is needed. We recommend Modelio
+  version 3.3.1 since the UML-VDM mapping tool is tested with that
+  version of Modelio. Modelio is both available in a commercial
+  version as well as in an open source setting from a company called
+  Softeam. Just like Overture this tool is built on top of the Eclipse
+  platform. The product can be obtained from
 \begin{quote}
 \url{http://www.modelio.org/}.
 \end{quote}
@@ -1336,11 +1338,12 @@ activity diagrams, sequence diagrams, objects charts, package charts are not
 used in the UML mapping. It is essentially only the information
 used statically inside classes and their usage in class diagrams that is used.
 
-To convert a UML class diagram model to a VDM++ model, you first need to export
-the UML model from Modelio to the Eclipse XMI\index{XMI} format, called UML
-using the EMF UML3.0.0 format. At the moment, Modelio\index{Modelio} is the only
-UML tool supported. Export from Modelio is done as illustrated in
-Figure~\ref{fig:exportfromUML}.
+To convert a UML class diagram model to a VDM++ model, you first need
+to export the UML model from Modelio to the Eclipse XMI\index{XMI}
+format, called UML using the EMF UML3.0.0 format. At the moment,
+Modelio\index{Modelio} is the only UML tool supported. In particular,
+the exported UML models have been tested using Modelio 3.3.1. Export
+from Modelio is done as illustrated in Figure~\ref{fig:exportfromUML}.
 
 \begin{figure}[htbp]
 \begin{center}

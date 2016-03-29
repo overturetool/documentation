@@ -73,7 +73,7 @@ operations
       return mk_(min, max, diff / card dom s2e) )
 pre card dom s2e > 0;
 
-public static IsFinished: () ==> ()
+public IsFinished: () ==> ()
 IsFinished() == skip;
 
 sync
