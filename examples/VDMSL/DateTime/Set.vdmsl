@@ -26,29 +26,29 @@ functions
 
   -- The sum of a set of numerics.
   sum: set of real +> real
-  sum(s) == fold(Numeric`add,0,s);
+  sum(s) == fold[real](Numeric`add,0,s);
 
   -- The product of a set of numerics.
   prod: set of real +> real
-  prod(s) == fold(Numeric`mult,1,s);
+  prod(s) == fold[real](Numeric`mult,1,s);
 
   -- The minimum of a set of numerics.
   min: set of real +> real
-  min(s) == fold1(Numeric`min, s)
+  min(s) == fold1[real](Numeric`min, s)
   pre s <> {}
   post RESULT in set s and forall e in set s & RESULT <= e;
 
   -- The maximum of a set of numerics.
   max: set of real +> real
-  max(s) == fold1(Numeric`max, s)
+  max(s) == fold1[real](Numeric`max, s)
   pre s <> {}
   post RESULT in set s and forall e in set s & RESULT >= e;
 
   -- The sequence whose elements are that of a specified set, with no duplicates.
   -- No order is guaranteed in the resulting sequence.
   toSeq[@a]: set of @a +> seq of @a
-  toSeq(s) == fold(Seq`app,[],s)
-  post len RESULT = card s and forall e in set s & Seq`inSeq(e,RESULT);
+  toSeq(s) == fold[@a](Seq`app,[],s)
+  post len RESULT = card s and forall e in set s & Seq`inSeq[@a](e,RESULT);
 
   -- Apply a function to all elements of a set.
   -- The result set may be smaller than the argument set.
@@ -68,7 +68,7 @@ functions
   fold(f, e, s) == cases s:
                      {}        -> e,
                      {x}       -> x,
-                     t union u -> f(fold(f,a,t), fold(f,a,u))
+                     t union u -> f(fold[@a](f,a,t), fold[@a](f,a,u))
                    end
   --pre (exists x:@a & forall y:@a & f(x,y) = y)
   --and (forall x,y:@a & f(x, y) = f(y, x))
@@ -80,7 +80,7 @@ functions
   fold1[@a]: (@a * @a +> @a) * set of @a +> @a
   fold1(f, s) == cases s:
                    {e}       -> e,
-                   t union u -> f(fold1(f,t), fold1(f,u))
+                   t union u -> f(fold1[@a](f,t), fold1[@a](f,u))
                  end
   pre s <> {}
   --and (forall x,y:@a & f(x,y) = f(y,x))
@@ -93,18 +93,18 @@ functions
 
   -- Is a set of sets a partition of a set?
   isPartition[@a]: set of set of @a * set of @a +> bool
-  isPartition(ss,s) == pairwiseDisjoint(ss) and dunion ss = s;
+  isPartition(ss,s) == pairwiseDisjoint[@a](ss) and dunion ss = s;
 
   -- All (sequence) permutations of a set.
   permutations[@a]: set of @a +> set of seq1 of @a
   permutations(s) ==
     cases s:
       {e} -> {[e]},
-      -   -> dunion { { [e]^tail | tail in set permutations(s\{e}) } | e in set s }
+      -   -> dunion { { [e]^tail | tail in set permutations[@a](s\{e}) } | e in set s }
     end
   pre s <> {}
   post card RESULT = prod({1,...,card s}) and
-       forall sq in set RESULT & Seq`isDistinct(sq) and elems sq = s
+       forall sq in set RESULT & Seq`isDistinct[@a](sq) and elems sq = s
   measure size;
 
   -- The cross product of two sets.

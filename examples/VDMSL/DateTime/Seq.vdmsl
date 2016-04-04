@@ -25,20 +25,20 @@ functions
 
   -- The sum of a sequence of numerics.
   sum: seq of real +> real
-  sum(s) == fold(Numeric`add,0,s);
+  sum(s) == fold[real](Numeric`add,0,s);
 
   -- The product of a sequence of numerics.
   prod: seq of real +> real
-  prod(s) == fold(Numeric`mult,1,s);
+  prod(s) == fold[real](Numeric`mult,1,s);
 
   -- The minimum of a sequence of numerics.
   min: seq1 of real +> real
-  min(s) == fold1(Numeric`min,s)
+  min(s) == fold1[real](Numeric`min,s)
   post RESULT in set elems s and forall e in set elems s & RESULT <= e;
 
   -- The maximum of a sequence of numerics.
   max: seq1 of real +> real
-  max(s) == fold1(Numeric`max,s)
+  max(s) == fold1[real](Numeric`max,s)
   post RESULT in set elems s and forall e in set elems s & RESULT >= e;
 
   -- Does an element appear in a sequence?
@@ -61,7 +61,7 @@ functions
   fold(f, e, s) == cases s:
                      []    -> e,
                      [x]   -> x,
-                     s1^s2 -> f(fold(f,a,s1), fold(f,a,s2))
+                     s1^s2 -> f(fold[@a](f,e,s1), fold[@a](f,e,s2))
                    end
   --pre (exists x:@a & forall y:@a & f(x,y) = y and f(y,x) = y)
   --and forall x,y,z:@a & f(x,f(y,z)) = f(f(x,y),z)
@@ -72,7 +72,7 @@ functions
   fold1[@a]: (@a * @a +> @a) * seq1 of @a +> @a
   fold1(f, s) == cases s:
                    [e]   -> e,
-                   s1^s2 -> f(fold1(f,s1), fold1(f,s2))
+                   s1^s2 -> f(fold1[@a](f,s1), fold1[@a](f,s2))
                  end
   --pre forall x,y,z:@a & f(x,f(y,z)) = f(f(x,y),z)
   measure size';
@@ -81,7 +81,7 @@ functions
   zip[@a,@b]: seq of @a * seq of @b +> seq of (@a * @b)
   zip(s,t) == cases mk_(s,t):
                 mk_([],[])         -> [],
-                mk_([x]^s',[y]^t') -> [mk_(x,y)] ^ zip(s',t')
+                mk_([x]^s',[y]^t') -> [mk_(x,y)] ^ zip[@a,@b](s',t')
               end
   pre len s = len t
   post len RESULT = len s and forall i in set inds RESULT & RESULT(i) = mk_(s(i), t(i))
@@ -92,8 +92,8 @@ functions
   unzip(s) == cases s:
                 []         -> [],
                 [mk_(x,y)] -> mk_([x],[y]),
-                s1^s2      -> let mk_(t1,u1) = unzip(s1),
-                                  mk_(t2,u2) = unzip(s2)
+                s1^s2      -> let mk_(t1,u1) = unzip[@a,@b](s1),
+                                  mk_(t2,u2) = unzip[@a,@b](s2)
                               in mk_(t1^t2, u1^u2)
               end
   post let mk_(t,u) = RESULT
