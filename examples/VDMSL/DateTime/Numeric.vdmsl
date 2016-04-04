@@ -1,0 +1,35 @@
+/*
+   A module that specifies and defines general purpose functions over numerics.
+
+   All definitions are explicit and executable.
+*/
+module Numeric
+exports functions min: real * real +> real
+                  max: real * real +> real
+                  add: real * real +> real
+                  mult: real * real +> real
+
+definitions
+
+functions
+
+  -- The minimum of two numerics.
+  min: real * real +> real
+  min(x,y) == if x<y then x else y;
+
+  -- The maximum of two numerics.
+  max: real * real +> real
+  max(x,y) == if x>y then x else y;
+
+  -- The following functions wrap primitives for convenience, to allow them for example to
+  -- serve as function arguments.
+
+  -- Sum of two numbers.
+  add: real * real +> real
+  add(m,n) == m+n;
+
+  -- Product of two numbers.
+  mult: real * real +> real
+  mult(m,n) == m*n;
+
+end Numeric
