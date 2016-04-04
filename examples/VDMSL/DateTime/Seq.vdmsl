@@ -1,4 +1,4 @@
-/**
+/*
    A module that specifies and defines general purpose functions over sequences.
 
    All functions are explicit and executable. Where a non-executable condition adds value, it
@@ -11,6 +11,10 @@ exports functions sum: seq of real +> real
                   min: seq1 of real +> real
                   max: seq1 of real +> real
                   inSeq[@a]: @a * seq of @a +> bool
+                  prefix[@a]: seq of @a * seq of @a +> bool
+                  suffix[@a]: seq of @a * seq of @a +> bool
+                  infix[@a]: seq of @a * seq of @a +> bool
+                  subseq[@a]: seq1 of @a * nat1 * nat +> seq of @a
                   xform[@a,@b]: (@a +> @b) * seq of @a +> seq of @b
                   fold[@a]: (@a * @a +> @a) * @a * seq of @a +> @a
                   fold1[@a]: (@a * @a +> @a) * seq1 of @a +> @a
@@ -18,6 +22,7 @@ exports functions sum: seq of real +> real
                   unzip[@a,@b]: seq of (@a * @b) +> seq of @a * seq of @b
                   isDistinct[@a]: seq of @a +> bool
                   app[@a]: seq of @a * seq of @a +> seq of @a
+                  setOf[@a]: seq of @a +> set of @a
 
 definitions
 
@@ -45,6 +50,24 @@ functions
   inSeq[@a]: @a * seq of @a +> bool
   inSeq(e,s) == e in set elems s;
 
+  -- Is one sequence a prefix of another?
+  prefix[@a]: seq of @a * seq of @a +> bool
+  prefix(pref,full) == len pref <= len full and forall i in set inds pref & pref(i) = full(i);
+
+  -- Is one sequence a suffix of another?
+  suffix[@a]: seq of @a * seq of @a +> bool
+  suffix(suff,full) == prefix[@a](reverse suff, reverse full);
+
+  -- Is one sequence a subsequence of another sequence?
+  infix[@a]: seq of @a * seq of @a +> bool
+  infix(inf,full) == exists i in set inds full & i <= len full-len inf+1 and prefix[@a](inf, subseq[@a](full, i, len inf));
+
+  -- Extract a subsequence from a sequence. The starting index and the length of the subsequence
+  -- are specified.
+  subseq[@a]: seq1 of @a * nat1 * nat +> seq of @a
+  subseq(sq, start, slen) == [ sq(i) | i in set inds sq & start <= i and i < start+slen ]
+  pre start+slen-1 <= len sq;
+
   -- Apply a function to all elements of a sequence.
   xform[@a,@b]: (@a+>@b) * seq of @a +> seq of @b
   xform(f,s) == cases s:
@@ -53,7 +76,7 @@ functions
                   s1^s2 -> xform[@a,@b](f,s1) ^ xform[@a,@b](f,s2)
                 end
   post len RESULT = len s and forall i in set inds s & RESULT(i) = f(s(i))
-  measure size''';
+  measure size3;
 
   -- Fold (iterate, accumulate, reduce) a binary function over a sequence.
   -- The function is assumed to be associative and have an identity element.
@@ -65,7 +88,7 @@ functions
                    end
   --pre (exists x:@a & forall y:@a & f(x,y) = y and f(y,x) = y)
   --and forall x,y,z:@a & f(x,f(y,z)) = f(f(x,y),z)
-  measure size'';
+  measure size2;
 
   -- Fold (iterate, accumulate, reduce) a binary function over a non-empty set.
   -- The function is assumed to be associative.
@@ -75,19 +98,19 @@ functions
                    s1^s2 -> f(fold1[@a](f,s1), fold1[@a](f,s2))
                  end
   --pre forall x,y,z:@a & f(x,f(y,z)) = f(f(x,y),z)
-  measure size';
+  measure size1;
 
   -- Pair the corresponding elements of two lists of equal length.
   zip[@a,@b]: seq of @a * seq of @b +> seq of (@a * @b)
   zip(s,t) == cases mk_(s,t):
                 mk_([],[])         -> [],
-                mk_([x]^s',[y]^t') -> [mk_(x,y)] ^ zip[@a,@b](s',t')
+                mk_([x]^s1,[y]^t1) -> [mk_(x,y)] ^ zip[@a,@b](s1,t1)
               end
   pre len s = len t
   post len RESULT = len s and forall i in set inds RESULT & RESULT(i) = mk_(s(i), t(i))
-  measure size''';
+  measure size3;
 
-  -- Split a list of pairs into a list of firsts and a lists of seconds.
+  -- Split a list of pairs into a list of firsts and a list of seconds.
   unzip[@a,@b]: seq of (@a * @b) +> seq of @a * seq of @b
   unzip(s) == cases s:
                 []         -> [],
@@ -112,18 +135,22 @@ functions
   app[@a]: seq of @a * seq of @a +> seq of @a
   app(m,n) == m^n;
 
+  -- Set of sequence elements.
+  setOf[@a]: seq of @a +> set of @a
+  setOf(s) == elems(s);
+
   -- Measure functions.
 
   size[@a,@b]: seq of ? -> nat
   size(s) == len s;
 
-  size'[@a]: ? * seq of @a -> nat
-  size'(-, s) == len s;
+  size1[@a]: ? * seq of @a -> nat
+  size1(-, s) == len s;
 
-  size''[@a]: ? * ? * seq of @a -> nat
-  size''(-, -, s) == len s;
+  size2[@a]: ? * ? * seq of @a -> nat
+  size2(-, -, s) == len s;
 
-  size'''[@a,@b]: ? * seq of @a -> nat
-  size'''(-, s) == len s;
+  size3[@a,@b]: ? * seq of @a -> nat
+  size3(-, s) == len s;
 
 end Seq

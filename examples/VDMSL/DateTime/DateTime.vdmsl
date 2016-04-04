@@ -1,11 +1,11 @@
-/**
+/*
    A model of dates, times and durations. Intended as a core library for use by higher level
    models that require dates and/or times and/or durations.
 
    Dates are based on the Gregorian calendar. The Gregorian calendar commenced in October 1582,
    but it is extended backwards to year 1 in the proleptic Gregorian calendar, as per ISO 8601.
 
-   Times assume Co-ordinated Univeral Time (UTC). Timezones and daylight savings are not
+   Times assume Co-ordinated Universal Time (UTC). Timezones and daylight savings are not
    supported. The granularity of times is to the nearest millisecond.
 
    A duration is modelled as a number of elapsed milliseconds (being the smallest unit of time).
@@ -40,12 +40,20 @@ exports types Year
                   daysInYear: Year +> nat1
                   dateLess: Date * Date +> bool
                   dateLeq: Date * Date +> bool
+                  dateGrtr: Date * Date +> bool
+                  dateGeq: Date * Date +> bool
                   timeLess: Time * Time +> bool
                   timeLeq: Time * Time +> bool
+                  timeGrtr: Time * Time +> bool
+                  timeGeq: Time * Time +> bool
                   dtgLess: DTG * DTG +> bool
                   dtgLeq: DTG * DTG +> bool
+                  dtgGrtr: DTG * DTG +> bool
+                  dtgGeq: DTG * DTG +> bool
                   durLess: Duration * Duration +> bool
                   durLeq: Duration * Duration +> bool
+                  durGrtr: Duration * Duration +> bool
+                  durGeq: Duration * Duration +> bool
                   dtgInRange: DTG * DTG * DTG +> bool
                   inPeriod: DTG * Period +> bool
                   overlap: Period * Period +> bool
@@ -92,11 +100,11 @@ types
   Month = nat1
   inv month == month <= MONTHS_PER_YEAR;
 
-  -- A day of a month.
+  -- A day in a month.
   Day = nat1
   inv day == day <= MAX_DAYS_PER_MONTH;
 
-  -- An hour of a day.
+  -- An hour in a day.
   Hour = nat
   inv hour == hour < HOURS_PER_DAY;
 
@@ -108,7 +116,7 @@ types
   Second = nat
   inv second == second < SECONDS_PER_MINUTE;
 
-  -- A millisecond of a second.
+  -- A millisecond in a second.
   Millisecond = nat
   inv milli == milli < MILLIS_PER_SECOND;
 
@@ -144,7 +152,7 @@ values
   MINUTES_PER_HOUR:nat = 60;
   HOURS_PER_DAY:nat = 24;
   DAYS_PER_MONTH:map nat1 to nat1 = {1|->31, 2|->28, 3|->31, 4|->30, 5|->31, 6|->30,
-                                      7|->31, 8|->31, 9|->30, 10|->31, 11|->30, 12|->31};
+                                     7|->31, 8|->31, 9|->30, 10|->31, 11|->30, 12|->31};
   DAYS_PER_MONTH_LEAP:map nat1 to nat1 = DAYS_PER_MONTH ++ {2|->29};
   MAX_DAYS_PER_MONTH:nat1 = Set`max(rng DAYS_PER_MONTH);
   MONTHS_PER_YEAR:nat1 = card dom DAYS_PER_MONTH;
@@ -183,6 +191,14 @@ functions
   dateLeq: Date * Date +> bool
   dateLeq(date1,date2) == dateLess(date1, date2) or date1 = date2;
 
+  -- Greater than relation on dates.
+  dateGrtr: Date * Date +> bool
+  dateGrtr(d1, d2) == dateLess(d2, d1);
+
+  -- Greater than or equal relation on dates.
+  dateGeq: Date * Date +> bool
+  dateGeq(d1, d2) == dateLeq(d2, d1);
+
   -- Order relation on times.
   timeLess: Time * Time +> bool
   timeLess(mk_Time(h1,m1,s1,l1), mk_Time(h2,m2,s2,l2)) ==
@@ -193,6 +209,14 @@ functions
   timeLeq: Time * Time +> bool
   timeLeq(time1, time2) == timeLess(time1, time2) or time1 = time2;
 
+  -- Greater than relation on times.
+  timeGrtr: Time * Time +> bool
+  timeGrtr(d1, d2) == timeLess(d2, d1);
+
+  -- Greater than or equal relation on times.
+  timeGeq: Time * Time +> bool
+  timeGeq(d1, d2) == timeLeq(d2, d1);
+
   -- Order relation on DTGs.
   dtgLess: DTG * DTG +> bool
   dtgLess(mk_DTG(d1,t1), mk_DTG(d2,t2)) == dateLess(d1,d2) or (d1=d2 and timeLess(t1,t2));
@@ -201,6 +225,14 @@ functions
   dtgLeq: DTG * DTG +> bool
   dtgLeq(dtg1, dtg2) == dtgLess(dtg1, dtg2) or dtg1 = dtg2;
 
+  -- Greater than relation on DTGs.
+  dtgGrtr: DTG * DTG +> bool
+  dtgGrtr(d1, d2) == dtgLess(d2, d1);
+
+  -- Greater than or equal relation on DTGs.
+  dtgGeq: DTG * DTG +> bool
+  dtgGeq(d1, d2) == dtgLeq(d2, d1);
+
   -- Order relation on durations.
   durLess: Duration * Duration +> bool
   durLess(d1, d2) == d1.dur < d2.dur;
@@ -208,6 +240,14 @@ functions
   -- Less than or equal relation on durations.
   durLeq: Duration * Duration +> bool
   durLeq(d1, d2) == durLess(d1,d2) or d1 = d2;
+
+  -- Greater than relation on durations.
+  durGrtr: Duration * Duration +> bool
+  durGrtr(d1, d2) == durLess(d2, d1);
+
+  -- Greater than or equal relation on durations.
+  durGeq: Duration * Duration +> bool
+  durGeq(d1, d2) == durLeq(d2, d1);
 
   -- Does a DTG fall between two given DTGs?
   dtgInRange: DTG * DTG * DTG +> bool
@@ -402,7 +442,7 @@ functions
   -- A period that represents an instant in time.
   instant: DTG +> Period
   instant(dtg) == mk_Period(dtg,dtg)
-  post inPeriod(dtg,RESULT);
+  post inPeriod(dtg, RESULT);
        --and forall d:DTG & d=dtg <=> inPeriod(d,RESULT);
 
 end DateTime

@@ -1,7 +1,7 @@
-/**
+/*
    A module that specifies and defines general purpose functions over numerics.
 
-   All definitions are explict and executable.
+   All definitions are explicit and executable.
 */
 module Numeric
 exports functions min: real * real +> real

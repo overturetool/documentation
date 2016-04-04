@@ -1,4 +1,4 @@
-/**
+/*
    A module that specifies and defines general purpose functions over sets.
 
    All functions are explicit and executable. Where a non-executable condition adds value, it
@@ -54,13 +54,13 @@ functions
   -- The result set may be smaller than the argument set.
   xform[@a,@b]: (@a+>@b) * set of @a +> set of @b
   xform(f,s) == cases s:
-                  {} -> {},
+                  {}  -> {},
                   {e} -> {f(e)},
                   s1 union s2 -> xform[@a,@b](f,s1) union xform[@a,@b](f,s2)
                 end
   post (forall e in set s & f(e) in set RESULT) and
        (forall r in set RESULT & exists e in set s & f(e) = r)
-  measure size''';
+  measure size3;
 
   -- Fold (iterate, accumulate, reduce) a binary function over a set.
   -- The function is assumed to be commutative and associative, and have an identity element.
@@ -68,12 +68,12 @@ functions
   fold(f, e, s) == cases s:
                      {}        -> e,
                      {x}       -> x,
-                     t union u -> f(fold[@a](f,a,t), fold[@a](f,a,u))
+                     t union u -> f(fold[@a](f,e,t), fold[@a](f,e,u))
                    end
-  --pre (exists x:@a & forall y:@a & f(x,y) = y)
+  --pre (exists x:@a & forall y:@a & f(x,y) = y and f(y,x) = y)
   --and (forall x,y:@a & f(x, y) = f(y, x))
   --and (forall x,y,z:@a & f(x,f(y,z)) = f(f(x,y),z))
-  measure size'';
+  measure size2;
 
   -- Fold (iterate, accumulate, reduce) a binary function over a non-empty set.
   -- The function is assumed to be commutative and associative.
@@ -85,7 +85,7 @@ functions
   pre s <> {}
   --and (forall x,y:@a & f(x,y) = f(y,x))
   --and (forall x,y,z:@a & f(x,f(y,z)) = f(f(x,y),z))
-  measure size';
+  measure size1;
 
   -- Are the members of a set of sets pairwise disjoint.
   pairwiseDisjoint[@a]: set of set of @a +> bool
@@ -103,8 +103,9 @@ functions
       -   -> dunion { { [e]^tail | tail in set permutations[@a](s\{e}) } | e in set s }
     end
   pre s <> {}
-  post card RESULT = prod({1,...,card s}) and
-       forall sq in set RESULT & Seq`isDistinct[@a](sq) and elems sq = s
+  post -- for a set of size n, there are n! permutations
+       card RESULT = prod({1,...,card s}) and
+       forall sq in set RESULT & len sq = card s and elems sq = s
   measure size;
 
   -- The cross product of two sets.
@@ -116,13 +117,13 @@ functions
   size[@a]: set of @a +> nat
   size(s) == card s;
 
-  size'[@a]: ? * set of @a +> nat
-  size'(-, s) == card s;
+  size1[@a]: ? * set of @a +> nat
+  size1(-, s) == card s;
 
-  size''[@a]: ? * ? * set of @a +> nat
-  size''(-, -, s) == card s;
+  size2[@a]: ? * ? * set of @a +> nat
+  size2(-, -, s) == card s;
 
-  size'''[@a,@b]: ? * set of @a +> nat
-  size'''(-, s) == card s;
+  size3[@a,@b]: ? * set of @a +> nat
+  size3(-, s) == card s;
 
 end Set
