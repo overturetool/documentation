@@ -5,7 +5,7 @@ server.
 #******************************************************
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
-#LANGUAGE_VERSION=VDM10
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

@@ -12,7 +12,7 @@ with alarms. A comparable model of this example also exists in VDM-SL.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= John Fitzgerald and Peter Gorm Larsen
-#LANGUAGE_VERSION=VDM10
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

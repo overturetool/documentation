@@ -227,7 +227,7 @@
         Peter W. V. Tran-J\o{}rgensen\\
         Tomohiro Oda}
 
-\date{November 2014}
+\date{April 2016}
 \reportno{TR-001}
 
 \pagenumbering{roman}
@@ -249,6 +249,7 @@ November & 2014 & 6 & 2.1.2 &
 Includes RMs \#25, \#26, \#29 \\ \hline
 August & 2015 & 7 & 2.3.0 &
 Includes RMs \#27 \\ \hline
+April & 2016 & 7 & 2.3.4 & review inputs from Paul Chisholm \\ \hline
 \end{tabular}
 
 %\addtocounter{page}{2}
@@ -264,7 +265,7 @@ Includes RMs \#27 \\ \hline
 The Vienna Development Method (VDM)
 \cite{Bjorner&78,Jones90a,Fitzgerald&08c} was originally developed at
 the IBM laboratories in Vienna in the 1970's and as such it is one of
-the longest established formal method.
+the longest established formal methods.
 This document is a common language manual for the three dialects for
 VDM-SL, VDM++ and VDM-RT in the VDM-10 commonly agreed language
 revision. These dialects  are supported by both VDMTools (minus VDM-RT)
@@ -434,7 +435,7 @@ one in the following.
 In general the VDM languages allow one to specify systems in
 which computations may fail to terminate or to deliver a result. To
 deal with such potential undefinedness,
-the VDM languages employs a three valued logic: values may be
+the VDM languages employ a three valued logic: values may be
 true, false or bottom (undefined).
 The semantics of the VDM interpreters differs from the ISO/VDM-SL standard
 in that it does
@@ -753,7 +754,7 @@ values, called tokens. The only operations that can be carried out on
 tokens are equality and inequality. In VDM,
 tokens cannot be individually represented whereas they can be written
 with a \keyw{mk\_token} around an arbitrary expression. This is a way
-of enabling testing of specifications which contain token
+of enabling testing of specifications that contain token
 types. However, in order to resemble the ISO/VDM-SL standard these token
 values cannot be decomposed by means of any pattern matching and they
 cannot be used for anything other than equality and inequality
@@ -776,13 +777,14 @@ comparisons.
   \end{tabular}%
 \index{\texttt{=}!token equality}\index{Equality!token type}\index{\texttt{<>}!token inequality}\index{Inequality!token type}
 
-\item[Examples:] Let for example {\tt s = \keyw{mk\_token}(6)} and let {\tt t
-    = \keyw{mk\_token}(1)} in:
+\item[Examples:] Let for example {\tt s = \keyw{mk\_token}(6)},  let {\tt t
+    = \keyw{mk\_token}(1)} and  {\tt u = mk\_token(\{1,2\})} in:
 
   \begin{tabular}{lcl}
     {\tt s = t} &$\equiv$& \keyw{false} \\
     {\tt s <> t} &$\equiv$& \keyw{true} \\
     {\tt s = \keyw{mk\_token}(6)} & $\equiv$& \keyw{true} \\
+    {\tt u = \keyw{mk\_token}(\{2,1\})} & $\equiv$& \keyw{true} \\
   \end{tabular}
 \end{description}
 
@@ -850,7 +852,7 @@ a logical predicate.
     constructs a set by evaluating the expression {\tt e} on all the
     bindings for which the predicate {\tt P} evaluates to \keyw{true}.
     A binding is either a set binding or a type
-    binding\footnote{Notice that type bindings cannot be executed by
+    binding\footnote{Notice that type bindings over infinite types (discharging the invariant limitations) cannot be executed by
       the VDM interpreters because in general
       they are not executable (see section~\ref{bind} for further
       information about this).}.  A set bind {\tt bdn} has the form
@@ -969,7 +971,7 @@ predicate and {\tt e} is an arbitrary expression.
 
   \begin{description}
   \item[Sequence enumeration:] \verb+[e1, e2,..., en]+ constructs a
-    sequence of the enumerated elements. The empty sequence will be written
+    sequence of the enumerated elements. The empty sequence is written
     as \verb+[]+.  A text literal is a shorthand for enumerating a sequence
     of characters (e.g.\ {\tt "ifad" = ['i','f','a','d']}).
 
@@ -1101,7 +1103,7 @@ set.
 
   \begin{description}
   \item[Map enumeration:] {\tt \{a1 |-> b1, a2 |-> b2, \ldots, an |-> bn\}}
-    con\-structs a mapping of the enumerated maplets. The empty map will be
+    con\-structs a mapping of the enumerated maplets. The empty map is
     written as {\tt \{|->\}}.
 
   \item[Map comprehension:] {\tt \{ed |-> er | bd1, \ldots, bdn \& P\}}
@@ -1324,7 +1326,7 @@ a value is of one of the basic types.
 In the following this convention will be used: {\tt A} is a record
 type, {\tt A1, \ldots, Am} are arbitrary types, {\tt r}, {\tt r1}, and
 {\tt r2} are record values, {\tt i1, \ldots, im} are selectors from
-the {\tt r} record value, {\tt e1, \ldots, em} are arbitrary
+the {\tt r} record value (and these must be unique entrances inside one record definition), {\tt e1, \ldots, em} are arbitrary
 expressions.
 
 \begin{description}
@@ -1381,9 +1383,9 @@ expressions.
   accessed by pattern matching (like it is done for tuples) as the
   fields have not been named.
 
-  In the last notation the fields of {\tt A} can only be accessed by
-  pattern matching (as is done for tuples) since the fields have not
-  been named.
+ % In the last notation the fields of {\tt A} can only be accessed by
+  %pattern matching (as is done for tuples) since the fields have not
+  %been named.
 
   The shorthand notation {\tt ::} used in the two previous examples
    where the tag name equals the type
@@ -1550,7 +1552,7 @@ types.
 
   \Rule{optional type}{\Lit{[}, \Ruleref{type}, \Lit{]}}
 
-\item[Equation:] {\tt B = A1 | A2 | \ldots\ | An}%
+\item[Equation:] {\tt B = A1 | A2 | \ldots\ | [An]}%
 \index{\texttt{|}!union type}\index{\texttt{[]}!optional type}
 
 \item[Constructors:] None.
@@ -1592,6 +1594,7 @@ types.
     {\tt \keyw{is\_}Const(expr.cons)} &$\equiv$& \keyw{true}\\
     {\tt \keyw{is\_}Var(expr.altn)}   &$\equiv$& \keyw{true}\\
     {\tt \keyw{is\_}Infix(expr.test)}  &$\equiv$& \keyw{false}\\
+    {\tt expr.altn.tp} =} {\tt \keyw{nil} &$\equiv$& \keyw{true}\\
   \end{tabular}
 
   Using union types we can extend the use of previously defined
@@ -2042,7 +2045,7 @@ post dom m = dom m1 inter dom m2 and
 \end{lstlisting}
 
 A simple example of an extended explicit function definition
-(non-standard) is the function \texttt{map\_disj} which takes a pair of
+is the function \texttt{map\_disj} which takes a pair of
 compatible maps over natural numbers and returns the map consisting of
 those maplets unique to one or other of the given maps:
 
@@ -2052,7 +2055,7 @@ map_disj (m1:map nat to nat,m2:map nat to nat)
   (dom m1 inter dom m2) <-: m1 munion
   (dom m1 inter dom m2) <-: m2
 pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d)
-post dom res = (dom m1 union dom m2) ++ (dom m1 inter dom m2)
+post dom res = (dom m1 union dom m2) \ (dom m1 inter dom m2)
      and
      forall d in set dom res & res(d) = m1(d) or res(d) = m2(d)
 \end{lstlisting}
@@ -2119,7 +2122,7 @@ Here the proof obligation will become:
 \begin{lstlisting}
 forall n:nat &
   (not (n = 0) =>
-    id(n) > id((n - 1)))
+    id(n) > id(n - 1))
 \end{lstlisting}
 \noindent This proof obligation will ensure that the recursive
 function will terminate and thus sooner or later reach the base case.
@@ -2174,10 +2177,7 @@ then the pre-condition function would be
   pre_num_bag[@elem] :@elem * (map @elem to nat1) +> bool
 \end{lstlisting}
 
-In case functions are defined polymorphic a \keyw{measure} should also be
-used.\\
-
-\noindent Finally, VDM makes no assumptions about the type bound to a type parameter. This binding must be made explicitly, either by making an assertion as part of the pre-condition of the function, or by making a test before the part of the function body that restricts the type parameter. For an example, consider the function given below:
+\noindent Finally, VDM makes no assumptions about the type bound to a type parameter. This binding must be made explicitly, either by making an assertion as part of the pre-condition of the function, or by making a test before the part of the function body that restricts the type parameter. For example, consider the function given below:
 
 \begin{lstlisting}
 public f[@T]: seq of @T -> seq of @T
@@ -2188,7 +2188,27 @@ f(s) ==
   	reverse s;
 \end{lstlisting}
 
-Here the type parameter \texttt{@T} denotes the element type of the sequence \texttt{s} passed to the function. Note how the body of the function assumes the type parameter to be defined for the \texttt{+} operator. This only works since the \texttt{\textbf{if}}-clause explicitly states that the parameter \texttt{s} is of type \texttt{\textbf{seq of real}}. Without the \texttt{\textbf{if}}-clause use of the \texttt{+} operator would fail due to \texttt{@T} not being of a numeric type. Alternatively, the assumption could be stated using a pre-condition. This puts a restriction on the type parameter that applies to the entire body of the function, though with simple examples like this the effect is the same as explicitly declaring the type of the parameter in the function signature.
+Here the type parameter \texttt{@T} denotes the element type of the sequence \texttt{s} passed to the function. Note how the body of the function assumes the type parameter to be defined for the \texttt{+} operator. This only works since the \texttt{\textbf{if}}-clause explicitly states that the parameter \texttt{s} is of type \texttt{\textbf{seq of real}}. Without the \texttt{\textbf{if}}-clause use of the \texttt{+} operator would fail due to \texttt{@T} not being of a numeric type. Alternatively, the assumption could be stated using a pre-condition e.g.\ using {\texttt{\keyw{is\_real}}. This puts a restriction on the type parameter that applies to the entire body of the function, though with simple examples like this the effect is the same as explicitly declaring the type of the parameter in the function signature.
+
+Polymorphic functions can also be recursive and in those cases it also makes sense to include a measure function. For example:
+
+\begin{lstlisting}
+dlen[@A]: seq of seq of @A -> nat
+dlen(l) ==
+  if l = []
+  then 0
+  else len hd l + dlen[@A](tl l)
+measure Len;
+
+Len[@A]: seq of seq of @A -> nat
+Len(l) == len l;
+\end{lstlisting}
+\noindent where a proof obligation ensuring termination of this recursive function as:
+
+\begin{lstlisting}
+(forall l:seq of (seq of (@A)) & ((not (l = [])) => 
+(Len[@A](l) > Len[@A](tl l))))
+\end{lstlisting}
 
 \section{Higher Order Functions}
 
@@ -2322,7 +2342,7 @@ one by one. Each of them will be described by means of:
   any type, involving the pattern identifiers of the patterns from {\tt
     mb}. The {\tt \keyw{be st} e1} part is optional. The expression
   denotes the value of the expression {\tt e2} in the context in which
-  all the patterns from {\tt mb} has been matched against either an element
+  all the patterns from {\tt mb} have been matched against either an element
   in the set from {\tt mb} or against a value from the type in {\tt mb}%
   \footnote{Remember that only the set bindings can be executed by
     means of the VDM interpreters.}.
@@ -2763,8 +2783,7 @@ print_Const(mk_Const(c)) ==
   \begin{lstlisting}
   min(s: set of nat) x: nat
   pre s <> {}
-  post x in set s and
-       forall y in set s \ {x} & y < x
+  post forall y in set s & x <= y
   \end{lstlisting}
   We can use unique existential quantification to state the functional
   property satisfied by all maps \texttt{m}:
@@ -2861,7 +2880,7 @@ print_Const(mk_Const(c)) ==
   \end{lstlisting}
   where {\tt e1} up to {\tt en} are general expressions. It constructs
   a set of the values of the enumerated expressions. The empty set
-  must be written as \verb+{}+.
+  is written as \verb+{}+.
 
   The {\it set comprehension} expression has the form:
   \begin{lstlisting}
@@ -2951,7 +2970,7 @@ print_Const(mk_Const(c)) ==
     [e1, e2, !\ldots!, en]
   \end{lstlisting}
   where {\tt e1} through {\tt en} are general expressions. It constructs a
-  sequence of the enumerated elements. The empty sequence must be written
+  sequence of the enumerated elements. The empty sequence is written
   as {\tt []}.
 
   A {\it sequence comprehension} has the form:
@@ -3061,8 +3080,8 @@ then:
     {d1 |-> r1, d2 |-> r2, !\ldots!, dn |-> rn}
   \end{lstlisting}
   where all the domain expressions {\tt di} and range expressions {\tt ri}
-  are general expressions. The empty map
-  must be written as {\tt \{|->\}}.
+  are general expressions and all {\tt di}'s must be different unless they point to the same value. The empty map
+  is written as {\tt \{|->\}}.
 
   A {\it map comprehension} has the form:
   \begin{lstlisting}
@@ -3164,7 +3183,7 @@ example, we have:
     mk_T(e1, e2, !\ldots!, en)
   \end{lstlisting}
   where the type of the expressions {\tt (e1, e2, \ldots, en)} matches the
-  type of the corresponding entrances in the composite type {\tt T}.
+  type of the corresponding entrances in the composite type {\tt T}. Note that the reason why a \emph{name} (and not an \emph{identifier}) is used here is to take into account that one would like to be able to refer also to a class or a module where the record type is defined (see Chapter~\ref{top-level}) this would look like {\tt mk\_MC`T(e1, e2,} \ldots{\tt , en)} where {\tt MC} will be the name of a \emph{module} or a \emph{class}.
 
   The {\it record modification} has the form:
   \begin{lstlisting}
@@ -3197,7 +3216,7 @@ example, we have:
       in
         (gp \ {wsc,lsc}) union {new_wsc, new_lsc}
   pre forall sc1, sc2 in set gp &
-          sc1 <> sc2 <=> sc1.team <> sc2.team
+          ((sc1 <> sc2) <=> (sc1.team <> sc2.team))
           and {wt,lt} subset {sc.team | sc in set gp}
   \end{lstlisting}
 
@@ -3513,8 +3532,8 @@ In this example the {\bf\ttfamily threadid} expression is used in two places:
   cannot be polymorphic, but apart from that, it corresponds semantically
   to an explicit function definition as explained in
   chapter~\ref{functiondef}. A function defined by a lambda expression can
-  be Curried by using a new lambda expression in the body of it in a nested
-  way. When lambda expressions are bound to an identifier they can also
+  be Curried by using a new nested lambda expression in the body. 
+  When lambda expressions are bound to an identifier they can also
   define a recursive function.
 
 \item[Examples:] An increment function can be defined by means of a lambda
@@ -3731,7 +3750,7 @@ end A
 
   \Rule{isofbaseclass expression}{
     \Lop{isofbaseclass},
-    \Lit{(}, \Ruleref{name}, \Ruleref{expression}, \Lit{)}}
+    \Lit{(}, \Ruleref{name}, \Lit{,}, \Ruleref{expression}, \Lit{)}}
 
 \item[Semantic:] The function {\keyw{isofbaseclass}} when applied to an
   object reference \texttt{expression} and a class name \texttt{name}
@@ -3765,7 +3784,7 @@ end A
     \ldots
     }
   \Rule{isofclass expression}{
-    \Lop{isofclass}, \Lit{(}, \Ruleref{name}, \Ruleref{expression}, \Lit{)}
+    \Lop{isofclass}, \Lit{(}, \Ruleref{name}, \Lit{,}, \Ruleref{expression}, \Lit{)}
   }
 
 \item[Semantics:] The function \keyw{isofclass} when applied to an
@@ -3801,7 +3820,7 @@ end A
     }
   \Rule{samebaseclass expression}{\Lop{samebaseclass}, \lfeed
   \Lit{(},
-        \Ruleref{expression}, \Ruleref{expression}, \Lit{)}
+        \Ruleref{expression}, \Lit{,}, \Ruleref{expression}, \Lit{)}
     }
 
 \item[Semantics:] The function \keyw{samebaseclass} when applied to
@@ -3823,7 +3842,7 @@ is an instance of \texttt{AVLTree} and \texttt{bb} is an instance of
   \keyw{samebaseclass}\texttt{(a,b)} & $\equiv$ & \keyw{true}\\
   \keyw{samebaseclass}\texttt{(a,bb)} & $\equiv$ & \keyw{true}\\
   \keyw{samebaseclass}\texttt{(b,bb)} & $\equiv$ & \keyw{true}\\
-  \keyw{samebaseclass}\texttt{(t,bb)} & $\equiv$ & \keyw{false}\\
+  \keyw{samebaseclass}\texttt{(t,bb)} & $\equiv$ & \keyw{true}\\
   \keyw{samebaseclass}\texttt{(q,a)} & $\equiv$ & \keyw{false}\\
   \end{tabular}
 \end{description}
@@ -3840,7 +3859,7 @@ is an instance of \texttt{AVLTree} and \texttt{bb} is an instance of
     }
 
   \Rule{sameclass expression}{\Lop{sameclass}, \lfeed
-  \Lit{(}, \Ruleref{expression},
+  \Lit{(}, \Ruleref{expression}, \Lit{,},
         \Ruleref{expression}, \Lit{)}
    }
 
@@ -4091,7 +4110,7 @@ first importing the module \texttt{CGRel} then by
   \begin{lstlisting}
   CGRel`build_rel({mk_(<A>, <B>)})
   \end{lstlisting}
-Note that in VDM++ and VDM-RT \texttt{build\_rel} function can
+Note that in VDM++ and VDM-RT the \texttt{build\_rel} function can
 additionally have
 an access modifier allowing access to it outside the defining class.
 \end{description}
@@ -4375,7 +4394,7 @@ Set enumerations match patterns to elements of a set. For instance in:
 the identifiers \texttt{sc1}, \texttt{sc2}, \texttt{sc3} and
 \texttt{sc4} are bound to the four elements of \texttt{GroupA}. Note
 that the choice of binding is loose -- for instance
-\texttt{sc1} may be bound to [any] element of \texttt{\keyw{elems}
+\texttt{sc1} may be bound to any element of \texttt{\keyw{elems}
 GroupA}. In this case if \texttt{\keyw{elems} GroupA} does not contain
 precisely four elements, then the expression is not well-formed.
 
@@ -4881,7 +4900,7 @@ the VDM interpreters.
   state must be manipulated as a whole, and this is done by referring to it
   as a record tagged with the state name (see the example). When a field in
   the state is manipulated in some operation, the field must however be
-  referenced to directly by the field name without pre-fixing it with the
+  referenced directly by the field name without pre-fixing it with the
   state name.
 
 \item[Examples:] In the following example we create one state variable:
@@ -5029,7 +5048,7 @@ only be used in the VDM-RT dialect.
   \Ruleref{identifier}, \Lit{:}, \Ruleref{expression}, \Lit{->}, \Ruleref{expression}
   }
 
-\item[Semantics:] Operations in VDM are per default synchronous but if
+\item[Semantics:] Operations in VDM are by default synchronous but if
   the keyword ``\keyw{async}'' is used in VDM-RT in front of an
   operation definition it means that that operation will be treated as
   an asynchronous operation. This means that the operation cannot have
@@ -5121,8 +5140,8 @@ variables listed after the reserved
 word \keyw{rd} can only be read whereas the operation can both read and
 write the variables listed after \keyw{wr}.
 
-In VDM-SL these pre- and post-conditions the VDM interpreters also
-creates new functions as with the pre- and post-conditions of operation
+In VDM-SL the presence of such pre- and post-conditions the VDM interpreters will alo
+create new functions as with the pre- and post-conditions of operation
 definitions.  However, if a specification contains a global state, the
 state is also part of the newly created functions. Thus, functions
 with the following signatures are created for operations with pre-
@@ -5248,7 +5267,7 @@ errs COND1: c1 -> r1
      CONDn: cn -> rn
 \end{lstlisting}
 The condition names {\tt COND1}, \ldots, {\tt CONDn} are identifiers
-which describe the kind of error which can be raised\footnote{Notice
+that describe the kind of error which can be raised\footnote{Notice
 that these names are purely of mnemonic value, i.e.\ semantically they
 are not important.}. The condition expressions {\tt c1}, \ldots, {\tt
 cn} can be considered as pre-conditions for the different kinds of
@@ -5265,12 +5284,12 @@ An operation definition making use of an \keyw{errs} clause
 essentially gets an effective pre-condition which is a disjunction of
 the original pre-condition and all the condition expressions {\tt c1},
 \ldots, {\tt cn}. The effective post-condition in these cases becomes
-a disjunction of the conjuncts ({\tt orig\_pre and orig\_post)} and
-the {\tt c1 and r1}, \ldots, {\tt cn and rn}.
+a disjunction of the conjuncts ({\tt orig\_pre \keyw{and} orig\_post)} and
+the {\tt c1 \keyw{and} r1}, \ldots, {\tt cn \keyw{and} rn}.
 
 Superficially there appears to be some redundancy between exceptions
 and pre-conditions here. However there is a conceptual distinction
-between them which dictates which should be used and when. The
+between them that dictates which should be used and when. The
 pre-condition specifies what callers  to the operation must ensure for
 correct behaviour; the exception clauses indicate that the operation
 being specified takes responsibility for error handling when an
@@ -5305,7 +5324,7 @@ the queue. The exceptional case here is that the queue in
 which the exception clause specifies how the operation should
 behave is empty.
 
-Note that the VDM interpreters for VDM-SL models creates a function here:
+Note that the VDM interpreters for VDM-SL models create a function here:
 \begin{lstlisting}
   post_DEQUEUE: [Elem] * qsys * qsys +> bool
 \end{lstlisting}
@@ -5315,7 +5334,7 @@ Note that the VDM interpreters for VDM-SL models creates a function here:
 
 \section{Constructors (VDM++ and VDM-RT)}\label{constructors}
 
-Constructors are operations which have the same name as the class in
+Constructors are operations that have the same name as the class in
 which they are defined and which create new instances of that
 class. Their return type must therefore be the same class
 name, and if a return value is specified this should be \keyw{self}
@@ -6869,9 +6888,9 @@ The final example demonstrates the use of a general expression as the argument t
 \label{top-level}
 
 The top-level specification structure differs significantly between
-the VDM-SL appraoch and the VDM++ and VDM-RT approach. In VDM-SL the
+the VDM-SL approach and the VDM++ and VDM-RT approach. In VDM-SL the
 ISO standard prescribes a flat-language but here a modular extension
-is also enabled using imports and exprts primitives. In VDM++ and
+is also enabled using imports and exports primitives. In VDM++ and
 VDM-RT structuring is done using object-oriented classes that can
 inherit constructs between them controlled by access modifiers. These
 two different approaches are explained in the two sections in this
@@ -6935,18 +6954,18 @@ values
   st1 = mk_St([3,2,-9,11,5,3])
 
 state St of
-  l:seq1 of nat
+  list:seq1 of nat
 end
 
 functions
 
   min_index : seq1 of nat -> nat
-  min_index(l) ==
-    if len l = 1
+  min_index(plist) ==
+    if len plist = 1
     then 1
-    else let mi = min_index(tl l)
+    else let mi = min_index(tl plist)
          in
-           if l(mi+1) < hd l
+           if plist(mi+1) < hd plist
            then mi+1
            else 1
 
@@ -6954,13 +6973,13 @@ operations
 
   SelectionSort : nat ==> ()
   SelectionSort (i) ==
-    if i < len l
+    if i < len list
     then (dcl temp: nat;
-          dcl mi : nat := min_index(l(i,...,len l)) + i - 1;
+          dcl mi : nat := min_index(l(i,...,len list)) + i - 1;
 
-          temp := l(mi);
-          l(mi) := l(i);
-          l(i) := temp;
+          temp := list(mi);
+          list(mi) := list(i);
+          list(i) := temp;
           SelectionSort(i+1)
          )
 \end{lstlisting}
@@ -7022,9 +7041,10 @@ Thus, in general, the syntax of a module is:
   }
 \end{description}
 
-To illustrate the use of modules, the example flat top-level
-specification are rewritten with some minor modifications.  Some
-unimportant parts of the flat specification are left out for clarity.
+%To illustrate the use of modules, the example flat top-level
+%specification are rewritten with some minor modifications.  Some
+%unimportant parts of the flat specification are left out for clarity.
+Note that the identifier after \keyw{module} and \keyw{end} should be identical.
 
 \subsubsection{The Exports Section}
 
@@ -7132,7 +7152,7 @@ unimportant parts of the flat specification are left out for clarity.
 
     If we export the structure of the type by using the keyword
     \keyw{struct}, the other module can create and manipulate values of
-    type {\tt T} (it can also use \keyw{mk\_} keyword and the
+    type {\tt T} (it can also use the \keyw{mk\_} keyword and the
     \keyw{is\_} keyword for this type if it is a record type).
 
     If the type also defines an invariant, the invariant predicate function
@@ -7158,6 +7178,7 @@ module BankAccount
 
 exports types digit; account
         functions digval: digit -> nat;
+                  deposit: account * real -> account;
                   withdrawal: account * real -> account;
                   isPin: account * nat -> bool;
                   requestWithdrawal: account * nat -> bool
@@ -7350,11 +7371,10 @@ such that
   can also find this information in the exporting module.
 
   When a type which has been exported with the \keyw{struct} keyword
-  (with its structure) is imported the
-  importing module may only make use of this structure if it repeats
-  the type definition from the exporting module in its type import. In
-  case such a type is a composite type and it is also renamed this has
-  the consequence that the tag is renamed as well.
+  (with its structure) any
+  importing module may only make use of this structure if the exporting module has exported its structure using the \keyw{struct} keyword. Records imported in this way will make reference to its defining module, e.g., \keyw{mk\_}{\tt ExportingMod`RecordName}. In
+  case such a type is a composite type which is renamed upon import this has
+  the consequence that the tag is renamed as well, i.e., if such a type is renamed to {\tt ImportedRecName} it will be referred to as \keyw{mk\_}{\tt EImportedRecName}.
 
 \item[Examples:] We can model an ATM card as consisting of a
 card number and an expiry date. This requires the \texttt{digit} type
@@ -7373,7 +7393,7 @@ definitions
 
 types
 
-    digit = BankAccount`digit;
+    digit = BankAccount`digit
 
     atmc:: cardnumber : seq1 of digit
            expiry : digit * digit * digit * digit
@@ -7394,7 +7414,7 @@ must represent valid dates, and card numbers must be at least 8 digits
 long. Note that since \texttt{digit} is not exported with the
 \keyw{struct} keyword from the module \texttt{BankAccount}, we cannot
 access the invariant for \texttt{digit} in module
-\texttt{ATMCard}. However this notwithstanding, all values of type
+\texttt{ATMCard}. This notwithstanding, all values of type
 \texttt{digit} manipulated in \texttt{ATMCard} must satisfy the
 invariant.
 
@@ -7406,7 +7426,7 @@ In the previous chapters VDM constructs such as types,
 expressions, statements, functions and operations have been
 described. A number of these constructs can constitute the definitions
 inside a class definition. A top-level specification, or document, is
-composed by one or more class definitions. Note that only in VDM-RT it
+composed of one or more class definitions. Note that only in VDM-RT it
 is possible to have a \keyw{system} class.
 
 \begin{description}
@@ -7422,13 +7442,13 @@ is possible to have a \keyw{system} class.
 
 \section{System (VDM-RT) }\label{sec:system}
 
-In order to be able to describe distributed systems in VDM-RT includes
+In order to be able to describe distributed systems VDM-RT includes
 a notion of a system that describes how different parts of the system
 modelled are deployed to different Core Processing Units (CPUs) and
 communication busses connecting the CPUs together. Syntactically the
 system is described exactly like ordinary classes described below in
 Section~\ref{sec:classdep}, except that the keyword ``\keyw{system}''
-instead of the keyword ``\keyw{class}''.
+instead of the keyword ``\keyw{class}'' is used.
 
 \begin{description}
 \item[Syntax:]
@@ -7473,7 +7493,7 @@ system definition.
 
 The instances of \texttt{CPU} and \texttt{BUS} must be made as instance
 variables and the definition must use constructors. The constructor for the
-\texttt{CPU} class takes two parameters: the first one indicate the
+\texttt{CPU} class takes two parameters: the first one indicates the
 primary scheduling policy used for the \texttt{CPU} whereas the second
 parameter provides the capacity of the \texttt{CPU} (indicated as number of 
 instructions Per Second or Hz -- NB. the (time unit) step size of time is 1 nanosecond).
@@ -7499,7 +7519,7 @@ is:
 %                          Detection
 \end{description}
 
-The \texttt{CPU} class have member operations called \texttt{deploy} and
+The \texttt{CPU} class has member operations called \texttt{deploy} and
 \texttt{setPriority}. The \texttt{deploy} operation takes one
 significant parameter
 which must be an object that is declared as a static instance variable
@@ -7521,11 +7541,11 @@ The system ``class'' is limited in the way that it can only contain:
 \item[Instance variables:] The only instances that can be declared in the 
 system ``class'' is of the special classes \texttt{CPU} and \texttt{BUS} 
 as well as static instances of the different system components that one
-wish to allocate to different CPU's.
+wishes to allocate to different CPU's.
 \item[Constructor:] The actual deployment of instances to CPU's and setting
 of priorities for the different operations is set inside the
 constructor which is the only operation that can be placed in the
-system ``class''. The only kind of statements that can be used inside
+system ``class''. The only kind of statement that can be used inside
 this constructor is a block statement with a sequence of invocations
 of the special \texttt{deploy} and \texttt{setPriority} operations.
 \end{description}
@@ -7536,7 +7556,7 @@ CPU's. Basically the user should ensure that only one instance is
 deployed to a CPU if the class the instance comes from contains any
 static operations or functions. In case a static instance variable is
 used it is accessed directly (without any communication over the
-busses, so this in essence not proper from a distribution
+busses), so this in essence not proper from a distribution
 standpoint. Thus, all instance variables of instances to be deployed
 should only be accessed through the use of operations.
 
@@ -7719,8 +7739,8 @@ class Sort
   operations
 
     initial_data : seq of int ==> ()
-    initial_data (l) ==
-      data := l;
+    initial_data (list) ==
+      data := list;
 
     sort_ascending : () ==> ()
     sort_ascending () == is subclass responsibility;
@@ -7731,12 +7751,12 @@ class SelectionSort is subclass of Sort
   functions
 
     min_index : seq1 of nat -> nat
-    min_index(l) ==
-      if len l = 1
+    min_index(list) ==
+      if len list = 1
       then 1
-      else let mi = min_index(tl l)
+      else let mi = min_index(tl list)
            in
-             if l(mi+1) < hd l
+             if list(mi+1) < hd list
              then mi+1
              else 1
 
@@ -9600,9 +9620,9 @@ same prefix will be skipped automatically.
              regular expression describing the test sequences in which
              different operations should be executed to test the VDM
              specification. Inside the trace definitions, bindings may appear
-             and for each possible such binding a particular test case
+             and for each possible binding a particular test case
              can be automatically derived. So one trace definition
-             expand into a set of test cases. In this sense a test
+             expands into a set of test cases. In this sense a test
              case is a sequence of operation calls executed after each
              other. Between each test case the VDM specification is
              initialised so they become entirely independent. From a
@@ -9616,11 +9636,11 @@ So here it makes sense to explain what kind of expansion the different
 kinds of trace definitions gives rise to.
 
 The \emph{trace definition lists} simply use a semicolon (``\texttt{;}'') and
-this simply result in sequencing between the \emph{trace definition
+this results in sequencing between the \emph{trace definition
   terms} used inside it.
 
 In the \emph{trace definition term} it is possible to introduce
-alternatives using the bar (``\texttt{|}'') operator. This result in
+alternatives using the bar (``\texttt{|}'') operator. This results in
 test cases for all alternatives.
 
 The \emph{trace binding definition} exists in two forms where the
@@ -11194,23 +11214,23 @@ For both VDM++ and VDM-RT, we can define:
 \subsection{Base Class Membership (VDM++ and VDM-RT)}
 
 \Ruledef{isofbaseclass expression}{
-      \Lop{isofbaseclass}, \Lit{(}, \Ruleref{name}, \Ruleref{expression}, \Lit{)}}
+      \Lop{isofbaseclass}, \Lit{(}, \Ruleref{name}, \Lit{,}, \Ruleref{expression}, \Lit{)}}
 
 \subsection{Class Membership (VDM++ and VDM-RT)}
 
 \Ruledef{isofclass expression}{
-      \Lop{isofclass}, \Lit{(}, \Ruleref{name}, \Ruleref{expression}, \Lit{)}}
+      \Lop{isofclass}, \Lit{(}, \Ruleref{name}, \Lit{,}, \Ruleref{expression}, \Lit{)}}
 
 \subsection{Same Base Class Membership (VDM++ and VDM-RT)}
 
 \Ruledef{samebaseclass expression}{
-      \Lop{samebaseclass}, \Lit{(}, \Ruleref{expression}, \lfeed
+      \Lop{samebaseclass}, \Lit{(}, \Ruleref{expression}, \Lit{,}, \lfeed
       \Ruleref{expression}, \Lit{)}}
 
 \subsection{Same Class Membership (VDM++ and VDM-RT)}
 
 \Ruledef{sameclass expression}{
-      \Lop{sameclass}, \Lit{(}, \Ruleref{expression}, \lfeed
+      \Lop{sameclass}, \Lit{(}, \Ruleref{expression}, \Lit{,}, \lfeed
       \Ruleref{expression}, \Lit{)}}
 
 \subsection{History Expressions (VDM++ and VDM-RT)}
@@ -12265,7 +12285,6 @@ of expression they are used in.
   \Ruleref{set prefix operator} \dsep
   \Ruleref{sequence prefix operator} \dsep
   \Ruleref{map prefix operator} \dsep
-  \Ruleref{map inverse} \dsep
   \Ruleref{arithmetic infix operator} \dsep
   \Ruleref{set infix operator} \dsep
   \Ruleref{sequence infix operator} \dsep
@@ -12292,7 +12311,8 @@ of expression they are used in.
   \Lop{len} \dsep
   \Lop{inds} \dsepl
   \Lop{elems} \dsepl
-  \Lop{conc}
+  \Lop{conc} \dsepl
+  \Lop{reverse}
   }
 
 \Ruledef{map prefix operator}{
@@ -12335,7 +12355,7 @@ of expression they are used in.
 family is defined in the following table.
 
 \blankline
-\begin{table}{thb}
+\begin{table}[thb]
 \begin{center}
   \begin{tabular}{ccccc}
     \hline
@@ -12353,6 +12373,7 @@ family is defined in the following table.
                      & \keyw{abs}       & \keyw{dinter}         & \keyw{merge}           & \keyw{hd} \keyw{tl} \\
                      & \keyw{floor}     & \keyw{dunion}         &                        & \keyw{conc}        \\
                      &                  &                       &                        & \keyw{inds}        \\
+                     &                  &                       &                        & \keyw{reverse}        \\
     \hline
   \end{tabular}
 \end{center}

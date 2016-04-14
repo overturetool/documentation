@@ -15,7 +15,7 @@ Systems and Networks, pp 352-353, Supplemental Volume. June 25-28, 2007. Edinbur
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Jeremy Bryans and John Fitzgerald
-#LANGUAGE_VERSION=VDM10
+#LANGUAGE_VERSION=vdm10
 #LIB= IO
 #INV_CHECKS=true
 #POST_CHECKS=true

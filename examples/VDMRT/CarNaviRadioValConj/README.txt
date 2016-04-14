@@ -16,6 +16,6 @@ coherent application in a distributed application.
 #DYNAMIC_TYPE_CHECKS=true
 #SUPPRESS_WARNINGS=false
 #ENTRY_POINT= new Testing().Test()
-#EXPECTED_RESULT=NO_ERROR_TYPE_CHECK
+#EXPECTED_RESULT=NO_CHECK
 #REALTIME_TIME_INV_CHECKS=true
 #******************************************************
