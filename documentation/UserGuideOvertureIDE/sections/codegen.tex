@@ -2,14 +2,17 @@
 \newcommand{\vdmkw}[1]{\texttt{\textbf{#1}}}
 \chapter{Automatic Generation of Code}\label{sec:codegen}
 
-It is possible to generate Java code\index{code generation} for a
-large subset of VDM-SL and VDM++ models. In addition to Java, a C++
-code generator is currently being developed, but this work is in its
-early stages of development, and it is not included with releases of
-Overture yet. For comparison, code generation of VDM-SL and VDM++
-specifications to both Java and C++ is a feature that is available in
-VDMTools~\cite{Java2VDMMan,CGMan,CGManPP}. The sections below focus
-solely on the Java code generator available in Overture.
+It is possible to generate Java code\index{code generation} for a large subset of VDM-SL and VDM++ models.
+%
+In addition to Java, C and C++ code generators are currently being developed.
+%
+Both these code generators are in the early stages of development.
+%
+The C++ generator is not included with releases of Overture yet, but the C generator is far enough along that it can be included for testing purposes.
+%
+For comparison, code generation of VDM-SL and VDM++ specifications to both Java and C++ is a feature that is available in VDMTools~\cite{Java2VDMMan,CGMan,CGManPP}.
+%
+The majority of this chapter focuses solely on the Java code generator available in Overture, with a brief discussion of the C code generator ending the chapter.
 
 \section{Use of the Java Code Generator}
 \label{sec:javacg_use}
@@ -291,7 +294,11 @@ and some are generated.
   \captionof{table}{The type mappings used by the Java code generator.}
   \label{tbl:type-mappings}
 \end{center}
-
+%
+%
+%
+\section{The C Code Generator}
+\fbox{TODO.}
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../OvertureIDEUserGuide"
