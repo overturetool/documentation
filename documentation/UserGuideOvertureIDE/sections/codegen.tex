@@ -298,7 +298,68 @@ and some are generated.
 %
 %
 \section{The C Code Generator}
-\fbox{TODO.}
+Translation of VDM models to C code is a new feature of Overture.
+%
+The target language of the C generator is the executable subset of VDM-RT.
+%
+It is not yet feature-complete, but it can handle models which do not use sophisticated features of VDM-RT.
+%
+The following list describes the current state of language feature support.
+%
+Items in black are tested and known, to the best of the developers' knowledge, to translate correctly to C.
+%
+Items in \textcolor{red}{red} are not yet supported.
+%
+%
+%
+\begin{itemize}
+%
+\item  Classes.
+%
+\item  Inheritance.
+%
+\item  Overriding.
+%
+\item  Type definitions.
+\begin{itemize}
+\item  \textcolor{red}{Type invariants}.
+\end{itemize}
+%
+\item  Boolean and numeric expressions.
+\begin{itemize}
+\item  \textcolor{red}{Quantifiers}.
+\end{itemize}
+%
+\item  \textcolor{red}{Products}.
+%
+\item  Sets, sequences and maps.
+\begin{itemize}
+\item  \textcolor{red}{Access to nested sequences and maps, \emph{e.\@g.\@} \texttt{a(i)(j) := k}}.
+\end{itemize}
+%
+\item  Explicit functions and operations.
+\begin{itemize}
+\item  \textcolor{red}{Lambda abstractions}.
+\item  \textcolor{red}{Pre-\@ and post-conditions}.
+\end{itemize}
+%
+\item  For loops.
+
+%
+\item  \textcolor{red}{Real-time and distribution features}.
+\begin{itemize}
+\item  Soft real-time delays.
+\end{itemize}
+%
+\end{itemize}
+
+Like the Java code generator, the C code generator can be invoked from the context menu in the VDM project explorer.
+%
+Code is emitted to the folder \texttt{generated/src/c} under the corresponding VDM project.
+%
+Please note that this folder is wiped clean each time code is generated.
+%
+Additional development work on the generated code \emph{must not} be carried out in this folder.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../OvertureIDEUserGuide"
