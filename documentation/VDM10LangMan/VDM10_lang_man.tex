@@ -7094,12 +7094,12 @@ Note that the identifier after \keyw{module} and \keyw{end} should be identical.
 
   \Rule{export functions signature}{
     \Lop{functions} \Ruleref{function signature}, \lfeed
-    \SeqPt{\Lit{;}, \Ruleref{function signature}}
+    \SeqPt{\Lit{;}, \Ruleref{function signature}}, \OptPt{\Lit{;}}
     }
 
   \Rule{function signature}{
     \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \lfeed
-    \Ruleref{function type}, \OptPt{\Lit{;}}
+    \Ruleref{function type}
     }
 
   \Rule{export operations signature}{
@@ -9858,12 +9858,12 @@ VDM-SL standard.
 
 \Ruledef{export functions signature}{
   \Lop{functions} \Ruleref{function signature}, \lfeed
-  \SeqPt{\Lit{;}, \Ruleref{function signature}}
+  \SeqPt{\Lit{;}, \Ruleref{function signature}}, \OptPt{\Lit{;}}
   }
 
 \Ruledef{function signature}{
   \Ruleref{name list}, \OptPt{\Ruleref{type variable list}},  \lfeed
-  \Ruleref{function type}, \OptPt{\Lit{;}}
+  \Ruleref{function type}
   }
 
 \Ruledef{export operations signature}{
