@@ -7067,9 +7067,9 @@ Note that the identifier after \keyw{module} and \keyw{end} should be identical.
 
   \Rule{export signature}{
     \Ruleref{export types signature} \dsep
-    \Ruleref{values signature} \dsep
+    \Ruleref{export values signature} \dsep
     \Ruleref{export functions signature} \dsep
-    \Ruleref{operations signature}
+    \Ruleref{export operations signature}
 %    \dsep
 %    state signature
     }
@@ -7083,7 +7083,7 @@ Note that the identifier after \keyw{module} and \keyw{end} should be identical.
     \OptPt{\Lop{struct}}, \Ruleref{name}
     }
 
-  \Rule{values signature}{
+  \Rule{export values signature}{
     \Lop{values}, \Ruleref{value signature}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{value signature}}, \OptPt{\Lit{;}}
     }
@@ -7098,20 +7098,11 @@ Note that the identifier after \keyw{module} and \keyw{end} should be identical.
     }
 
   \Rule{function export}{
-    \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \Lit{:}, \lfeed
+    \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \OptPt{\Lit{;}}, \lfeed
     \Ruleref{function type}
     }
 
-  \Rule{functions signature}{
-    \Lop{functions} \Ruleref{function signature}, \lfeed
-    \SeqPt{\Lit{;}, \Ruleref{function signature}}, \OptPt{\Lit{;}}
-    }
-
-  \Rule{function signature}{
-    \Ruleref{name list}, \Lit{:}, \Ruleref{function type}
-    }
-
-  \Rule{operations signature}{
+  \Rule{export operations signature}{
     \Lop{operations} \Ruleref{operation signature}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{operation signature}}, \OptPt{\Lit{;}}
     }
@@ -9840,9 +9831,9 @@ VDM-SL standard.
 
 \Ruledef{export signature}{
   \Ruleref{export types signature} \dsep
-  \Ruleref{values signature} \dsep
+  \Ruleref{export values signature} \dsep
   \Ruleref{export functions signature} \dsep
-  \Ruleref{operations signature}
+  \Ruleref{export operations signature}
 %  \dsep
 %  \Ruleref{state signature}
   }
@@ -9856,7 +9847,7 @@ VDM-SL standard.
   \OptPt{\Lop{struct}}, \Ruleref{name}
   }
 
-\Ruledef{values signature}{
+\Ruledef{export values signature}{
   \Lop{values}, \Ruleref{value signature}, \lfeed
   \SeqPt{\Lit{;}, \Ruleref{value signature}}, \OptPt{\Lit{;}}
   }
@@ -9871,20 +9862,11 @@ VDM-SL standard.
   }
 
 \Ruledef{function export}{
-  \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \Lit{:}, \lfeed
+  \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \OptPt{\Lit{;}}, \lfeed
   \Ruleref{function type}
   }
 
-\Ruledef{functions signature}{
-  \Lop{functions} \Ruleref{function signature}, \lfeed
-  \SeqPt{\Lit{;}, \Ruleref{function signature}}, \OptPt{\Lit{;}}
-  }
-
-\Ruledef{function signature}{
-    \Ruleref{name list}, \Lit{:}, \Ruleref{function type}
-  }
-
-\Ruledef{operations signature}{
+\Ruledef{export operations signature}{
   \Lop{operations} \Ruleref{operation signature}, \lfeed
   \SeqPt{\Lit{;}, \Ruleref{operation signature}}, \OptPt{\Lit{;}}
   }
