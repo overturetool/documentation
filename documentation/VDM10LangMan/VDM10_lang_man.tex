@@ -249,7 +249,7 @@ November & 2014 & 6 & 2.1.2 &
 Includes RMs \#25, \#26, \#29 \\ \hline
 August & 2015 & 7 & 2.3.0 &
 Includes RMs \#27 \\ \hline
-April & 2016 & 7 & 2.3.4 & review inputs from Paul Chisholm \\ \hline
+April & 2016 & 8 & 2.3.4 & review inputs from Paul Chisholm \\ \hline
 \end{tabular}
 
 %\addtocounter{page}{2}
@@ -2043,7 +2043,8 @@ pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d)
 post dom m = dom m1 inter dom m2 and
      forall d in set dom m & m(d) = m1(d);
 \end{lstlisting}
-
+\noindent Note that implicitly functions are considered total. Thus if they are exported in VDM-SL they need to be exported using the total function type.
+ 
 A simple example of an extended explicit function definition
 is the function \texttt{map\_disj} which takes a pair of
 compatible maps over natural numbers and returns the map consisting of
@@ -7098,7 +7099,7 @@ Note that the identifier after \keyw{module} and \keyw{end} should be identical.
     }
 
   \Rule{function signature}{
-    \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \lfeed
+    \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \Lit{:}, \lfeed
     \Ruleref{function type}
     }
 
@@ -7361,11 +7362,9 @@ such that
   complete module. If no type information is given, the static semantics
   can also find this information in the exporting module.
 
-  When a type which has been exported with the \keyw{struct} keyword
-  (with its structure) any
-  importing module may only make use of this structure if the exporting module has exported its structure using the \keyw{struct} keyword. Records imported in this way will make reference to its defining module, e.g., \keyw{mk\_}{\tt ExportingMod`RecordName}. In
-  case such a type is a composite type which is renamed upon import this has
-  the consequence that the tag is renamed as well, i.e., if such a type is renamed to {\tt ImportedRecName} it will be referred to as \keyw{mk\_}{\tt EImportedRecName}.
+ A module that imports a type may only access the internal structure of that type if it was exported with the \keyw{struct} keyword; this includes invoking the type constructor and using the selector functions. If the type was exported without the \keyw{struct} keyword then the importing module may refer to the type, and call functions from the imported module that create elements of the type, but it cannot invoke the type constructor, or use the selector functions.
+
+When a composite type is exported with struct then its constructor is referred to, in the importing module, by \keyw{mk\_}{\tt ExportingMod`RecordName}. If the composite type is renamed on import, to {\tt ImportedRecName} say, then the constructor is referred to by \keyw{mk\_}{\tt ImportedRecName}.
 
 \item[Examples:] We can model an ATM card as consisting of a
 card number and an expiry date. This requires the \texttt{digit} type
@@ -7389,8 +7388,8 @@ types
     atmc:: cardnumber : seq1 of digit
            expiry : digit * digit * digit * digit
     inv mk_atmc(cardnumber, mk_(m1,m2,-,-)) ==
-        atmc_digval(m1) * 10 + atmc_digval(m2) <= 12 and
-        len cardnumber >= 8
+        let m = atmc_digval(m1) * 10 + atmc_digval(m2) 
+        in m > 0 and m <= 12 and len cardnumber >= 8
 
 functions
 
@@ -8617,7 +8616,8 @@ The sporadic obligation can be regarded as the way
 of describing stochastic activities in a class.
 
 \begin{description}
-\item[Syntax: (VDM-RT)]
+\item[Syntax: (VDM-RT):]\mbox{}\\
+
   \Ruledef{sporadic obligation}{
     \Lop{sporadic}, \lfeed \Lit{(}, \Ruleref{expression},  \Ruleref{expression},   \Ruleref{expression},
     \Lit{)}, \lfeed \Lit{(}, \Ruleref{name}, \Lit{)}
@@ -9862,7 +9862,7 @@ VDM-SL standard.
   }
 
 \Ruledef{function signature}{
-  \Ruleref{name list}, \OptPt{\Ruleref{type variable list}},  \lfeed
+  \Ruleref{name list}, \OptPt{\Ruleref{type variable list}}, \Lit{:},  \lfeed
   \Ruleref{function type}
   }
 
