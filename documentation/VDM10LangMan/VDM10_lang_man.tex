@@ -3260,7 +3260,7 @@ example, we have:
   sequence, and finally for calling a function. In section~\ref{maps} it
   has already been shown what it means to look up in a map. Similarly in
   section~\ref{sequences} it is illustrated how indexing in a sequence is
-  performed.
+  performed. Function calls are using a call by value semantics meaning that the values are passed as arguments. The only exception to this is in the VDM++ and VDM-RT dialects where object references are passed as call by reference but since the functions cannot adjust any instance variable this make no semantic difference.
 
   In the VDM languages an operation can also be called
   here. This is not allowed in standard VDM-SL and because this kind of
