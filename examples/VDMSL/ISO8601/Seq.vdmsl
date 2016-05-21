@@ -111,7 +111,7 @@ functions
   -- Pad a sequence on the right with a given item up to a specified length.
   padCentre[@a]: seq of @a * @a * nat +> seq of @a
   padCentre(sq,x,n) == let space = if n <= len sq then 0 else n - len sq
-                       in padRight(padLeft(sq,x,len sq + (space div 2)),x,n);
+                       in padRight[@a](padLeft[@a](sq,x,len sq + (space div 2)),x,n);
 
   -- Apply a function to all elements of a sequence.
   xform[@a,@b]: (@a+>@b) * seq of @a +> seq of @b
