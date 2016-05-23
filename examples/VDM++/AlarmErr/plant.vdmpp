@@ -2,7 +2,7 @@ class Plant
 
 instance variables
 
-alarms   : set of Alarm;
+alarms   : set of Alarm
 schedule : map Period to set of Expert;
 inv PlantInv(alarms,schedule);
 
