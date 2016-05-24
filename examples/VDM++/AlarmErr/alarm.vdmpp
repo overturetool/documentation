@@ -15,7 +15,7 @@ public Alarm: Expert`Qualification * String ==> Alarm
 Alarm(quali,str) ==
 ( descr := str;
   reqQuali := quali;
-  return self
+  return 7
 );
 
 pure public GetReqQuali: () ==> Expert`Qualification
