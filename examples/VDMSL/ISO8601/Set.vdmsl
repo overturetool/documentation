@@ -47,7 +47,12 @@ functions
   -- The sequence whose elements are those of a specified set, with no duplicates.
   -- No order is guaranteed in the resulting sequence.
   toSeq[@a]: set of @a +> seq of @a
-  toSeq(s) == fold[@a](Seq`app[@a],[],s)
+  toSeq(s) ==
+  	cases s:
+		{} ->        [],
+		{x} ->       [x],
+		t union u -> toSeq[@a](t) ^ toSeq[@a](u)
+    end
   post len RESULT = card s and forall e in set s & Seq`inSeq[@a](e,RESULT);
 
   -- Apply a function to all elements of a set. The result set may be smaller than the
