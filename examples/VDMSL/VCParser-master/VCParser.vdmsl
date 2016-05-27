@@ -251,7 +251,7 @@ functions
                                 mk_TREE(
                                     nil,
                                     conc [let mk_TREE(-, subcontent) = contents(index) in subcontent
-                                        | index in set inds contents]),
+                                        | index in set inds contents & is_(contents(index), TREE)]),
                                 rest)
                     end)
         comp parser;
