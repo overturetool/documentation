@@ -1,11 +1,12 @@
 module VCParser
 /***
 VCParser
-Author: Tomohiro Oda
+Author: Tomohiro Oda and Paul Chisholm
 Version: 0.01
 License: the MIT License
 
-Copyright (c) 2013 Tomohiro Oda and Software Research Associates, Inc.
+Copyright (c) 2013 Tomohiro Oda, Paul Chisholm
+                   and Software Research Associates, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +32,7 @@ types
      SOURCE = seq of char;
      ERROR :: message : seq of char;
      LABEL = [seq of char];
-     TREE :: label : LABEL contents : seq of TREE| seq of char;
+     TREE :: label : LABEL contents : seq of (TREE | char);
      PARSED :: parsed : TREE| ERROR remaining : SOURCE;
      PARSER = SOURCE -> PARSED;
 
@@ -51,6 +52,14 @@ values
                 [] -> mk_PARSED(mk_ERROR(UNEXPECTED_EOF), source),
                 others -> mk_PARSED(mk_TREE(nil, [hd source]), tl source)
                 end;
+     whiteChar =
+        label(
+            "whiteChar",
+            either([takeChar(" \t\r\n"(index)) | index in set {1, ..., 4}]));
+     whiteString = star(whiteChar);
+     whiteString1 = plus(whiteChar);
+     passWhiteString = pass(whiteString);
+     passWhiteString1 = pass(whiteString1);
      digit =
         label(
             "digit",
@@ -67,15 +76,16 @@ values
             either(
                 [takeChar("ABCDEFGHIJKLMNOPQRSTUVWXYZ"(index))
                     | index in set {1, ..., 26}]));
-     alphabet = label("alphabet", either([lowerAlphabet, upperAlphabet]));
+     alphabet =
+        label("alphabet", either([lowerAlphabet, upperAlphabet]));
      natnum =
         label(
             "nat",
-            concat(
-                series(
-                    [concat(series([pass(fail(takeChar('0'))), digit])),
-                    concat(star(digit))])));
-     integer = label("int", concat(series([option(takeChar('-')), natnum])));
+            either(
+                [takeChar('0'),
+                concat(series([fail(takeChar('0')), concat(plus(digit))]))]));
+     integer =
+        label("int", concat(series([option(takeChar('-')), natnum])));
 
 functions
     /***
@@ -94,42 +104,49 @@ functions
                     else
                         mk_PARSED(mk_ERROR(EXPECTED ^ "'" ^ [c] ^ "'"), source)
                 end;
+    
+    passChar : char -> PARSER
+    passChar(c) == pass(takeChar(c));
+    
+    passString : seq of char -> PARSER
+    passString(s) == pass(takeString(s));
     /***
     parser combinators
     ***/
     
     takeString : seq1 of char -> PARSER
     takeString(string) ==
-        concat(series([takeChar(string(index)) | index in set inds string]));
+        concat(
+            series([takeChar(string(index)) | index in set inds string]));
     
     series : seq1 of PARSER -> PARSER
     series(parsers) ==
         lambda source : SOURCE &
-            let mk_PARSED(tree1, source1) = (hd parsers)(source)
-            in
-                cases mk_(tree1, tl parsers):
-                    mk_(mk_ERROR(-), -) -> mk_PARSED(tree1, source1),
-                    mk_(-, []) -> mk_PARSED(mk_TREE(nil, [tree1]), source1),
-                    mk_(-, rest) ->
-                        let mk_PARSED(tree2, source2) = series(rest)(source1)
-                        in
-                            cases tree2:
-                                mk_TREE(-, trees2) ->
-                                    mk_PARSED(mk_TREE(nil, [tree1] ^ trees2), source2),
-                                mk_ERROR(-) -> mk_PARSED(tree2, source2)
-                                end
-                    end;
+            (let mk_PARSED(tree1, source1) = (hd parsers)(source)
+                in
+                    cases mk_(tree1, tl parsers):
+                        mk_(mk_ERROR(-), -) -> mk_PARSED(tree1, source1),
+                        mk_(-, []) -> mk_PARSED(mk_TREE(nil, [tree1]), source1),
+                        mk_(-, rest) ->
+                            let mk_PARSED(tree2, source2) = series(rest)(source1)
+                            in
+                                cases tree2:
+                                    mk_TREE(-, trees2) ->
+                                        mk_PARSED(mk_TREE(nil, [tree1] ^ trees2), source2),
+                                    mk_ERROR(-) -> mk_PARSED(tree2, source2)
+                                    end
+                        end);
     
     either : seq1 of PARSER -> PARSER
     either(parsers) ==
         lambda source : SOURCE &
-            let mk_PARSED(tree1, source1) = (hd parsers)(source)
-            in
-                cases mk_(tree1, tl parsers):
-                    mk_(mk_ERROR(-), []) -> mk_PARSED(tree1, source1),
-                    mk_(mk_ERROR(-), -) -> either(tl parsers)(source),
-                    mk_(-, -) -> mk_PARSED(tree1, source1)
-                    end;
+            (let mk_PARSED(tree1, source1) = (hd parsers)(source)
+                in
+                    cases mk_(tree1, tl parsers):
+                        mk_(mk_ERROR(-), []) -> mk_PARSED(tree1, source1),
+                        mk_(mk_ERROR(-), -) -> either(tl parsers)(source),
+                        mk_(-, -) -> mk_PARSED(tree1, source1)
+                        end);
     
     star : PARSER -> PARSER
     star(parser) ==
@@ -137,9 +154,52 @@ functions
             cases parser(source):
                 mk_PARSED(mk_ERROR(-), -) -> mk_PARSED(mk_TREE(nil, []), source),
                 mk_PARSED(tree, rest) ->
+                    if
+                        rest = source
+                    then
+                        mk_PARSED(tree, rest)
+                    else
+                        (let mk_PARSED(mk_TREE(-, trees), source2) = star(parser)(rest)
+                            in mk_PARSED(mk_TREE(nil, [tree] ^ trees), source2))
+                end;
+    
+    plus : PARSER -> PARSER
+    plus(parser) ==
+        lambda source : SOURCE &
+            cases parser(source):
+                mk_PARSED(mk_ERROR(e), -) -> mk_PARSED(mk_ERROR(e), source),
+                mk_PARSED(tree, rest) ->
                     let mk_PARSED(mk_TREE(-, trees), source2) = star(parser)(rest)
                     in mk_PARSED(mk_TREE(nil, [tree] ^ trees), source2)
                 end;
+    
+    iterate : PARSER * [nat] * [nat1] -> PARSER
+    iterate(parser, m, n) ==
+        let lower = if m = nil then 0 else m
+        in
+            series(
+                [parser | i in set {1, ..., lower}]
+                ^ (if
+                        n = nil
+                    then
+                        [star(parser)]
+                    else
+                        [option(parser) | i in set {lower + 1, ..., n}]))
+    pre m <> nil and n <> nil => m <= n;
+    
+    iterateWithSeparator : PARSER * PARSER -> PARSER
+    iterateWithSeparator(parser, separator) ==
+        let next_item = series([pass(separator), parser])
+        in series([parser, star(next_item)]);
+    
+    iterateFixedTimes : PARSER * nat1 -> PARSER
+    iterateFixedTimes(parser, n) == iterate(parser, n, n);
+    
+    iterateAtMost : PARSER * nat1 -> PARSER
+    iterateAtMost(parser, n) == iterate(parser, nil, n);
+    
+    iterateAtLeast : PARSER * nat -> PARSER
+    iterateAtLeast(parser, n) == iterate(parser, n, nil);
     
     option : PARSER -> PARSER
     option(parser) ==
@@ -152,10 +212,11 @@ functions
     trimBlanks : PARSER -> PARSER
     trimBlanks(parser) ==
         (lambda parsed : PARSED &
-            cases parsed:
-                mk_PARSED(mk_ERROR(-), -) -> parsed,
-                mk_PARSED(mk_TREE(-, contents), rest) -> mk_PARSED(contents(2), rest)
-                end)
+                cases parsed:
+                    mk_PARSED(mk_ERROR(-), -) -> parsed,
+                    mk_PARSED(mk_TREE(-, contents), rest) ->
+                        mk_PARSED(contents(2), rest)
+                    end)
         comp (series(
                 [star(either([takeChar(' '), takeChar('\t')])), parser,
                 star(either([takeChar(' '), takeChar('\t')]))]));
@@ -163,36 +224,36 @@ functions
     fail : PARSER -> PARSER
     fail(parser) ==
         lambda source : SOURCE &
-            let mk_PARSED(tree1, source1) = parser(source)
-            in
-                cases tree1:
-                    mk_ERROR(-) -> mk_PARSED(mk_TREE(nil, []), source),
-                    mk_TREE(-, -) ->
-                        mk_PARSED(
-                            mk_ERROR(
-                                UNEXPECTED
-                                ^ [source(index) | index in set {1, ..., len source - len source1}]),
-                            source)
-                    end;
+            (let mk_PARSED(tree1, source1) = parser(source)
+                in
+                    cases tree1:
+                        mk_ERROR(-) -> mk_PARSED(mk_TREE(nil, []), source),
+                        mk_TREE(-, -) ->
+                            mk_PARSED(
+                                mk_ERROR(
+                                    UNEXPECTED
+                                    ^ [source(index) | index in set {1, ..., len source - len source1}]),
+                                source)
+                        end);
     
     concat : PARSER -> PARSER
     concat(parser) ==
         (lambda p : PARSED &
-            cases p:
-                mk_PARSED(mk_ERROR(-), -) -> p,
-                mk_PARSED(mk_TREE(-, contents), rest) ->
-                    if contents = []
-                        then mk_PARSED(mk_TREE(nil, contents), rest)
-                    elseif is_(contents, seq of char)
-                        then mk_PARSED(mk_TREE(nil, contents), rest)
-                    else
-                        mk_PARSED(
-                            mk_TREE(
-                                nil,
-                                conc [let mk_TREE(-, subcontent) = contents(index) in subcontent
-                                    | index in set inds contents]),
-                            rest)
-                end)
+                cases p:
+                    mk_PARSED(mk_ERROR(-), -) -> p,
+                    mk_PARSED(mk_TREE(-, contents), rest) ->
+                        if contents = []
+                            then mk_PARSED(mk_TREE(nil, contents), rest)
+                        elseif is_(contents, seq of char)
+                            then mk_PARSED(mk_TREE(nil, contents), rest)
+                        else
+                            mk_PARSED(
+                                mk_TREE(
+                                    nil,
+                                    conc [let mk_TREE(-, subcontent) = contents(index) in subcontent
+                                        | index in set inds contents]),
+                                rest)
+                    end)
         comp parser;
     
     pass : PARSER -> PARSER
@@ -203,20 +264,20 @@ functions
                 err -> err
                 end;
     
-    label : LABEL* PARSER -> PARSER
+    label : LABEL * PARSER -> PARSER
     label(newLabel, parser) ==
         (lambda parsed : PARSED &
-            cases parsed:
-                mk_PARSED(mk_TREE(-, contents), source) ->
-                    mk_PARSED(mk_TREE(newLabel, contents), source),
-                others -> parsed
-                end)
+                cases parsed:
+                    mk_PARSED(mk_TREE(-, contents), source) ->
+                        mk_PARSED(mk_TREE(newLabel, contents), source),
+                    others -> parsed
+                    end)
         comp parser;
     
-    trans : (PARSED -> PARSED)* PARSER -> PARSER
+    trans : (PARSED -> PARSED) * PARSER -> PARSER
     trans(modifier, parser) == modifier comp parser;
     
-    transtree : (TREE -> TREE)* PARSER -> PARSER
+    transtree : (TREE -> TREE) * PARSER -> PARSER
     transtree(modifier, parser) ==
         trans(
             lambda parsed : PARSED &
@@ -226,7 +287,7 @@ functions
                     end,
             parser);
     
-    iferror : seq of char* PARSER -> PARSER
+    iferror : seq of char * PARSER -> PARSER
     iferror(message, parser) ==
         trans(
             lambda parsed : PARSED &
@@ -235,5 +296,85 @@ functions
                     mk_PARSED(mk_TREE(-, -), -) -> parsed
                     end,
             parser);
+/***
+ utilities for tree manipulation 
+***/
+    
+    isEmpty : TREE -> bool
+    isEmpty(tree) == tree.label = nil and tree.contents = [];
+/*  Prune and lift a sequence of trees. */
+    
+    pruneTrees : seq of TREE -> seq of TREE
+    pruneTrees(trees) ==
+        [liftTree(pruneTree(trees(i)))
+            | i in set inds trees & not isEmpty(pruneTree(trees(i)))];
+    -- If a tree has a nil label and a single sub-tree, return the subtree, otherwise identity.
+    
+    liftTree : TREE -> TREE
+    liftTree(mk_TREE(lbl, contents)) ==
+        if is_(contents, seq of char)
+            then mk_TREE(lbl, contents)
+        elseif lbl = nil and len contents = 1
+            then contents(1)
+        else
+            mk_TREE(lbl, contents);
+    -- Filter out empty subtrees from a tree.
+    
+    pruneTree : TREE -> TREE
+    pruneTree(mk_TREE(lbl, contents)) ==
+        if
+            is_(contents, seq of char)
+        then
+            mk_TREE(lbl, contents)
+        else
+            mk_TREE(lbl, pruneTrees(contents));
+    -- Filter out empty subtrees from a parse result.
+    
+    prune : PARSED -> PARSED
+    prune(mk_PARSED(parsed, remaining)) ==
+        if
+            is_ERROR(parsed)
+        then
+            mk_PARSED(parsed, remaining)
+        else
+            mk_PARSED(pruneTree(parsed), remaining);
+    -- Format as text a parse result.
+    
+    format : PARSED -> seq of char
+    format(mk_PARSED(parsed, remaining)) ==
+        formatTreeOrError(parsed) ^ "Remaining: [" ^ remaining ^ "]";
+    -- Format as text a parse tree or parse error.
+    
+    formatTreeOrError : TREE| ERROR -> seq of char
+    formatTreeOrError(treeOrError) ==
+        if
+            is_ERROR(treeOrError)
+        then
+            "Error: " ^ treeOrError.message ^ "\n"
+        else
+            "Parse Tree:\n" ^ formatTree(treeOrError, TABSIZE);
+    -- Format as text a parse tree.
+    
+    formatTree : TREE * nat -> seq of char
+    formatTree(mk_TREE(lbl, contents), n) ==
+        let lblstr = if lbl = nil then "" else lbl
+        in indent(n) ^ lblstr ^ "\n" ^ formatTree2(contents, n + TABSIZE);
+    -- Format as text the parse tree content (text or sequence of subtrees).
+    
+    formatTree2 : (seq of TREE| seq of char) * nat -> seq of char
+    formatTree2(tt, n) ==
+        if
+            is_(tt, seq of char)
+        then
+            indent(n) ^ tt ^ "\n"
+        else
+            conc [formatTree(tt(i), n) | i in set inds tt];
+    -- Create a sequence of blanks.
+    
+    indent : nat -> seq of char
+    indent(n) == [' ' | i in set {1, ..., n}];
+
+values
+     TABSIZE = 2;
 
 end VCParser

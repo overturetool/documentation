@@ -89,15 +89,23 @@ functions
         cases tree:
             mk_VCParser`TREE("int", contents) -> evalInt(contents),
             mk_VCParser`TREE("*", [e1, e2]) -> evalTree(e1) * evalTree(e2),
-            mk_VCParser`TREE("/", [e1, e2]) -> evalTree(e1) / evalTree(e2),
+            mk_VCParser`TREE("/", [e1, e2]) -> evalTree(e1) div evalTree(e2),
             mk_VCParser`TREE("+", [e1, e2]) -> evalTree(e1) + evalTree(e2),
             mk_VCParser`TREE("-", [e1, e2]) -> evalTree(e1) - evalTree(e2)
             end;
     
+    hasDivZero : VCParser`TREE -> bool
+    hasDivZero(tree) == cases tree:
+        mk_VCParser`TREE("/", [-, mk_VCParser`TREE("int", "0")]) -> true,
+        mk_VCParser`TREE("/", [-, mk_VCParser`TREE("int", "-0")]) -> true,
+        mk_VCParser`TREE("int", -) -> false,
+        mk_VCParser`TREE(-, [tree1, tree2]) -> hasDivZero(tree1) or hasDivZero(tree2)
+        end;
+
     eval : seq of char -> [int]
     eval(string) ==
         cases parseExpression(string):
-            mk_VCParser`PARSED(tree, []) -> evalTree(tree),
+            mk_VCParser`PARSED(tree, []) -> if hasDivZero(tree) then nil else evalTree(tree),
             others -> nil
             end;
 
