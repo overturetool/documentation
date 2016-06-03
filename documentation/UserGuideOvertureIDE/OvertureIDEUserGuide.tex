@@ -1106,13 +1106,16 @@ the same panel as the Variables view in the upper right hand corner.
 \subsection{Conditional Breakpoints}
 \label{sec:userguide:breakpoints}
 
-Breakpoints can be conditional. This is a powerful feature for the
-developer since it allows you to specify a conditional expression
-which has to be true for the debugger to stop at the given breakpoint.
-As well as using an expression, a conditional breakpoint may specify a
-hit count and whether the breakpoint should stop when the hit count is
-equal to, greater than, or a multiple of the given value, or a general
-expression using the variables in scope at the breakpoint.
+Breakpoints can be conditional. This is a powerful feature that allows
+the developer to specify a condition or expression which must be true
+for the debugger to stop the execution at the given breakpoint. A
+conditional breakpoint may specify a hit count, and whether the
+execution should stop at the given breakpoint when the hit count is
+equal to, greater than, or a multiple of the given value. The
+condition can also be a simple user-defined expression that is allowed
+to refer to values and variables that are visible from the given
+context. The condition can, however, not be an arbitrary expression
+that contains object or operation calls.
 
 A normal breakpoint can be made conditional by right clicking on the breakpoint
 mark in the Editor view\footnote{Note this is not possible from the Breakpoint view.}
