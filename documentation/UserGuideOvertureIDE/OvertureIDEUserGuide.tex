@@ -1565,8 +1565,47 @@ underlying Java-based Overture interpreter. In addition it is possible
 to link a
 Java implementation with a VDM model.
 
-Overture supplies two different techniques for linking between VDM and Java; (1) the functionality which allow VDM to interact with an ``External Java Library'' is described in Section~\ref{sec:javalibs} and (2) the method used to allow a Java implementation to ``Remote Control'' a VDM model is explained in Section~\ref{sec:remote}. An example of how these methods can be used to create a GUI for a model is supplied in Section~\ref{sec:gui}. These methods are also used to enable control of models with a generic
+In order to co-execute VDM and Java, the Java build path must be configured as explained in Section~\ref{sec:java-build-path}. Overture supplies two different techniques for linking between VDM and Java; (1) the functionality which allow VDM to interact with an ``External Java Library'' is described in Section~\ref{sec:javalibs} and (2) the method used to allow a Java implementation to ``Remote Control'' a VDM model is explained in Section~\ref{sec:remote}. An example of how these methods can be used to create a GUI for a model is supplied in Section~\ref{sec:gui}. These methods are also used to enable control of models with a generic
 GUI as explained in \autoref{sec:guibuilder}.
+
+\section{Configuring the Java Build Path}
+\label{sec:java-build-path}
+
+In order to use Overture's implementation of the different VDM types in a Java program, the Overture library must be added to the Java program's build path. The library can be found in the Overture installation directories under:
+
+ \texttt{\textless  Overturedir\textgreater\textbackslash Plugins\textbackslash }:
+
+\begin{itemize}
+\item \texttt{org.overture.ide.core:\_x.x\textbackslash jars,} 
+
+\begin{description}
+\item[\texttt{Ast.jar}] Contains the Abstract Syntax Tree with all the static language definitions
+\item[\texttt{Parser.jar}] Contains the VDM parser
+\end{description}
+
+\item \texttt{org.overture.ide.debug:\_x.x\textbackslash jars\textbackslash}
+
+\begin{description}
+\item[\texttt{Interpreter.jar}] Contains the interpreter and the values which is what external Java implementations mainly will use)
+\end{description}
+
+\item \texttt{org.overture.ide.builder.vdmj:\_x.x\textbackslash jars\textbackslash}
+
+\begin{description}
+\item[\texttt{TypeChecker.jar}] Contains the type checker, this is used when e.g. comparing types
+\end{description}
+
+\end{itemize}
+
+\noindent These can then be added to the Java build path, as shown in Figure~\ref{fig:gui:VDMJBuildPath}. The alternative is to use the command line \texttt{Overture.x.x.x.Jar} file, as described in \autoref{sec:commandline}, and add that to the Java build path, since this contains all of the above Jars in a single file.
+
+\begin{figure}[h]
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{figures/SmokersVDMJBuildPath}
+  \caption[labelInTOC]{Adding the Overture library to the build path in Eclipse}
+  \label{fig:gui:VDMJBuildPath}
+\end{center}
+\end{figure}
 
 \section{Defining Your Own Java Libraries to be used from Overture}\label{sec:javalibs}
 
@@ -1781,42 +1820,6 @@ public class Graphics implements Serializable {
 ! \ldots !
 }
 \end{lstlisting}
-
-In order to use the VDM Types the Java implementation must have the Overture java library in its build path. The library can be found in Overture installation directories under:
-
- \texttt{\textless  Overturedir\textgreater\textbackslash Plugins\textbackslash }:
-
-\begin{itemize}
-\item \texttt{org.overture.ide.core:\_x.x\textbackslash jars,} 
-
-\begin{description}
-\item[\texttt{Ast.jar}] Contains the Abstract Syntax Tree with all the static language definitions
-\item[\texttt{Parser.jar}] Contains the VDM parser
-\end{description}
-
-\item \texttt{org.overture.ide.debug:\_x.x\textbackslash jars\textbackslash}
-
-\begin{description}
-\item[\texttt{Interpreter.jar}] Contains the interpreter and the values which is what external Java implementations mainly will use)
-\end{description}
-
-\item \texttt{org.overture.ide.builder.vdmj:\_x.x\textbackslash jars\textbackslash}
-
-\begin{description}
-\item[\texttt{TypeChecker.jar}] Contains the type checker, this is used when e.g. comparing types
-\end{description}
-
-\end{itemize}
-
-\noindent These can then be added to the Java build path, as shown in Figure~\ref{fig:gui:VDMJBuildPath}. The alternative is to use the command line \texttt{Overture.x.x.x.Jar} file, as described in \autoref{sec:commandline}, and add that to the Java build path, since this contains all of the above Jars in a single file.
-
-\begin{figure}[h]
-\begin{center}
-  \includegraphics[width=0.7\textwidth]{figures/SmokersVDMJBuildPath}
-  \caption[labelInTOC]{Adding VDMJ library to the build path in Eclipse}
-  \label{fig:gui:VDMJBuildPath}
-\end{center}
-\end{figure}
 
 \newpage
 \subsection{Remote Control}
