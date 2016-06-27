@@ -24,8 +24,9 @@ exports types Upper
               Text
               TextUpper
               TextLower
-        values SP, TB, CR, LF, WHITE_SPACE, UPPER, LOWER, DIGIT, OCTAL, HEX: char
-               LOWERS, UPPERS, DIGITS, OCTALS, HEXS: seq of char
+        values SP, TB, CR, LF : char
+               WHITE_SPACE, UPPER, LOWER, DIGIT, OCTAL, HEX : set of char
+               UPPERS, LOWERS, DIGITS, OCTALS, HEXS: seq of char
         functions toLower: Upper +> Lower
                   toUpper: Lower +> Upper
 

@@ -11,7 +11,7 @@ exports functions sum: seq of real +> real
                   min: seq1 of real +> real
                   max: seq1 of real +> real
                   inSeq[@a]: @a * seq of @a +> bool
-                  indexOf: @a * seq1 of @a +> nat1
+                  indexOf[@a]: @a * seq1 of @a +> nat1
                   indexOfSeq[@a]: seq1 of @a * seq1 of @a +> nat1
                   indexOfSeqOpt[@a]: seq1 of @a * seq1 of @a +> [nat1]
                   numOccurs[@a]: @a * seq of @a +> nat
