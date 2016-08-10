@@ -16,11 +16,11 @@
 % as the expected and actual values.
 
 \begin{description}
-\item[2000:] \texttt{"Expecting 'in set' after pattern in set binding"}
-\item[2001:] \texttt{"Expecting 'in set' in set bind"}
+\item[2000:] \texttt{"Expecting 'in set' or 'in seq' after pattern in binding"}
+\item[2001:] \texttt{"Expecting 'in set' or 'in seq' in bind"}
 \item[2002:] \texttt{"Expecting ':' in type bind"}
-\item[2003:] \texttt{"Expecting 'in set' after pattern in binding"}
-\item[2004:] \texttt{"Expecting 'in set' or ':' after patterns"}
+\item[2003:] \texttt{"Expecting 'in set' or 'in seq' after pattern in binding"}
+\item[2004:] \texttt{"Expecting 'in set', 'in seq' or ':' after patterns"}
 \item[2005:] \texttt{"Expecting list of 'class' or 'system' definitions"}
 \item[2006:] \texttt{"Found tokens after class definitions"}
 \item[2007:] \texttt{"Expecting 'end <class>'"}
@@ -127,8 +127,8 @@
 \item[2107:] \texttt{"Expecting '->' in errs clause"}
 \item[2108:] \texttt{"Expecting <pattern>=<exp>"}
 \item[2109:] \texttt{"Expecting <type bind>=<exp>"}
-\item[2110:] \texttt{"Expecting <pattern> in set <set exp>"}
-\item[2111:] \texttt{"Expecting <pattern> in set <set exp>"}
+\item[2110:] \texttt{"Expecting <pattern> in set|seq <exp>"}
+\item[2111:] \texttt{"Expecting <pattern> in set|seq <exp>"}
 \item[2112:] \texttt{"Expecting '(' after periodic"}
 \item[2113:] \texttt{"Expecting ')' after period arguments"}
 \item[2114:] \texttt{"Expecting '(' after periodic(...)"}
@@ -324,5 +324,18 @@
 \item[2313:] \texttt{"Expecting ')' after sporadic arguments"}
 \item[2314:] \texttt{"Expecting '(' after sporadic(...)"}
 \item[2315:] \texttt{"Expecting (name) after sporadic(...)"}
+\item[2316:] \texttt{"Periodic threads only available in VDM-RT"}
+\item[2317:] \texttt{"Sporadic threads only available in VDM-RT"}
+\item[2318:] \texttt{"Unexpected token after flat definitions"}
+\item[2319:] \texttt{"Expecting class name after obj_ in object pattern"}
+\item[2320:] \texttt{"Expecting '(' after obj_ pattern"}
+\item[2321:] \texttt{"Expecting '|->' in object pattern"}
+\item[2322:] \texttt{"Expecting ')' after obj_ pattern"}
+\item[2323:] \texttt{"Object patterns not available in VDM classic"}
+\item[2324:] \texttt{"Pure only permitted for operations"}
+\item[2325:] \texttt{"Pure operations are not available in classic"}
+\item[2326:] \texttt{"Expecting 'of' after set1"}
+\item[2327:] \texttt{"Type set1 is not available in classic"}
+\item[2328:] \texttt{"Sequence binds are not available in classic"}
 
 \end{description}
