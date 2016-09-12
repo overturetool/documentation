@@ -190,6 +190,7 @@
 \newcommand{\SEQ}[1]{\keyw{seq of }#1}
 \newcommand{\NSEQ}[1]{\keyw{seq1 of }#1}
 \newcommand{\SET}[1]{\keyw{set of }#1}
+\newcommand{\SETONE}[1]{\keyw{set1 of }#1}
 \newcommand{\PROD}[2]{#1 * #2}
 \newcommand{\TO}[2]{#1 $\To$ #2}
 \newcommand{\FUN}[2]{#1 $\To$ #2}
@@ -888,7 +889,7 @@ a logical predicate.
     {\tt s1 <> s2}& Inequality & \TO{\PROD{\SET{A}}{\SET{A}}}{\keyw{bool}} \\
     {\tt \keyw{card} s1}& Cardinality & \TO{\SET{A}}{\keyw{nat}} \\
     {\tt \keyw{dunion} ss}& Distributed union& \TO{\SET{\SET{A}}}{\SET{A}} \\
-    {\tt \keyw{dinter} ss}&Distributed intersection & \TO{\SET{\SET{A}}}{\SET{A}} \\
+    {\tt \keyw{dinter} ss}&Distributed intersection & \TO{\SETONE{\SET{A}}}{\SET{A}} \\
     {\tt \keyw{power} s1}&Finite power set & \TO{\SET{A}}{\SET{\SET{A}}} \\
     \hline
   \end{tabular}%
