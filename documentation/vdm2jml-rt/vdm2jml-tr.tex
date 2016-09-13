@@ -7,6 +7,8 @@
 \usepackage{appendix}
 \usepackage{xspace}
 
+\input{jml-listings}
+
 \acrodef{ast}[AST]{Abstract Syntax Tree}
 \acrodef{vdm}[VDM]{Vienna Development Method}
 \acrodef{jml}[JML]{Java Modeling Language}
@@ -37,6 +39,28 @@
 %    numberstyle=\small,
 }
 
+% Custom JML style
+\lstdefinestyle{customJml}
+{
+  escapechar=~,
+  breaklines=true,
+  basicstyle=\footnotesize\ttfamily,
+  language=[JML]Java,
+  frame=tlrb,
+  captionpos=b
+}
+
+% OpenJML RAC output
+\lstdefinestyle{racOutput}
+{
+  escapechar=!,
+  captionpos=b,
+  xleftmargin=0em,
+  frame=single,
+  numbers=none,
+  breaklines=true,
+  basicstyle=\footnotesize\ttfamily
+}
 
 \title{Automated translation of VDM-SL to JML annotated Java}
 \subtitle{Technical Report}
@@ -57,6 +81,7 @@
 
 \begin{appendices}
   \input{chapters/atm-model-example}
+  \input{chapters/atm-code-example}
 \end{appendices}
 
 %\addcontentsline{toc}{chapter}{Bibliography}
