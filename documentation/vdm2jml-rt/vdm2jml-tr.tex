@@ -3,6 +3,40 @@
 \usepackage{graphicx}
 \usepackage{acronym}
 \usepackage{listings}
+\usepackage{vdmlisting}
+\usepackage{appendix}
+\usepackage{xspace}
+
+\acrodef{ast}[AST]{Abstract Syntax Tree}
+\acrodef{vdm}[VDM]{Vienna Development Method}
+\acrodef{jml}[JML]{Java Modeling Language}
+\acrodef{dbc}[DbC]{Design-by-Contract}
+\acrodef{atm}[ATM]{Automated Teller Machine}
+\acrodef{pvs}[PVS]{the Prototype Verification System}
+\acrodef{uml}[UML]{the Unified Modeling Language}
+\acrodef{ir}[IR]{Intermediate Representation}
+
+\newcommand{\vsl}{VDM-SL\xspace}
+
+\lstset{
+    basicstyle=\footnotesize\ttfamily,
+    frame=single, 
+    breaklines=true,
+    tabsize=2, 
+    linewidth=\columnwidth,
+    showstringspaces=false, 
+    captionpos=b,
+    frameround=, 
+    aboveskip=5mm,
+    belowskip=5mm,
+    framexleftmargin=0mm, 
+    framexrightmargin=0mm,
+    escapeinside={(*@}{@*)},
+%    numbers=left,               
+%    numbersep=10pt,                   
+%    numberstyle=\small,
+}
+
 
 \title{Automated translation of VDM-SL to JML annotated Java}
 \subtitle{Technical Report}
@@ -20,6 +54,10 @@
 \mainmatter
 
 \input{chapters/intro.tex}
+
+\begin{appendices}
+  \input{chapters/atm-model-example}
+\end{appendices}
 
 %\addcontentsline{toc}{chapter}{Bibliography}
 \bibliographystyle{splncs03}
