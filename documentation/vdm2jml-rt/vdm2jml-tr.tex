@@ -8,6 +8,10 @@
 \usepackage{xspace}
 \usepackage{cleveref}
 
+% To get cref to work with appendices
+\crefname{app}{appendix}{appendices}
+\Crefname{app}{Appendix}{Appendices}
+
 \input{jml-listings}
 
 \acrodef{ast}[AST]{Abstract Syntax Tree}
@@ -85,6 +89,7 @@
 \input{chapters/translation.tex}
 
 \begin{appendices}
+  \crefalias{chapter}{app}
   \input{chapters/atm-model-example}
   \input{chapters/atm-code-example}
 \end{appendices}
