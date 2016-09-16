@@ -19,6 +19,9 @@
 \acrodef{uml}[UML]{the Unified Modeling Language}
 \acrodef{ir}[IR]{Intermediate Representation}
 
+\usepackage{todonotes}
+\presetkeys{todonotes}{inline,linecolor=red,backgroundcolor=blue!20!white, bordercolor=red}{}
+
 \newcommand{\vsl}{VDM-SL\xspace}
 
 \lstset{
@@ -79,6 +82,7 @@
 \mainmatter
 
 \input{chapters/intro.tex}
+\input{chapters/translation.tex}
 
 \begin{appendices}
   \input{chapters/atm-model-example}
