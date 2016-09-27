@@ -204,6 +204,7 @@ August  & 2013 & 4       & 2.0.0 \\ \hline
 January  & 2015 & 5       & 2.1.6 \\ \hline
 April  & 2015 & 5       & 2.2.4 \\ \hline
 September & 2015 & 6 & 2.3.0 \\ \hline
+September & 2016 & 7 & 2.4.0 \\ \hline
 \end{tabular}
 
 \tableofcontents
@@ -255,7 +256,7 @@ such as Booleans and natural numbers. These types are very abstract,
 allowing you to add any relevant constraints using data type
 invariants. Functionality is defined in terms of operations over these
 data types. Operations can be defined implicitly by preconditions and
-postconditions that characterize their behavior, or explicitly by
+postconditions that characterise their behavior, or explicitly by
 means of specific algorithms. An extension of VDM-SL, called VDM++,
 supports object-oriented structuring of models and permits direct
 modelling of concurrency \cite{Fitzgerald&05}. A further extension
@@ -300,7 +301,7 @@ how it is possible automatically to generate executable code in programming lang
 Chapter~\ref{sec:vdmuml} explains the support for mapping between
 object-oriented VDM models and UML models; Chapter~\ref{sec:ToVDMRT}
 shows how a VDM++ project can be
-converted into a new VDM-RT project; Chapter~\ref{sec:showlog} shows
+converted into a new VDM-RT project; Chapter~\ref{sec:graphics} shows how it is possible to plot values of numeric variables from a model while a VDM model is being interpreted; Chapter~\ref{sec:showlog} shows
 how to analyse and display execution logs from VDM-RT models; 
 Chapter~\ref{sec:linkToJava} demonstrates how Java can be used in 
 combination with VDM models and
@@ -1409,6 +1410,48 @@ a {\textbf\texttt{system}} class with appropriate declarations of
 \texttt{CPU}s and \texttt{BUS}ses and proceed with the real time
 model development. Also keep in mind that you may have some errors
 if your VDM++ model uses VDM-RT keywords as names.
+
+\chapter{Graphics Plotting while Interpreting VDM Model}\label{sec:graphics}
+
+In some occasions it can be convenient to be able to monitor how numeric variables inside a VDM++ model evolve over time. A plugin extension to Overture enable such a graphics plotting while a VDM model is being interpreted. However, it is only possible to expose instance variables that contains numeric values and that have been declared static and public so they can be exposed externally in this fashion. In order to be able to make use of this feature it is necessary to instal the ``Overture Graphics Plugin'' through Overture's``Install New Software \ldots '' feature. The repository URL is:\\
+
+\noindent \url{http://overture.au.dk/overture-graphics-plugin/master/repository/}\\
+
+When that has been imported it is possible to start the graphics plugin as a special debug configuration as shown in Figure~\ref{fig:graphicsdebug}. 
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=2.5in]{screenDumps/Graphicsdebug}
+\caption{Starting up the debugger using the Graphics plugin\label{fig:graphicsdebug}}
+\end{center}
+\end{figure}
+
+This will then automatically add a \texttt{overture.graphics.properties} file and a file called \texttt{overture.graphics.jar} in the \texttt{lib} directory and these files are essentially internally making use of the remote control feature described in Section~\ref{sec:Remote} below. This will then start up a new window as the one shown in Figure~\ref{fig:graphicselectclass} where the user first needs to select the root class to use for the debugging and afterwards the main operation to be invoked. Note that both of these cannot have any parameters.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\textwidth]{screenDumps/graphicselectclass}
+\caption{Starting up the debugger using the Graphics plugin\label{fig:graphicselectclass}}
+\end{center}
+\end{figure}
+
+ Afterwards one can define different plots as shown in Figure~\ref{graphicsAddPlot} where one is able to select numeric instance variables that have been declared both static and public. This new application started up is in fact a separate application making using the Electron framework. From the file menu it is also possible to save such plot configurations such that one can load them in a later session instead of having to define them again. Numerous plots can be defined if desired but typically it is advantageous to display multiple graphs on the same plot. 
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\textwidth]{screenDumps/graphicsAddPlot}
+\caption{Starting up the debugger using the Graphics plugin\label{fig:graphicsAddPlot}}
+\end{center}
+\end{figure}
+
+When one is finished with configuring it is possible to see the actual plot by clicking on the small plus in front of the selected type of plot (in this case a 2D plot) and then double-click on the plot one would like to see. Then one can start the entire simulation by pressing the Start bottom. This will invoke the VDM interpreter with the selected class and operation and as time is advancing the plot is automatically updated for all the selected instance variables. Such a plot looks like what is shown in Figure~\ref{fig:graphicsplot}.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\textwidth]{screenDumps/graphicsplot}
+\caption{Starting up the debugger using the Graphics plugin\label{fig:graphicsplot}}
+\end{center}
+\end{figure}
 
 \chapter{Analysing Logs from VDM-RT Executions}\label{sec:showlog}
 
