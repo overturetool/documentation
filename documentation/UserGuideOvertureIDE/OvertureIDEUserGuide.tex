@@ -175,7 +175,7 @@
 \makeindex
 
 \begin{document}
-\title{Overture VDM-10 Tool Support: User Guide \\{\large Version 2.3.0}}
+\title{Overture VDM-10 Tool Support: User Guide \\{\large Version 2.4.2}}
 \author{Peter Gorm Larsen, Kenneth Lausdahl, Peter Tran-J\o{}rgensen,\\ Joey Coleman, Sune Wolff and  Lu\'{i}s Diogo Couto \\
 Aarhus University, Department of Engineering\\
 Finlandsgade 22, DK-8000 \AA{}rhus C, Denmark\\[3mm]
@@ -184,7 +184,7 @@ Fujitsu UK\\
 Lovelace Road, Bracknell, \\
 Berkshire. RG12 8SN, UK}
 
-\date{September 2015}
+\date{September 2016}
 
 \reportno{TR-002}
 
@@ -204,7 +204,7 @@ August  & 2013 & 4       & 2.0.0 \\ \hline
 January  & 2015 & 5       & 2.1.6 \\ \hline
 April  & 2015 & 5       & 2.2.4 \\ \hline
 September & 2015 & 6 & 2.3.0 \\ \hline
-September & 2016 & 7 & 2.4.0 \\ \hline
+September & 2016 & 7 & 2.4.2 \\ \hline
 \end{tabular}
 
 \tableofcontents
@@ -1411,13 +1411,18 @@ a {\textbf\texttt{system}} class with appropriate declarations of
 model development. Also keep in mind that you may have some errors
 if your VDM++ model uses VDM-RT keywords as names.
 
-\chapter{Graphics Plotting while Interpreting VDM Model}\label{sec:graphics}
+\chapter{Graphics Plotting for VDM Models}\label{sec:graphics}
 
-In some occasions it can be convenient to be able to monitor how numeric variables inside a VDM++ model evolve over time. A plugin extension to Overture enable such a graphics plotting while a VDM model is being interpreted. However, it is only possible to expose instance variables that contains numeric values and that have been declared static and public so they can be exposed externally in this fashion. In order to be able to make use of this feature it is necessary to instal the ``Overture Graphics Plugin'' through Overture's``Install New Software \ldots '' feature. The repository URL is:\\
-
-\noindent \url{http://overture.au.dk/overture-graphics-plugin/master/repository/}\\
-
-When that has been imported it is possible to start the graphics plugin as a special debug configuration as shown in Figure~\ref{fig:graphicsdebug}. 
+On some occasions it is convenient to monitor how a VDM++ model's
+variables evolve over time. To support this kind of analysis, a plugin
+extension to Overture enables graphics plotting of VDM models, as they
+are being interpreted. Currently plotting is only supported for
+instance variables that contain numeric values, and which have been
+declared \vdmkw{public} and \vdmkw{static}. In order to use this
+feature, it is necessary to install the ``Overture Graphics Plugin''
+through Overture's``Install New Software \ldots '' menu. When the
+plugin has been installed it is possible to launch it as a special
+debug configuration as shown in Figure~\ref{fig:graphicsdebug}.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -1426,7 +1431,14 @@ When that has been imported it is possible to start the graphics plugin as a spe
 \end{center}
 \end{figure}
 
-This will then automatically add a \texttt{overture.graphics.properties} file and a file called \texttt{overture.graphics.jar} in the \texttt{lib} directory and these files are essentially internally making use of the remote control feature described in Section~\ref{sec:Remote} below. This will then start up a new window as the one shown in Figure~\ref{fig:graphicselectclass} where the user first needs to select the root class to use for the debugging and afterwards the main operation to be invoked. Note that both of these cannot have any parameters.
+When the plugin is launched two files named
+\texttt{overture.graphics.properties} and
+\texttt{overture.graphics.jar} will be added to the project's
+\texttt{lib} folder, and a new window will appear as shown in
+Figure~\ref{fig:graphicselectclass}. Next, the user needs to select
+the entry point to execute (a class and an operation). Note that both
+the class constructor and operation that constitute the entry point
+must not receive any arguments.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -1435,7 +1447,12 @@ This will then automatically add a \texttt{overture.graphics.properties} file an
 \end{center}
 \end{figure}
 
- Afterwards one can define different plots as shown in Figure~\ref{graphicsAddPlot} where one is able to select numeric instance variables that have been declared both static and public. This new application started up is in fact a separate application making using the Electron framework. From the file menu it is also possible to save such plot configurations such that one can load them in a later session instead of having to define them again. Numerous plots can be defined if desired but typically it is advantageous to display multiple graphs on the same plot. 
+Afterwards, the user can define different plots based on a selection
+of instance variables -- see
+Figure~\ref{fig:graphicsAddPlot}. Furthermore, from the file menu it
+is possible to save the plot configurations for later use. Numerous
+plots can be defined, if desired, although it is common to use the
+same plot to visualise multiple graphs.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -1444,12 +1461,17 @@ This will then automatically add a \texttt{overture.graphics.properties} file an
 \end{center}
 \end{figure}
 
-When one is finished with configuring it is possible to see the actual plot by clicking on the small plus in front of the selected type of plot (in this case a 2D plot) and then double-click on the plot one would like to see. Then one can start the entire simulation by pressing the Start bottom. This will invoke the VDM interpreter with the selected class and operation and as time is advancing the plot is automatically updated for all the selected instance variables. Such a plot looks like what is shown in Figure~\ref{fig:graphicsplot}.
+Once a plot has been defined it can be selected via the ``PLOTS''
+menu, and visualised by pressing the ``Start'' button as shown on the
+left of Figure~\ref{fig:graphicsplot}. This will execute the
+user-defined entry point and plot the instance variables as the model
+execution advances over time. An example of one such plot is shown in
+Figure~\ref{fig:graphicsplot}.
 
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=\textwidth]{screenDumps/graphicsplot}
-\caption{Starting up the debugger using the Graphics plugin\label{fig:graphicsplot}}
+\caption{Starting the debugger using the Graphics plugin\label{fig:graphicsplot}}
 \end{center}
 \end{figure}
 
