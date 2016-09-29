@@ -91,7 +91,8 @@ from there the entire simulation can be started up.
 #******************************************************
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
-#Author: Nico Plat and Peter Gorm Larsen
+#AUTHOR: Nico Plat and Peter Gorm Larsen
+#LIB=IO,VDMUtil,MATH
 #LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
