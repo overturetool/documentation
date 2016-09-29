@@ -402,6 +402,29 @@ Code is emitted to the folder \texttt{generated/src/c} under the corresponding V
 Please note that this folder is wiped clean each time code is generated.
 %
 Additional development work on the generated code \emph{must not} be carried out in this folder.
+
+The generator will emit a \texttt{main.c} file containing an empty \texttt{main()} function.
+%
+The generator also emits a CMake file called \texttt{Project}\-\texttt{CMake}\-\texttt{Lists.txt}.
+%
+When renamed to \texttt{CMake}\-\texttt{Lists.txt}, executing
+%
+%
+%
+\begin{quote}
+\texttt{cmake .}\\
+\texttt{make}
+\end{quote}
+%
+%
+%
+in the generated code root directory will compile an executable, but inert, binary of the generated model.
+%
+At this point the user is free to populate the \texttt{main} function.
+%
+The header file \texttt{Mangled}\-\texttt{Names.h} contains the correspondences between model identifiers and the mangled names used internally in the generated code.
+%
+This file can be used to call into the generated model using approximately the naming convention of the VDM model.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../OvertureIDEUserGuide"
