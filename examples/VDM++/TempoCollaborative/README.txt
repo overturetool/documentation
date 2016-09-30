@@ -100,5 +100,6 @@ from there the entire simulation can be started up.
 #DYNAMIC_TYPE_CHECKS=true
 #SUPPRESS_WARNINGS=false
 #ENTRY_POINT=new World().Run("RotterdamNetwork.csv", "TMSconfiguration.csv", 300)
+#ENTRY_POINT=new World().runwithoutcollab()
 #EXPECTED_RESULT=NO_ERROR_INTERPRETER
 #******************************************************
