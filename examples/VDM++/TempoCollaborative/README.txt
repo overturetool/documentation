@@ -92,7 +92,7 @@ from there the entire simulation can be started up.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR: Nico Plat and Peter Gorm Larsen
-#LIB=IO,VDMUtil,MATH
+#LIB=IO,VDMUtil,CSV,MATH
 #LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
