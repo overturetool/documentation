@@ -92,7 +92,7 @@ from there the entire simulation can be started up.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR: Nico Plat and Peter Gorm Larsen
-#LIB=IO,VDMUtil,MATH
+#LIB=IO,VDMUtil,CSV,MATH
 #LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
@@ -100,5 +100,6 @@ from there the entire simulation can be started up.
 #DYNAMIC_TYPE_CHECKS=true
 #SUPPRESS_WARNINGS=false
 #ENTRY_POINT=new World().Run("RotterdamNetwork.csv", "TMSconfiguration.csv", 300)
+#ENTRY_POINT=new World().runwithoutcollab()
 #EXPECTED_RESULT=NO_ERROR_INTERPRETER
 #******************************************************
