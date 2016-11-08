@@ -993,7 +993,7 @@ static TVP new(){
 	CCLASS ptr=C_Constructor(NULL);
 
 	return newTypeValue(VDM_CLASS, (TypedValueType)
-			{	.ptr=newClassValue(ptr->_C_id, &ptr->_C_refs, \
+			{	.ptr=newClassValue(ptr->_C_id, &ptr->_C_refs,\
 					(freeVdmClassFunction)&C_free, ptr)});
 }
 
