@@ -22,7 +22,7 @@ We illustrate its design here by means of very simple generated VDM models.
 
 The native library provides a single fundamental data structure in support of all the VDM-RT data types, called \texttt{TypedValue}.
 %
-The complete definition is shown in Listing \ref{lst:tvp} (excerpt from previous work on integrating Overture with the TASTE toolset \cite{Fabbri&16}.)
+The complete definition is shown in Listing \ref{lst:tvp}.
 %
 A pointer to \texttt{TypedValue} is \texttt{\#define}d as \texttt{TVP}, and is used throughout the implementation.
 %
@@ -703,7 +703,7 @@ static TVP new(){
 	ACLASS ptr=A_Constructor(NULL);
 
 	return newTypeValue(VDM_CLASS, (TypedValueType)
-			{	.ptr=newClassValue(ptr->_A_id, &ptr->_A_refs, \
+			{	.ptr=newClassValue(ptr->_A_id, &ptr->_A_refs,\
 				(freeVdmClassFunction)&A_free, ptr)});
 }
 
@@ -839,7 +839,7 @@ static TVP new(){
 	BCLASS ptr=B_Constructor(NULL);
 
 	return newTypeValue(VDM_CLASS, (TypedValueType)
-			{	.ptr=newClassValue(ptr->_B_id, &ptr->_B_refs, \
+			{	.ptr=newClassValue(ptr->_B_id, &ptr->_B_refs,\
 					(freeVdmClassFunction)&B_free, ptr)});
 }
 
