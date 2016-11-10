@@ -383,7 +383,9 @@ int main()
 %
 %
 %
-First, and instance of the class implementation is created, together with a variable to store the result of \texttt{op}.
+Had the class \texttt{A} contained any \texttt{value}s or \texttt{static} fields, the very first calls into the model would have been to \texttt{A\_\allowbreak{}const\_\allowbreak{}init()} and \texttt{A\_\allowbreak{}static\_\allowbreak{}init()}.
+%
+As this is not the case here, an instance of the class implementation is first created, together with a variable to store the result of \texttt{op}.
 %
 The macro \texttt{CALL\_FUNC} carries out the necessary calculations for calling the correct version of \texttt{\_Z2opEV} in the presence of inheritance and overriding (not the case here).
 %
