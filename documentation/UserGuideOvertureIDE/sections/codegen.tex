@@ -317,15 +317,20 @@ Translation of VDM models to C code is a new feature of Overture.
 %
 The target language of the C generator is the executable subset of VDM-RT.
 %
-It is not yet feature-complete, but it can handle models which do not use sophisticated features of VDM-RT.
+It is not yet feature-complete, but it can handle models that do not use sophisticated features of VDM-RT.
+
+In this section we give an overview of the current state of language feature support.
 %
-The following list describes the current state of language feature support.
+The translation strategy is then described in some detail as a means of providing a tutorial introduction to calling into the generated model.
 %
-Items in black are tested and known, to the best of the developers' knowledge, to translate correctly to C.
+%
+%
+\subsection{Language Feature Support Status}
+Overture's C code generator is under active development.
+%
+At present, items in black are tested and known, to the best of the developers' knowledge, to translate correctly to C.
 %
 Items in \textcolor{red}{red} are not yet supported.
-%
-%
 %
 \begin{itemize}
 %
@@ -333,7 +338,11 @@ Items in \textcolor{red}{red} are not yet supported.
 %
 \item  Inheritance.
 %
-\item  Overriding.
+\item  Overloading and overriding.
+%
+\item  Nested constructor calling.
+%
+\item  The \texttt{self} expression.
 %
 \item  Type definitions.
 \begin{itemize}
@@ -344,6 +353,12 @@ Items in \textcolor{red}{red} are not yet supported.
 \begin{itemize}
 \item  \textcolor{red}{Quantifiers}.
 \end{itemize}
+%
+\item  Let expressions.
+%
+\item  \texttt{is\_(\textit{var}, \textit{type})} testing for basic types.
+%
+\item  Records.
 %
 \item  \textcolor{red}{Products}.
 %
@@ -436,6 +451,11 @@ At this point the user is free to populate the \texttt{main} function.
 The header file \texttt{Mangled}\-\texttt{Names.h} contains the correspondences between model identifiers and the mangled names used internally in the generated code.
 %
 This file can be used to call into the generated model using approximately the naming convention of the VDM model.
+%
+%
+%
+\subsection{The C Translation Strategy}
+\input{sections/codegen-translation-subsection}
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../OvertureIDEUserGuide"

@@ -156,8 +156,8 @@
 \lstset{language=VDM++}
 %\lstset{alsolanguage=Java}
 % The command below enables you to escape into normal LaTeX mode inside your
-% VDM chunks by starting with a `!' character and ending with a `!'
-\lstset{escapeinside=!!}
+% VDM chunks by starting with a `^' character and ending with a `^'
+\lstset{escapeinside=\^\^}
 
 %This file has been converted to use LaTeX2e
 %\documentstyle[overture]{article}
@@ -1888,7 +1888,7 @@ public class Graphics implements Serializable {
 	model.finishedSmoking(); 		  //wait for smoker to finish
 	ctrl.EnableButtons(); 			  //enable GUI input
     }
-! \ldots !
+^ \ldots ^
 }
 \end{lstlisting}
 
@@ -1935,7 +1935,7 @@ public class SmokingControl {
 public void finish(){
    interpreter.finish();
 }
-! \ldots !
+^ \ldots ^
 }
 \end{lstlisting}
 
@@ -1957,9 +1957,9 @@ It is important that the execution of a remote GUI is stopped in a controlled ma
 public MyJFrame() {
 // Allow Overture to do a controlled shutdown
 setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-! \ldots !
+^ \ldots ^
 }
-! \ldots !
+^ \ldots ^
 @Override
 public void dispose(){
   interpreter.finish();
