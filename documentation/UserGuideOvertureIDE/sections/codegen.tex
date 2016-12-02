@@ -431,6 +431,10 @@ Additional development work on the generated code \emph{must not} be carried out
 
 The generator will emit a \texttt{main.c} file containing an empty \texttt{main()} function.
 %
+Moreover, the file contains helper functions for system-wide initialization and tear-down of model \texttt{values} and static fields.
+%
+The implementation of these is discussed below.
+%
 The generator also emits a CMake file called \texttt{Project}\-\texttt{CMake}\-\texttt{Lists.txt}.
 %
 When renamed to \texttt{CMake}\-\texttt{Lists.txt}, executing
