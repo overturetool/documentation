@@ -190,6 +190,7 @@
 \newcommand{\SEQ}[1]{\keyw{seq of }#1}
 \newcommand{\NSEQ}[1]{\keyw{seq1 of }#1}
 \newcommand{\SET}[1]{\keyw{set of }#1}
+\newcommand{\SETONE}[1]{\keyw{set1 of }#1}
 \newcommand{\PROD}[2]{#1 * #2}
 \newcommand{\TO}[2]{#1 $\To$ #2}
 \newcommand{\FUN}[2]{#1 $\To$ #2}
@@ -225,9 +226,10 @@
         Shin Sahara\\
         Marcel Verhoef\\
         Peter W. V. Tran-J\o{}rgensen\\
-        Tomohiro Oda}
+        Tomohiro Oda\\
+        Paul Chisholm}
 
-\date{April 2016}
+\date{September 2016}
 \reportno{TR-001}
 
 \pagenumbering{roman}
@@ -249,7 +251,8 @@ November & 2014 & 6 & 2.1.2 &
 Includes RMs \#25, \#26, \#29 \\ \hline
 August & 2015 & 7 & 2.3.0 &
 Includes RMs \#27 \\ \hline
-April & 2016 & 8 & 2.3.4 & review inputs from Paul Chisholm \\ \hline
+April & 2016 & 8 & 2.3.4 & Review inputs from Paul Chisholm \\ \hline
+September & 2016 & 9 & 2.4.0 & RMs \#35, \#36 \\ \hline
 \end{tabular}
 
 %\addtocounter{page}{2}
@@ -822,7 +825,8 @@ type\footnote{Note however that it is always possible to find a common
   section~\ref{unions}.)}, which is treated as a whole. All sets in
 VDM languages are finite, i.e.\ they contain only a finite
 number of elements. The elements of a set type can be arbitrarily
-complex, they could for example be sets themselves.
+complex, they could for example be sets themselves. Sets may include the
+empty set (set0 type), or may require at least one element (set1 type).
 
 In the following this convention will be used: {\tt A} is an arbitrary
 type, {\tt S} is a set type, {\tt s}, {\tt s1}, {\tt s2} are set
@@ -838,9 +842,14 @@ a logical predicate.
     \ldots
     }
 
-  \Rule{set type}{\Lop{set of}, \Ruleref{type}}
+  \Rule{set type}{\Ruleref{set0 type} \dsep
+    \Ruleref{set1 type}
+  }
 
-\item[Equation:] {\tt S = \keyw{set of} A}\index{\keyw{set of}}
+  \Rule{set0 type}{\Lop{set of}, \Ruleref{type}}
+  \Rule{set1 type}{\Lop{set1 of}, \Ruleref{type}}
+
+\item[Equation:] {\tt S = \keyw{set of} A }\index{\keyw{set of}} or {\tt S = \keyw{set1 of} A}\index{\keyw{set1 of}}
 
 \item[Constructors:] \mbox{}
 
@@ -851,16 +860,16 @@ a logical predicate.
   \item[Set comprehension:] \verb+{e | bd1, bd2, ..., bdm & P}+
     constructs a set by evaluating the expression {\tt e} on all the
     bindings for which the predicate {\tt P} evaluates to \keyw{true}.
-    A binding is either a set binding or a type
+    A binding is either a set binding, a sequence binding, or a type
     binding\footnote{Notice that type bindings over infinite types (discharging the invariant limitations) cannot be executed by
       the VDM interpreters because in general
       they are not executable (see section~\ref{bind} for further
       information about this).}.  A set bind {\tt bdn} has the form
     {\tt pat1, \ldots, patp \keyw{in set} s}, where {\tt pati} is a
     pattern (normally simply an identifier), and {\tt s} is a set
-    constructed by an expression. A type binding is similar, in the
-    sense that \keyw{in set} is replaced by a colon and {\tt s} is
-    replaced with a type expression.
+    constructed by an expression. A sequence (or type) binding is similar, in the
+    sense that \keyw{in set} is replaced by \keyw{in seq} (or a colon) and {\tt s} is
+    replaced with a sequence (or type) expression.
   \end{description}
   The syntax and semantics for all set expressions are given in
   section~\ref{setexpr}.%
@@ -880,7 +889,7 @@ a logical predicate.
     {\tt s1 <> s2}& Inequality & \TO{\PROD{\SET{A}}{\SET{A}}}{\keyw{bool}} \\
     {\tt \keyw{card} s1}& Cardinality & \TO{\SET{A}}{\keyw{nat}} \\
     {\tt \keyw{dunion} ss}& Distributed union& \TO{\SET{\SET{A}}}{\SET{A}} \\
-    {\tt \keyw{dinter} ss}&Distributed intersection & \TO{\SET{\SET{A}}}{\SET{A}} \\
+    {\tt \keyw{dinter} ss}&Distributed intersection & \TO{\SETONE{\SET{A}}}{\SET{A}} \\
     {\tt \keyw{power} s1}&Finite power set & \TO{\SET{A}}{\SET{\SET{A}}} \\
     \hline
   \end{tabular}%
@@ -975,7 +984,16 @@ predicate and {\tt e} is an arbitrary expression.
     as \verb+[]+.  A text literal is a shorthand for enumerating a sequence
     of characters (e.g.\ {\tt "ifad" = ['i','f','a','d']}).
 
-  \item[Sequence comprehension:] {\tt [e | id \keyw{in set} S \& P]}
+  \item[Sequence comprehension:] 
+
+    {\tt [e | id \keyw{in seq} S \& P]} constructs a sequence by
+    evaluating the expression \texttt{e} on all the bindings for which
+    the predicate \texttt{P} evaluates to \keyw{true}. The expression
+    \texttt{e} will use the identifier \texttt{id}. \texttt{S} is a
+    sequence of elements and \texttt{id} will be matched with the
+    elements preserving the order of \texttt{S}.
+
+{\tt [e | id \keyw{in set} S \& P]}
     constructs a sequence by evaluating the expression {\tt e} on all the
     bindings for which the predicate {\tt P} evaluates to \keyw{true}. The
     expression {\tt e} will use the identifier {\tt id}. {\tt S} is a set
@@ -1110,7 +1128,7 @@ set.
     constructs a mapping by evaluating the expressions {\tt ed} and {\tt
       er} on all the possible bindings for which the predicate {\tt P}
     evaluates to \keyw{true}. {\tt bd1, \ldots, bdn} are bindings of
-    free identifiers from the expressions {\tt ed} and {\tt er} to sets or types.
+    free identifiers from the expressions {\tt ed} and {\tt er} to sets, sequences or types.
   \end{description}
   The syntax and semantics of all map expressions are given in
   section~\ref{mapexpr}.%
@@ -1408,7 +1426,7 @@ expressions.
   \end{lstlisting}
   where \texttt{A} and \texttt{B} are defined as composite types
   themselves. In this situation the \keyw{is\_} predicate can be used
-  to distingush the alternatives.
+  to distinguish the alternatives.
 
 \item[Constructors:] The record constructor: {\tt \keyw{mk\_}A(a, b)} where
   {\tt a} belongs to the type {\tt A1} and {\tt b} belongs to the type {\tt
@@ -2184,7 +2202,7 @@ then the pre-condition function would be
 public f[@T]: seq of @T -> seq of @T
 f(s) ==
   if is_(s, seq of real) then
-  	[s(i) + 1 | i in set inds s]
+  	[r + 1 | r in seq s]
   else
   	reverse s;
 \end{lstlisting}
@@ -2220,7 +2238,7 @@ subsequence that satisfies this predicate:
 \begin{lstlisting}
   nat_filter : (nat -> bool) * seq of nat -> seq of nat
   nat_filter (p,ns) ==
-    [ns(i) | i in set inds ns & p(ns(i))];
+    [n | n in seq ns & p(n)];
 \end{lstlisting}
 Then
   \texttt{nat\_filter (\keyw{lambda} x:\keyw{nat} \& x \keyw{mod} 2 = 0, [1,2,3,4,5])} $\equiv$ \texttt{[2,4]}.
@@ -2229,7 +2247,7 @@ define a polymorphic version of this function:
 \begin{lstlisting}
   filter[@elem]: (@elem -> bool) * seq of @elem -> seq of @elem
   filter (p,l) ==
-    [l(i) | i in set inds l & p(l(i))];
+    [i | i in seq l & p(i)];
 \end{lstlisting}
 \label{filterdef}
 so \texttt{filter[\keyw{real}](\keyw{lambda} x:\keyw{real} \&
@@ -2338,14 +2356,14 @@ one by one. Each of them will be described by means of:
   \end{lstlisting}%
   where {\tt mb} is a multi-binding of one or more patterns (mostly
   just one pattern)
- to a set value (or a type),
+ to a set value (or a sequence or a type),
   {\tt e1} is a boolean expression, and {\tt e2} is an expression, of
   any type, involving the pattern identifiers of the patterns from {\tt
     mb}. The {\tt \keyw{be st} e1} part is optional. The expression
   denotes the value of the expression {\tt e2} in the context in which
   all the patterns from {\tt mb} have been matched against either an element
-  in the set from {\tt mb} or against a value from the type in {\tt mb}%
-  \footnote{Remember that only the set bindings can be executed by
+  in the set from {\tt mb}, or an element in the sequence from {\tt mb}, or against a value from the type in {\tt mb}%
+  \footnote{Remember that only the set and sequence bindings can be executed by
     means of the VDM interpreters.}.
   If the {\tt \keyw{st} e1} expression is present, only such bindings
   where {\tt e1} evaluates to true in the matching context are used.
@@ -2421,8 +2439,8 @@ set_filter(p)(s) ==
    selection_sort (l) ==
      if l = []
      then []
-     else let m in set elems l be st
-              forall x in set elems l & m <= x
+     else let m in seq l be st
+              forall x in seq l & m <= x
           in
             [m] ^ (selection_sort (remove(m,l)))
    \end{lstlisting}
@@ -2472,7 +2490,7 @@ inside operations.
   context in which the patterns (or binds) {\tt pb1, \ldots, pbn} are
   matched against the corresponding expressions {\tt e1, \ldots,
     en}\footnote{If binds are used, it simply means that the values
-    which can match the pattern are further constrained by the type or
+    which can match the pattern are further constrained by the type, sequence, or
     set expression as explained in Chapter~\ref{patterns}.}.
 
 \item[Examples:] The {\it define expression} is
@@ -2728,8 +2746,8 @@ print_Const(mk_Const(c)) ==
   \begin{lstlisting}
     forall mbd1, mbd2, !\ldots!, mbdn & e
   \end{lstlisting}
-  where each {\tt mbdi} is a multiple bind {\tt pi \keyw{in set} s} (or
-  if it is a type bind {\tt pi : type}), and {\tt e} is a boolean
+  where each {\tt mbdi} is a multiple bind {\tt pi \keyw{in set} s}, { \tt pi \keyw{in seq} s}, or
+  if it is a type bind {\tt pi : type}, and {\tt e} is a boolean
   expression involving the pattern identifiers of the {\tt mbdi}'s. It
   has the value \keyw{true} if {\tt e} is \keyw{true} when evaluated in the
   context of every choice of bindings from {\tt mbd1, mbd2, \ldots,
@@ -2748,7 +2766,7 @@ print_Const(mk_Const(c)) ==
   \begin{lstlisting}
     exists1 bd & e
   \end{lstlisting}
-  where {\tt bd} is either a set bind or a type bind and {\tt e} is a
+  where {\tt bd} is either a set bind, a sequence bind, or a type bind and {\tt e} is a
   boolean expression involving the pattern identifiers of {\tt bd}. It
   has the value \keyw{true} if {\tt e} is \keyw{true} when evaluated in the
   context of exactly one choice of bindings, and \keyw{false} otherwise.
@@ -2814,7 +2832,7 @@ print_Const(mk_Const(c)) ==
   \begin{lstlisting}
     iota bd & e
   \end{lstlisting}
-  where {\tt bd} is either a set bind or a type bind, and {\tt e} is a
+  where {\tt bd} is either a set bind, a sequence bind, or a type bind, and {\tt e} is a
   boolean expression involving the pattern identifiers of {\tt bd}.
   The \keyw{iota} operator can only be used if a unique value exists
   which matches the bind and makes the body expression {\tt e} yield
@@ -2889,11 +2907,11 @@ print_Const(mk_Const(c)) ==
   \end{lstlisting}
   It constructs a set by evaluating the expression {\tt e} on all the
   bindings for which the predicate {\tt P} evaluates to \keyw{true}. A
-  multiple binding can contain both set bindings and type bindings.
-  Thus {\tt mbdn} will look like {\tt pat1 \keyw{in set} s1, pat2 : tp1,
+  multiple binding can contain set bindings, sequence bindings, and type bindings.
+  Thus {\tt mbdn} will look like {\tt pat1 \keyw{in set} s1, pat2 : tp1, pat3 \keyw{in seq} q1,
     \ldots \keyw{in set} s2}, where {\tt pati} is a pattern (normally
-  simply an identifier), and {\tt s1} and {\tt s2} are sets
-  constructed by expressions (whereas {\tt tp1} is used to illustrate
+  simply an identifier), {\tt s1} and {\tt s2} are sets
+  constructed by expressions, and {\tt q1} is a sequence constructed by an expression (whereas {\tt tp1} is used to illustrate
   that type binds can also be used). Notice however that type binds
   can only be executed by the VDM interpreters in case the types can
   be statically declared as finite.
@@ -2954,7 +2972,7 @@ print_Const(mk_Const(c)) ==
     }
 
   \Rule{sequence comprehension}{
-    \Lit{[}, \Ruleref{expression}, \Lit{|}, \Ruleref{set bind}, \lfeed
+    \Lit{[}, \Ruleref{expression}, \Lit{|}, \Ruleref{bind list}, \lfeed
     \OptPt{\Lit{\char'046}, \Ruleref{expression}}, \Lit{]}
     }
 
@@ -2974,7 +2992,20 @@ print_Const(mk_Const(c)) ==
   sequence of the enumerated elements. The empty sequence is written
   as {\tt []}.
 
-  A {\it sequence comprehension} has the form:
+  A {\it sequence comprehension} over sequences has the form:
+  \begin{lstlisting}
+    [e | pat in seq S & P]
+  \end{lstlisting}
+  where the expression \texttt{e} will use the identifiers from the
+  pattern \texttt{pat} (normally this pattern will simply be an
+  identifier, but the only real requirement is that exactly one
+  pattern identifier must be present in the pattern). \texttt{S} is a
+  sequence of values. It constructs a sequence by evaluating the
+  expression \texttt{e} on all the bindings for which the predicate
+  \texttt{P} evaluates to true, preserving the order of elements in
+  \texttt{S}.
+
+  A {\it sequence comprehension} over sets has the form:
   \begin{lstlisting}
     [e | pat in set S & P]
   \end{lstlisting}
@@ -3027,18 +3058,18 @@ then:
 
   \begin{tabular}{lcl}
   \parbox[t]{6cm}{\ttfamily\selectfont
-            [GroupA(i).team \\
-            | i \keyw{in set inds} GroupA \\
-            \& GroupA(i).won <> 0]}
+            [a.team \\
+            | a \keyw{in seq} GroupA \\
+            \& a.won <> 0]}
     &$\equiv$ &
         \texttt{[}\parbox[t]{4cm}{\ttfamily\selectfont
                                  <Brazil>, \\
                                  <Norway>, \\
                                  <Morocco>]}\\
   \parbox[t]{6cm}{\ttfamily\selectfont
-            [GroupA(i) \\
-            | i \keyw{in set inds} GroupA\\
-            \& GroupA(i).won = 0]}
+            [a \\
+            | a \keyw{in seq} GroupA\\
+            \& a.won = 0]}
     &$\equiv$ & \texttt{[\keyw{mk\_}Score(<Scotland>,0,1,2,1)]}\\
   \texttt{GroupA(1,...,2)}
     &$\equiv$ &
@@ -3046,9 +3077,9 @@ then:
          \keyw{mk\_}Score(<Brazil>,2,0,1,6), \\
          \keyw{mk\_}Score(<Norway>,1,2,0,5)]}\\
   \parbox[t]{6cm}{\ttfamily\selectfont
-            [GroupA(i) \\
-            | i \keyw{in set inds} GroupA \\
-            \& GroupA(i).points = 9]}
+            [a \\
+            | a \keyw{in seq} GroupA \\
+            \& a.points = 9]}
     &$\equiv$ & \texttt{[]}
   \end{tabular}
 \end{description}
@@ -4589,11 +4620,15 @@ For example, the call \texttt{professorDict([new Professor("Smith"), \\new Profe
 \begin{description}
 \item[Syntax:]
   \Rule{bind}{
-    \Ruleref{set bind} \dsepl \Ruleref{type bind}
+    \Ruleref{set bind} \dsepl \Ruleref{seq bind} \dsepl \Ruleref{type bind}
     }
 
   \Rule{set bind}{
     \Ruleref{pattern}, \Lop{in set}, \Ruleref{expression}
+    }
+
+  \Rule{seq bind}{
+    \Ruleref{pattern}, \Lop{in seq}, \Ruleref{expression}
     }
 
   \Rule{type bind}{
@@ -4606,11 +4641,16 @@ For example, the call \texttt{professorDict([new Professor("Smith"), \\new Profe
 
   \Rule{multiple bind}{
     \Ruleref{multiple set bind} \dsep
+    \Ruleref{multiple seq bind} \dsep
     \Ruleref{multiple type bind}
     }
 
   \Rule{multiple set bind}{
     \Ruleref{pattern list}, \Lop{in set}, \Ruleref{expression}
+    }
+
+  \Rule{multiple seq bind}{
+    \Ruleref{pattern list}, \Lop{in seq}, \Ruleref{expression}
     }
 
   \Rule{multiple type bind}{
@@ -4619,10 +4659,10 @@ For example, the call \texttt{professorDict([new Professor("Smith"), \\new Profe
 
 \item[Semantics:] A {\it bind} matches a pattern to a value. In a {\it
     set bind} the value is chosen from the set defined by the set
-    expression of the bind. In a {\it type bind} the value is chosen
+    expression of the bind. In a {\it seq bind} the value is chosen from the sequence defined by the sequence expression of the bind. In a {\it type bind} the value is chosen
     from the type defined by the type expression.  {\it Multiple bind}
     is the same as {\it bind} except that several patterns are bound
-    to the same set or type.  Notice that type binds {\bf can} only be
+    to the same set, sequence or type.  Notice that type binds {\bf can} only be
     executed by the VDM interpreters in case the type can be deduced
     to be finite statically.  This would require the VDM interpreters
     to search through infinite domains like the natural numbers.
@@ -5418,7 +5458,7 @@ one by one. Each of them will be described by means of:
   part is optional. The expression denotes the evaluation of the statement
   {\tt s} in the context where all the patterns from {\tt mb} has been matched
   against an element in the set (or type) from {\tt mb}\footnote{Remember
-    that only the set bindings can be executed by means of the
+    that only the set and sequence bindings can be executed by means of the
     VDM interpreters.}.
   If the \keyw{be st}
   expression {\tt e} is present, only such bindings where {\tt e} evaluates
@@ -8228,7 +8268,7 @@ number already active is less than 10:
 \item[Semantics:]
 The object state guard is a boolean expression which depends on the values of
 one (or more) instance variable(s) of the object itself. Object state
-guards differ from operation pre-conditions in that a call to an an
+guards differ from operation pre-conditions in that a call to an
 operation whose permission predicate is false results in the caller
 blocking until the predicate is satisfied, whereas a call to an
 operation whose pre-condition is false means the operation's behaviour
@@ -8461,7 +8501,7 @@ be continued when the next expression is executed,
 see~\cite{Larsen&13a} for more details about ``sessions'').
 Thus if one would like to ensure a specific number
 of such other threads to be completed before stopping the execution
-one needs to block the debug thread using a synchonisation as
+one needs to block the debug thread using a synchronisation as
 explained in Chapter~\ref{ch:sync}.
 
 \begin{description}
@@ -10069,7 +10109,16 @@ The access part is only possible in VDM++ and VDM-RT.
   }
 
 \Ruledef{set type}{
+  \Ruleref{set0 type} \dsep
+  \Ruleref{set1 type}
+}
+
+\Ruledef{set0 type}{
   \Lop{set of}, \Ruleref{type}
+  }
+
+\Ruledef{set1 type}{
+  \Lop{set1 of}, \Ruleref{type}
   }
 
 \Ruledef{seq type}{
@@ -11063,7 +11112,7 @@ For both VDM++ and VDM-RT, we can define:
   }
 
 \Ruledef{sequence comprehension}{
-  \Lit{[}, \Ruleref{expression}, \Lit{|}, \Ruleref{set bind}, \lfeed
+  \Lit{[}, \Ruleref{expression}, \Lit{|}, \Ruleref{bind list}, \lfeed
   \OptPt{\Lit{\&}, \Ruleref{expression}},
   \Lit{]}
   }
@@ -11677,11 +11726,15 @@ In VDM++ and VDM-RT a call statement looks like:
   }
 
 \Ruledef{bind}{
-  \Ruleref{set bind} \dsepl \Ruleref{type bind}
+  \Ruleref{set bind} \dsepl \Ruleref{seq bind} \dsepl \Ruleref{type bind}
   }
 
 \Ruledef{set bind}{
   \Ruleref{pattern}, \Lop{in set}, \Ruleref{expression}
+  }
+
+\Ruledef{seq bind}{
+  \Ruleref{pattern}, \Lop{in seq}, \Ruleref{expression}
   }
 
 \Ruledef{type bind}{
@@ -11694,11 +11747,16 @@ In VDM++ and VDM-RT a call statement looks like:
 
 \Ruledef{multiple bind}{
   \Ruleref{multiple set bind} \dsep
+  \Ruleref{multiple seq bind} \dsep
   \Ruleref{multiple type bind}
   }
 
 \Ruledef{multiple set bind}{
   \Ruleref{pattern list}, \Lop{in set}, \Ruleref{expression}
+  }
+
+\Ruledef{multiple seq bind}{
+  \Ruleref{pattern list}, \Lop{in seq}, \Ruleref{expression}
   }
 
 \Ruledef{multiple type bind}{
@@ -11727,7 +11785,7 @@ reflecting the need for fully internationalized specifications.
 
 All Unicode codepoints have a ``category''. Certain categories are
 entirely excluded from the set of codepoints that are permitted in
-identifiers. This prevents, say, puntuation characters from being
+identifiers. This prevents, say, punctuation characters from being
 used. On the other hand, to provide a degree of compatibility with the
 original VDM ISO standard, and for backward compatibility, there are
 different rules for the formation of user identifiers that only use
@@ -11943,6 +12001,7 @@ consecutive symbols must be separated by a separator.
   \Lks{seq}
   \Lksb{seq1}
   \Lks{set}
+  \Lks{set1}
   \Lks{skip}
   \Lks{specified}
   \Lks{sporadic}
@@ -12486,12 +12545,12 @@ Type operators have their own separate precedence ordering, as follows:
 \item Map types: \keyw{map} \ldots \keyw{to} \ldots and \keyw{inmap} \ldots
   \keyw{to} \ldots\ (right grouping).\nonstandard{0}
 
-\item Unary type operators: \keyw{seq of}, \keyw{seq1 of}, \keyw{set of}.
+\item Unary type operators: \keyw{seq of}, \keyw{seq1 of}, \keyw{set of}, \keyw{set1 of}.
 \end{enumerate}
 
 \chapter{Differences between the Concrete Syntaxes}\label{sec:diff}
 
-Whe VDM was originally developed a mathematical syntax was used and
+When VDM was originally developed a mathematical syntax was used and
 this have also been retained in the ISO/VDM-SL standard. However, most
 VDM tools today mainly use an ASCII syntax. Below is a list of the
 symbols which are different in the mathematical syntax and the ASCII
@@ -12529,6 +12588,7 @@ syntax:\\
  $\Dunion$          & {\bf\ttfamily dunion}                      \\
  $\Power$          & {\bf\ttfamily power}                        \\
  \ldots$\Set$            & {\bf\ttfamily set of ...}                    \\
+ \ldots$\Set_1$            & {\bf\ttfamily set1 of ...}                    \\
  \ldots$\Seq*$              & {\bf\ttfamily seq of ...}                 \\
  \ldots$\Seq+$              & {\bf\ttfamily seq1 of ...}                 \\
  \ldots$\Gmap$\ldots           & {\bf\ttfamily map ... to ...}                 \\
@@ -12536,6 +12596,7 @@ syntax:\\
  $\Muop$           & {\bf\ttfamily mu}                           \\
  $\Bool$           & {\bf\ttfamily bool}                         \\
  $\Nat$            & {\bf\ttfamily nat}                          \\
+ $\Nat_1$            & {\bf\ttfamily nat1}                          \\
  $\Int$            & {\bf\ttfamily int}                          \\
  $\Real$           & {\bf\ttfamily real}                         \\
  $\Not$            & {\bf\ttfamily not}                          \\

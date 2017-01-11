@@ -2,17 +2,18 @@
 \newcommand{\vdmkw}[1]{\texttt{\textbf{#1}}}
 \chapter{Automatic Generation of Code}\label{sec:codegen}
 
-It is possible to generate Java code\index{code generation} for a large subset of VDM-SL and VDM++ models.
-%
-In addition to Java, C and C++ code generators are currently being developed.
-%
-Both these code generators are in the early stages of development.
-%
-The C++ generator is not included with releases of Overture yet, but the C generator is far enough along that it can be included for testing purposes.
-%
-For comparison, code generation of VDM-SL and VDM++ specifications to both Java and C++ is a feature that is available in VDMTools~\cite{Java2VDMMan,CGMan,CGManPP}.
-%
-The majority of this chapter focuses solely on the Java code generator available in Overture, with a brief discussion of the C code generator ending the chapter.
+It is possible to generate Java code\index{code generation} for a
+large subset of VDM-SL and VDM++ models. In addition to Java, C and
+C++ code generators are currently being developed. Both these code
+generators are in the early stages of development. The C++ generator
+is not included with releases of Overture yet, but the C generator is
+far enough along that it can be included for testing purposes. For
+comparison, code generation of VDM-SL and VDM++ specifications to both
+Java and C++ is a feature that is available in
+VDMTools~\cite{Java2VDMMan,CGMan,CGManPP}. The majority of this
+chapter focuses solely on the Java code generator available in
+Overture, with a brief discussion of the C code generator ending the
+chapter.
 
 \section{Use of the Java Code Generator}
 \label{sec:javacg_use}
@@ -64,6 +65,20 @@ particular this figure shows the status of code generating the
 indicated by the console output, the generated code is available as an
 Eclipse project in the \texttt{<workspace>/<project>/generated/java}
 folder.
+
+\noindent The Java code generator is also exposed as a Maven plugin in
+order to provide support for build and test automation. In essence
+this means that the Java code generator can be invoked from build
+environments that use Maven to manage Java projects. This allows code
+generated VDM models to be seamlessly integrated with other
+dependencies such as manually implemented components that the VDM
+model access via the Java bridge (see chapter~\ref{sec:linkToJava}),
+user-interfaces or third-party libraries. Another feature of this
+Maven plugin is that it allows model tests, written using
+\texttt{VDMUnit} to be code generated to JUnit4 tests, which can be
+executed via Maven in order to validate the generated code. An online
+tutorial that demonstrates how to use the Maven plugin is available
+via~\cite{DelegateTutorial}.
 
 \section{Configuration of the Java Code Generator}
 
@@ -302,15 +317,20 @@ Translation of VDM models to C code is a new feature of Overture.
 %
 The target language of the C generator is the executable subset of VDM-RT.
 %
-It is not yet feature-complete, but it can handle models which do not use sophisticated features of VDM-RT.
+It is not yet feature-complete, but it can handle models that do not use sophisticated features of VDM-RT.
+
+In this section we give an overview of the current state of language feature support.
 %
-The following list describes the current state of language feature support.
+The translation strategy is then described in some detail as a means of providing a tutorial introduction to calling into the generated model.
 %
-Items in black are tested and known, to the best of the developers' knowledge, to translate correctly to C.
+%
+%
+\subsection{Language Feature Support Status}
+Overture's C code generator is under active development.
+%
+At present, items in black are tested and known, to the best of the developers' knowledge, to translate correctly to C.
 %
 Items in \textcolor{red}{red} are not yet supported.
-%
-%
 %
 \begin{itemize}
 %
@@ -318,7 +338,11 @@ Items in \textcolor{red}{red} are not yet supported.
 %
 \item  Inheritance.
 %
-\item  Overriding.
+\item  Overloading and overriding.
+%
+\item  Nested constructor calling.
+%
+\item  The \texttt{self} expression.
 %
 \item  Type definitions.
 \begin{itemize}
@@ -329,6 +353,12 @@ Items in \textcolor{red}{red} are not yet supported.
 \begin{itemize}
 \item  \textcolor{red}{Quantifiers}.
 \end{itemize}
+%
+\item  Let expressions.
+%
+\item  \texttt{is\_(\textit{var}, \textit{type})} testing for basic types.
+%
+\item  Records.
 %
 \item  \textcolor{red}{Products}.
 %
@@ -363,13 +393,6 @@ Items in \textcolor{red}{red} are not yet supported.
 %
 \item MATH library.
 \begin{itemize}
-\item  \textcolor{red}{exp()}
-\item  \textcolor{red}{acot()}
-\item  \textcolor{red}{acos()}
-\item  \textcolor{red}{asin()}
-\item  \textcolor{red}{cot()}
-\item  \textcolor{red}{tan()}
-\item  \textcolor{red}{cos()}
 \item  \textcolor{red}{rand()}
 \item  \textcolor{red}{srand()}
 \item  \textcolor{red}{srand2()}
@@ -377,7 +400,18 @@ Items in \textcolor{red}{red} are not yet supported.
 %
 \end{itemize}
 
-Like the Java code generator, the C code generator can be invoked from the context menu in the VDM project explorer.
+Like the Java code generator, the C code generator can be invoked from the context menu in the VDM project explorer, as shown in in Figure \ref{fig:invoking}.
+%
+%
+%
+\begin{figure}[ht]
+\centering
+\includegraphics[width=3.7in]{figures/InvokingCCG.png}
+\caption{Invoking the C code generator.}
+\label{fig:invoking}
+\end{figure}
+%
+%
 %
 Unlike the Java code generator, it must be installed through Overture's ``Install New Software \dots'' feature.
 %
@@ -394,6 +428,38 @@ Code is emitted to the folder \texttt{generated/src/c} under the corresponding V
 Please note that this folder is wiped clean each time code is generated.
 %
 Additional development work on the generated code \emph{must not} be carried out in this folder.
+
+The generator will emit a \texttt{main.c} file containing an empty \texttt{main()} function.
+%
+Moreover, the file contains helper functions for system-wide initialization and tear-down of model \texttt{values} and static fields.
+%
+The implementation of these is discussed below.
+%
+The generator also emits a CMake file called \texttt{Project}\-\texttt{CMake}\-\texttt{Lists.txt}.
+%
+When renamed to \texttt{CMake}\-\texttt{Lists.txt}, executing
+%
+%
+%
+\begin{quote}
+\texttt{cmake .}\\
+\texttt{make}
+\end{quote}
+%
+%
+%
+in the generated code root directory will compile an executable, but inert, binary of the generated model.
+%
+At this point the user is free to populate the \texttt{main} function.
+%
+The header file \texttt{Mangled}\-\texttt{Names.h} contains the correspondences between model identifiers and the mangled names used internally in the generated code.
+%
+This file can be used to call into the generated model using approximately the naming convention of the VDM model.
+%
+%
+%
+\subsection{The C Translation Strategy}
+\input{sections/codegen-translation-subsection}
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../OvertureIDEUserGuide"
