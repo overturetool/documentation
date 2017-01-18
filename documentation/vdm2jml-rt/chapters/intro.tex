@@ -2,28 +2,29 @@
 \chapter{Introduction}
 
 A model specified using the \ac{vdm} can be validated against its
-contract-based elements (e.g.\ pre and postconditions and invariants)
-in order to ensure that the system behaves as intended. One way to
-validate the model against its contracts is by animation using
-Overture's \ac{vdm} interpreter.
+contract-based elements (e.g.\ pre- and postconditions and invariants)
+in order to ensure that the system behaves as intended. This can, for
+example, be done through model animation using Overture's \ac{vdm}
+interpreter.
 
 When sufficient insight into the system under development has been
 obtained during the formal analysis, development proceeds to the
 implementation phase, where the system is realised. One way to realise
-a \ac{vdm} model is by implementing it in a programming language, for
-example, using code generation. However, since no guarantees are made
-about the correctness of the generated code, other measures must be
-taken to increase the confidence in the correctness of the generated
-code.
+a \ac{vdm} model (which forms the focus of this report) is by
+implementing it in a programming language using code
+generation. However, since no guarantees are currently made about the
+correctness of the generated code, other measures must be taken to
+increase the confidence in the correctness of the derived model
+implementation.
 
 To support this approach, Overture enables fully automated translation
 of \vsl's contract-based elements (pre- and postconditions, and
-invariants) and type constraints to \ac{jml} annotations. The \ac{jml}
-generator is developed as an extension of Overture's \ac{vdm}-to-Java
-code generator and produces \ac{jml} annotated Java programs. In this
-way \ac{jml} tools can be used to validate the generated Java code
-against the \emph{intended} system behaviour, described using
-\ac{jml}. This work-flow is illustrated in
+invariants) and type constraints into \ac{jml} annotations. This
+translation is achieved using Overture's \emph{\ac{jml} translator},
+which translates \ac{vdmsl} models into \ac{jml}-annotated Java
+programs. In this way \ac{jml} tools can be used to validate the
+generated Java code against the \emph{intended} system behaviour,
+described using \ac{jml}. This work-flow is illustrated in
 \cref{fig:vdm2jml-overview}.
 
 \begin{figure}[!ht]
