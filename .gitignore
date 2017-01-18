@@ -67,5 +67,8 @@ bin
 *.el
 
 # Other generated files #
-#######################
+#########################  
+documentation/vdm2jml-rt/test-copies/
 documentation/vdm2jml-rt/chapters/generated.tex
+  
+  
