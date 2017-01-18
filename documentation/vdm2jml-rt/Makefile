@@ -8,8 +8,5 @@ pdf:
 
 clean:
 	rm -rf test-copies
-	latexmk -c
-
-clear:
-	rm -rf test-copies
+	rm -f chapters/generated.tex
 	latexmk -C
