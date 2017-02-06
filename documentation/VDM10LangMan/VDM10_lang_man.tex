@@ -4,8 +4,11 @@
 \usepackage{graphics}
 \usepackage{times}
 \usepackage{listings}
-\usepackage{color}
-\usepackage{graphicx}
+
+% \usepackage{color}
+% \usepackage{graphicx}
+\usepackage[dvipdfmx]{graphicx,color}
+
 \usepackage{latexsym}
 \usepackage{longtable} % ,multirow
 \usepackage{vdmsl-2e}
@@ -263,60 +266,51 @@ September & 2016 & 9 & 2.4.0 & RMs \#35, \#36 \\ \hline
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\chapter{Introduction}
+\chapter{はじめに}
 
 The Vienna Development Method (VDM)
-\cite{Bjorner&78,Jones90a,Fitzgerald&08c} was originally developed at
-the IBM laboratories in Vienna in the 1970's and as such it is one of
-the longest established formal methods.
-This document is a common language manual for the three dialects for
-VDM-SL, VDM++ and VDM-RT in the VDM-10 commonly agreed language
-revision. These dialects  are supported by both VDMTools (minus VDM-RT)
-\cite{Fitzgerald&08a} (in the appropriate version) as well as in the
-Overture open source tool \cite{Larsen&10a} built on top of the
-Eclipse platform. Whenever a construct is common to the three
-different dialects the term ``VDM languages'' will be used. Whenever a
-construct is specific to a subset of the VDM languages the specific
-dialect term mentioned above will be mentioned explicitly.
+\cite{Bjorner&78,Jones90a,Fitzgerald&08c} は、元々ウィーンのIBM研究所で
+1970年代に開発され、最も初期に確立された形式手法の一つだ。
+このドキュメントは、合意されたVDM-10仕様から派生した3つの方言、VDM-SL、VDM++、そして
+VDM-RTを同時に説明する共通言語マニュアルである。
+これらの方言はVDMTools \cite{Fitzgerald&08a} （但し VDM-RTを除く）と、
+Eclipse プラットフォーム上に構築された Overture オープンソースツール \cite{Larsen&10a}
+の両者でサポートされている。
+ある特徴が3つの方言に共通している場合には「VDM言語」という表現が用いられるが、
+特定の方言に固有の特徴を説明している場合には、それがどの方言に対する特徴かを明記する。
 
-\section{The VDM Specification Language (VDM-SL)}
+\section{VDM Specification 言語 (VDM-SL)}
 
-The syntax and semantics of the VDM-SL
-language is essentially the standard ISO/VDM-SL \cite{ISOVDM96}
-with a modular extension\footnote{A few other extensions are also included.}.
-Notice that all syntactically correct VDM-SL specifications are also correct in
- VDM-SL.
-Even though we have tried to present the language in a
-clear and understandable way the document is not a complete VDM-SL
-reference manual.
-For a more thorough presentation of the language we refer to the
-existing literature\footnote{A more tutorial like
-presentation is given in \cite{Fitzgerald&98b,Fitzgerald&09} whereas proofs in VDM-SL
-are treated best in \cite{Jones90a} and \cite{Bicarregui&94}.}.
-Wherever the  VDM-SL notation differs from
-the VDM-SL standard notation the semantics will of course be carefully
-explained.
+VDM-SL言語のシンタックスとセマンティクスは、本質的には ISO標準の VDM-SL \cite{ISOVDM96}
+にモジュール拡張を加えたものだ\footnote{その他の拡張も若干含まれている。}。
+% Notice that all syntactically correct VDM-SL specifications are also correct in
+%  VDM-SL. ... トートロジー？
+ISO/VDM-SL に準拠したすべての構文的に正しい仕様記述は、
+VDM-10/VDM-SLとしても構文的に正しいことに注目して欲しい。
+言語に関して明快で理解しやすい説明を行うが、このドキュメント自身は
+完全なVDM-SLのレファレンスマニュアルではない。
+言語に対するより完全な解説としては、既存の文献を示す\footnote{よりチュートリアル
+風の解説については \cite{Fitzgerald&98b,Fitzgerald&09} を参照、VDM-SLを用いた証明に関しては
+ \cite{Jones90a} と \cite{Bicarregui&94}が詳しい。}。
+VDM-10/VDM-SLの記法がISO標準/VDM-SLと異なる場合には、もちろん注意深い解説が加えられる。
 
-\section{The VDM++ Language}
+\section{VDM++ 言語}
 
-VDM++ is a formal specification language intended to specify object
-oriented systems with parallel and real-time behaviour, typically in
-technical environments~\cite{Fitzgerald&05}.  The language is based on
-VDM-SL~\cite{ISOVDM96}, and has been extended with class and object
-concepts, which are also present in languages like Smalltalk-80 and
-Java.  This combination facilitates the development of object oriented
-formal specifications.
+VDM++ は、主にエンジニアリング環境で、平行性ならびにリアルタイム性を持つ
+オブジェクト指向システムの記述を行うことが意図された、
+形式仕様記述言語である~\cite{Fitzgerald&05}。
+この言語はVDM-SL~\cite{ISOVDM96}に基き、その上に、Smalltalk-80 や Java といった言語の
+中に見出だせるような、クラスやオブジェクトの概念が拡張されたものだ。
 
-\section{The VDM Real Time Language (VDM-RT)}
+\section{VDM Real Time 言語 (VDM-RT)}
 
-The VDM-RT language (formerly called VICE as an acronym for ``VDM++ In
-Constrained Environments'') is used to appropriately model and analyse
-Real-Time embedded and distributed
-systems~\cite{Mukherjee&00,Verhoef&06b,Verhoef&07,Verhoef08,Larsen&09b}. Thus
-VDM-RT is an extension of the VDM++ language.
+VDM-RT 言語 (以前は VICE「VDM++ In Constrained Environments」と呼ばれていた）は、
+VDM++ 言語の拡張である。
+分散したリアルタイム組み込みシステムを適切にモデル化し、
+分析するために用いられる \cite{Mukherjee&00,Verhoef&06b,Verhoef&07,Verhoef08,Larsen&09b}。
 
-
-\section{Purpose of The Document}
+% \section{Purpose of This Document}
+\section{このドキュメントの目的}
 
 This document is the language reference manual for all the VDM-10 dialects.  The
 syntax of VDM language constructs is defined using grammar rules.
@@ -332,7 +326,8 @@ concrete syntax but we will display all reserved words in a special
 keyword font. Note that general Unicode identifiers are allowed so
 it is for example possible to write Japanese characters directly.
 
-\section{Structure of the Document}
+% \section{Structure of the Document}
+\section{ドキュメントの構造}
 
 Chapter~\ref{syntax-notation} presents the BNF notation used for the
 description of syntactic constructs.  The VDM notations are described
@@ -2042,7 +2037,7 @@ numbers and returns those maplets common to both
 map_inter: (map nat to nat) * (map nat to nat) -> map nat to nat
 map_inter (m1,m2) ==
   (dom m1 inter dom m2) <: m1
-pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d)
+pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d);
 \end{lstlisting}
 Note that we could also use the optional post condition to allow
 assertions about the result of the function:
@@ -2051,7 +2046,7 @@ map_inter: (map nat to nat) * (map nat to nat) -> map nat to nat
 map_inter (m1,m2) ==
   (dom m1 inter dom m2) <: m1
 pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d)
-post dom RESULT = dom m1 inter dom m2
+post dom RESULT = dom m1 inter dom m2;
 \end{lstlisting}
 
 The same function can also be defined implicitly:
@@ -2076,7 +2071,7 @@ map_disj (m1:map nat to nat,m2:map nat to nat)
 pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d)
 post dom res = (dom m1 union dom m2) \ (dom m1 inter dom m2)
      and
-     forall d in set dom res & res(d) = m1(d) or res(d) = m2(d)
+     forall d in set dom res & res(d) = m1(d) or res(d) = m2(d);
 \end{lstlisting}
 \label{mapdisj}
 
@@ -2130,12 +2125,12 @@ fac(n) ==
   if n = 0
   then 1
   else n * fac(n - 1)
-measure id
+measure id;
 \end{lstlisting}
 where \texttt{id} would be defined as:
 \begin{lstlisting}
 id: nat +> nat
-id(n) == n
+id(n) == n;
 \end{lstlisting}
 Here the proof obligation will become:
 \begin{lstlisting}
@@ -2160,7 +2155,7 @@ non-element is not part of the map, rather than being mapped to 0.}
 \begin{lstlisting}
 empty_bag[@elem] : () +> (map @elem to nat1)
 empty_bag() ==
-  { |-> }
+  { |-> };
 \end{lstlisting}
 Before we can use the above function, we have to instantiate the
 function {\tt empty\_bag} with a type, for example integers (see also
@@ -2180,7 +2175,7 @@ num_bag(e, m) ==
 plus_bag[@elem] : @elem * (map @elem to nat1) +>
                   (map @elem to nat1)
 plus_bag(e, m) ==
-  m ++ { e |-> num_bag[@elem](e, m) + 1 }
+  m ++ { e |-> num_bag[@elem](e, m) + 1 };
 \end{lstlisting}
 If pre- and or post-conditions are defined for polymorphic functions, the
 corresponding predicate functions are also polymorphic. For instance
@@ -2189,7 +2184,7 @@ if \texttt{num\_bag} was defined as
   num_bag[@elem] : @elem * (map @elem to nat1) +> nat
   num_bag(e, m) ==
     m(e)
-  pre e in set dom m
+  pre e in set dom m;
 \end{lstlisting}
 then the pre-condition function would be
 \begin{lstlisting}
@@ -2379,7 +2374,7 @@ map_disj (m1,m2) ==
   let inter_dom = dom m1 inter dom m2
   in
     inter_dom <-: m1 munion inter_dom <-: m2
-pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d)
+pre forall d in set dom m1 inter dom m2 & m1(d) = m2(d);
 \end{lstlisting}
   They are also convenient for decomposing complex
   structures into their components. For instance, using the previously
@@ -2442,7 +2437,7 @@ set_filter(p)(s) ==
      else let m in seq l be st
               forall x in seq l & m <= x
           in
-            [m] ^ (selection_sort (remove(m,l)))
+            [m] ^ (selection_sort (remove(m,l)));
    \end{lstlisting}
 \label{selectionSortdef}
    Here the first function removes a given element from the given
@@ -2675,7 +2670,7 @@ inside operations.
       []      -> [],
       [x]     -> [x],
       l1 ^ l2 -> lmerge (mergesort(l1), mergesort(l2))
-    end
+    end;
   \end{lstlisting}
 The pattern matching provided by cases expressions is useful for
   manipulating members of type unions. For instance, using the type
@@ -2795,14 +2790,14 @@ print_Const(mk_Const(c)) ==
 
   QualificationOK: set of Expert * Qualification -> bool
   QualificationOK(exs,reqquali) ==
-    exists ex in set exs & reqquali in set ex.quali
+    exists ex in set exs & reqquali in set ex.quali;
   \end{lstlisting}
   The function \texttt{min} gives us an example of a universal
   quantification:
   \begin{lstlisting}
   min(s: set of nat) x: nat
   pre s <> {}
-  post forall y in set s & x <= y
+  post forall y in set s & x <= y;
   \end{lstlisting}
   We can use unique existential quantification to state the functional
   property satisfied by all maps \texttt{m}:
@@ -3249,7 +3244,7 @@ example, we have:
         (gp \ {wsc,lsc}) union {new_wsc, new_lsc}
   pre forall sc1, sc2 in set gp &
           ((sc1 <> sc2) <=> (sc1.team <> sc2.team))
-          and {wt,lt} subset {sc.team | sc in set gp}
+          and {wt,lt} subset {sc.team | sc in set gp};
   \end{lstlisting}
 
 \end{description}
@@ -3445,7 +3440,7 @@ insertion:
          then curr_node := curr_node.rightBranch()
          else curr_node := curr_node.leftBranch();
        curr_node.addRoot(x);
-       )
+       );
 \end{lstlisting}
 This operation uses a self expression to find the root at which to
 being traversal prior to insertion. Further examples are given in
@@ -3765,7 +3760,7 @@ end A
     Domain(m) ==
       if is_(m, map nat to nat)
       then dom m
-      else {d | mk_(d,-) in set elems m}
+      else {d | mk_(d,-) in set elems m};
   \end{lstlisting}
      In addition there are examples on page \pageref{exprIsExs}.
 \end{description}
@@ -4132,7 +4127,7 @@ module/class
   functions
 
     build_rel : set of (Cg * Cg) -> CompatRel
-    build_rel (s) == {|->}
+    build_rel (s) == {|->};
 \end{lstlisting}
 In another
 module/class
@@ -4181,7 +4176,7 @@ an access modifier allowing access to it outside the defining class.
   build_score (t,w,d,l,p) ==
     if 3 * w + d = p
     then mk_Score(t,w,d,l,p)
-    else undefined
+    else undefined;
   \end{lstlisting}
 \end{description}
 
@@ -4216,7 +4211,7 @@ an access modifier allowing access to it outside the defining class.
   g (n: nat) sqrt: nat
   pre n >= 0
   post sqrt * sqrt <= n and
-       (sqrt+1) * (sqrt+1) > n
+       (sqrt+1) * (sqrt+1) > n;
   \end{lstlisting}
   Then the expression
   \begin{lstlisting}
@@ -4440,7 +4435,7 @@ set2seq(s) ==
     {}          -> [],
     {x}         -> [x],
     s1 union s2 -> (set2seq[@elem](s1))^(set2seq[@elem](s2))
-  end
+  end;
 \end{lstlisting}
 In the third cases alternative we see the use of a set union pattern. This
 binds \texttt{s1} and \texttt{s2} to arbitrary subsets of \texttt{s}
@@ -4476,7 +4471,7 @@ quicksort (l) ==
           quicksort([l(i) | i in set inds l & l(i) < x])
                   ^ [l(i) | i in set inds l & l(i) = x] ^
           quicksort([l(i) | i in set inds l & l(i) > x])
-  end
+  end;
 \end{lstlisting}
 Here, in the second cases clause a sequence concatenation pattern is
 used to decompose \texttt{l} into an arbitrary pivot element and two
@@ -4754,7 +4749,7 @@ values
 public p1: Period = mk_token("Monday day");
 private eid2 : ExpertId = mk_token(145);
 protected e3 : Expert = mk_Expert(eid2, { <Mech>, <Chem> });
-a1 : Alarm = mk_Alarm("CO2 detected", <Chem>)
+a1 : Alarm = mk_Alarm("CO2 detected", <Chem>);
 \end{lstlisting}
   As this example shows, a value can depend on other values which are
   defined previous to itself. The access modifiers \keyw{private},
@@ -4966,7 +4961,7 @@ functions
 
 init_sc : set of Team -> set of Score
 init_sc (ts) ==
-  { mk_Score (t,0,0,0,0) | t in set ts }
+  { mk_Score (t,0,0,0,0) | t in set ts };
   \end{lstlisting}
   In the invariant we state that each group has four teams, and no team
   plays more than three games. Initially no team has played any games.
@@ -5476,7 +5471,7 @@ from the class \texttt{GroupPhase}
           (sc.points > sc'.points) or
           (sc.points = sc'.points and sc.won > sc'.won)
     in
-      return sc.team
+      return sc.team;
   \end{lstlisting}
   The companion operation \texttt{GroupRunnerUp} gives an example of a simple
   let statement as well:
@@ -5491,7 +5486,7 @@ from the class \texttt{GroupPhase}
              (sc.points > sc'.points) or
              (sc.points = sc'.points and sc.won > sc'.won)
          in
-           return sc.team
+           return sc.team;
   \end{lstlisting}
   Note the use of the {\bf\ttfamily def} statement (section~\ref{defstmt})
   here; this is used rather than a {\bf\ttfamily let} statement since the
@@ -5560,7 +5555,7 @@ SecondRound () ==
   in
     return ([mk_(winners(secondRoundWinners(i)),
                 runners_up(secondRoundRunnersUp(i)))
-            | i in set {1,...,8}])
+            | i in set {1,...,8}]);
   \end{lstlisting}
 
 \end{description}
@@ -5627,7 +5622,7 @@ or in the context of a VDM++ instance variables
     (dcl temp: nat := x;
      x := y;
      y := temp
-    )
+    );
   \end{lstlisting}
 \end{description}
 
@@ -5755,7 +5750,7 @@ Win_sd (wt,lt) ==
                  else} sc
                | sc in set gps(gp)}
 pre exists gp in set dom gps &
-               {wt,lt} subset {sc.team | sc in set gps(gp)}
+               {wt,lt} subset {sc.team | sc in set gps(gp)};
   \end{lstlisting}
   The operation \texttt{SelectionSort} is a state based version of the
   function \texttt{selection\_sort} on page \pageref{selectionSortdef}. It 
@@ -5919,7 +5914,7 @@ GroupWinner_cases (gp) ==
     others -> RandomElement ( {sc.team | sc in set gps(gp) &
                                 forall sc' in set gps(gp) &
                                  sc'.points <= sc.points} )
-  end
+  end;
   \end{lstlisting}
 
 \end{description}
@@ -6034,7 +6029,7 @@ GroupWinner_cases (gp) ==
                sorted_list(j+1) := temp
               );
      return sorted_list
-     )
+     );
 \end{lstlisting}
 \end{description}
 
@@ -6260,7 +6255,7 @@ and returns the result of
        (stack := tl stack;
         return res)
     pre stack <> []
-    post stack~ = [RESULT] ^ stack
+    post stack~ = [RESULT] ^ stack;
   \end{lstlisting}
   where {\tt stack} is a global variable.
 
@@ -6501,7 +6496,7 @@ also the result of the complete {\it trap statement}.
       <BUSY>  |-> DoCommand(),
       err     |-> return -2 }
     in
-      DoCommand()
+      DoCommand();
   \end{lstlisting}
   In operation {\tt DoCommand} we use the {\it always statement\/} in the
   allocation of memory, and all exceptions raised are captured by the {\it
@@ -6561,7 +6556,7 @@ remedy this in the operation \texttt{SquareRootErr}:
            nextx := ((r / x) + x) / 2;
          );
        return nextx
-      )
+      );
   \end{lstlisting}
 \end{description}
 
@@ -6680,7 +6675,7 @@ Alternatively we could use the \keyw{startlist} statement here:
 \begin{lstlisting}
 bootSequenceList : runLevel ==> ()
 bootSequenceList(rl) ==
-  startlist(pInit(rl))
+  startlist(pInit(rl));
 \end{lstlisting}
 \end{description}
 
@@ -6756,7 +6751,7 @@ Sort2 () ==
          post y < y~ and
               permutation(l~(x,...,y~),l(x,...,y~)) and
               forall i in set {x,...,y} & l(i) < l(y~)]
-       )
+       );
 \end{lstlisting}
   (\texttt{permutation} is an auxiliary function taking two sequences
   which returns true iff one sequence is a permutation of the other.)
@@ -6824,7 +6819,7 @@ op2 : () ==> nat
 op2() ==
 ( dcl n : nat := 3;
   duration(10)  n := op1(1);
-  return n)
+  return n);
 \end{lstlisting}
 When executing \texttt{op2}, if the call to \texttt{op1} is
 executed, the duration statement in \texttt{op1} will be overridden by
@@ -7022,7 +7017,7 @@ operations
           list(mi) := list(i);
           list(i) := temp;
           SelectionSort(i+1)
-         )
+         );
 \end{lstlisting}
 
 \subsection{A Structured Specification}
@@ -7806,7 +7801,7 @@ class SelectionSort is subclass of Sort
            data(mi) := data(i);
            data(i) := temp;
            selectSort(i+1)
-           )
+           );
 
 end SelectionSort
 \end{lstlisting}
@@ -8278,14 +8273,14 @@ is unspecified.
 Using the web server example again, we can only allow file removal if
 some files already exist:
 \begin{lstlisting}
-    per DeleteURL   => dom site_map <> {}
+    per DeleteURL   => dom site_map <> {};
 \end{lstlisting}
 
 Constraints for safe execution of the operations {\tt Push} and {\tt Pop}
 in a stack object can be expressed using an object state guard as:
 \begin{lstlisting}
 per Push => length < maxsize;
-per Pop => length > 0
+per Pop => length > 0;
 \end{lstlisting}
 where {\tt maxsize} and {\tt length} are instance variables of
 the stack object.
@@ -8294,7 +8289,7 @@ It is often possible to express such constraints as a
 consequence of the history,
 for example the empty state of the stack:
 \begin{lstlisting}
-    length = 0 <=> #fin(Push) = #fin(Pop)
+    length = 0 <=> #fin(Push) = #fin(Pop);
 \end{lstlisting}
 However, the size is a property which is better regarded as a
 property of the particular stack instance, and in such cases it is
@@ -8337,7 +8332,7 @@ state functions is for expressing priority between operations. The
 protocol specified by:
 %mutex(A,B) $\wedge$ per B \kw{=>} \#req(A) = 0
 \begin{lstlisting}
-per B => #waiting(A) = 0
+per B => #waiting(A) = 0;
 \end{lstlisting}
 gives priority to waiting  requests for activation of {\tt A}. There
 are, however, many other situations when operation dispatch depends on
@@ -8350,7 +8345,7 @@ Note that \texttt{\#\keyw{req}(A)} have value 1 at the time of evaluation of
 the permission predicate for the first invocation of operation
 \texttt{A}. That is,
 \begin{lstlisting}
-per A => #req(A) = 0
+per A => #req(A) = 0;
 \end{lstlisting}
 would always block.
 
@@ -8599,7 +8594,7 @@ and reading the current time.
 \begin{lstlisting}
 class Timer
 values
-  PERIOD : nat = 1000
+  PERIOD : nat = 1000;
 \end{lstlisting}
 
 The Timer has two instance variables the current time and a flag
