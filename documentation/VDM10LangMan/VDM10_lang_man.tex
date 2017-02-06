@@ -269,6 +269,7 @@ September & 2016 & 9 & 2.4.0 & RMs \#35, \#36 \\ \hline
 \chapter{はじめに}
 
 The Vienna Development Method (VDM)
+<<<<<<< Updated upstream
 \cite{Bjorner&78,Jones90a,Fitzgerald&08c} は、元々ウィーンのIBM研究所で
 1970年代に開発され、最も初期に確立された形式手法の一つだ。
 このドキュメントは、合意されたVDM-10仕様から派生した3つの方言、VDM-SL、VDM++、そして
@@ -311,6 +312,58 @@ VDM++ 言語の拡張である。
 
 % \section{Purpose of This Document}
 \section{このドキュメントの目的}
+=======
+\cite{Bjorner&78,Jones90a,Fitzgerald&08c} was originally developed at
+the IBM laboratories in Vienna in the 1970's and as such it is one of
+the longest established formal methods.
+This document is a common language manual for the three dialects for
+VDM-SL, VDM++ and VDM-RT in the VDM-10 commonly agreed language
+revision. These dialects  are supported by both VDMTools (minus VDM-RT)
+\cite{Fitzgerald&08a} (in the appropriate version) as well as in the
+Overture open source tool \cite{Larsen&10a} built on top of the
+Eclipse platform. Whenever a construct is common to the three
+different dialects the term ``VDM languages'' will be used. Whenever a
+construct is specific to a subset of the VDM languages the specific
+dialect term mentioned above will be mentioned explicitly.
+
+\section{The VDM Specification Language (VDM-SL)}
+
+The syntax and semantics of the VDM-SL
+language is essentially the standard ISO/VDM-SL \cite{ISOVDM96}
+with a modular extension\footnote{A few other extensions are also included.}.
+Notice that all syntactically correct VDM-SL specifications are also correct in
+ VDM-SL.
+Even though we have tried to present the language in a
+clear and understandable way the document is not a complete VDM-SL
+reference manual.
+For a more thorough presentation of the language we refer to the
+existing literature\footnote{A more tutorial like
+presentation is given in \cite{Fitzgerald&98b,Fitzgerald&09} whereas proofs in VDM-SL
+are treated best in \cite{Jones90a} and \cite{Bicarregui&94}.}.
+Wherever the  VDM-SL notation differs from
+the VDM-SL standard notation the semantics will of course be carefully
+explained.
+
+\section{The VDM++ Language}
+
+VDM++ is a formal specification language intended to specify object
+oriented systems with parallel and real-time behaviour, typically in
+technical environments~\cite{Fitzgerald&05}.  The language is based on
+VDM-SL~\cite{ISOVDM96}, and has been extended with class and object
+concepts, which are also present in languages like Smalltalk-80 and
+Java.  This combination facilitates the development of object oriented
+formal specifications.
+
+\section{The VDM Real Time Language (VDM-RT)}
+
+The VDM-RT language (formerly called VICE as an acronym for ``VDM++ In
+Constrained Environments'') is used to appropriately model and analyse
+Real-Time embedded and distributed
+systems~\cite{Mukherjee&00,Verhoef&06b,Verhoef&07,Verhoef08,Larsen&09b}. Thus
+VDM-RT is an extension of the VDM++ language.
+
+\section{Purpose of The Document}
+>>>>>>> Stashed changes
 
 This document is the language reference manual for all the VDM-10 dialects.  The
 syntax of VDM language constructs is defined using grammar rules.

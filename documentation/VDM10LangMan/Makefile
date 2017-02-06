@@ -8,6 +8,7 @@ pdf:
 	platex $(source).tex
 	dvipdfmx $(source) 2> ERR.out
 
+
 clean:
 	latexmk -c
 
