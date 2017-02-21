@@ -1,0 +1,777 @@
+\section{Translating \ac{vdmsl} contracts to \ac{jml}}
+\label{sec:sl-dbc-gen}
+
+In this section we present the rules used to translate the \ac{dbc}
+elements of \ac{vdmsl} to \ac{jml} annotations that are added to the
+generated Java code. For each of the elements, we describe the
+approach used to translate the element to \ac{jml}. This is afterwards
+generalised as a rule, which appears in a grey box.
+
+\subsection{Allowing null values by default}
+\label{sec:modules}
+
+Overture's Java code-generator may sometimes introduce auxiliary
+variables that are initialised to \kw{null} when it code-generates
+some of the constructs of \ac{vdm}. To avoid having errors reported
+when checking the generated code with a \ac{jml} tool, we allow
+\kw{null} as a legal value by default for all references in the
+generated code.
+
+\transRule{Allowing null values by default} {Annotate every class output by the
+  Java code-generator with the \kw{nullable\_by\_default} modifier to
+  allow all references to use \kw{null} as a legal value.}
+%
+\newcounter{nullRule}
+\setcounter{nullRule}{\arabic{transRule}}
+%
+
+As a consequence we also have to guard against \kw{null} values for
+variables that originate from \ac{vdm} variables or
+patterns\footnote{The generated code uses variables to represent the
+  patterns (record pattern, tuple pattern, identifier pattern etc.)
+  introduced by use of pattern matching in \ac{vdm}.}  that do not
+allow \kw{nil}.
+
+\subsection{Translating functional descriptions to \ac{jml}}
+\label{sec:func-desc}
+
+Recall that a \ac{vdmsl} function code-generates to a \kw{static} Java
+method. In addition, a \ac{vdmsl} function does not have side-effects
+and therefore the code-generated version of the method can be
+annotated as \ac{jml} \kw{pure}.
+
+\transRule{Translation of functions}{Any function -- whether it is
+  defined by the user or derived, e.g.\ from a \kw{pre} or \kw{post}
+  condition clause -- code-generates to a \kw{static} Java method that
+  is annotated with the \kw{pure} modifier.}
+%
+\newcounter{funcRule}
+\setcounter{funcRule}{\arabic{transRule}}
+%
+
+Operations, on the other hand, can read and manipulate the state of
+the enclosing module, or invoke other operations that may have
+side-effects. Therefore, the method that the operation code-generates
+to cannot be annotated as \ac{jml} \kw{pure}.
+
+When a \ac{vdmsl} definition (e.g.\ a functional description) is
+code-generated to Java, the visibility of the corresponding Java
+definition can, in principle, be set according to whether the
+\ac{vdmsl} definition is exported (\kw{public}) or not
+(\kw{private}). In the presentation of the translation rules following
+this section, we omit explicit use of access specifiers in the rule
+formulation as we do not consider it crucial to our work.
+
+\subsection{Translating preconditions to \ac{jml}}
+
+In terms of semantics there is no difference between a precondition in
+\ac{vdmsl} and \ac{jml}. There are, however, interesting issues worth
+mentioning regarding how the \ac{jml} translator implements the
+translation. We start by covering preconditions of operations, and we
+end this subsection by describing how they differ from those of
+functions. As an example of how a \ac{vdmsl} precondition is
+translated, consider the operation
+in~\autoref{lst:vdmWithdrawPre}. This operation models withdrawal from
+a bank account identified by the parameter \texttt{id}.
+
+\begin{vdmsl}[style=customVdm,caption={\ac{vdmsl} operation for bank
+account withdrawal guarded by a precondition.},label={lst:vdmWithdrawPre}]
+Withdraw : AccountId * Amount ==> real
+Withdraw (id, amount) ==
+let newBalance =
+    accounts(id).balance - amount
+in (
+ accounts(id).balance := newBalance;
+ return newBalance;
+)
+pre
+currentCard in set validCards and pinOk and
+currentCard in set accounts(id).cards and
+id in set dom accounts
+\end{vdmsl}
+
+In order to withdraw money from the account, we require that a valid
+card has been inserted, the PIN code is accepted, and that the bank
+account exists. Note that since \texttt{currentCard} is of the
+optional type \texttt{[Card]} it can be \kw{nil}, which is not a valid
+member of \texttt{validCards}. Therefore, the precondition is
+\kw{false} when no debit card has been inserted into the \ac{atm}. The
+\texttt{pre\_Withdraw} function, which is not a visible part of the
+model, is derived from the \kw{pre} clause of the \texttt{Withdraw}
+operation. In the generated code this function is represented using a
+\kw{pure} method according to rule \arabic{funcRule} -- see
+\autoref{lst:jmlPreWithdraw}. Note that for the method in
+\autoref{lst:jmlPreWithdraw}, the Java code-generator uses extra
+variables to perform the equivalent \ac{vdm} computation. These extra
+variables are also type checked using \ac{jml} (although they are only
+used to store intermediate results).
+
+\begin{lstlisting}[float=*,style=customJml,caption={Code-generated version of
+the \texttt{pre\_Withdraw} operation.},label={lst:jmlPreWithdraw}]
+/*@ pure @*/
+public static Boolean pre_Withdraw(
+    final Number id, final Number amount, final atm.ATMtypes.St St) {
+  //@ assert (Utils.is_nat(id) && inv_ATM_AccountId(id));
+  //@ assert (Utils.is_nat1(amount) && inv_ATM_Amount(amount));
+  //@ assert Utils.is_(St,atm.ATMtypes.St.class);
+  Boolean andResult_3 = false;
+  //@ assert Utils.is_bool(andResult_3);
+  if (SetUtil.inSet(St.get_currentCard(), St.get_validCards())) {
+    Boolean andResult_4 = false;
+    //@ assert Utils.is_bool(andResult_4);
+    if (St.get_pinOk()) {
+      Boolean andResult_5 = false;
+      //@ assert Utils.is_bool(andResult_5);
+      if (SetUtil.inSet(St.get_currentCard(),
+          ((atm.ATMtypes.Account) Utils.get(St.accounts, id)).get_cards())) {
+        if (SetUtil.inSet(id, MapUtil.dom(St.get_accounts()))) {
+          andResult_5 = true;
+          //@ assert Utils.is_bool(andResult_5);
+        }
+      }
+      if (andResult_5) {
+        andResult_4 = true;
+        //@ assert Utils.is_bool(andResult_4);
+      }
+    }
+    if (andResult_4) {
+      andResult_3 = true;
+      //@ assert Utils.is_bool(andResult_3);
+    }
+  }
+  Boolean ret_29 = andResult_3;
+  //@ assert Utils.is_bool(ret_29);
+  return ret_29;
+}
+\end{lstlisting}
+
+The \texttt{Withdraw} operation is translated to the method shown
+in~\autoref{lst:jmlWithdraw}. This method introduces several \ac{jml}
+assertions that will be described in \autoref{sec:sl-types-gen}. Note
+that the \texttt{pre\_Withdraw} method is invoked from the
+\kw{requires} clause of the \texttt{Withdraw} method to check whether
+the precondition is met. In addition to the input parameters of the
+\texttt{Withdraw} method, the \texttt{pre\_Withdraw} method is also
+passed the state \texttt{St}.
+
+\begin{lstlisting}[float=*,style=customJml,caption={Code-generated version of
+the \texttt{Withdraw} operation.},label={lst:jmlWithdraw}]
+//@ requires pre_Withdraw(id,amount,St);
+public static Number Withdraw(final Number id, final Number amount) {
+ //@ assert (Utils.is_nat(id) && inv_ATM_AccountId(id));
+ //@ assert (Utils.is_nat1(amount) && inv_ATM_Amount(amount));
+ final Number newBalance =
+     ((atm.ATMtypes.Account) Utils.get(St.accounts, id)).get_balance().doubleValue()
+         - amount.longValue();
+ //@ assert Utils.is_real(newBalance);
+ {
+   VDMMap stateDes_1 = St.get_accounts();
+   atm.ATMtypes.Account stateDes_2 = ((atm.ATMtypes.Account) Utils.get(stateDes_1, id));
+   //@ assert stateDes_2 != null;
+   stateDes_2.set_balance(newBalance);
+   //@ assert (V2J.isMap(stateDes_1) && (\forall int i; 0 <= i && i < V2J.size(stateDes_1); (Utils.is_nat(V2J.getDom(stateDes_1,i)) && inv_ATM_AccountId(V2J.getDom(stateDes_1,i))) && Utils.is_(V2J.getRng(stateDes_1,i),atm.ATMtypes.Account.class)));
+   //@ assert Utils.is_(St,atm.ATMtypes.St.class);
+   //@ assert \invariant_for(St);
+   Number ret_7 = newBalance;
+   //@ assert Utils.is_real(ret_7);
+   return ret_7;
+ }
+}
+\end{lstlisting}
+
+\transRule{Translating the precondition of an operation} {
+  Let \texttt{op} be a method code-generated from a \ac{vdmsl} user-defined operation and let the signature of \texttt{op} be:\\
+  \kw{static} \texttt{R op(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n})}\\
+  Then \texttt{op} has a code-generated precondition method\\
+  \texttt{pre\_op} that is \kw{pure} and which in addition to the
+  pa\-ra\-met\-ers of \texttt{op} also takes the state component \texttt{s} as an argument, i.e.\ \\
+  \texttt{/*@ \kw{pure} @*/} \kw{static} \texttt{ \kw{boolean}\\
+    pre\_op(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n},S s)}\\
+  To ensure that the precondition is evaluated, we annotate \texttt{op} with the following \kw{requires} annotation:\\
+  \texttt{//@ \kw{requires} pre\_op(i\sub{1},...,i\sub{n},s);}}
+%
+\newcounter{preOp}
+\setcounter{preOp}{\arabic{transRule}}
+%
+Rule \arabic{preOp} assumes the existence of a state component
+\texttt{s}. However, when the state of the module enclosing
+\texttt{op} is not defined, rule \arabic{preOp} changes to not include
+the state parameter in the definition of \texttt{pre\_op}.
+
+The example above considers the case where the precondition is
+guarding an operation (i.e.\ \texttt{Withdraw}). As described in
+\autoref{sec:vdmjml}, a precondition is defined differently for a
+function than it is for an operation. In particular, the precondition
+of a function is not passed the state, so neither is the
+code-generated version of it. We also note that the visibility of the
+precondition function must be the same as that of the functional
+description it guards. Otherwise it cannot be invoked from the
+corresponding \kw{requires} clause.
+
+\transRule{Translating the precondition of a function} {
+  Let \texttt{f} be a method code-generated from a \ac{vdmsl} user-defined function and let the signature of \texttt{f} be:\\
+  \kw{static} \texttt{R f(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n})}\\
+  Then \texttt{f} has a code-generated precondition method
+  \texttt{pre\_f} that is \kw{pure} and which accepts the same parameters as \texttt{f}, i.e.\ \\
+  \texttt{/*@ \kw{pure} @*/} \kw{static} \texttt{ \kw{boolean}\\
+    pre\_f(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n})}\\
+  To ensure that the precondition is evaluated, we annotate \texttt{f} with the following \kw{requires} annotation:\\
+  \texttt{//@ \kw{requires} pre\_f(i\sub{1},...,i\sub{n});}}
+  
+\subsection{Translating postconditions to \ac{jml}}
+\label{sec:postcond}
+
+Postconditions in \ac{vdmsl} and \ac{jml} are semantically similar,
+although \ac{vdmsl} represents the postcondition function as a derived
+function definition (as was done for preconditions). Furthermore, in
+\ac{vdm} and \ac{jml} postconditions of operations and methods,
+respectively, can access both the before and after states. Returning
+to the \texttt{Withdraw} operation, one could specify a postcondition
+requiring that exactly the value specified by the \texttt{amount}
+parameter is withdrawn from the account -- see
+~\autoref{lst:vdmWithdrawPost}.
+
+\begin{vdmsl}[style=customVdm,caption={The \texttt{Withdraw} operation
+guarded by a postcondition.},label={lst:vdmWithdrawPost}]
+Withdraw : AccountId * Amount ==> real
+Withdraw (id, amount) == ...
+post
+let accountPre = accounts~(id),
+    accountPost = accounts(id)
+in
+ accountPre.balance =
+ accountPost.balance + amount and
+ accountPost.balance = RESULT;
+\end{vdmsl}
+
+The JML translator produces a \kw{pure} Java method to represent the
+postcondition function. This Java method is invoked from the
+\kw{ensures} clause to check that the postcondition holds. The
+invocation of the postcondition method of the \texttt{Withdraw}
+operation is shown in~\autoref{lst:jmlWithdrawPost}.
+
+\begin{lstlisting}[style=customJml,caption={Code-generated version of
+the \texttt{Withdraw} operation.},label={lst:jmlWithdrawPost}]
+//@ requires pre_Withdraw(id,amount,St);
+//@ ensures post_Withdraw(id,amount,\result,\old(St.copy()),St);
+public static Number Withdraw(final Number id, final Number amount) {...}
+\end{lstlisting}
+
+Note in particular how the before and after states are passed to the
+\texttt{post\_Withdraw} method. Reasoning about before state is
+achieved using \ac{jml}'s \old expression. For the \texttt{Withdraw}
+operation the before state is constructed as \oldexp{St.copy()}. Since
+\texttt{St.copy()} is a deep copy of the state (as explained
+in~\autoref{sec:sl2java}) the evaluation inside the \old expression
+ensures that the result indeed is a representation of the before
+state.
+
+The \ac{jml} translator deep copies the state because Java represents
+every composite data type using a class. So without deep copying the
+state, only the address of the before state object reference is
+copied. In effect, only a single object would exist to represent the
+pre- and post states. This would never work, since state changes made
+by the operation would affect what was intended to be a representation
+of the before state. Therefore, the state is deep copied to get a
+separate object to represent the before state.
+
+\transRule{Translating the postcondition of an operation} {
+  Let \texttt{op} be a method code-generated from a \ac{vdmsl} user-defined operation and let the signature of \texttt{op} be:\\
+  \kw{static} \texttt{R op(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n})}\\
+  Then \texttt{op} has a code-generated postcondition method\\
+  \texttt{post\_op} that is \kw{pure} and which in addition to the
+  parameters of \texttt{op}, also takes the result and the before and after states of \texttt{op} as arguments, i.e.\ \\
+  \texttt{/*@ \kw{pure} @*/} \kw{static} \texttt{ \kw{boolean}}\\
+  \texttt{ post\_op(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n},}\\
+  \indent \texttt{R RESULT,S \_s,S s)}\\
+  To ensure that the postcondition is evaluated we annotate \texttt{op} with the following \kw{ensures} annotation:\\
+  \texttt{//@ \kw{ensures}
+    post\_op(i\sub{1},...,i\sub{n},\textbackslash\kw{result},}\\
+  \indent \texttt{\textbackslash\textbf{old}(s.copy()),s);}}
+%
+\newcounter{postOp}
+\setcounter{postOp}{\arabic{transRule}}
+%
+
+While the primary concern is to preserve the behaviour of the
+specification across the translation, deep copying values may
+significantly affect system performance in a negative way. In
+particular, because it is difficult (in general) to avoid deep copying
+values unnecessarily when they are passed around in the generated
+code. To address this issue, the Java code-generator (and hence the
+\ac{jml} translator) offers an option that, when selected by the user,
+omits deep copying of values (other than the old state). While the
+purpose of this is to generate performance-efficient code, this option
+is, however, only safe to use if Java objects that originate from
+\ac{vdmsl} values are not modified via aliases.
+
+Yi et al.\ identify and address a number of problems with the \old
+expression~\cite{Yi&2013}. In particular, the authors of that work
+conduct experiments showing that passing deep copies of the old state
+may drastically increase a system's memory usage. To address this, Yi
+et al.\ propose the \past expression as a more memory-efficient
+alternative to the \old expression. Yi et al.\ further show that the
+\past expression can be implemented as an extension of the OpenJML
+runtime assertion checker by means of aspect-oriented programming
+principles. However, OpenJML does not officially support the \past
+expression yet, which is why the translation rules do not currently
+rely on this expression. As we see it, the ideas proposed by Yi et
+al.\ could potentially support the development of a more
+performance-efficient way to handle old states in the \ac{jml}
+translator.
+
+Similar to rule \arabic{preOp}, rule \arabic{postOp} also assumes that
+the state of the module enclosing \texttt{op} exists. If the state
+component does not exist, rule \arabic{postOp} changes to not include
+the state parameters in the definition of
+\texttt{post\_op}. Furthermore, if \texttt{op} does not return a
+result (the return type is void), then the definition of
+\texttt{post\_op} does not include the \texttt{RESULT} parameter.
+
+The example above considers the postcondition of an operation (i.e.\
+\texttt{Withdraw}). As described in \autoref{sec:vdmjml}, the
+postcondition of a function is not allowed to access state. Therefore, the
+code-generated version of the postcondition function is not
+passed the state.
+
+\transRule{Translating the postcondition of a function} {
+  Let \texttt{f} be a method code-generated from a \ac{vdmsl} user-defined function and let the signature of \texttt{f} be:\\
+  \kw{static} \texttt{R f(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n})}\\
+  Then \texttt{f} has a code-generated postcondition method\\
+  \texttt{post\_f} that is \kw{pure} and which in addition to the
+  parameters of \texttt{f} also takes the result of \texttt{f} as an argument, i.e.\ \\
+  \texttt{/*@ \kw{pure} @*/} \kw{static} \texttt{ \kw{boolean}\\
+    post\_f(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n},R RESULT)}\\
+  To ensure that the postcondition is evaluated we annotate \texttt{f} with the following \kw{ensures} annotation:\\
+  \texttt{//@ \kw{ensures}
+    post\_f(i\sub{1},...,i\sub{n},\textbackslash\kw{result});}}
+
+\subsection{Translating record invariants to \ac{jml}}
+\label{sub:rec-inv}
+
+A record can, like any other type definition in \ac{vdmsl}, be
+constrained by an invariant. As an example,~\autoref{lst:vdmRec} shows
+a record definition modelling a bank account.
+
+\begin{vdmsl}[style=customVdm,caption={A \ac{vdmsl} record definition
+modelling a bank account.},label={lst:vdmRec}]
+Account :: 
+ cards : set of Card
+ balance : real
+ inv a == a.balance >= -1000;
+\end{vdmsl}
+
+An \texttt{Account} comprises the available balance as well as the
+debit cards associated with the account. We further constrain an
+\texttt{Account} to not have a balance of less than -1000, which is
+expressed using an invariant.
+
+As described in~\autoref{sec:sl2java}, a record definition is
+translated to a class that emulates the behaviour of a value type
+using \texttt{copy} and \texttt{equals} methods.
+
+Since a record invariant is required to hold for every record value,
+or object instance in the generated code, we represent it using an
+\kw{instance invariant} in \ac{jml} as shown
+in~\autoref{lst:jmlRec}. Note that the \kw{instance} \kw{invariant} is
+formulated as an implication such that invariant violations are not
+reported when invariant checks are disabled. As we shall see in
+\autoref{sec:atomic} this has to do with the way \ac{vdmsl} handles
+atomic execution.
+
+% PJ: Make listing a float to avoid unintentional page-break
+
+\begin{lstlisting}[float,style=customJml,caption={Code-generated version
+of the \texttt{Account} record.},label={lst:jmlRec}]
+//@ nullable_by_default
+final public class Account implements Record
+{
+ public VDMSet cards;
+ public Number balance;
+ //@ public instance invariant atm.ATM.invChecksOn ==> inv_Account(cards,balance);
+  ...
+ /*@ pure @*/
+ public boolean equals(final Object obj)
+ {...}
+ /*@ pure @*/
+ public atm.ATMtypes.Account copy(){...}
+ /*@ pure @*/
+ public VDMSet get_cards() {...}
+ public void set_cards(final VDMSet _cards)
+ {...}
+ /*@ pure @*/
+ public Number get_balance() {...}
+ public void set_balance(final Number _balance) {...}
+ /*@ pure @*/
+ /*@ helper @*/
+ public static Boolean inv_Account(final VDMSet _cards, final Number _balance){
+   return _balance.doubleValue() >= -1000L;
+ }
+}
+\end{lstlisting}
+
+The code-generated record \texttt{Account} defines an \emph{invariant
+  method} \texttt{inv\_Account} that takes all the record fields of
+\texttt{Account} as input and evaluates the invariant predicate. This
+method is invoked directly from the \ac{jml} invariant, as shown in
+\autoref{lst:jmlRec}. Note that \texttt{inv\_Account} is a \kw{static}
+method according to rule \arabic{funcRule}. In addition, this
+method is annotated as a \kw{helper} to avoid the invariant check
+triggering another invariant check, which eventually would cause a
+stack-overflow.
+
+\transRule{Translating a record invariant}{Let \texttt{D} be a
+  code-generated record definition with fields
+  \texttt{f\sub{1},...,f\sub{n}} of types
+  \texttt{F\sub{1},...,F\sub{n}}, respectively, and let \texttt{D} be
+  constrained by an invariant. Then \texttt{D} has an invariant method
+  \texttt{inv\_D} that is annotated as a \kw{helper} to allow it to
+  be invoked from the invariant clause of \texttt{D}. The invariant
+  method can also be annotated as \kw{pure} since it originates from a
+  function definition. The annotated signature of \texttt{inv\_D} thus
+  becomes:\\
+  \texttt{/*@ \kw{pure} @*/}\\
+  \texttt{/*@ \kw{helper} @*/}\\
+  \kw{boolean} \texttt{inv\_D(F\sub{1} f\sub{1},...,F\sub{n} f\sub{n})}\\
+  Let further \texttt{invChecksOn} be a variable that is true if
+  invariant checking is enabled and false otherwise. To represent the
+  record invariant of \texttt{D} we annotate \texttt{D} with the
+  \kw{invariant} annotation:\\
+  \texttt{/*@ \kw{public} \kw{instance} \kw{invariant}\\invChecksOn
+    \kw{==>} inv\_D(f\sub{1},...,f\sub{n}); @*/}}
+
+As we shall later see in \autoref{sec:atomic}, atomic execution
+sometimes requires extra assertions to be inserted into the generated
+code in order to guarantee that the record invariant semantics of
+\ac{vdmsl} are preserved.
+
+All the methods inside a record class -- except for the constructor
+and the ``setter'' methods -- do not modify the state of the record
+class and therefore they are marked as \kw{pure}. Updates to a record
+object in the generated code are made using the ``setter'' methods of
+the generated record class, or by using the record modification
+expression~\cite{Larsen&10b}. Use of ``setter'' methods instead of
+direct field access to manipulate the state of a record (which is how
+field access is achieved in \ac{vdmsl}) forces the record object into
+a \emph{visible state} (as described in \autoref{sec:jml}) after it
+has been updated, thus triggering the invariant check according to
+the \ac{vdmsl} semantics. For example, in \ac{vdmsl} we could set
+the balance of an account as shown in \autoref{lst:vdmAccountUpdate}.
+
+\begin{vdmsl}[style=customVdm,caption={Updating the \texttt{Account}
+balance in \ac{vdmsl}.},label={lst:vdmAccountUpdate},numbers=none]
+acc.balance := newBalance;
+\end{vdmsl}
+
+\noindent This assignment produces the Java code shown in
+\autoref{lst:jmlAccountUpdate}. Note that for this particular case
+there is no need to generate any additional \ac{jml} assertions since
+the state of \texttt{acc} becomes visible after the call to
+\texttt{set\_balance}. This causes the invariant check of
+\texttt{Account} to trigger.
+
+\begin{lstlisting}[style=customJml,caption={Updating the
+\texttt{Account} balance in the generated
+code.},label={lst:jmlAccountUpdate},numbers=none]
+acc.set_balance(newBalance);
+\end{lstlisting}
+
+% In \ac{vdmsl} an invariant is a function, which means that it cannot
+% call operations -- only calls to functions are
+% allowed.\footnote{Recent changes to \ac{vdm}10 now allows \kw{pure}
+%   operations (different from the \kw{pure} concept in \ac{jml}) to be
+%   called from functions.}. Java, on the other hand, uses methods to
+% express functionality, but it does not distinguish between functions
+% and operations as \ac{vdm} does. Therefore every functional
+% description in a \ac{vdmsl} model generates to a Java method.
+
+%\todo[inline]{Re-consider this paragraph}
+
+% The record invariant method (e.g.\ \texttt{inv\_Account}) is defined
+% within the record class (e.g.\ \texttt{Account}) and this class is
+% generated as a top-level class by the current version of the
+% \ac{jml} translator.\footnote{Alternatively, record classes could
+% have been generated as inner classes of their defining
+% module. However, since OpenJML currently provides limited support
+% for loading of inner classes we have chosen to generate records as
+% top-level classes. See:
+% \url{https://sourceforge.net/p/jmlspecs/bugs/413/}} A user-defined
+% functional description code-generates to a method in module
+% class. Therefore this method cannot be accessed by a \kw{private}
+% helper in a record class. Therefore we simply prohibit invocation of
+% user-defined functions from a \ac{jml} invariant.
+
+\subsection{Atomic execution}
+\label{sec:atomic}
+
+There are situations where multiple assignment statements in
+\ac{vdmsl} need to be evaluated atomically in order to avoid
+unintentional violation of a state invariant. In our example, this is
+the case when the \ac{atm} returns the card to the owner, which is
+done as the last step of a transaction. Returning the debit card also
+requires us to invalidate the PIN code currently entered. These two
+things have to be done atomically to avoid violating the state
+invariant of the \texttt{ATM} module, which is checked using the
+\texttt{inv\_St} function, derived from the state invariant shown in
+\autoref{lst:vdmCase} in \autoref{sec:case}. Therefore the body of the
+\texttt{ReturnCard} operation is executed inside an \kw{atomic}
+statement block as shown in \autoref{lst:vdmReturn}. Note that the
+invariant is evaluated internally by the interpreter, and therefore
+the example in \autoref{lst:vdmReturn} makes no explicit mention of
+the invariant.
+
+\begin{vdmsl}[style=customVdm,caption={Removal of the debit card from
+the \ac{atm} in \ac{vdmsl}.},label={lst:vdmReturn}]
+ReturnCard : () ==> ()
+ReturnCard () ==
+atomic (
+ currentCard := nil;
+ pinOk := false;
+)
+pre currentCard <> nil
+post currentCard = nil and not pinOk;
+\end{vdmsl}
+
+\ac{jml} does not include a syntactic construct similar to that of the
+\kw{atomic} statement. Instead atomic execution must be achieved using
+different means -- for example by manipulating state directly using
+field access or \kw{helper} methods.
+
+To be consistent with the way record state is updated, and
+to reflect the way that \ac{vdmsl} handles atomic execution, we
+believe a better approach is to use a flag that indicates if invariant
+checks are enabled or not. Since this flag should not affect the
+generated code, we make it a \kw{ghost} field such that it is only
+visible at the specification level. Since this \kw{ghost} field must
+be accessible everywhere in the translation, we make it a static field
+of the class, as shown in \autoref{lst:invChecks}. The \kw{ghost}
+field must be added to one of the generated Java classes since Java
+does not really have global variables. Note that this flag does not
+affect pre- and postconditions since these checks must always be
+evaluated.
+
+\begin{lstlisting}[style=customJml,caption={Ghost field used to
+control invariant checking.},label={lst:invChecks}]
+/*@ public ghost static boolean invChecksOn = true; @*/
+\end{lstlisting}
+
+The declaration of \texttt{invChecksOn} allows us to formulate
+invariants such that violations are reported only if invariant
+checking is enabled. An example of this is shown in
+\autoref{lst:jmlRecInv} for the record state class of the \texttt{ATM}
+module.
+
+\begin{lstlisting}[style=customJml,caption={The invariant of the record state class.},label={lst:jmlRecInv}]
+//@ public instance invariant atm.ATM.invChecksOn ==> inv_St(validCards,currentCard,pinOk,accounts);
+\end{lstlisting}
+
+The \texttt{invChecksOn} flag provides the means to emulate the
+behaviour of atomic execution in a Java environment as shown in
+\autoref{lst:jmlReturn}. Specifically, the \ac{jml} \kw{set} statement
+is used to disable/enable invariant checking before/after executing
+the body of the \texttt{ReturnCard} method.
+
+\begin{lstlisting}[style=customJml,caption={Code-generated version
+of the \texttt{ReturnCard} operation.},label={lst:jmlReturn}]
+//@ requires pre_ReturnCard(St);
+//@ ensures post_ReturnCard(\old(St.copy()),St);
+public static void ReturnCard() {
+ atm.ATMtypes.Card atomicTmp_1 = null;
+ //@ assert ((atomicTmp_1 == null) || Utils.is_(atomicTmp_1,atm.ATMtypes.Card.class));
+ Boolean atomicTmp_2 = false;
+ //@ assert Utils.is_bool(atomicTmp_2);
+ { /* Start of atomic statement */
+   //@ set invChecksOn = false;
+   //@ assert St != null;
+   St.set_currentCard(Utils.copy(atomicTmp_1));
+   //@ assert St != null;
+   St.set_pinOk(atomicTmp_2);
+   //@ set invChecksOn = true;
+   //@ assert \invariant_for(St);
+ } /* End of atomic statement */
+}
+\end{lstlisting}
+
+\transRule{Enabling and disabling invariant checking}{Declare in a
+  code-generated module \texttt{M} a globally accessible \ac{jml}
+  \kw{ghost} field \texttt{invChecksOn} to control
+  invariant checking:\\
+  \texttt{/*@ \kw{public} \kw{ghost} \kw{static}\\
+    \kw{boolean} invChecksOn = \kw{true}; @*/}\\
+  Before executing a code-generated atomic statement (in any of the
+  code-generated modules) invariant checking is disabled using the
+  following \ac{jml} \kw{set}
+  statement:\\
+  \texttt{//@ \kw{set} M.invChecksOn = \kw{false};}\\
+  After the code-generated atomic block has finished executing
+  invariant checking is re-enabled using:\\
+  \texttt{//@ \kw{set} M.invChecksOn = \kw{true};}}
+
+When all the statements have been executed it must be ensured that no
+invariants have been violated. For the example in
+\autoref{lst:jmlReturn}, the only thing that needs to be checked is
+that the state component of the \texttt{ATM} class, i.e.\ \texttt{St}
+does not violate its invariant. This is checked by asserting that
+\inv{St} holds.
+
+\transRule{Resuming invariant checking}{Let
+  \texttt{d\sub{1},...,d\sub{n}} be state designators of records that
+  have been updated, or affected by an update, during execution of a
+  code-generated atomic statement block. Further assume that
+  \texttt{d\sub{1},...,d\sub{n}} have been updated in the given order,
+  i.e.\ \texttt{d\sub{i}} was updated (for the first time) before
+  \texttt{d\sub{i+1}} and that \texttt{d\sub{i}} may be of one of
+  \texttt{m\sub{i}} record types\\
+  \texttt{D\sub{i1},...,D\sub{im\sub{i}}}. Immediately after executing
+  the code-generated atomic statement block, it is checked that the
+  state designators \texttt{d\sub{1},...,d\sub{n}} do not violate any
+  invariants using
+  the following sequence of \kw{assert} statements:\\
+  \texttt{//@ \kw{assert} \guardedinv{d\sub{1}}{D\sub{11}};}\\
+  ...\\
+  \texttt{//@ \kw{assert} \guardedinv{d\sub{1}}{D\sub{1m\sub{1}}};}\\
+  ...\\
+  \texttt{//@ \kw{assert} \guardedinv{d\sub{n}}{D\sub{n1}};}\\
+  ...\\
+  \texttt{//@ \kw{assert} \guardedinv{d\sub{n}}{D\sub{nm\sub{n}}};}}
+
+%
+\newcounter{resumeInv}
+\setcounter{resumeInv}{\arabic{transRule}}
+%
+
+The \invariantfor construct is not currently implemented in
+OpenJML. Instead the invariant check, for an object, can be inlined as
+a method call (rather than explicitly using \invariantfor). However,
+throughout this paper we use \invariantfor to check record invariants
+as we believe it makes the examples easier to understand.
+
+The \ac{jml} translator keeps track of state designators of records
+that potentially have been updated as part of executing the
+code-generated atomic statement block. This is done by analysing the
+left-hand sides of the assignment statements. Immediately after
+invariant checking is re-enabled, i.e.\ the code-generated atomic
+statement block has finished execution, it is checked that no record
+violates its invariant.
+
+There are a few things related to rule \arabic{resumeInv} that are
+worth clarifying. First, for assignments to composite state
+designators such as \texttt{a.b.c:=42}, the invariants of the
+individual state designators \texttt{a}, \texttt{b} and \texttt{c},
+have to be checked, if these are defined. For this particular example
+we say that \texttt{c} was updated, and that \texttt{a} and \texttt{b}
+were affected by the update. Second, the order in which the invariants
+are checked follows that used by the Overture \ac{vdm} interpreter. Third,
+regardless of how many times a state designator is updated, the
+corresponding invariant is only checked once (for each state
+designator) since this is how atomic execution works in \ac{vdm},
+i.e.\ the update(s) are performed atomically, and afterwards the
+constraints that the state designators are subjected to are
+checked. Fourth, rule \arabic{resumeInv} includes all the state
+designators that have been updated or affected by an update. No
+particularly complex situations can arise that makes it difficult to
+identify these state designators since all \ac{vdmsl}'s data types use
+call-by-value semantics, and therefore no aliasing can
+occur. Essentially this means that for the assignment statement
+\texttt{a.b.c:=42}, the only invariants (if defined) that have to be checked are
+those of the state designators \texttt{a}, \texttt{b} and \texttt{c}
+ since aliases do not exist. Therefore, the \ac{jml}
+translator can determine (using static analysis) that assertions only
+have to be generated for these state designators. Naturally this
+simplifies the translation process, since the \ac{jml} translator does
+not have to identify additional state designators (other than those
+that appear on the left-hand side of the assignment) that are affected
+by the assignment.
+
+A state designator can be ``masked'' as a union type and in such
+situations it cannot always be statically determined what the runtime
+type of a state designator will be. To demonstrate this, consider the
+record types \texttt{R1} and \texttt{R2} and a state designator
+declared as \texttt{\kw{dcl} r : R1 | R2 := ...}. Further assume that
+\texttt{R1} and \texttt{R2} code-generate to classes
+\texttt{R1\sub{c}} and \texttt{R2\sub{c}}. After updating \texttt{r}
+atomically in the generated code, it is ensured that \inv{(R1\sub{c})
+  r} holds if \texttt{r} is of type \texttt{R1\sub{c}}, and similarly
+that the equivalent condition is true if \texttt{r} is of type
+\texttt{R2\sub{c}}. Since rule \arabic{resumeInv} has to take all
+possible types into account, the invariant checks are formulated as
+implications.
+
+Although the \ac{vdm} type system allows state designators to be
+``masked'' as union types, most of the time it is possible to
+statically determine the runtime type of a state de\-sig\-na\-tor. For
+example, in \autoref{lst:jmlReturn} no \kw{instanceof} check is needed
+since the static type of the state component is \texttt{St}. This is
+an example where the \ac{jml} translator simplifies the checks proposed
+by rule \arabic{resumeInv}.
+
+There are more aspects to rule \arabic{resumeInv} worth discussing --
+especially when state designators are based on arbitrarily complex
+data structures such as nested records. These will be addressed in
+\autoref{sub:complex-state}.
+
+\subsection{Translating module state to \ac{jml}}
+
+As described in \autoref{sub:vdmsl}, a module state invariant
+constrains the record type used to represent the state component of
+the enclosing module. Therefore, a module state invariant can
+essentially be seen as a record invariant that can be translated into
+\ac{jml}-annotated Java without introducing additional translation
+rules. This subsection instead explains how a \ac{vdmsl} state
+definition is translated into a form that allows the rules related to
+record invariants to be applied (see \autoref{sub:rec-inv}).
+
+In our example each account can be accessed from an \ac{atm} using one
+of the debit cards associated with it. In addition to the bank
+accounts, the state of the \ac{atm} also keeps track of the debit
+cards that the system considers valid, the debit card that is
+currently inserted into the \ac{atm}, and wheth\-er the PIN code entered
+by the user is valid. The state (including the state invariant) as
+specified in \ac{vdmsl} is shown in~\autoref{lst:vdmCase} and
+described in \autoref{sec:case}. Based on the state definition, a
+record class is generated that represents the state type as shown in
+\autoref{lst:jmlStateRec}. Recall that the fields in this class are
+nullable according to rule \arabic{nullRule}.
+
+\begin{lstlisting}[style=customJml,caption={The record class used to represent the state type.},label={lst:jmlStateRec}]
+final public class St implements Record {
+ public VDMSet validCards;
+ public atm.ATMtypes.Card currentCard;
+ public Boolean pinOk;
+ public VDMMap accounts;
+
+ //@ public instance invariant atm.ATM.invChecksOn ==> inv_St(validCards,currentCard,pinOk,accounts);
+ /* Record methods omitted */ 
+}
+\end{lstlisting}
+
+In addition, an instance of the record class is created to represent
+the state component as shown in \autoref{lst:jmlStateComp}. The state
+component is annotated with the \kw{spec\_public} modifier so that it
+can be referred to from the \kw{requires} and \kw{ensures} clauses of
+\kw{public} methods. Also note that the module is not constrained by
+an invariant. This is handled entirely by the record invariant shown
+in \autoref{lst:jmlStateRec}.
+
+\begin{lstlisting}[style=customJml,caption={The state component in the
+\texttt{ATM} module.},label={lst:jmlStateComp}]
+final public class ATM {
+ /* Fields omitted */
+
+ /*@ spec_public @*/
+ private static atm.ATMtypes.St St = new atm.ATMtypes.St(SetUtil.~set~(),
+            null, false, MapUtil.map());
+ /* Module methods omitted */ 
+}
+\end{lstlisting}
+
+\transRule{Translating the state component}{Annotate state components
+  of module classes with the\\
+  \kw{spec\_public} modifier to ensure that the state components can
+  be referred to from the \kw{requires} and\\
+  \kw{ensures} clauses of \kw{public} methods.}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 

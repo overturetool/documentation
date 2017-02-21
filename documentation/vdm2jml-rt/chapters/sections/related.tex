@@ -1,0 +1,86 @@
+
+\section{Related work}
+\label{sec:related}
+
+%SpecSharp cites: SpecSharp\cite{Barnett&04,Barnett&11}.\\
+
+In \cite{Vilhena08} Vilhena considers the possibilities for
+automatically converting between \ac{vdm}++ and \ac{jml} and the
+approach is demonstrated using a proof-of-concept implementation.
+That work considers a bi-directional mapping, whereas we only consider
+a one-way translation from \ac{vdmsl} to Java/\ac{jml}. The
+bi-directional mapping proposed by Vilhena only produces the \ac{jml}
+specification files (where non-model methods do not define
+bodies). Therefore, Vilhena's mapping does not generate annotations at
+the statement level, which is an essential part of our work. The
+implementation of the bi-directional mapping was originally targeting
+the Overture tool, but it never reached maturity to be included in the
+release of the tool.
+
+Rules for translating from a subset of \ac{vdmsl} to \ac{jml} are
+proposed by Jin et al.\ in~\cite{Jin&08}. Their approach also
+considers implicit functional descriptions but it provides limited
+support for translation of record definitions and named invariant
+types. In the early phases of the software development process the
+authors propose to formulate requirements in natural language or using
+\ac{uml}~\cite{Rumbaugh&04} and then formalise them in \ac{vdmsl} to
+eliminate ambiguity. Subsequently the authors manually apply their
+rules to the \ac{vdmsl} specification to produce an initial version of
+the software implementation. Their work does, however, not take
+generation of the bodies of functions and operations into
+account. Therefore, the authors only produce the method signatures for
+the Java methods when translating the functional descriptions of the
+\ac{vdmsl} model.
+
+The translation rules proposed by Jin et al.\ have been implemented as
+an Eclipse plugin by Zhou et al.\ in~\cite{Zhou&10}. The plugin takes
+a \ac{vdmsl} specification as input, which is type-checked using
+VDMTools~\cite{Larsen01}, and outputs \ac{jml}-annotated Java classes
+that must be completed manually by the developer.
+
+Translations from other formal notations or modelling languages to
+\ac{jml}-annotated Java have also been developed. As an example, Rivera et
+al.\ present the EventB2Java tool~\cite{Rivera&15} -- a
+code-generator, which is capable of translating both abstract and
+refinement Event-B~\cite{Abrial09} models into \ac{jml}-annotated
+Java. EventB2Java has the advantage over other Event-B code-generators
+that it does not require user intervention as part of the
+code-generation process, which is similar to our approach.
+
+In~\cite{Lensink&12} Lensink et al.\ present a prototype
+code-generator that translates a subset of \ac{pvs}~\cite{Owre&92} to
+an intermediate representation in Why~\cite{Filliatre03} suitable for
+program verification. Subsequently the Why representation is
+translated to \ac{jml}-annotated Java. In their work the authors focus
+on translating executable \ac{pvs} constructs, which is similar to
+what we do for \ac{vdmsl}. A key feature of their code-generator is
+that it, in addition to specification code, also translates proven
+properties, which is outside the scope of our work.
+
+Hubbers et. al propose AutoJML~\cite{Hubbers&03a} -- a tool for
+translating \ac{uml} state diagrams into \ac{jml}-annotated Java Card
+code~\cite{Chen&00}. A state diagram describes a Java Card applet from
+which AutoJML produces Java skeleton code annotated with \ac{jml}. In
+the generated code the different states are represented as constant
+values, and an additional Java field is used to represent the current
+state of the applet. A \ac{jml} \kw{invariant} is used to specify the
+valid state values for this field, and a \ac{jml} \kw{constraint} is
+used to describe the valid state transitions. This is comparable to
+the way we enable and disable invariant checking, which we do by
+toggling the \texttt{invChecksOn} \kw{ghost} field using \kw{set}
+statements.
+
+In~\cite{Klebanov&08} Klebanov proposes an approach similar to that of
+Hubbers et al. Instead of using \ac{uml} state diagrams, Klebanov uses
+automata-based programming to describe the behaviour of a smart card
+application, which is generated to \ac{jml}-annotated Java Card
+code. Klebanov argues that use of automata-based programming over
+\ac{uml} state diagrams is a better way to describe
+application-specific behaviour. A similar argument can be made for
+\ac{vdmsl}, which is suitable for capturing the dynamic aspects of a
+system.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 

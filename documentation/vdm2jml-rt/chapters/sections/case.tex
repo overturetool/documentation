@@ -1,0 +1,146 @@
+\section{Case study example}
+\label{sec:case}
+
+Throughout the paper we will demonstrate the translation rules using a
+case study model of an \ac{atm}. The model consists of a single
+module, \texttt{ATM} (shown in \autoref{lst:vdmCase}), which uses a
+state definition to record information about
+
+\begin{itemize}
+
+\item The debit cards considered valid by the system (named
+  \texttt{validCards}).
+
+\item The debit card currently inserted into the \ac{atm}, if any
+  (\texttt{currentCard}).
+
+\item If a valid PIN code has been entered (\texttt{pinOk}) for the
+  debit card currently inserted into the \ac{atm} and,
+
+\item all the bank accounts known to the system (\texttt{accounts}).
+
+\end{itemize}
+
+\begin{vdmsl}[style=customVdm,caption={\ac{vdmsl} module representing
+an \ac{atm}.},label={lst:vdmCase}]
+module ATM
+definitions
+state St of
+ validCards : set of Card
+ currentCard : [Card]
+ pinOk : bool
+ accounts : map AccountId to Account
+ init St == St = @mk_@St({},nil,false,{|->})
+ inv @mk_@St(v,c,p,a) ==
+  (p or c <> nil => c in set v)
+  and
+  forall id1, id2 in set dom a &
+   id1 <> id2 =>
+   a(id1).cards inter a(id2).cards = {}
+end
+ ...
+operations
+GetStatus : () ==> bool * seq of char
+GetStatus () == ...
+
+OpenAccount : set of Card * AccountId ==> ()
+OpenAccount (cards,id) == ...
+
+AddCard : Card ==> ()
+AddCard (c) == ...
+
+RemoveCard : Card ==> ()
+RemoveCard (c) == ...
+
+InsertCard : Card ==>
+  <Accept>|<Busy>|<Reject>  
+InsertCard (c) == ...
+
+EnterPin : Pin ==> ()
+EnterPin (pin) == ...
+
+ReturnCard : () ==> ()
+ReturnCard () == ...
+
+Withdraw : AccountId * Amount ==> real
+Withdraw (id, amount) == ...
+
+Deposit : AccountId * Amount ==> real
+Deposit (id, amount) == ...
+end
+\end{vdmsl}
+
+For simplicity, \autoref{lst:vdmCase} omits type definitions and only
+shows the state definition (including the state invariant) and the
+signatures for some of the operations. The state invariant, shown in
+\autoref{lst:vdmCase}, requires that at all times the following two
+conditions must be met: a debit card must at most be associated with a
+single account and secondly, for a PIN code to be considered valid,
+the debit card currently inserted into the \ac{atm} must itself be a
+valid debit card.
+
+When the \ac{atm} model is translated to a \ac{jml}-annotated Java
+program it can be checked for correctness using \ac{jml} tools. To
+demonstrate this, consider the example in \autoref{lst:jmlScenario},
+which creates a debit card, inserts it into the \ac{atm}, and performs
+a transaction scenario.
+
+\begin{lstlisting}[style=customJml,caption={Java code demonstrating
+use of the implementation of the \ac{atm}
+model.},label={lst:jmlScenario}]
+Card c = new Card(5,1234);
+// atm.ATM.AddCard(c); (missing statement)
+atm.ATM.InsertCard(c);
+atm.ATM.EnterPin(1234);
+System.out.println(atm.ATM.GetStatus());
+/* Transaction related code omitted */
+atm.ATM.ReturnCard();
+\end{lstlisting}
+
+If this program is executed using the OpenJML runtime assertion
+checker the output in \autoref{lst:racOutput} is reported.
+
+\begin{lstlisting}[style=racOutput,caption={Inconsistent use of the
+system detected using the OpenJML runtime assertion
+checker.},label={lst:racOutput}]
+Exception in thread "main" java.lang.AssertionError: Main.java:12: JML precondition is false
+        atm.ATM.EnterPin(1234);
+                        ^
+atm/ATM.java:276: Associated declaration: Main.java:12: 
+  //@ requires pre_EnterPin(pin,St);
+      ^
+	at Main.main(Main.java:17)
+\end{lstlisting}
+
+For this particular example, this error is reported because the debit
+card \texttt{c} is not recognised as a valid debit card by the
+system. More specifically, the scenario did not invoke
+\texttt{atm.ATM.AddCard(c)} immediately after creating the debit
+card. The return value of the \texttt{Insert} method did indicate that
+the debit card was rejected, but this value was mistakenly discarded
+in \autoref{lst:jmlScenario}. The error is reported by the runtime
+assertion checker because entering a PIN code when no debit card is
+inserted into the \ac{atm} is considered an error. After changing the
+example in \autoref{lst:jmlScenario} to add \texttt{c} as a valid
+debit card, no problems are detected by the runtime assertion checker,
+as expected. Therefore, the code executes as if it was compiled using
+a standard Java compiler and executed on a regular Java virtual
+machine. More, specifically, the system will report the status as
+shown in \autoref{lst:racOutputSuccess} to indicate that the \ac{atm}
+is not awaiting a debit card, and that a transaction is in progress.
+
+\begin{lstlisting}[style=racOutput,caption={System output after fixing
+the problem in
+\autoref{lst:jmlScenario}.},label={lst:racOutputSuccess}]
+mk_(false, "transaction in progress.")
+\end{lstlisting}
+
+As we proceed, in \autoref{sec:sl-dbc-gen} and
+\autoref{sec:sl-types-gen} we elaborate on the specifics of each
+\ac{vdm} definition in the case study model and demonstrate the
+translation to \ac{jml}-annotated Java.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 

@@ -1,0 +1,614 @@
+\section{Checking \ac{vdm} types using \ac{jml}}
+\label{sec:sl-types-gen}
+
+In this section we describe how the translator uses \ac{jml} to check
+the consistency of \ac{vdm} types when they are code-generated.
+
+Throughout this section we construct a function called
+\texttt{Is(v,T)} that takes as input a Java value \texttt{v} and a
+\ac{vdm} type \texttt{T} and produces a \ac{jml} expression that can
+be used to check whether \texttt{v} represents a value of type
+\texttt{T}. We use \texttt{Is(v,T)} to check whether a Java value
+remains consistent with the \ac{vdm} type that produces it. The
+check produced by \texttt{Is(v,T)} can be added to the generated Java
+code to ensure that no type violations occur.
+
+This section covers some of the different classes of \ac{vdm} types
+that the \ac{jml} translator supports, and explains using our case
+study example, how \ac{jml} is used to check a Java value against the
+\ac{vdm} type that produces it.  Finally, we summarise and provide the
+complete definition of \texttt{Is(v,T)} in \autoref{fig:f-complete}.
+
+%
+% Constants used to control vertical space between cases
+%
+\newcommand\caseSpace{1pt}
+\newcommand\caseSpaceSeqSet{14.0\caseSpace}
+\newcommand\caseSpaceMap{20.0\caseSpace}
+
+\begin{figure*}[ht]
+\begin{mdframed}
+\begin{equation*}
+\texttt{Is(v,T)} =
+\begin{cases}
+  \texttt{Utils.is\_bool(v)} & \kw{if} \texttt{ T = \kw{bool}}\\[\caseSpace]
+
+  \texttt{Utils.is\_nat(v)} & \kw{if} \texttt{ T = \kw{nat}}\\[\caseSpace]
+
+  \texttt{Utils.is\_nat1(v)} & \kw{if} \texttt{ T = \kw{nat1}}\\[\caseSpace]
+
+  \texttt{Utils.is\_int(v)} & \kw{if} \texttt{ T = \kw{int}}\\[\caseSpace]
+
+  \texttt{Utils.is\_rat(v)} & \kw{if} \texttt{ T = \kw{rat}}\\[\caseSpace]
+
+  \texttt{Utils.is\_real(v)} & \kw{if} \texttt{ T = \kw{real}}\\[\caseSpace]
+
+  \texttt{Utils.is\_char(v)} & \kw{if} \texttt{ T = \kw{char}}\\[\caseSpace]
+
+  \texttt{Utils.is\_token(v)} & \kw{if} \texttt{ T = \kw{token}}\\[\caseSpace]
+
+  \texttt{Utils.is\_(v,String.\kw{class})} & \kw{if} \texttt{ T = \kw{seq of char}}\\[6.0\caseSpace]
+
+  \texttt{Utils.is\_(v,S\sub{CG}.\kw{class})} &
+  \!\begin{aligned}%[b]
+    & \kw{if} \texttt{ T} \text{ is a record or quote type } \texttt{S} \text{ that generates to}\\
+    & \text{a Java class with the fully qualified name } \texttt{S\sub{CG}}
+    \end{aligned}\\[10.0\caseSpace]
+
+  \texttt{(v == \kw{null} || Is(v,S))} & \kw{if} \texttt{ T = [S]}\\[\caseSpace]
+
+  \texttt{V2J.isTup(v,n) \&\& Is(v,T\sub{1}) \&\&...\&\& Is(v,T\sub{n})} & \kw{if} \texttt{ T = T\sub{1}*...*T\sub{n}}\\[\caseSpace]
+
+  \texttt{Is(v,T\sub{1}) ||...|| Is(v,T\sub{n})} & \kw{if} \texttt{ T = T\sub{1}|...|T\sub{n}}\\[6.0\caseSpace]
+
+  \!\begin{aligned}%[b]
+    & \texttt{V2J.isSet(v) \&\& (\kw{\textbackslash forall} \kw{int} i;}\\
+    & \texttt{ 0 <= i \&\& i < V2J.size(v); Is(V2J.get(v,i),S))}
+    \end{aligned}           & \kw{if} \texttt{ T = \kw{set} \kw{of} S}\\[\caseSpaceSeqSet]
+
+  \!\begin{aligned}%[b]
+    & \texttt{V2J.isSeq(v) \&\& (\kw{\textbackslash forall} \kw{int} i;} \\
+    & \texttt{ 0 <= i \&\& i < V2J.size(v); Is(V2J.get(v,i),S))}
+    \end{aligned}           & \kw{if} \texttt{ T = \kw{seq} \kw{of} S}\\[\caseSpaceSeqSet]
+
+  \!\begin{aligned}%[b]
+    & \texttt{V2J.isSeq1(v) \&\& (\kw{\textbackslash forall} \kw{int} i;} \\
+    & \texttt{ 0 <= i \&\& i < V2J.size(v); Is(V2J.get(v,i),S))} \\
+    \end{aligned}           & \kw{if} \texttt{ T = \kw{seq1} \kw{of} S}\\[\caseSpaceSeqSet]
+
+  \!\begin{aligned}%[b]
+    & \texttt{V2J.isMap(v) \&\& (\kw{\textbackslash forall} \kw{int} i;} \\
+    & \texttt{ 0 <= i \&\& i < V2J.size(v);} \\
+    &\texttt{ Is(V2J.getDom(v,i),D) \&\& Is(V2J.getRng(v,i),R))}
+    \end{aligned}           & \kw{if} \texttt{ T = \kw{map} D \kw{to} R}\\[\caseSpaceMap]
+
+  \!\begin{aligned}%[b]
+    & \texttt{V2J.isInjMap(v) \&\& (\kw{\textbackslash forall} \kw{int} i;} \\
+    & \texttt{ 0 <= i \&\& i < V2J.size(v);} \\
+    &\texttt{ Is(V2J.getDom(v,i),D) \&\& Is(V2J.getRng(v,i),R))}
+    \end{aligned}           & \kw{if} \texttt{ T = \kw{inmap} D \kw{to} R}\\[\caseSpaceMap]
+    
+  \texttt{Is(v,D) \&\& inv\_T(v)} &
+  \!\begin{aligned}%[b]
+    & \kw{if} \texttt{ T} \text{ is a named invariant type with domain type }\\ 
+    & \texttt{D} \text{ and invariant method} \texttt{ inv\_T}
+    \end{aligned}\\[10.0\caseSpace]
+
+\end{cases}
+\end{equation*}
+\end{mdframed}
+\caption{Complete definition of \texttt{Is(v,T).}}
+\label{fig:f-complete}
+\end{figure*}
+
+\subsection{Where to generate dynamic type checks}
+\label{sec:where}
+
+Most of the types available in \ac{vdm} are also present in Java in
+some form or other. The \ac{vdm} and Java type systems do, however,
+have some differences that require us to generate extra checks to
+ensure that a Java value remains consistent with the \ac{vdm} type
+that produces it.
+
+
+In addition to producing the \ac{jml} expression needed to check the
+consistency of a type, i.e.\ \texttt{Is(v,T)}, we also need to
+consider where to add the check to the generated code. The description
+below summarises the \ac{vdmsl} constructs that must be considered
+when adding these checks to the generated Java code. We use the term
+\emph{parameter} to refer to an identifier whose value does not
+change. A parameter can be defined using a \kw{let} construct, which
+is different from a state designator or variable that can be locally
+defined using a \kw{dcl} statement or globally using a state
+definition (see \autoref{sec:vdmjml}). The constructs to be considered
+are:
+
+\begin{itemize}
+
+\item \kw{return} statement: If a functional description has a
+  specified result type in its signature, then the returned value must
+  be checked against the specified type.
+
+\item Parameters of functions and operations: The arguments passed to
+  a functional description must be checked against the specified types
+  of the corresponding formal parameters upon entry to the functional
+  description.
+
+\item State designators: After updating a local or global state
+  designator, the new value assigned must respect the type of the
+  state designator.
+
+\item Variable or parameter declaration: After initialising a variable
+  or parameter it must be checked against its declared type.
+
+\item Value definition: An explicitly typed value definition must
+  specify a value consistent with its type.
+
+\end{itemize}
+
+All of the constructs in the list above -- with the exception of the
+value definition -- can be checked using a \ac{jml} \kw{assert}
+statement. The reason for this is that the code-generated versions of
+these constructs appear inside methods in the generated code. Since a
+\ac{vdm} value definition code-generates to a \kw{public} \kw{static}
+\kw{final} field (a constant) it is checked using a \kw{static}
+invariant.
+
+\subsection{Translating basic types}
+\label{sec:basic}
+
+In our example we may wish to check that the amount being withdrawn
+from an account is valid -- for example by requiring that it is a
+natural number larger than zero, as shown in \autoref{lst:vdmBasic}.
+
+\begin{vdmsl}[style=customVdm,caption={Use of explicit type annotation
+to ensure that a valid amount is being
+withdrawn.},label={lst:vdmBasic}]
+let amount : nat1 = expense - profit
+in
+  Withdraw(accId, amount);
+\end{vdmsl}
+
+In the generated Java code, shown in \autoref{lst:jmlBasic}, this is
+checked by analysing the value of the \texttt{amount} variable using
+the \texttt{Utils.is\_nat1} method available from the Java
+code-generator's runtime library. This method is invoked from a
+\ac{jml} annotation in order to check that \texttt{amount} is
+different from \kw{null} and that it represents an integer larger than
+zero.
+
+\begin{lstlisting}[style=customJml,caption={Use of \ac{jml} to check
+that a valid amount is being withdrawn.},label={lst:jmlBasic}]
+Number amount =
+  expense.longValue() - profit.longValue();
+//@ assert Utils.is_nat1(amount);
+return Withdraw(accId, amount);
+\end{lstlisting}
+
+\transRule{Checking of the \kw{nat1} type}{Let \texttt{v} be a value
+  or object reference in the generated code that originates from a
+  variable or pattern of type \kw{nat1} and further define
+  \texttt{Is(v,\kw{nat1}) = Utils.is\_nat1(v)}.\\
+  To ensure that \texttt{v} represents a value of type \kw{nat1},
+  generate a \ac{jml} check to ensure that \texttt{Is(v, \kw{nat1})}
+  holds.}
+
+The approach used to check other basic types follows the principles
+demonstrated using \autoref{lst:vdmBasic} and \autoref{lst:jmlBasic}
+-- the main difference being that each basic type uses a dedicated
+method from the Java code-generator's runtime library. Therefore, we
+omit the details of how other basic types of \ac{vdm} are checked
+using \ac{jml}, and instead provide the complete set of rules in
+\autoref{fig:f-complete}.
+
+We note that a record type or a quote type can be checked in a way
+similar to that of a basic type. The reason for this is that the Java
+code-generator produces a Java class for each of the record definitions and
+quote types in the \ac{vdm} model. Therefore, all there is to checking
+whether an object reference represents a given record or quote class
+is to check whether the object reference is an instance of said
+class. The rules for checking record and quote types are included in
+\autoref{fig:f-complete}.
+
+% \subsection{Translating optional types}
+% \label{sec:optional}
+
+% To demonstrate how the \ac{jml} translator handles optional types
+% consider the \texttt{GetCurrentCardId} operation in
+% \autoref{lst:vdmGetCurrentCardId}. This operation returns the
+% identification of the debit card currently inserted into the machine,
+% if any. Otherwise the operation returns \kw{nil} to indicate the
+% absence of a debit card. To allow \kw{null} as a return value, the
+% optional type operator is used to specify the return type of the
+% operation as \texttt{[\textbf{nat}]}.
+
+% \begin{vdmsl}[style=customVdm,caption={Operation for getting the id of
+% the debit card currently inserted into the
+% \ac{atm}.},label={lst:vdmGetCurrentCardId}]
+% GetCurrentCardId : () ==> [nat]
+% GetCurrentCardId () ==
+%  if currentCard <> nil then
+%    return currentCard.id
+%  else
+%    return nil;
+% \end{vdmsl}
+
+% Considering solely the signature of the code-generated version of this
+% operation, shown in \autoref{lst:jmlGetCurrentCardId}, there is no way
+% to tell that the return type represents a \texttt{[\textbf{nat}]}.
+
+% \begin{lstlisting}[style=customJml,caption={Signature of the
+% code-generated version of the \texttt{GetCurrentCardId}
+% operation.},label={lst:jmlGetCurrentCardId}] public static Number
+% GetCurrentCardId(){...}
+% \end{lstlisting}
+
+% \noindent The reason for this is that the Java code-generator uses the
+% \texttt{Number} class (which is part of the Java standard library) to
+% represent all numeric \ac{vdm} types. That the return type of the
+% operation is \texttt{[\textbf{nat}]} only becomes apparent when we
+% start using the corresponding method.
+
+% To demonstrate this, the Java fragment in
+% \autoref{lst:jmlOptionalCheck} uses the result of invoking the
+% \texttt{GetCurrentCardId} method to initialise a variable named
+% \texttt{id}. The initialisation of \texttt{id} is immediately followed
+% by a check that ensures that it represents either \kw{null} or a
+% natural number. The approach of allowing \kw{null} values like this is
+% the same for all optional types.
+
+% % The methods in the Java code-generator runtime library used for
+% % performing \ac{jml} checks (including those of \texttt{V2J}) all
+% % reject \kw{null} values, e.g.\ \texttt{Utils.is\_nat(\textbf{null})}
+% % yields \kw{false}.
+
+% \begin{lstlisting}[style=customJml,caption={Use of the
+% \texttt{GetCurrentCardId} method in the generated
+% code.},label={lst:jmlOptionalCheck}]
+% Number id = GetCurrentCardId();
+% //@ assert id == null || Utils.is_nat(id);
+% \end{lstlisting}
+
+% \transRule{Checking of optional types} {Let \texttt{v} be a value or
+%   object reference in the generated code that originates from a
+%   variable or pattern of the \ac{vdm} type \texttt{[T]} and further define\\
+%   \texttt{Is(v,[T]) = (v == \kw{null} || Is(v,T))}\\
+%   To ensure that \texttt{v} represents a value of type \texttt{[T]},
+%   generate a \ac{jml} check to ensure that \texttt{Is(v,[T])} holds.}
+
+% \subsection{Translating tuple types}
+% \label{sec:tuples}
+
+% In our case study example we use a tuple type to represent the status
+% of the \ac{atm}: the first field is a \kw{boolean} flag that indicates
+% if the \ac{atm} is currently awaiting a debit card to be inserted, and
+% the second field is a human-readable description of the current state
+% of the \ac{atm}, e.g. ``transaction in progress''. The signature of
+% the operation that retrieves the status of the \ac{atm} is shown in
+% \autoref{lst:vdmTuple}. Note in particular that the status returned is
+% represented using the tuple type \texttt{\kw{bool} * \kw{seq of
+%     char}}.
+
+% \begin{vdmsl}[style=customVdm,caption={The signature of the
+% \texttt{GetStatus} operation.},label={lst:vdmTuple}]
+% GetStatus : () ==> bool * seq of char
+% GetStatus () == ...
+% \end{vdmsl}
+
+% % In \ac{vdm} the status of the \ac{atm} can be retrieved as shown in
+% % \autoref{lst:vdmAtmStatus}. Note that the status flag and message are
+% % returned as fields of the same tuple value.
+
+% % \begin{vdmsl}[style=customVdm,caption={Retrieving the status of the
+% % \ac{atm}.},label={lst:vdmAtmStatus}]
+% % let status = GetStatus()
+% % in
+% %  ...
+% % \end{vdmsl}
+
+% In the generated Java code, every tuple value is represented as an
+% instance of the \texttt{Tuple} class available from the Java code-generator
+% runtime library. Since the \texttt{Tuple} class represents
+% tuple values in general, each instance of this class must be checked
+% against the specific tuple type that it originates from.
+
+% After the status of the \ac{atm} has been retrieved using the
+% \texttt{GetStatus} method in the generated code, the status is checked
+% as shown in \autoref{lst:jmlAtmStatus}. First it is checked that
+% \texttt{status} is a tuple of size two. Afterwards it is checked that
+% the first field is a \kw{boolean} and that the second field is a Java
+% \texttt{String} (which represents the \texttt{\kw{seq of char}} type).
+
+% \begin{lstlisting}[style=customJml,caption={Checking the \ac{atm}
+% status in the generated code.},label={lst:jmlAtmStatus}]
+% Tuple status = GetStatus();
+% //@ assert (V2J.isTup(status,2) && Utils.is_bool(V2J.~field~(status,0)) && Utils.is_(V2J.~field~(status,1),String.class));
+% \end{lstlisting}
+
+% \transRule{Checking of tuple types} {Let \texttt{v} be a value or
+%   object reference in the generated code that originates from a
+%   variable or pattern of the \ac{vdm} tuple type
+%   \texttt{T\sub{1}*...*T\sub{n}} and further define\\
+%   \texttt{Is(v,T\sub{1}*...*T\sub{n}) = V2J.isTup(v,n) \&\&\\
+%     Is(v,T\sub{1}) \&\&...\&\& Is(v,T\sub{n})}\\ To ensure that
+%   \texttt{v} represents a value of type \texttt{T\sub{1}*...*T\sub{n}},
+%   generate a \ac{jml} check to ensure that
+%   \texttt{Is(v,T\sub{1}*...*T\sub{n})} holds.}
+
+% \subsection{Translating union types}
+% \label{sec:unions}
+
+% Attempting to insert a debit card into the \ac{atm} results in the
+% debit card being accepted, if no card is currently inserted and it is
+% considered a valid card by the system. Otherwise the card is
+% rejected. Based on the outcome of this the \texttt{NotifyUser}
+% operation, shown in \autoref{lst:vdmNotifyUser}, displays a message to
+% inform the card holder about the current status of the session. This
+% operation uses a union type, formed by the three quote types
+% \texttt{<Accept>}, \texttt{<Busy>} and \texttt{<Reject>}, to represent
+% one of three outcomes of the card holder attempting to insert a debit
+% card into the \ac{atm}.
+
+% \begin{vdmsl}[style=customVdm,caption={Operation used to notify a
+% \ac{atm} user.},label={lst:vdmNotifyUser}]
+% NotifyUser : <Accept>|<Busy>|<Reject> ==> ()
+% NotifyUser (outcome) ==
+% if outcome = <Accept> then
+%   Display("Card accepted")
+% elseif outcome = <Busy> then
+%   ...
+% \end{vdmsl}
+
+% \noindent The code-generated version of the \texttt{NotifyUser} operation is
+% shown in \autoref{lst:jmlNotifyUser}. Since the \texttt{outcome}
+% parameter originates from the union type formed by the three quote
+% types, it must be checked that \texttt{outcome} equals one of the three
+% possible values. This check is performed immediately after entering
+% the \texttt{NotifyUser} method, as shown in
+% \autoref{lst:jmlNotifyUser}.
+
+% \begin{lstlisting}[style=customJml,caption={Code-generated version of
+% the \texttt{NotifyUser} operation.},label={lst:jmlNotifyUser}]
+% public static void NotifyUser(final Object outcome) {
+%  //@ assert (Utils.is_(outcome,atm.quotes.AcceptQuote.class) || Utils.is_(outcome,atm.quotes.BusyQuote.class) || Utils.is_(outcome,atm.quotes.RejectQuote.class));
+%  if (Utils.equals(outcome, atm.quotes.AcceptQuote.getInstance())) {
+%    Display("Card accepted");
+%  } else if (Utils.equals(outcome, atm.quotes.BusyQuote.getInstance())){
+%    ...
+% }
+% \end{lstlisting}
+
+% \transRule{Checking of union types} {Let \texttt{v} be a value or
+%   object reference in the generated code that originates from a
+%   variable or pattern of the \ac{vdm} union type
+%   \texttt{T\sub{1}|...|T\sub{n}} and further define\\
+%   \texttt{Is(v,T\sub{1}|...|T\sub{n}) = Is(v,T\sub{1}) ||...||\\Is(v,T\sub{n})}\\
+%   To ensure that \texttt{v} represents a value of type
+%   \texttt{T\sub{1}|...|T\sub{n}}, generate a \ac{jml}
+%   check to ensure that\\
+%   \texttt{Is(v,T\sub{1}|...|T\sub{n})} holds.}
+
+\subsection{Translating collections}
+\label{sec:col}
+
+In the generated code the \texttt{VDMSet}, \texttt{VDMSeq} and
+\texttt{VDMMap} collection classes are used as raw types. Therefore
+the code-generator does not take advantage of Java generics to make
+compile-time guarantees about the types of the objects a collection
+stores. This approach has the advantage of making it easier to store
+Java objects and values of different types in the same collection
+without having to introduce additional types. Although this allows the
+type system of \ac{vdm} to be represented in Java it has the
+disadvantage that no compile-time guarantees can be made about the
+types of the objects that a collection stores.
+
+In the \ac{atm} example we use the \texttt{TotalBalance} function,
+shown \autoref{lst:vdmTotalBalance}, to calculate the total balance
+available from a set of accounts.
+
+\begin{vdmsl}[style=customVdm,caption={Function that calculates the
+total balance available from a set of accounts.},label={lst:vdmTotalBalance}]
+TotalBalance : set of Account -> real
+TotalBalance (acs) ==
+ if acs = {} then
+   0
+ else
+  let a in set acs
+  in
+    a.balance + TotalBalance(acs \ {a});
+\end{vdmsl}
+
+When the \texttt{TotalBalance} function is code-generated to
+\ac{jml}-annotated Java, the code-generator adds \ac{jml} assertions
+to ensure that the set of accounts is consistent with the collection
+type used in \ac{vdm}. Since an \texttt{Account} record is represented
+using a Java class with the same name, we have to check that every
+element in the set is an instance of said Java class. As shown in
+\autoref{lst:jmlTotalBalance}, this is checked using a quantified
+expression. This expression uses a bound variable \texttt{i} to
+iterate over all the accounts and check that each element is an
+instance of the \texttt{Account} record class. Although sets are
+unordered collections, the quantified expression takes advantage of
+\texttt{VDMset} being implemented as an ordered collection. The
+formulation of the range expression in the quantified expression
+further ensures that the assertion can be checked using a tool such as
+the OpenJML runtime assertion checker, i.e. the assertion is
+executable.
+
+\begin{lstlisting}[style=customJml,caption={Code-generated version of
+the \texttt{TotalBalance} operation.},label={lst:jmlTotalBalance}]
+/*@ pure @*/
+public static Number TotalBalance(final VDMSet acs) {
+ //@ assert (V2J.isSet(acs) && (\forall int i; 0 <= i && i < V2J.size(acs); Utils.is_(V2J.get(acs,i),atm.ATMtypes.Account.class)));
+ if (Utils.empty(acs)) {
+   Number ret_1 = 0L;
+   //@ assert Utils.is_real(ret_1);
+   return ret_1;
+ } else { ... /*Compute sum recursively */}
+}
+\end{lstlisting}
+
+The \ac{jml} translator only uses Java 7 features since OpenJML did
+not support Java 8 at the time the \ac{jml} translator was
+developed. Iterating over collections (as shown in
+\autoref{lst:jmlTotalBalance}) may also be achieved using Java 8
+features such as lambda expressions. For example, one could imagine a
+method used to check collection types that would take as input two
+arguments (1) the collection itself and (2) a predicate method (e.g.\
+lambda expression) that would be evaluated for each of the elements in
+the collection. In that way the generated \ac{jml} annotations would
+not have to rely on sets implemented as ordered collections. Since
+lambda expressions in Java are mostly syntactic sugar for anonymous
+inner classes, lambda expressions could in principle be represented
+solely using Java 7 features. However, using this approach, the
+generated \ac{jml} annotations would not be concise, although this is
+only a concern if a human will read them.
+
+\transRule{Checking of sets} {Let \texttt{v} be a value or object
+  reference in the generated code that originates from a variable or
+  pattern of the \ac{vdm} set type \texttt{\kw{set} \kw{of} T} and
+  further define\\
+  \texttt{Is(v,\kw{set} \kw{of} T) = V2J.isSet(v) \&\&\\
+    (\kw{\textbackslash forall} \kw{int} i; 0 <= i \&\&\\ i <
+    V2J.size(v); Is(V2J.get(v,i),T))}\\
+  To ensure that \texttt{v}
+  represents a value of type \texttt{\kw{set} \kw{of} T}, generate a
+  \ac{jml} check to ensure that \texttt{Is(v,\kw{set} \kw{of} T)}
+  holds.}
+
+The \ac{vdm} sequence types \kw{seq} and \kw{seq1} are checked in a
+way similar to sets. The difference between checking the \kw{seq} and
+\kw{seq1} collection types is that the \kw{seq1} type requires at
+least one element to be present in the sequence. Checking a map, which
+like a set is an unordered collection, takes advantage of
+\texttt{VDMMap} imposing an order on the domain and range values. The
+main difference between checking a map and a set is that both the
+domain and range values of a map have to be checked. Checking the
+injective map type \kw{inmap} is similar to checking a standard map,
+except that the injectivity property must hold. We refrain from
+providing examples of how to check each of the collection types in
+\ac{vdm} since they are similar to what has already been
+shown. Instead we summarise the rules for checking all of the
+collection types in \autoref{fig:f-complete}.
+
+\subsection{Translating named invariant types to \ac{jml}}
+\label{sec:named-type-invariant}
+
+Since the Java code-generator does not generate additional class
+definitions for named invariant types, the invariant imposed on such a
+type cannot be expressed as a \ac{jml} invariant. This is only
+possible for a record since it translates to a class definition.
+
+Instead, we identify places in the generated code where a named
+invariant type may be violated, as described in \autoref{sec:where},
+and check that the invariant holds. Also, it is worth noting that a
+named invariant type, unlike a record type, does not have an explicit
+type constructor. Therefore, an expression can only violate a named
+invariant type if the expression is explicitly declared to be of that
+type.
+
+The \ac{atm} in our example is not capable of dispensing cents and
+also imposes a limit on the amount of money that can be
+withdrawn. Therefore, the amount of money can be represented as a
+named invariant type. An attempt to withdraw an amount of money that
+exceeds 2000 will yield a runtime error. The named invariant type used
+to represent the amount withdrawn from an account is shown together
+with the \texttt{Withdraw} operation in
+\autoref{lst:vdmWithdrawAmount}.
+
+\begin{vdmsl}[style=customVdm,caption={The amount to withdraw modelled
+using a named invariant type.},label={lst:vdmWithdrawAmount}]
+types
+Amount = nat1
+inv a == a < 2000;
+
+operations
+Withdraw : AccountId * Amount ==> real
+Withdraw (id, amount) == ...
+\end{vdmsl}
+
+On entering the code-generated version of \texttt{Withdraw}, shown
+in~\autoref{lst:jmlWithdrawdNamedTypeInv}, we assert that
+\texttt{amount} meets the named invariant type \texttt{Amount}. The
+assertion does two things: First it performs a dynamic type check to
+ensure that \texttt{amount} is a valid domain type of \texttt{Amount}
+and secondly, it checks that the invariant predicate holds. For the
+example in~\autoref{lst:jmlWithdrawdNamedTypeInv} this means checking
+that \texttt{amount} is of type \kw{nat1} and smaller than 2000. Note
+that meeting the invariant condition does not imply compatibility with
+the domain type of the named invariant type and vice versa. For
+example, -1 is smaller than 2000 but it is not of type
+\kw{nat1}. Likewise, 2001 is of type \kw{nat1} but it exceeds 2000 so
+neither -1 nor 2001 are of type \texttt{Amount}.
+
+\begin{lstlisting}[style=customJml,caption={Checking a named invariant
+type of an operation parameter in
+\ac{jml}.},label={lst:jmlWithdrawdNamedTypeInv}]
+public static Number Withdraw(final Number id, final Number amount){
+...
+//@ assert (Utils.is_nat1(amount) && inv_ATM_Amount(amount));
+ ...
+}
+\end{lstlisting}
+
+The code-generated invariant method for type \texttt{Amount} is shown
+in~\autoref{lst:jmlAmount}. Since the named invariant type check,
+shown in \autoref{lst:jmlWithdrawdNamedTypeInv}, is evaluated from
+left to right using short-circuit evaluation
+semantics~\cite{McCarthy61}, the invariant method is only invoked if
+the value subject to checking is compatible with the domain type of
+the named invariant type. Therefore, it is safe to narrow (or cast)
+the type of the argument passed to the invariant method before
+performing the invariant check.
+
+\begin{lstlisting}[style=customJml,caption={The named invariant type
+method for \texttt{Amount}.},label={lst:jmlAmount}]
+/*@ pure @*/
+/*@ helper @*/
+public static Boolean inv_ATM_Amount(final Object check_a) {
+ Number a = ((Number) check_a);
+ return a.longValue() < 2000L;
+}
+\end{lstlisting}
+
+\transRule{Checking of named invariant types} { Let \texttt{v} be a
+  value or object reference in the generated code that originates from
+  a variable or pattern of the \ac{vdm}\\
+  named invariant type \texttt{T} based on the domain type \texttt{D}
+  and constrained
+  by invariant predicate \texttt{e(p)}, i.e.\ \texttt{T} is defined as\\
+  \kw{types}\\
+  \texttt{T = D}\\
+  \texttt{\kw{inv} p == e(p)}\\
+  Then \texttt{T} has an invariant method, responsible for running the
+  code-generated version of the \texttt{e(p)} check, with a signature
+  defined as:\\
+  \texttt{\kw{public} \kw{static} \kw{boolean} inv\_T(Object o)}\\
+  Further define
+  \texttt{Is(v,T) = Is(v,D) \&\& inv\_T(v)}\\
+  To ensure that \texttt{v} represents a value of type \texttt{T},
+  generate a \ac{jml} check to ensure that \texttt{Is(v,T)} holds.}
+%
+\newcounter{namedTypeInv}
+\setcounter{namedTypeInv}{\arabic{transRule}}
+%
+Note that the invariant method \texttt{inv\_T} in rule
+\arabic{namedTypeInv} defines the input parameter \texttt{o} to be of
+type \texttt{Object}, thus allowing \texttt{inv\_T} to accept inputs
+of any type. Therefore, \texttt{inv\_T} must narrow the type of the
+input parameter \texttt{o} before performing the invariant check (see
+the example in \autoref{lst:jmlAmount}). This approach has the
+advantage that it allows simpler \ac{jml} checks since the argument
+type does not need to be narrowed before the invariant method is
+invoked. Had the input parameter of the invariant method been defined
+using the smallest possible type, then the argument type would need to
+be narrowed for situations where the argument is masked as a union
+type. Although this would complicate the \ac{jml} checks, it would
+have the advantage of allowing type narrowing to be removed from the
+invariant methods.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 

@@ -1,0 +1,126 @@
+\section{Conclusion and future plans}
+\label{sec:con}
+
+In this paper we have demonstrated how \ac{vdmsl} models can be
+translated to \ac{jml}-annotated Java programs that can be checked for
+correctness using \ac{jml} tools. The \ac{jml} translator uses
+\ac{jml} to represent the \ac{dbc} elements of \ac{vdmsl}, and
+generates checks that help ensure the consistency of \ac{vdmsl} types
+across the translation.
+
+The principles for pre- and postconditions in \ac{vdmsl} and \ac{jml}
+are similar although there are subtle semantic differences between the
+two notations. These differences are mostly caused by the fact that
+\ac{jml} is built on top of Java, where object types use reference
+semantics. \ac{vdmsl}, on the other hand, solely uses value
+types. Therefore, it is necessary to employ deep cloning principles
+when representing value types in \ac{jml}-annotated Java code.
+
+Checking state and record invariants in the generated code is
+complicated due to two reasons: First, atomic execution in \ac{vdm}
+requires a way to control when invariant checking must be done. We
+achieve this by using a \kw{ghost} field to indicate when invariant
+checking is enabled, and update it before entering and leaving the
+\kw{atomic} statement. Secondly, we have demonstrated that transitive
+dependencies between records sometimes require extra \ac{jml} checks
+to be generated to ensure that the invariant checks are evaluated when
+they should.
+
+The differences between the type systems of \ac{vdmsl} and Java
+further necessitate extra checks to be produced. These checks are
+needed to ensure that the generated code does not violate any of the
+constraints imposed by the types in the \ac{vdmsl} model. Overture
+performs these dynamic type checks internally, whereas they must be
+made explicit in Java.
+
+Although \ac{dbc} languages often support many of the same \ac{dbc}
+concepts, it is the semantic differences between the languages that
+make developing a translation challenging. In this paper we have shown
+several examples of such differences and how they can be
+addressed. Naturally, translating between other specification language
+pairs may reveal other differences and design details that are of
+interest to researchers and practitioners working on comparable
+tasks. However, based on the experiences gained by developing the
+\ac{vdmsl}-to-\ac{jml} translation, we list some of the design details
+that we believe are likely to challenge the development of
+translations between other specification language pairs:
+
+\begin{description}
+
+\item[Invariants:] The times when invariants are evaluated varies
+  across specification languages. For example, in \ac{vdm} they have
+  to hold at all times (except inside \kw{atomic} statements), whereas
+  in \ac{jml} they must hold in visible states. When invariants have
+  different semantics the translation must find a way to either
+  produce or reduce the number of invariant checks at the appropriate
+  places in the code.
+
+\item[Type systems:] The differences between type systems require
+  careful attention when developing a translation. Especially, when
+  the destination language (e.g.\ \ac{jml}) uses a more
+  ``coarse-grained'' type system than the source language (e.g.\
+  \ac{vdmsl}). For such situations extra checks must be produced to
+  ensure that types are used consistently across the translation. In
+  our work we use the function \texttt{Is(v,T)} to produce these extra
+  checks.
+
+\item [Atomic execution:] Languages may use dedicated constructs to
+  represent atomic execution (e.g.\ \ac{vdm}) or by allowing
+  invariants not to hold at certain times (e.g.\ \ac{jml}). In this
+  paper an example was given of how a dedicated construct can be
+  emulated in a language that does not support one natively.
+
+\item [Old state:] Despite pre- and postconditions being similar
+  concepts in different specification languages it is likely that the
+  notion of old state may require careful handling when developing a
+  translation between two specification languages. In our work, a deep
+  cloning principle was employed to ensure the correct construction of
+  the old state.
+
+\end{description}
+
+In the future we plan to use this work in the context of test
+automation. In \ac{vdm} it is possible to specify a trace definition
+in a way similar to that of a regular expression. This trace can then
+be expanded into a large collection of tests that can be executed
+against the model. This is a useful way to detect deficiencies in the
+model, such as missing preconditions, postconditions and
+invariants~\cite{Larsen&10c}.
+
+We plan to code-generate the trace expansion such that the 
+tests can be executed against the code-generated version of the
+model. The work presented in this paper can then be used to detect
+contract or type violations and give verdicts to the code-generated
+trace tests. We believe that this will be particularly advantageous
+for execution of large collections of tests. We expect this approach
+to significantly increase execution speed for test cases and also
+allow more tests to be executed. In addition, we plan to look into
+\ac{jml}-generation for other \ac{vdm} dialects such as
+\ac{vdm}++. However, since \ac{vdm}++ is object-oriented and supports
+concurrency, we envisage that this will give rise to a completely new
+set of challenges not addressed by the work in this paper.
+
+So far the analysis of the generated Java/\ac{jml} has primarily been
+limited to runtime assertion checking. Another item of future work is
+to formally verify the generated code against the \ac{jml}
+specification. In particular, by investigating to what extent this is
+possible, and whether the \ac{jml} translation can be optimised in a
+way that better supports formal verification through static
+analysis. For example, currently the translation produces auxiliary
+methods for invariants and pre- and postconditions that are used as
+part of the \ac{jml} specification. However, use of method calls in
+specifications complicates static analysis due to, for example, the
+possibility of exceptions or non-terminating behaviour~\cite{Cok05}.
+  
+We hope that our work will serve as inspiration for other researchers
+who seek to bridge the gap between other specification notations and
+implementation technologies that support the \ac{dbc} approach. We
+believe that the rules proposed in this paper can be useful for others
+who want to translate between specification languages such as ASM, B
+and Z and implementation technologies such as Spec\#, Sparc-Ada and
+Eiffel.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 

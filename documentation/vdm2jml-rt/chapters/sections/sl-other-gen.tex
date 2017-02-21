@@ -1,0 +1,321 @@
+\section{Other aspects of \ac{vdmsl} affecting the
+\ac{jml}-generation}
+\label{sec:sl-other-gen}
+
+There are other aspects of \ac{vdmsl} that further complicate the
+generation of \ac{vdmsl} models to \ac{jml}-annotated Java. In this
+section we use examples to demonstrate these issues and explain how
+they may be overcome.
+
+\subsection{Complex state designators}
+\label{sub:complex-state}
+
+State designators may be composite data structures such as records
+with fields that themselves are records. Such a data type forms
+\emph{complex state designators} that when modified require careful
+handling during the translation process. To demonstrate this, consider
+the three \ac{vdmsl} record definitions \texttt{R1}, \texttt{R2} and
+\texttt{R3} in \autoref{lst:vdmRecNesting}. Note in particular how the
+invariants of \texttt{R1} and \texttt{R2} depend on the field of
+\texttt{R3}. This transitive dependency complicates checking of
+invariants in the generated code. To demonstrate this, the operation
+in \autoref{lst:vdmRecNesting} instantiates \texttt{R1} as \texttt{r1}
+and modifies it to violate the \texttt{R1} invariant, which causes a
+runtime-error to be reported.
+
+\begin{vdmsl}[style=customVdm,caption={Record nesting in
+\ac{vdmsl}.},label={lst:vdmRecNesting}]
+types
+R1 :: r2 : R2
+inv r1 == r1.r2.r3.x <> -1;
+R2 :: r3 : R3
+inv r2 == r2.r3.x <> -2;
+R3 :: x : int
+inv r3 == r3.x <> -3;
+
+operations
+op: () ==> nat
+op () ==
+(
+ dcl r1 : R1 := @mk_@R1(@mk_@R2(@mk_@R3(5)));
+ r1.r2.r3.x := -1;
+ return 0;
+)
+\end{vdmsl}
+
+The operation \texttt{op} in \autoref{lst:vdmRecNesting} produces the
+method in \autoref{lst:jmlRecNesting}. For this example, \texttt{r1}
+is the same in both listings, \texttt{r2} is the same as
+\texttt{stateDes\_1} in \autoref{lst:jmlRecNesting}, and \texttt{r3}
+is the same as \texttt{stateDes\_2}. Note that in
+\autoref{lst:jmlRecNesting} we have removed fully qualified names of
+record classes and other \ac{jml} checks that are not relevant.
+
+\begin{lstlisting}[style=customJml,caption={Code-generated version of
+the operation from
+\autoref{lst:vdmRecNesting}.},label={lst:jmlRecNesting}]
+public static Number op() {
+ R1 r1 = new R1(new R2(new R3(5L)));
+ R2 stateDes_1 = r1.get_r2();
+ R3 stateDes_2 = stateDes_1.get_r3();
+ stateDes_2.set_x(-1L);
+ //@ assert \invariant_for(stateDes_1);
+ //@ assert \invariant_for(r1);
+ Number ret_1 = 0L;
+ return ret_1;
+}
+\end{lstlisting}
+
+Immediately after completing the state update, i.e.\ invoking
+\texttt{stateDes\_2.set\_x(-1L)}, the following things happen:
+
+\begin{enumerate}
+
+\item The state of \texttt{stateDes\_2} becomes \emph{visible} thus
+triggering the invariant check of \texttt{stateDes\_2}.
+
+\item The invariant check of \texttt{stateDes\_1} is run by asserting
+  \inv{stateDes\_1} and finally,
+
+\item the invariant check of \texttt{r1} is run by asserting\\
+  \inv{r1}, which causes a runtime-error to be reported.
+\end{enumerate}
+
+Strictly speaking the objects pointed to by \texttt{stateDes\_1} and
+\texttt{r} are also in visible states after executing the update to
+\texttt{stateDes\_2} and therefore the invariants of those objects
+should also hold. In particular a state is \emph{visible} for an
+object \texttt{o} \textit{``when no constructor, destructor,
+  non-static method invocation with \texttt{o} as receiver, or static
+  method invocation for a method in \texttt{o}\textquotesingle s class
+  or some superclass of \texttt{o}\textquotesingle s class is in
+  progress \cite{Leavens&13}''}. So in theory the invariant checks
+should not have to be run explicitly (step 2 and step 3). The reason
+that the \ac{jml} translator generates these checks anyway has to do
+with the strategies \ac{jml} tools use to check invariants.
+
+Tools such as \ac{jml} runtime checkers may assume no problems with
+ownership aliasing to avoid having to keep track of what objects and
+types are in visible states. Although this reduces the overhead of
+checking invariants, it also means that some invariant violations might
+go unnoticed. Alternatively, tools can check every applicable
+invariant for classes and objects in visible states but this adds a
+significant overhead to the program execution.
+
+Since aliasing can never occur in \ac{vdmsl}, it becomes simpler to
+keep track of what objects are in a visible state in the generated
+code and thus generate \ac{jml} checks that explicitly trigger the
+invariants checks. This has the advantage that invariant violations do
+not go unnoticed even though a \ac{jml} tool adopts a more practical
+approach to checking invariants.
+
+For the example in \autoref{lst:jmlRecNesting}, the important thing is
+to ensure that the violation of the invariant of \texttt{R1} is
+reported after executing the state update. This is done by asserting
+the entire chain of state designators. The \ac{jml} translator is able
+to generate these checks since it keeps track of state designators of
+records that may have been affected by updates to other state
+designators.
+
+\transRule{Checking transitive dependencies}{ Let \texttt{d\sub{n}} be
+  a state designator of a record in the generated code that has been
+  updated non-atomically, and let \texttt{d\sub{k},...,d\sub{1}}, for
+  \texttt{k = n-1}, be state designators that were affected by the
+  update to \texttt{d\sub{n}}. Further assume that \texttt{d\sub{i}}
+  may be of one of \texttt{m\sub{i}} record types
+  \texttt{D\sub{i1},...,D\sub{im\sub{i}}}. Immediately after executing
+  the update to \texttt{d\sub{n}} the state of \texttt{d\sub{n}}
+  becomes visible. To ensure that the invariant is evaluated
+  for all affected
+  state designators, execute the following sequence of assertions:\\
+  \texttt{//@ \kw{assert} \guardedinv{d\sub{k}}{D\sub{k1}};}\\
+  ...\\
+  \texttt{//@ \kw{assert} \guardedinv{d\sub{k}}{D\sub{km\sub{k}}};}\\
+  ....\\
+  \texttt{//@ \kw{assert} \guardedinv{d\sub{1}}{D\sub{11}};}\\
+  ...\\
+  \texttt{//@ \kw{assert} \guardedinv{d\sub{1}}{D\sub{1m\sub{1}}};}}
+
+%
+\newcounter{dependency}
+\setcounter{dependency}{\arabic{transRule}}
+%
+
+Note that the code in \autoref{lst:jmlRecNesting} omits the
+\kw{instance} \kw{of} checks, proposed by rule \arabic{dependency},
+since the types of the affected state designators can be determined
+statically.
+
+Regarding rule \arabic{resumeInv}, similar issues with transitive
+dependencies may occur in the generated code when dealing with atomic
+execution. Recall that invariant checking is disabled before a
+code-generated atomic statement block is executed. Once the atomic
+execution has completed, invariant checking is re-enabled, and
+therefore rule \arabic{resumeInv} must also take into account all the
+state designators that were affected by the atomic execution.
+
+\subsection{Recursive types}
+\label{sec:recursive-types}
+
+It is possible to formulate recursive types for which the generated
+\ac{jml} checks can only perform limited type checking. To demonstrate
+this, consider the recursive \ac{vdm} type definition in
+\autoref{lst:vdmRecType}. For this example, \texttt{S} represents an
+infinite number of types including \kw{nat1} as well as all possible
+dimensions of sequences that store elements of type \kw{nat1}, i.e.\
+\kw{seq} \kw{of} \kw{nat1}, \kw{seq} \kw{of} \kw{seq} \kw{of}
+\kw{nat1} and so on.
+
+\begin{vdmsl}[style=customVdm,caption={Example of recursive type
+definition in \ac{vdm}.},label={lst:vdmRecType}]
+types
+S = nat1 | seq of S;
+\end{vdmsl}
+
+\noindent The issue with this kind of type definition is that
+\texttt{Is(v,S)} in theory becomes an expression of infinite
+length. The \ac{jml} translator stops generating type checks whenever
+it encounters type cycles. For the particular example in
+\autoref{lst:vdmRecType} this means that a Java value or object
+reference \texttt{v} is only considered to respect \texttt{S} if
+\texttt{Utils.is\_nat1(v)} holds. For the rest of this section, we
+discuss the current limitations of type checking recursive types, and
+describe how these limitations may be addressed.
+
+The approach used to check types could be changed to also
+take the depth of the recursion \texttt{n} into account, i.e.\ use
+\texttt{Is(v,T,n)} to generate the type checks. The current approach
+used by the \ac{jml} translator thus corresponds to generating checks
+using \texttt{Is(v,T,1)}. \texttt{Is(v,S,2)} then generates checks for
+types \kw{nat1} and \kw{seq} \kw{of} \kw{nat}, whereas
+\texttt{Is(v,S,3)} additionally generates a check for the type \kw{seq}
+\kw{of} \kw{seq} \kw{of} \kw{nat1}.
+
+Alternatively, checking a recursive type \texttt{T} (such as
+\texttt{S} shown in \autoref{lst:vdmRecType}) can be done using a
+code-generated recursive method that is constructed in a way that
+allows a value \texttt{v} to be validated against \texttt{T}. Although
+static provers may not be able to perform checking of such types it
+should be possible using runtime assertion checking. However, in order
+to enable this style of type checking, the \ac{jml} translator would
+have to be extended with functionality that enables these methods to
+be generated such that they can be invoked from the generated \ac{jml}
+assertions.
+
+The limitation of the \ac{jml} translator for the example shown in
+\autoref{lst:vdmRecType} is a consequence of \texttt{S} being defined
+using the union type constructor ``\texttt{|}''. However, it is
+possible to check more practical examples of recursively defined types
+such as the linked list \texttt{LL} shown in
+\autoref{lst:vdmLinkedList}.
+
+To demonstrate this, consider the construction of a linked list value
+in \ac{vdm} that contains the numbers 1, 2 and 3 as shown in
+\autoref{lst:vdmLinkedValue}. In the generated code this value is
+represented using the code shown in \autoref{lst:jmlLinkedListValue}.
+
+\begin{vdmsl}[style=customVdm,caption={Example of a linked list
+defined using a record type.},label={lst:vdmLinkedList}]
+types
+LL ::
+  element : nat
+  tail : [LL]
+\end{vdmsl}
+
+\begin{vdmsl}[style=customVdm,caption={Example of a linked list value
+in \ac{vdm}.},label={lst:vdmLinkedValue},numbers=none]
+@mk_@LL(1, @mk_@LL(2, @mk_@LL(3, nil)))
+\end{vdmsl}
+
+\begin{lstlisting}[style=customJml,caption={Example of a linked list
+value in Java.},label={lst:jmlLinkedListValue},numbers=none]
+new LL(1L,new LL(2L,new LL(3L, null)));
+\end{lstlisting}
+
+Each time an object of type \texttt{LL} is instantiated in Java the
+constructor checks the types of the current \texttt{element} and the
+\texttt{tail} -- see \autoref{lst:jmlCheckLinkedList}. For this linked
+list example, it is therefore possible to type check \texttt{LL} since
+the \ac{vdm} type is represented using a recursively defined class in
+the generated code.
+
+\begin{lstlisting}[style=customJml,caption={Type checking a linked list using \ac{jml}.},label={lst:jmlCheckLinkedList}]
+public LL(final Number _element, final LL _tail) {
+ //@ assert Utils.is_nat(_element);
+ //@ assert (_tail == null || Utils.is_(_tail,LL.class));
+ ...
+} 
+\end{lstlisting}
+
+\subsection{Detecting problems with the generated code}
+\label{sec:detect-problem}
+
+As explained in \autoref{sec:postcond} deep copying objects may
+significantly affect the performance of the generated code. Therefore,
+the user may not always want to have these copy calls
+generated. However, from a general perspective this may result in code
+that does not preserve the semantics across the translation. \ac{jml}
+specifications can help detect such problems. To demonstrate this
+consider the \ac{vdmsl} operation in
+\autoref{lst:vdmVectorExample}. This operation assumes the existence
+of a two-dimensional vector \texttt{Vector2D}, defined as a record (a
+value type). In \autoref{lst:vdmVectorExample} \texttt{v2} is created
+as a deep copy of \texttt{v1}, and therefore the assignment to
+\texttt{v1} has no affect on \texttt{v2}, and \texttt{op} therefore
+returns 1 (see the postcondition).
+
+If this example is translated to Java with deep copying
+\emph{disabled} the code shown in \autoref{lst:jmlVectorExample} is
+produced. Note that this listing omits the generated \ac{jml}
+assertions to focus on the postcondition.
+
+\begin{vdmsl}[style=customVdm,caption={Use of value types in
+\ac{vdm}.},label={lst:vdmVectorExample}]
+op : () ==> nat
+op () == (
+dcl v1 : Vector2D := @mk_@Vector2D(1,2);
+dcl v2 : Vector2D := v1; -- Copy value
+v1.x := 2;
+return v2.x;)
+post RESULT = 1
+\end{vdmsl}
+
+\begin{lstlisting}[style=customJml,caption={Generated Java code
+without copy calls.},label={lst:jmlVectorExample}]
+//@ ensures post_op(\result);
+public static Number op() {
+  Vector2D v1 = new Vector2D(1L,2L);
+  Vector2D v2 = v1;
+  v1.set_x(2L);
+  Number ret_1 = v2.get_x();
+  return ret_1;
+}
+\end{lstlisting}
+
+If this code is executed using the OpenJML runtime assertion checker
+an error is reported because the method returns 2, which is different
+from the result obtained by executing the corresponding \ac{vdmsl}
+operation. Since deep copying is disabled only the \texttt{v1}
+reference is copied, and therefore the update to \texttt{v1}, i.e.\
+\texttt{v1.set\_x(2L)}, also affects \texttt{v2}.
+
+The detection of the postcondition violation as reported by the
+OpenJML runtime assertion checker is shown in
+\autoref{lst:racOutputPost}. However, if the code is generated with
+deep copying enabled (at the cost of performance) then \texttt{v2}
+will be constructed as \texttt{Utils.copy(v1)} and the method will
+change to return 1, as expected.
+
+\begin{lstlisting}[style=racOutput,caption={Detection of a
+postcondition violation.},label={lst:racOutputPost}]
+Ex/DEFAULT.java:17: JML postcondition is false
+    public static Number op() {
+Ex/DEFAULT.java:16: Associated declaration: Ex/DEFAULT.java:17: 
+    //@ ensures post_op(\result);
+\end{lstlisting}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 

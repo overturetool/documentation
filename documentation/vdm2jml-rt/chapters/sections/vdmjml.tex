@@ -1,0 +1,338 @@
+\section{\ac{dbc} with \ac{vdmsl} and \ac{jml}}
+\label{sec:vdmjml}
+
+In this section we describe \ac{vdmsl} and \ac{jml}. We cover
+different types and all the contract-based elements of \ac{vdmsl},
+focusing specifically on the \ac{vdm}-10 release, which we are
+targeting in our work. The \ac{jml} constructs described in this
+section cover those that are used to implement the translation rules.
+
+\subsection{\ac{vdmsl}}
+\label{sub:vdmsl}
+
+\ac{vdmsl} is an ISO standardised sequential modelling language that
+supports description of data and functionality. The ISO standard has
+later been informally extended with modules to allow type definitions,
+values (constants) and functionality to be imported and exported
+between modules. A module may define a single state component, which
+can be constrained by a state invariant. State is modified by
+assigning a new value to a state designator, which can be either a
+name, a field reference or a map or sequence reference, as described
+in the \ac{vdm} language reference manual~\cite{Larsen&10b}.
+
+Module state, if specified, implicitly defines a record type, which is
+tagged with the state name and also defines the type of the state
+component. The state type can be used like any other record type
+explicitly defined by the modeller -- the difference being that the
+state invariant~\cite{Andrews&98} constrains the state type and thus
+every instance of this record type.
+
+Data are defined by means of built-in basic types covering, for
+instance, numbers, booleans, quote types and characters. A quote type
+corresponds to an enumerated type in a language such as Pascal. The
+basic types can be used to form new structured data types using
+built-in type constructors that support creation of union types, tuple
+types and record types. A type may also be declared optional, which
+allows \kw{nil} to be used to represent the absence of a value. For
+collections of values, \ac{vdmsl} supports sets, sequences and
+maps. The built-in data types, type constructors and collections can
+be used to form named user defined types, which can be constrained by
+invariants. We refer to these types as \emph{named invariant
+  types}. As an example, \autoref{lst:vdmAmount} shows the definition
+of the named invariant type \texttt{Amount}, which is used to
+represent an amount of money deposited or withdrawn by an account
+holder. This type is defined based on natural numbers (excluding
+zero), i.e.\ the built-in basic type \kw{nat1} in \ac{vdmsl}. For this
+particular example, we say that \kw{nat1} is the \emph{domain type} of
+\texttt{Amount}. We further constrain \texttt{Amount} using an
+invariant, by requiring a value of this type to be less than
+2000. Specifically, for the invariant shown in
+\autoref{lst:vdmAmount}, the \texttt{a} on the left-hand side of the
+equality is a pattern that matches values of type
+\texttt{Amount}. This pattern is used to express the invariant
+predicate for this named invariant type.
+
+\begin{vdmsl}[style=customVdm,caption={Example of a \ac{vdmsl} named invariant type.},label={lst:vdmAmount}]
+types
+Amount = nat1
+inv a == a < 2000;
+\end{vdmsl}
+
+\subsubsection{Functional descriptions}
+\label{sec:functional-descriptions}
+
+In \ac{vdm}, functionality can be defined in terms of functions and
+operations over data types with a traditional call-by-value semantics.
+Functions are referentially transparent and therefore they are not
+allowed to access or manipulate state directly, whereas operations
+are. Therefore, a function cannot call an operation.\footnote{With the
+  recent introduction of \kw{pure} operations into \ac{vdm}-10 (not to
+  be confused with \kw{pure} methods in \ac{jml}) it has become
+  possible to invoke operations, albeit \kw{pure} ones, from a
+  function. This feature was introduced to address issues with the
+  object-oriented dialect of \ac{vdm}, called \ac{vdm}++, but was made
+  available in every \ac{vdm}-10 dialect (including \ac{vdmsl}).} In
+addition to accessing module state, operations may also use the
+\kw{dcl} statement to declare local state designators which can be
+assigned to. Subsequently the term \emph{functional description} will
+be used to refer to both functions and operations. As an example, a
+function that uses the \texttt{MATH`sqrt} library function to
+calculate the square root of a real number is shown in
+\autoref{lst:vdmSqrt}.
+
+\begin{vdmsl}[style=customVdm,caption={\ac{vdmsl} function for
+calculating the square root of a number.},label={lst:vdmSqrt}]
+sqrt :  real -> real
+sqrt (x) == MATH`sqrt(x)
+pre x >= 0
+post RESULT * RESULT = x;
+\end{vdmsl}
+
+Functional descriptions can be implicitly defined in terms of pre- and
+postconditions, which specify conditions that must hold before and
+after invoking the functional description. Alternatively, a functional
+description can be \emph{explicitly} defined by means of an algorithm,
+as shown in \autoref{lst:vdmSqrt}. The \ac{jml} translator supports
+both implicitly and explicitly defined functional
+descriptions. However, only methods that originate from explicitly
+defined functional descriptions can be executed.
+
+The precondition of a function can refer to all the arguments of the
+function it guards. The same applies to the postcondition of a
+function, which can also refer to the result of the execution using
+the reserved word \kw{RESULT}. For the square root function in
+\autoref{lst:vdmSqrt} we require that the input is a positive number
+(the precondition), and that the square of the function result equals
+the input value (the postcondition).
+
+Function definitions are derived for the pre- and postconditions of
+\texttt{sqrt} from \texttt{sqrt}'s \kw{pre} and \kw{post}
+clauses. These function definitions do not appear in the model, but
+they are used internally by the Overture interpreter to check for
+contract violations. However, to clarify, the pre- and postcondition
+functions of \texttt{sqrt} are shown in
+\autoref{lst:vdmFuncPrePost}. In this listing, \texttt{+>} specifies
+that \texttt{pre\_sqrt} and \texttt{post\_sqrt} are total functions,
+and not partial functions, which use the \texttt{->} type constructor.
+
+\begin{vdmsl}[style=customVdm,caption={Pre- and postcondition
+functions for the \texttt{sqrt} function shown in
+\autoref{lst:vdmSqrt}.},label={lst:vdmFuncPrePost}]
+pre_sqrt:real +> bool
+pre_sqrt(x) == x >= 0;
+
+post_sqrt:real*real +> bool
+post_sqrt(x,RESULT) == RESULT * RESULT = x;
+\end{vdmsl}
+
+Similarly, the pre- and postcondition functions of an operation are
+also derived. To demonstrate this, consider the \texttt{inc} operation
+in \autoref{lst:vdmInc}. This operation takes a real number as input,
+adds it to a counter (defined using a state designator), and returns
+the new counter value. In this listing \texttt{counter\~} and
+\texttt{counter} refer to the counter values before and after the
+operation has been invoked, respectively.
+
+\begin{vdmsl}[style=customVdm,caption={\ac{vdmsl} operation for
+incrementing a counter.},label={lst:vdmInc}]
+inc : real ==> real
+inc (i) == (
+ counter := counter + i;
+ return counter;
+)
+pre i > 0
+post counter = counter~ + i and
+     RESULT = counter;
+\end{vdmsl}
+
+A precondition of an operation can refer to the state, \texttt{s},
+before executing the operation, whereas the postcondition of an
+operation can read both the before and after states. State access is
+achieved by passing copies of the state to the pre- and postcondition
+functions. The corresponding pre- and postcondition functions for
+\texttt{inc} are shown in \autoref{lst:vdmOpPrePost} where the
+parameters \texttt{s\~} and \texttt{s} of \texttt{post\_inc} refer to
+the state (that contains the counter value) before and after execution
+of \texttt{inc}. We further use \texttt{S} to denote the record type
+that represents the module's state.
+
+\begin{vdmsl}[style=customVdm,caption={Pre- and postcondition
+functions for the \texttt{inc} operation shown in
+\autoref{lst:vdmInc}.},label={lst:vdmOpPrePost}]
+pre_inc:real*S +> bool
+pre_inc(i,s) == i > 0;
+
+post_inc:real*real*S*S +> bool
+post_inc(i,RESULT,s~,s) ==
+s.counter = s~.counter + i and
+RESULT = s.counter;
+\end{vdmsl}
+
+The function descriptions in \autoref{lst:vdmOpPrePost} assume that
+the pre- and postconditions are defined (using the \kw{pre} and
+\kw{post} clauses) and that the state of the module enclosing the
+functional description exists. For the cases where pre- and
+postconditions are not defined they can be thought of as functions
+that yield \kw{true} for every input. Furthermore, when no state
+component is defined, the pre- and postcondition functions simply omit
+the state parameters. Similarly, when an operation does not return a
+result (it specifies void as the return type) the postcondition
+function omits the \kw{RESULT} parameter.
+
+For each type definition constrained by an invariant, such as
+\texttt{Amount} shown in \autoref{lst:vdmAmount}, a function is
+implicitly created to represent the invariant -- see
+\autoref{lst:vdmTypeInv}. The Overture tool uses this function
+internally to check whether a value is consistent with respect to a
+given type (e.g.\ \texttt{Amount})~\cite{Lausdahl&11}. Note that since
+all invariants are functions they are not allowed to depend on state
+of other modules. Specifically, invariants can only invoke functions
+and access global constants (possibly defined in other modules).
+
+\begin{vdmsl}[style=customVdm,caption={Invariant function for type
+definition \texttt{Amount}.},label={lst:vdmTypeInv}]
+inv_Amount : Amount +> bool
+inv_Amount (a) == a < 2000;
+\end{vdmsl}
+
+\subsubsection{Atomic execution}
+
+Multiple consecutive statements are sometimes needed to update the
+state designators to make them consistent with the system's
+invariants. For example, assume that we have a system that uses two
+state designators called \texttt{evenID\sub{1}} and
+\texttt{evenID\sub{2}} to store even and different numbers. For this
+example, we will assume that these state designators are of type
+\texttt{Even} -- a type that constrains these state designators to
+store even numbers. To help ensure that the uniqueness constraint (a
+state invariant) is not violated during an update, multiple
+assignments can be grouped in an \kw{atomic} statement block as shown
+in~\autoref{lst:vdmAtomic}. Given the type \texttt{Even} of the state designators
+\texttt{evenID\sub{1}} and \texttt{evenID\sub{2}} it is as if the
+atomic statement is evaluated as shown in \autoref{lst:vdmAtomicEval}.
+
+\begin{vdmsl}[style=customVdm,caption={Atomic update in
+\ac{vdm}.},label={lst:vdmAtomic}]
+atomic (
+ evenID!\sub{1}! := exp!\sub{1}!;
+ evenID!\sub{2}! := exp!\sub{2}!;
+)
+\end{vdmsl}
+
+
+\begin{vdmsl}[style=customVdm,caption={The execution semantics of the
+\kw{atomic} statement.},label={lst:vdmAtomicEval}]
+let t!\sub{1}! : Even = exp!\sub{1}!,
+    t!\sub{2}! : Even = exp!\sub{2}!
+in (
+ -- Turn off invariants
+ evenID!\sub{1}! := t!\sub{1}!;
+ evenID!\sub{2}! := t!\sub{2}!;
+ -- Turn on invariants
+ -- Check invariants hold
+);
+\end{vdmsl}
+
+Executing the \kw{atomic} statement block is semantically equivalent
+to first evaluating the right-hand sides of all the assignments before
+turning off invariant checks, and then binding the results to the
+corresponding state designators. After all the assignments have been
+executed, it must be ensured that all invariants hold.
+
+There are three properties that follow from the evaluation semantics
+of the \kw{atomic} statement block that are worth mentioning:
+
+\begin{enumerate}
+
+\item When evaluating the right-hand sides of the assignment
+  statements, potential contract violations will be reported.
+
+\item Temporary identifiers, used to store the right-hand side
+  results, are explicitly typed and therefore violations of named
+  invariant types for these variables will be reported. The explicit
+  type annotations thus ensure that the right-hand side of a state
+  designator assignment is checked to be consistent with the type of
+  said state designator.
+
+\item Assignment statements cannot see intermediate values of state
+  designators.
+
+\end{enumerate}
+
+\subsection{\ac{jml}}
+\label{sec:jml}
+
+Although \ac{jml}~\cite{Leavens&13} is designed to specify arbitary
+sequential Java programs, in this subsection we only describe the
+features needed for the translation from \ac{vdmsl}.
+
+A method specified with the \kw{pure} modifier in \ac{jml} is not
+permitted to have write effects; such 
+methods are allowed to be used in specifications. Pure methods are
+used to translate \ac{vdmsl} functions.
+
+A class invariant in \ac{jml} should hold whenever the non-helper
+methods of that class are not being executed; thus invariants must
+hold in each method's before and after states. However, a method
+declared with the \kw{helper} annotation in a type \texttt{T} does not
+have its pre- and postconditions augmented with \texttt{T}'s
+invariants.  Helper methods (and constructors) must either be pure or
+private~\cite{Leavens&13}, so that the invariant will hold at the
+beginning and end of all client-visible
+methods~\cite{Mueller-Poetzsch-Heffter-Leavens06}. The before and
+after states of non-helper methods and constructors are said to be
+\emph{visible states}; thus invariants must hold in all visible
+states.  \ac{jml} distinguishes between instance and static
+invariants. An \emph{instance} invariant can refer to the non-static
+(i.e.\ instance) fields of an object.  A \emph{static\/} invariant
+cannot refer to an object's non-static fields; thus static invariants
+are used to specify properties of static fields.
+
+An assertion can reference the invariant for an object explicity using
+a predicate of the form \invariantfor{\texttt{(e)}}, which is
+equivalent to the invariant for \texttt{e}'s static type \cite[section
+12.4.22]{Leavens&13}.
+
+In \ac{jml} pre- and postconditions are written using the keywords
+\kw{requires} and \kw{ensures}, respectively. In the specification of
+a postcondition, one writes \texttt{\textbackslash \textbf{old}(e)} to
+refer to the before state value of an expression \texttt{e}.  For
+example, an \texttt{increment} method that writes a field
+\texttt{count} could be specified as shown in
+\autoref{lst:jmlCounMethod}.
+
+\begin{lstlisting}[style=customJml,label={lst:jmlCounMethod},caption={Example of a \ac{jml} specification for a Java method.}]
+//@ requires count < Integer.MAX_VALUE;
+//@ modifies count;
+//@ ensures count == \old(count)+1;
+void increment() {
+  count++;
+}
+\end{lstlisting}
+Method postconditions may also use the keyword {\RESULT} to refer to
+the value returned by the method.
+
+Specification expressions in \ac{jml} can use Java expressions that
+are pure (have no write effects), and also some logical operators,
+such as implication \texttt{==>}, and quantifiers such as {\JMLforall}
+and {\JMLexists}.
+
+In addition to method pre- and postconditions, one can also write
+assertions anywhere a Java statement can appear, using \ac{jml}'s
+\kw{assert} keyword. Such assertions must hold whenever they are executed.
+
+One way to specify the abstract state of a class is to use \ac{jml}'s
+\kw{ghost} variables. Ghost variables are specification-only variables
+and fields of objects that can only be used in \ac{jml} specifications
+and in \ac{jml} \kw{set} statements. A set statement is an assignment
+statement whose target is a ghost variable.
+
+By default, \ac{jml} variables and fields may not hold the \kw{null}
+value. However, should one wish to specify that all fields of a class
+may hold \kw{null}, then one can annotate the class's declaration with
+\kw{nullable\_by\_default}.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 

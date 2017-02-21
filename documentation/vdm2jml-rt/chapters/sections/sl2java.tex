@@ -1,0 +1,120 @@
+\section{The implementation of the \ac{jml} translator}
+\label{sec:sl2java}
+
+The \ac{jml} translator is implemented as an extension to Overture's
+\ac{vdmsl}-to-Java code-generator, which provides code-generation
+support for a large executable subset of \ac{vdm}. This section
+describes how the \ac{jml} translator has been implemented, and
+explains the details of the Java code-generator that are needed in
+order to understand how the \ac{jml} translator works.
+
+\subsection{The implementation}
+
+The Java code-generator is developed using Overture's code-generation
+platform -- a framework for constructing code-generators for
+\ac{vdm}~\cite{Jorgensen&14a}. This platform is used by the Java
+code-generator to parse the \ac{vdmsl} model sources and to construct
+an \ac{ir} of the model -- an \ac{ast} that constitutes an internal
+representation of the generated code. The Java code-generator uses the
+code-generation platform to \emph{transform} the \ac{ir} into a tree
+structure that eventually is translated directly into Java code. The
+translation of the \ac{ir} into Java is handled by the code-generation
+platform's code emission framework, which uses the Apache Velocity
+template engine~\cite{ApacheVelocity}.
+
+The Java code-generator exposes the \ac{ir} during the code-generation
+process, which allows the \ac{jml} translator to intercept the
+code-generation process and further transform the \ac{ir}. These
+additional transformations are used to decorate the \ac{ir} with nodes
+that contain the \ac{jml} annotations. Using the code emission
+framework, the final version of the \ac{ir} is translated into a
+\ac{jml}-annotated Java program.
+
+The \ac{jml} translator is publicly available in Overture version
+2.3.8 (as of July 2016) onwards~\cite{Overture}. Furthermore, the
+\ac{jml} translator's source code is available via the Overture tool's
+open-source code repository~\cite{OvertureGithub}.
+
+\subsection{Overview of the translation}
+
+In the generated code, a module is represented using a \kw{final} Java
+class with a \kw{private} constructor, since \ac{vdmsl} does not
+support inheritance and a module cannot be instantiated. Due to the
+latter, both operations and functions are code-generated as
+\kw{static} Java methods.
+
+Module state is represented using a \kw{static} class field in the
+module class to ensure that only a single state component exists at
+any given time. The state component is represented using a record
+value, and as a consequence, an additional record type is 
+generated to represent it.
+
+Each variable in \ac{vdmsl} is passed by value, i.e.\ as a \emph{deep
+  copy}, when it is passed as an argument, appears on the right-hand
+side of an assignment or is returned as a result. As a consequence,
+aliasing can never occur in a \ac{vdmsl} model. Types are different in
+Java, where objects are modified via object references or
+pointers. Therefore different object references can be used to modify
+the same object. To avoid such aliasing in the generated code, data
+types are code-generated with functionality to support value type
+behaviour.
+
+Every record definition code-generates to a class definition with
+accessor methods for reading and manipulating the fields. This class
+implements \texttt{equals} and \texttt{copy} methods to support
+comparison based on structural equivalence and deep copying,
+respectively. In this way the call-by-value semantics of \ac{vdmsl}
+can be preserved in the generated code by invoking the \texttt{copy}
+method, which helps to prevent aliasing. Similarly the \texttt{equals}
+method can be invoked to compare code-generated records based on
+structural equivalence rather than comparing addresses of object
+references. A record object can then be obtained by invoking the
+constructor of the record class or by invoking the \texttt{copy}
+method of an existing record object.
+
+Java does not support the definition of aliases of existing types,
+such as the \texttt{Amount} named invariant type
+in~\autoref{lst:vdmAmount}. Therefore, the Java code-generator chooses
+not to code-generate class definitions for these types. Instead, a use of
+a named invariant type is replaced with its domain type (described
+in \autoref{sub:vdmsl}). Since the named invariant type is an alias of
+an existing type this is fine, as long as we make sure to check that
+the type invariant holds.
+
+% [I think the following may be more natural for Java -- Gary]
+% [Yes you can argue that, but there are other (good) reasons for not doing it. I omitted this paragraph as I don't want the paper to get into a discussion about this -- Peter TJ]
+% Alternatively, the Java code-generator could have generated a class
+% definition to represent the named invariant type directly. As a
+% consequence of the current approach fewer class definitions are
+% generated. However, as we shall see in~\autoref{sec:sl-other-gen},
+% this approach imposes some different challenges to the translation of
+% named invariant types to \ac{jml} compared to that of translating
+% state invariants.
+
+To assist the translation of \ac{vdm} to Java, the existing Java
+code-generator uses a runtime library, which among other things,
+includes Java implementations for some of the different \ac{vdm} types
+and operators. The \texttt{Tuple} class, for example, is used to
+represent tuple types and enables construction of tuple values. Sets,
+sequences and maps are represented using the \texttt{VDMSet},
+\texttt{VDMSeq} and \texttt{VDMMap} classes, which themselves are
+based on Java collections, and so on. The runtime library's collection
+classes are used as raw types (e.g.\ \texttt{VDMSet}) in the generated
+code, and therefore they are never passed a generic type argument. Raw
+types provide a convenient way to represent \ac{vdm} collections that
+store elements of some union type -- a kind of type that Java does not
+support.
+
+In addition to using the existing runtime library, the \ac{jml}
+translator also contributes a small runtime library to aid the
+generation of \ac{jml} checks. This runtime library, which we
+subsequently refer to as \texttt{V2J}, is an extension of the existing
+Java code-generator runtime library. As we shall see in
+\autoref{sec:col}, the \texttt{V2J} runtime is mostly used in the
+generated \ac{jml} checks to ensure that instances of collections
+respect the \ac{vdm} types that produce them.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 

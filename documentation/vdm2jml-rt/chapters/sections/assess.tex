@@ -1,0 +1,98 @@
+
+\section{Translation assessment}
+\label{sec:assess}
+
+In this section we provide an assessment of the translation. We first
+describe how the correctness of the translation was assessed, and
+afterwards we discuss the scope and treated feature set in relation to
+existing \ac{jml} tools.
+
+\subsection{Translation correctness}
+
+The translation rules have been validated by running examples through
+the \ac{jml} translator and analysing the generated Java/\ac{jml}
+using the OpenJML runtime assertion checker. Some of the examples used
+to test the tool constitute \emph{integration tests} that have been
+developed by the authors. In addition, we have used the tool to
+analyse an \emph{external specification} (originally used as part of
+an industrial case study) that the authors have not been involved in
+the development of. A summary of the different examples used to test
+the translation is given below. Additional details about the examples
+can be found via the references provided.
+
+The \emph{integration tests} currently consist of 85 examples that
+cover testing of all the translation rules. Each test (typically)
+forms a minimal example that exercises a small part of the entire
+translation (such as a single rule). The workflow for running these
+tests is as follows: First, the test model is translated to
+\ac{jml}-annotated Java using the \ac{jml} translator. Next, the
+generated Java/\ac{jml} is compiled and executed using the OpenJML
+runtime assertion checker. Finally, the (actual) output reported by
+the OpenJML runtime assertion checker is compared to the expected
+output in order to confirm that the behaviour of the test model is
+preserved across the translation. For example, if the execution of a
+test model produces a precondition violation then the equivalent error
+is expected to be produced when the generated Java/\ac{jml} is
+executed using the OpenJML runtime assertion checker. All the examples
+used to test the \ac{jml} translator are available via Overture's
+GitHub page~\cite{OvertureGithub} or can be found in a technical
+report that presents a more complete definition of the
+translation~\cite{JmlTechReport16}.
+
+Compared to the \emph{integration tests}, the \emph{external
+  specification} is a large example that is rich in terms of \ac{dbc}
+elements. The model was originally developed to study the properties
+of an algorithm used to obfuscate \ac{fad} codes, which are six digit
+numbers used to identify branches of a retailer. The customer required
+that obfuscated \ac{fad} codes were still six digit numbers, remained
+unique (per branch), and that the entire range of \ac{fad} codes
+(0-999999) was still available. In addition, the obfuscation had to be
+a light-weight calculation (rather than a look-up in a table). The
+properties of the algorithm were described using \ac{vdm} contracts to
+allow the algorithm to be validated using \ac{vdm}'s test automation
+features~\cite{Larsen&10c}.
+
+Investigating whether the algorithm met the requirements necessitated
+the generation and execution of one million tests that initially could
+not be handled by any of the \ac{vdm} tools (either due to intractable execution
+times, or because the \ac{vdm} interpreter ran out of
+memory). Motivated by this, the specification was translated into a
+\ac{jml}-annotated Java program~\cite{Jorgensen&16}, and all one
+million tests were executed using a code-generated version of the
+\ac{vdm} specification. In that way, the properties of the obfuscation
+algorithm could be validated by executing a code-generated version of
+the \ac{vdm} specification using the OpenJML runtime assertion
+checker.
+
+\subsection{Translation scope and treated feature set}
+
+As explained in \autoref{sec:recursive-types} it is possible to
+formulate recursive types that currently are not supported by the
+\ac{jml} translator. Aside from that, all \ac{vdmsl}'s types and
+contract-based elements are supported. However, the \ac{jml}
+translator does not currently support the object-oriented and
+real-time dialects of \ac{vdm}, called \ac{vdm}++~\cite{Fitzgerald&05}
+and \ac{vdm}-RT~\cite{Lausdahl&11}.
+
+The Java code-generator that we extend currently only uses Java 7
+features in the generated code. OpenJML is the only \ac{jml} tool that
+we are aware of that supports this version of Java. Specifically, as
+of December 2016, OpenJML version 0.8.5 was released with support for
+Java 8, i.e.\ the latest official Java version (at the current time of
+writing). Other \ac{jml} tools, on the other hand, lack support for
+recent Java versions (in particular Java 7 and 8). Therefore, these
+tools cannot currently be used to analyse the generated Java/JML.
+
+The \ac{jml} translation is only valuable if the \ac{jml} features
+that it relies on are supported by \ac{jml} tools. Specifically, we
+have aimed to develop a translation that generates Java/\ac{jml} that
+can be analysed using OpenJML. However, the translation would benefit
+from the \invariantfor construct, which OpenJML does not currently
+support. Instead we offer an alternative way to represent this
+construct in order to achieve compatibility with OpenJML (see
+\autoref{sec:atomic} for details).
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 

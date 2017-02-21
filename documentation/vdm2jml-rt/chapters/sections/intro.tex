@@ -1,0 +1,104 @@
+\section{Introduction}
+\label{sec:intro}
+
+\ac{dbc} is an approach for designing software based on concepts such
+as preconditions, postconditions and invariants~\cite{Meyer88}. These
+concepts are referred to as ``\emph{contracts}'', according to a
+conceptual metaphor for the conditions and obligations of a business
+contract. An example of a formal method that uses \ac{dbc} elements is
+\ac{vdm}, which was originally developed at IBM in Vienna for the
+development of a compiler for
+PL/1~\cite{Bjorner&78,Fitzgerald&08c,Fitzgerald&09}. One way to
+realise a \ac{vdm} specification in a programming language is through
+refinement~\cite{Woodcock&96}. This is a stepwise process by which one
+can transform a formal model into a program that can be verified to
+semantically satisfy its contracts~\cite{SDRA}.
+
+Another way to realise a \ac{vdm} specification is using
+code-generation. The idea is for the generated code to be a refinement
+of the specification, but which is not achieved through step-wise
+refinement, but rather in one step through code-generation translation
+rules. Code-generation aims to reduce the resources needed to realise
+the model as well as to avoid introducing problems in the
+implementation due to manual translation of model into code. However,
+current \ac{vdm} code-generators do not make any guarantees about the
+correctness of the generated code, nor do they provide the necessary
+means to help check that the code meets the specification. Naturally,
+this casts doubt on the value of code-generation as a way to realise a
+\ac{vdm} model, since the goal is to develop software that meets the
+specification.
+
+In this paper we improve code-generation of \ac{vdm} models by
+allowing the generated code to be checked against the system
+properties described by the \ac{vdm} contracts. This helps ensure that
+the generated code meets the \ac{vdm} specification, and is achieved
+as described in this paper.
+
+Some \ac{dbc} technologies are tailored to specify detailed designs of
+programming interfaces for a particular programming
+language~\cite{Wing87}. An example of one such technology is
+\ac{jml}~\cite{Burdy&05} -- a formal specification language that uses
+\ac{dbc} elements, written as specialized comments, to specify the
+behaviour of Java classes and interfaces. \ac{jml} annotations can be
+analysed statically or checked dynamically using \ac{jml} tools.
+Therefore, \ac{jml} can be seen as a technology that serves to bridge
+the gap between an abstract system specification and its Java
+implementation.
+
+In this paper we attempt to bridge this gap even further by proposing
+a way to automatically translate a specification written in \ac{vdmsl}
+to a \ac{jml}-annotated Java implementation. Current \ac{vdm}
+code-generators either ignore or provide limited code-generation
+support for the contract-based elements and type constraints of
+\ac{vdm}. Ideally we should be able to preserve the contracts and type
+constraints when the system specification is implemented, since (1)
+they serve to document the intention and properties of the system and
+(2) they can be used to check the system realisation for
+correctness. Ensuring that the contracts and type constraints, as
+originally specified in \ac{vdm}, hold for the system implementation
+potentially requires many extra checks to be added to the code. Adding
+these checks to the code manually is tedious and prone to
+errors. Instead, these checks could be generated
+automatically. Representing contracts and type constraints in \ac{jml}
+also has the advantage that these checks may be ignored by the Java
+compiler. This allows the system realisation to be executed without
+the overhead of checking the contracts and type constraints, if
+desired.
+
+The two main contributions of our work are (1) a collection of
+semantics-preserving rules for translating a \ac{vdmsl} specification
+to a \ac{jml}-annotated Java program and (2) an implementation of
+these rules as an extension to Overture's \cite{Larsen&10a,Overture}
+\ac{vdm}-to-Java code-generator~\cite{Jorgensen&14a}.
+
+The rules propose ways to translate the \ac{dbc} elements of
+\ac{vdmsl} to \ac{jml} annotations; these annotations are added to the
+Java code produced by Overture's Java code-generator. The rules cover
+checking of preconditions, postconditions and invariants, but the
+translator also produces \ac{jml} checks to ensure that no type
+constraints are violated across the translation. We present the rules
+one by one and demonstrate, using a case study model of an \ac{atm},
+how the code-generator extension translates a \ac{vdmsl} specification
+to \ac{jml}-annotated Java code.
+
+Since the translation is not formally defined we have used the
+OpenJML~\cite{Cok&11} runtime assertion checker to validate our work
+--- in particular by generating \ac{jml} constructs supported by this
+tool. More specifically, the \ac{jml} translator has been tested by
+running examples through the tool in order to validate each of the
+translation rules (see \autoref{sec:assess} for more details).
+
+Following this section, we describe \ac{dbc} with VDM-SL and JML in
+\autoref{sec:vdmjml}. We continue by presenting the implementation of
+the \ac{jml} translator in \autoref{sec:sl2java}. Then we describe the
+rules used to translate a \ac{vdmsl} specification to a
+\ac{jml}-annotated Java program in sections \ref{sec:sl-dbc-gen} to
+\ref{sec:sl-other-gen}. Next, we assess the correctness of the
+translation in \autoref{sec:assess}. Finally we describe related work
+in \autoref{sec:related} and present future plans and conclude in
+\autoref{sec:con}.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End: 
