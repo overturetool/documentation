@@ -27,6 +27,7 @@ complete definition of \texttt{Is(v,T)} in \autoref{fig:f-complete}.
 \newcommand\caseSpaceMap{20.0\caseSpace}
 
 \begin{figure*}[ht]
+  \tiny
 \begin{mdframed}
 \begin{equation*}
 \texttt{Is(v,T)} =
@@ -50,7 +51,7 @@ complete definition of \texttt{Is(v,T)} in \autoref{fig:f-complete}.
   \texttt{Utils.is\_(v,String.\kw{class})} & \kw{if} \texttt{ T = \kw{seq of char}}\\[6.0\caseSpace]
 
   \texttt{Utils.is\_(v,S\sub{CG}.\kw{class})} &
-  \!\begin{aligned}%[b]
+  \!\begin{aligned}[b]
     & \kw{if} \texttt{ T} \text{ is a record or quote type } \texttt{S} \text{ that generates to}\\
     & \text{a Java class with the fully qualified name } \texttt{S\sub{CG}}
     \end{aligned}\\[10.0\caseSpace]
@@ -61,35 +62,35 @@ complete definition of \texttt{Is(v,T)} in \autoref{fig:f-complete}.
 
   \texttt{Is(v,T\sub{1}) ||...|| Is(v,T\sub{n})} & \kw{if} \texttt{ T = T\sub{1}|...|T\sub{n}}\\[6.0\caseSpace]
 
-  \!\begin{aligned}%[b]
+  \!\begin{aligned}[b]
     & \texttt{V2J.isSet(v) \&\& (\kw{\textbackslash forall} \kw{int} i;}\\
     & \texttt{ 0 <= i \&\& i < V2J.size(v); Is(V2J.get(v,i),S))}
     \end{aligned}           & \kw{if} \texttt{ T = \kw{set} \kw{of} S}\\[\caseSpaceSeqSet]
 
-  \!\begin{aligned}%[b]
+  \!\begin{aligned}[b]
     & \texttt{V2J.isSeq(v) \&\& (\kw{\textbackslash forall} \kw{int} i;} \\
     & \texttt{ 0 <= i \&\& i < V2J.size(v); Is(V2J.get(v,i),S))}
     \end{aligned}           & \kw{if} \texttt{ T = \kw{seq} \kw{of} S}\\[\caseSpaceSeqSet]
 
-  \!\begin{aligned}%[b]
+  \!\begin{aligned}[b]
     & \texttt{V2J.isSeq1(v) \&\& (\kw{\textbackslash forall} \kw{int} i;} \\
     & \texttt{ 0 <= i \&\& i < V2J.size(v); Is(V2J.get(v,i),S))} \\
     \end{aligned}           & \kw{if} \texttt{ T = \kw{seq1} \kw{of} S}\\[\caseSpaceSeqSet]
 
-  \!\begin{aligned}%[b]
+  \!\begin{aligned}[b]
     & \texttt{V2J.isMap(v) \&\& (\kw{\textbackslash forall} \kw{int} i;} \\
     & \texttt{ 0 <= i \&\& i < V2J.size(v);} \\
     &\texttt{ Is(V2J.getDom(v,i),D) \&\& Is(V2J.getRng(v,i),R))}
     \end{aligned}           & \kw{if} \texttt{ T = \kw{map} D \kw{to} R}\\[\caseSpaceMap]
 
-  \!\begin{aligned}%[b]
+  \!\begin{aligned}[b]
     & \texttt{V2J.isInjMap(v) \&\& (\kw{\textbackslash forall} \kw{int} i;} \\
     & \texttt{ 0 <= i \&\& i < V2J.size(v);} \\
     &\texttt{ Is(V2J.getDom(v,i),D) \&\& Is(V2J.getRng(v,i),R))}
     \end{aligned}           & \kw{if} \texttt{ T = \kw{inmap} D \kw{to} R}\\[\caseSpaceMap]
     
   \texttt{Is(v,D) \&\& inv\_T(v)} &
-  \!\begin{aligned}%[b]
+  \!\begin{aligned}[b]
     & \kw{if} \texttt{ T} \text{ is a named invariant type with domain type }\\ 
     & \texttt{D} \text{ and invariant method} \texttt{ inv\_T}
     \end{aligned}\\[10.0\caseSpace]
