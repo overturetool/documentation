@@ -2,49 +2,61 @@
 
 \usepackage{graphicx}
 \usepackage{acronym}
+\usepackage{cleveref}
 \usepackage{listings}
+\usepackage{hyperref}
 \usepackage{vdmlisting}
 \usepackage{appendix}
 \usepackage{xspace}
-\usepackage{cleveref}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{fixltx2e} % For subscript command
+\usepackage{todonotes}
+\presetkeys{todonotes}{inline,linecolor=red,backgroundcolor=blue!20!white, bordercolor=red}{}
 
 % To get cref to work with appendices
 \crefname{app}{appendix}{appendices}
 \Crefname{app}{Appendix}{Appendices}
 
+% Including times to make bold facing of keywords work for ttfamily in JML listings
+% \usepackage{times}
 \input{jml-listings}
 
 \acrodef{ast}[AST]{Abstract Syntax Tree}
-\acrodef{vdm}[VDM]{Vienna Development Method}
-\acrodef{vdmsl}[VDM-SL]{Vienna Development Method Specification Language}
-\acrodef{jml}[JML]{Java Modeling Language}
+\acrodef{fad}[FAD]{Financial Accounting District}
+\acrodef{vdm}[VDM]{the Vienna Development Method}
+\acrodef{vdmsl}[VDM-SL]{the Vienna Development Method Specification Language}
+\acrodef{jml}[JML]{the Java Modeling Language}
 \acrodef{dbc}[DbC]{Design-by-Contract}
 \acrodef{atm}[ATM]{Automated Teller Machine}
+\acrodef{pvs}[PVS]{the Prototype Verification System}
+\acrodef{uml}[UML]{the Unified Modeling Language}
 \acrodef{ir}[IR]{Intermediate Representation}
-
-\usepackage{todonotes}
-\presetkeys{todonotes}{inline,linecolor=red,backgroundcolor=blue!20!white, bordercolor=red}{}
 
 \newcommand{\vsl}{VDM-SL\xspace}
 
-\lstset{
-    basicstyle=\footnotesize\ttfamily,
-    frame=single, 
-    breaklines=true,
-    tabsize=2, 
-    linewidth=\columnwidth,
-    showstringspaces=false, 
-    captionpos=b,
-    frameround=, 
-    aboveskip=5mm,
-    belowskip=5mm,
-    framexleftmargin=0mm, 
-    framexrightmargin=0mm,
-    escapeinside={(*@}{@*)},
-%    numbers=left,               
-%    numbersep=10pt,                   
-%    numberstyle=\small,
+  \lstset
+{
+  numbers=left,
+  firstnumber=1,
+  numberfirstline=true,
+  xleftmargin=1.5em
 }
+
+  % Custom VDM style
+\lstdefinestyle{customVdm}
+{
+  escapechar=!,
+  breaklines=true,
+  basicstyle=\footnotesize\ttfamily,
+  % frame=single,
+  % frameround=,
+  linewidth=\columnwidth,
+  morekeywords={atomic},
+  moredelim={[is][keywordstyle]{@}{@}}
+}
+
 
 % Custom JML style
 \lstdefinestyle{customJml}
@@ -68,6 +80,51 @@
   breaklines=true,
   basicstyle=\footnotesize\ttfamily
 }
+
+\mdfdefinestyle{MyFrame}{%
+    linecolor=black,
+    outerlinewidth=1pt,
+    frametitlerule=true,
+    frametitlerulewidth=1pt,
+    linewidth=0pt,
+    roundcorner=0pt,
+    innertopmargin=3pt,
+    innerbottommargin=3pt,
+    innerrightmargin=3pt,
+    innerleftmargin=3pt,
+    backgroundcolor=gray!20!white}
+
+\newcounter{transRule}
+\setcounter{transRule}{0}
+
+\newcommand{\transRule}[2]{ \refstepcounter{transRule}%
+  \begin{mdframed}[nobreak=true,style=MyFrame,frametitle=\arabic{transRule}. #1]
+    #2
+  \end{mdframed}}
+
+
+\newcommand{\sub}[1]{\textsubscript{#1}}
+
+\newcommand{\kw}[1]{\texttt{\textbf{#1}}\xspace}
+
+% Definitions related to JML
+\newcommand{\old}{\textbackslash \kw{old}}
+\newcommand{\past}{\textbackslash \kw{past}}
+\newcommand{\RESULT}{\textbackslash \kw{result}}
+\newcommand{\JMLforall}{\textbackslash \kw{forall}}
+\newcommand{\JMLexists}{\textbackslash \kw{exists}}
+
+\newcommand{\invariantfor}{\textbackslash \kw{invariant\_for}}
+
+\newcommand{\oldexp}[1]{\old(\texttt{#1})}
+
+\newcommand{\inv}[1]{\texttt{\textbackslash \textbf{invariant\_for}(#1)}}
+
+% Increase size of sub scripts
+\DeclareMathSizes{10}{10}{9}{10}
+
+% Example: d instance of D ==> \invariant for((D) d)
+\newcommand{\guardedinv}[2]{\texttt{#1 \kw{instance} \kw{of} #2 ==>\\ \indent \textbackslash \textbf{invariant\_for}((#2) #1)}}
 
 \title{Automated translation of VDM-SL to JML-annotated Java}
 \subtitle{Technical Report}
