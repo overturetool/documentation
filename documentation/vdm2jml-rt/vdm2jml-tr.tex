@@ -36,15 +36,23 @@
 
 \newcommand{\vsl}{VDM-SL\xspace}
 
-  \lstset
+\lstset
 {
+  basicstyle=\footnotesize\ttfamily,
   numbers=left,
   firstnumber=1,
   numberfirstline=true,
   xleftmargin=1.5em
 }
 
-  % Custom VDM style
+% Used by the VDM listings in the appendices
+\lstdefinestyle{appendixVdm}
+{
+  frame=trBL,
+  frameround=fttt  
+}
+
+% Custom VDM style (used by the listings in chapters/sections)
 \lstdefinestyle{customVdm}
 {
   escapechar=!,
