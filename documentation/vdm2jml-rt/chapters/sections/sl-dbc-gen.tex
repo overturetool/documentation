@@ -148,7 +148,7 @@ public static Boolean pre_Withdraw(
 The \texttt{Withdraw} operation is translated to the method shown
 in~\autoref{lst:jmlWithdraw}. This method introduces several \ac{jml}
 assertions that will be described in \autoref{sec:sl-types-gen}. Note
-that the \texttt{pre\_Withdraw} method is invoked from the
+that the method \texttt{pre\_Withdraw} is invoked from the
 \kw{requires} clause of the \texttt{Withdraw} method to check whether
 the precondition is met. In addition to the input parameters of the
 \texttt{Withdraw} method, the \texttt{pre\_Withdraw} method is also
@@ -182,8 +182,7 @@ public static Number Withdraw(final Number id, final Number amount) {
 \transRule{Translating the precondition of an operation} {
   Let \texttt{op} be a method code-generated from a \ac{vdmsl} user-defined operation and let the signature of \texttt{op} be:\\
   \kw{static} \texttt{R op(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n})}\\
-  Then \texttt{op} has a code-generated precondition method\\
-  \texttt{pre\_op} that is \kw{pure} and which in addition to the
+  Then \texttt{op} has a code-generated precondition method \texttt{pre\_op} that is \kw{pure} and which in addition to the
   pa\-ra\-met\-ers of \texttt{op} also takes the state component \texttt{s} as an argument, i.e.\ \\
   \texttt{/*@ \kw{pure} @*/} \kw{static} \texttt{ \kw{boolean}\\
     pre\_op(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n},S s)}\\
@@ -278,8 +277,7 @@ separate object to represent the before state.
 \transRule{Translating the postcondition of an operation} {
   Let \texttt{op} be a method code-generated from a \ac{vdmsl} user-defined operation and let the signature of \texttt{op} be:\\
   \kw{static} \texttt{R op(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n})}\\
-  Then \texttt{op} has a code-generated postcondition method\\
-  \texttt{post\_op} that is \kw{pure} and which in addition to the
+  Then \texttt{op} has a code-generated postcondition method \texttt{post\_op} that is \kw{pure} and which in addition to the
   parameters of \texttt{op}, also takes the result and the before and after states of \texttt{op} as arguments, i.e.\ \\
   \texttt{/*@ \kw{pure} @*/} \kw{static} \texttt{ \kw{boolean}}\\
   \texttt{ post\_op(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n},}\\
@@ -337,8 +335,7 @@ passed the state.
 \transRule{Translating the postcondition of a function} {
   Let \texttt{f} be a method code-generated from a \ac{vdmsl} user-defined function and let the signature of \texttt{f} be:\\
   \kw{static} \texttt{R f(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n})}\\
-  Then \texttt{f} has a code-generated postcondition method\\
-  \texttt{post\_f} that is \kw{pure} and which in addition to the
+  Then \texttt{f} has a code-generated postcondition method \texttt{post\_f} that is \kw{pure} and which in addition to the
   parameters of \texttt{f} also takes the result of \texttt{f} as an argument, i.e.\ \\
   \texttt{/*@ \kw{pure} @*/} \kw{static} \texttt{ \kw{boolean}\\
     post\_f(I\sub{1} i\sub{1},...,I\sub{n} i\sub{n},R RESULT)}\\
@@ -621,7 +618,7 @@ does not violate its invariant. This is checked by asserting that
   \texttt{d\sub{1},...,d\sub{n}} have been updated in the given order,
   i.e.\ \texttt{d\sub{i}} was updated (for the first time) before
   \texttt{d\sub{i+1}} and that \texttt{d\sub{i}} may be of one of
-  \texttt{m\sub{i}} record types\\
+  \texttt{m\sub{i}} record types
   \texttt{D\sub{i1},...,D\sub{im\sub{i}}}. Immediately after executing
   the code-generated atomic statement block, it is checked that the
   state designators \texttt{d\sub{1},...,d\sub{n}} do not violate any
@@ -641,7 +638,7 @@ does not violate its invariant. This is checked by asserting that
 %
 
 The \invariantfor construct is not currently implemented in
-OpenJML. Instead the invariant check, for an object, can be inlined as
+OpenJML. Instead this check can be inlined as
 a method call (rather than explicitly using \invariantfor). However,
 throughout this report we use \invariantfor to check record invariants
 as we believe it makes the examples easier to understand.
@@ -766,10 +763,8 @@ final public class ATM {
 \end{lstlisting}
 
 \transRule{Translating the state component}{Annotate state components
-  of module classes with the\\
-  \kw{spec\_public} modifier to ensure that the state components can
-  be referred to from the \kw{requires} and\\
-  \kw{ensures} clauses of \kw{public} methods.}
+  of module classes with the \kw{spec\_public} modifier to ensure that the state components can
+  be referred to from the \kw{requires} and \kw{ensures} clauses of \kw{public} methods.}
 
 
 %%% Local Variables:

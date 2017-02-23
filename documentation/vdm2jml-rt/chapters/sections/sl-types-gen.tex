@@ -180,8 +180,7 @@ zero.
 
 \begin{lstlisting}[style=customJml,caption={Use of \ac{jml} to check
 that a valid amount is being withdrawn.},label={lst:jmlBasic}]
-Number amount =
-  expense.longValue() - profit.longValue();
+Number amount = expense.longValue() - profit.longValue();
 //@ assert Utils.is_nat1(amount);
 return Withdraw(accId, amount);
 \end{lstlisting}
@@ -191,7 +190,7 @@ return Withdraw(accId, amount);
   variable or pattern of type \kw{nat1} and further define
   \texttt{Is(v,\kw{nat1}) = Utils.is\_nat1(v)}.\\
   To ensure that \texttt{v} represents a value of type \kw{nat1},
-  generate a \ac{jml} check to ensure that \texttt{Is(v, \kw{nat1})}
+  generate a \ac{jml} check to ensure that\\ \texttt{Is(v, \kw{nat1})}
   holds.}
 
 The approach used to check other basic types follows the principles
@@ -250,8 +249,7 @@ represent all numeric \ac{vdm} types. That the return type of the
 operation is \texttt{[\textbf{nat}]} only becomes apparent when we
 start using the corresponding method.
 
-To demonstrate this, the Java fragment in
-\autoref{lst:jmlOptionalCheck} uses the result of invoking the
+To demonstrate this, \autoref{lst:jmlOptionalCheck} uses the result of invoking the
 \texttt{GetCurrentCardId} method to initialise a variable named
 \texttt{id}. The initialisation of \texttt{id} is immediately followed
 by a check that ensures that it represents either \kw{null} or a
@@ -330,7 +328,7 @@ Tuple status = GetStatus();
   object reference in the generated code that originates from a
   variable or pattern of the \ac{vdm} tuple type
   \texttt{T\sub{1}*...*T\sub{n}} and further define\\
-  \texttt{Is(v,T\sub{1}*...*T\sub{n}) = V2J.isTup(v,n) \&\&\\
+  \texttt{Is(v,T\sub{1}*...*T\sub{n}) = V2J.isTup(v,n) \&\&
     Is(v,T\sub{1}) \&\&...\&\& Is(v,T\sub{n})}\\ To ensure that
   \texttt{v} represents a value of type \texttt{T\sub{1}*...*T\sub{n}},
   generate a \ac{jml} check to ensure that
@@ -383,7 +381,7 @@ public static void NotifyUser(final Object outcome) {
   object reference in the generated code that originates from a
   variable or pattern of the \ac{vdm} union type
   \texttt{T\sub{1}|...|T\sub{n}} and further define\\
-  \texttt{Is(v,T\sub{1}|...|T\sub{n}) = Is(v,T\sub{1}) ||...||\\Is(v,T\sub{n})}\\
+  \texttt{Is(v,T\sub{1}|...|T\sub{n}) = Is(v,T\sub{1}) ||...|| Is(v,T\sub{n})}\\
   To ensure that \texttt{v} represents a value of type
   \texttt{T\sub{1}|...|T\sub{n}}, generate a \ac{jml}
   check to ensure that\\
@@ -574,7 +572,7 @@ public static Boolean inv_ATM_Amount(final Object check_a) {
 
 \transRule{Checking of named invariant types} { Let \texttt{v} be a
   value or object reference in the generated code that originates from
-  a variable or pattern of the \ac{vdm}\\
+  a variable or pattern of the \ac{vdm}
   named invariant type \texttt{T} based on the domain type \texttt{D}
   and constrained
   by invariant predicate \texttt{e(p)}, i.e.\ \texttt{T} is defined as\\

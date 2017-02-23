@@ -72,13 +72,13 @@ Immediately after completing the state update, i.e.\ invoking
 \begin{enumerate}
 
 \item The state of \texttt{stateDes\_2} becomes \emph{visible} thus
-triggering the invariant check of \texttt{stateDes\_2}.
+  triggering the \texttt{stateDes\_2} invariant check.
 
-\item The invariant check of \texttt{stateDes\_1} is run by asserting
+\item The invariant check of \texttt{stateDes\_1} is run as
   \inv{stateDes\_1} and finally,
 
-\item the invariant check of \texttt{r1} is run by asserting\\
-  \inv{r1}, which causes a runtime-error to be reported.
+\item the invariant check of \texttt{r1} is run by asserting \inv{r1},
+  which causes a runtime-error to be reported.
 \end{enumerate}
 
 Strictly speaking the objects pointed to by \texttt{stateDes\_1} and
