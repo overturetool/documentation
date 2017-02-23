@@ -211,183 +211,183 @@ is to check whether the object reference is an instance of said
 class. The rules for checking record and quote types are included in
 \autoref{fig:f-complete}.
 
-% \subsection{Translating optional types}
-% \label{sec:optional}
+\subsection{Translating optional types}
+\label{sec:optional}
 
-% To demonstrate how the \ac{jml} translator handles optional types
-% consider the \texttt{GetCurrentCardId} operation in
-% \autoref{lst:vdmGetCurrentCardId}. This operation returns the
-% identification of the debit card currently inserted into the machine,
-% if any. Otherwise the operation returns \kw{nil} to indicate the
-% absence of a debit card. To allow \kw{null} as a return value, the
-% optional type operator is used to specify the return type of the
-% operation as \texttt{[\textbf{nat}]}.
+To demonstrate how the \ac{jml} translator handles optional types
+consider the \texttt{GetCurrentCardId} operation in
+\autoref{lst:vdmGetCurrentCardId}. This operation returns the
+identification of the debit card currently inserted into the machine,
+if any. Otherwise the operation returns \kw{nil} to indicate the
+absence of a debit card. To allow \kw{null} as a return value, the
+optional type operator is used to specify the return type of the
+operation as \texttt{[\textbf{nat}]}.
 
-% \begin{vdmsl}[style=customVdm,caption={Operation for getting the id of
-% the debit card currently inserted into the
-% \ac{atm}.},label={lst:vdmGetCurrentCardId}]
-% GetCurrentCardId : () ==> [nat]
-% GetCurrentCardId () ==
-%  if currentCard <> nil then
-%    return currentCard.id
-%  else
-%    return nil;
+\begin{vdmsl}[style=customVdm,caption={Operation for getting the id of
+the debit card currently inserted into the
+\ac{atm}.},label={lst:vdmGetCurrentCardId}]
+GetCurrentCardId : () ==> [nat]
+GetCurrentCardId () ==
+ if currentCard <> nil then
+   return currentCard.id
+ else
+   return nil;
+\end{vdmsl}
+
+Considering solely the signature of the code-generated version of this
+operation, shown in \autoref{lst:jmlGetCurrentCardId}, there is no way
+to tell that the return type represents a \texttt{[\textbf{nat}]}.
+
+\begin{lstlisting}[style=customJml,caption={Signature of the
+code-generated version of the \texttt{GetCurrentCardId}
+operation.},label={lst:jmlGetCurrentCardId}]
+public static Number GetCurrentCardId(){...}
+\end{lstlisting}
+
+\noindent The reason for this is that the Java code-generator uses the
+\texttt{Number} class (which is part of the Java standard library) to
+represent all numeric \ac{vdm} types. That the return type of the
+operation is \texttt{[\textbf{nat}]} only becomes apparent when we
+start using the corresponding method.
+
+To demonstrate this, the Java fragment in
+\autoref{lst:jmlOptionalCheck} uses the result of invoking the
+\texttt{GetCurrentCardId} method to initialise a variable named
+\texttt{id}. The initialisation of \texttt{id} is immediately followed
+by a check that ensures that it represents either \kw{null} or a
+natural number. The approach of allowing \kw{null} values like this is
+the same for all optional types.
+
+% The methods in the Java code-generator runtime library used for
+% performing \ac{jml} checks (including those of \texttt{V2J}) all
+% reject \kw{null} values, e.g.\ \texttt{Utils.is\_nat(\textbf{null})}
+% yields \kw{false}.
+
+\begin{lstlisting}[style=customJml,caption={Use of the
+\texttt{GetCurrentCardId} method in the generated
+code.},label={lst:jmlOptionalCheck}]
+Number id = GetCurrentCardId();
+//@ assert id == null || Utils.is_nat(id);
+\end{lstlisting}
+
+\transRule{Checking of optional types} {Let \texttt{v} be a value or
+  object reference in the generated code that originates from a
+  variable or pattern of the \ac{vdm} type \texttt{[T]} and further define\\
+  \texttt{Is(v,[T]) = (v == \kw{null} || Is(v,T))}\\
+  To ensure that \texttt{v} represents a value of type \texttt{[T]},
+  generate a \ac{jml} check to ensure that \texttt{Is(v,[T])} holds.}
+
+\subsection{Translating tuple types}
+\label{sec:tuples}
+
+In our case study example we use a tuple type to represent the status
+of the \ac{atm}: the first field is a \kw{boolean} flag that indicates
+if the \ac{atm} is currently awaiting a debit card to be inserted, and
+the second field is a human-readable description of the current state
+of the \ac{atm}, e.g. ``transaction in progress''. The signature of
+the operation that retrieves the status of the \ac{atm} is shown in
+\autoref{lst:vdmTuple}. Note in particular that the status returned is
+represented using the tuple type \texttt{\kw{bool} * \kw{seq of
+    char}}.
+
+\begin{vdmsl}[style=customVdm,caption={The signature of the
+\texttt{GetStatus} operation.},label={lst:vdmTuple}]
+GetStatus : () ==> bool * seq of char
+GetStatus () == ...
+\end{vdmsl}
+
+% In \ac{vdm} the status of the \ac{atm} can be retrieved as shown in
+% \autoref{lst:vdmAtmStatus}. Note that the status flag and message are
+% returned as fields of the same tuple value.
+
+% \begin{vdmsl}[style=customVdm,caption={Retrieving the status of the
+% \ac{atm}.},label={lst:vdmAtmStatus}]
+% let status = GetStatus()
+% in
+%  ...
 % \end{vdmsl}
 
-% Considering solely the signature of the code-generated version of this
-% operation, shown in \autoref{lst:jmlGetCurrentCardId}, there is no way
-% to tell that the return type represents a \texttt{[\textbf{nat}]}.
+In the generated Java code, every tuple value is represented as an
+instance of the \texttt{Tuple} class available from the Java code-generator
+runtime library. Since the \texttt{Tuple} class represents
+tuple values in general, each instance of this class must be checked
+against the specific tuple type that it originates from.
 
-% \begin{lstlisting}[style=customJml,caption={Signature of the
-% code-generated version of the \texttt{GetCurrentCardId}
-% operation.},label={lst:jmlGetCurrentCardId}] public static Number
-% GetCurrentCardId(){...}
-% \end{lstlisting}
+After the status of the \ac{atm} has been retrieved using the
+\texttt{GetStatus} method in the generated code, the status is checked
+as shown in \autoref{lst:jmlAtmStatus}. First it is checked that
+\texttt{status} is a tuple of size two. Afterwards it is checked that
+the first field is a \kw{boolean} and that the second field is a Java
+\texttt{String} (which represents the \texttt{\kw{seq of char}} type).
 
-% \noindent The reason for this is that the Java code-generator uses the
-% \texttt{Number} class (which is part of the Java standard library) to
-% represent all numeric \ac{vdm} types. That the return type of the
-% operation is \texttt{[\textbf{nat}]} only becomes apparent when we
-% start using the corresponding method.
+\begin{lstlisting}[style=customJml,caption={Checking the \ac{atm}
+status in the generated code.},label={lst:jmlAtmStatus}]
+Tuple status = GetStatus();
+//@ assert (V2J.isTup(status,2) && Utils.is_bool(V2J.~field~(status,0)) && Utils.is_(V2J.~field~(status,1),String.class));
+\end{lstlisting}
 
-% To demonstrate this, the Java fragment in
-% \autoref{lst:jmlOptionalCheck} uses the result of invoking the
-% \texttt{GetCurrentCardId} method to initialise a variable named
-% \texttt{id}. The initialisation of \texttt{id} is immediately followed
-% by a check that ensures that it represents either \kw{null} or a
-% natural number. The approach of allowing \kw{null} values like this is
-% the same for all optional types.
+\transRule{Checking of tuple types} {Let \texttt{v} be a value or
+  object reference in the generated code that originates from a
+  variable or pattern of the \ac{vdm} tuple type
+  \texttt{T\sub{1}*...*T\sub{n}} and further define\\
+  \texttt{Is(v,T\sub{1}*...*T\sub{n}) = V2J.isTup(v,n) \&\&\\
+    Is(v,T\sub{1}) \&\&...\&\& Is(v,T\sub{n})}\\ To ensure that
+  \texttt{v} represents a value of type \texttt{T\sub{1}*...*T\sub{n}},
+  generate a \ac{jml} check to ensure that
+  \texttt{Is(v,T\sub{1}*...*T\sub{n})} holds.}
 
-% % The methods in the Java code-generator runtime library used for
-% % performing \ac{jml} checks (including those of \texttt{V2J}) all
-% % reject \kw{null} values, e.g.\ \texttt{Utils.is\_nat(\textbf{null})}
-% % yields \kw{false}.
+\subsection{Translating union types}
+\label{sec:unions}
 
-% \begin{lstlisting}[style=customJml,caption={Use of the
-% \texttt{GetCurrentCardId} method in the generated
-% code.},label={lst:jmlOptionalCheck}]
-% Number id = GetCurrentCardId();
-% //@ assert id == null || Utils.is_nat(id);
-% \end{lstlisting}
+Attempting to insert a debit card into the \ac{atm} results in the
+debit card being accepted, if no card is currently inserted and it is
+considered a valid card by the system. Otherwise the card is
+rejected. Based on the outcome of this the \texttt{NotifyUser}
+operation, shown in \autoref{lst:vdmNotifyUser}, displays a message to
+inform the card holder about the current status of the session. This
+operation uses a union type, formed by the three quote types
+\texttt{<Accept>}, \texttt{<Busy>} and \texttt{<Reject>}, to represent
+one of three outcomes of the card holder attempting to insert a debit
+card into the \ac{atm}.
 
-% \transRule{Checking of optional types} {Let \texttt{v} be a value or
-%   object reference in the generated code that originates from a
-%   variable or pattern of the \ac{vdm} type \texttt{[T]} and further define\\
-%   \texttt{Is(v,[T]) = (v == \kw{null} || Is(v,T))}\\
-%   To ensure that \texttt{v} represents a value of type \texttt{[T]},
-%   generate a \ac{jml} check to ensure that \texttt{Is(v,[T])} holds.}
+\begin{vdmsl}[style=customVdm,caption={Operation used to notify a
+\ac{atm} user.},label={lst:vdmNotifyUser}]
+NotifyUser : <Accept>|<Busy>|<Reject> ==> ()
+NotifyUser (outcome) ==
+if outcome = <Accept> then
+  Display("Card accepted")
+elseif outcome = <Busy> then
+  ...
+\end{vdmsl}
 
-% \subsection{Translating tuple types}
-% \label{sec:tuples}
+\noindent The code-generated version of the \texttt{NotifyUser} operation is
+shown in \autoref{lst:jmlNotifyUser}. Since the \texttt{outcome}
+parameter originates from the union type formed by the three quote
+types, it must be checked that \texttt{outcome} equals one of the three
+possible values. This check is performed immediately after entering
+the \texttt{NotifyUser} method, as shown in
+\autoref{lst:jmlNotifyUser}.
 
-% In our case study example we use a tuple type to represent the status
-% of the \ac{atm}: the first field is a \kw{boolean} flag that indicates
-% if the \ac{atm} is currently awaiting a debit card to be inserted, and
-% the second field is a human-readable description of the current state
-% of the \ac{atm}, e.g. ``transaction in progress''. The signature of
-% the operation that retrieves the status of the \ac{atm} is shown in
-% \autoref{lst:vdmTuple}. Note in particular that the status returned is
-% represented using the tuple type \texttt{\kw{bool} * \kw{seq of
-%     char}}.
+\begin{lstlisting}[style=customJml,caption={Code-generated version of
+the \texttt{NotifyUser} operation.},label={lst:jmlNotifyUser}]
+public static void NotifyUser(final Object outcome) {
+ //@ assert (Utils.is_(outcome,atm.quotes.AcceptQuote.class) || Utils.is_(outcome,atm.quotes.BusyQuote.class) || Utils.is_(outcome,atm.quotes.RejectQuote.class));
+ if (Utils.equals(outcome, atm.quotes.AcceptQuote.getInstance())) {
+   Display("Card accepted");
+ } else if (Utils.equals(outcome, atm.quotes.BusyQuote.getInstance())){
+   ...
+}
+\end{lstlisting}
 
-% \begin{vdmsl}[style=customVdm,caption={The signature of the
-% \texttt{GetStatus} operation.},label={lst:vdmTuple}]
-% GetStatus : () ==> bool * seq of char
-% GetStatus () == ...
-% \end{vdmsl}
-
-% % In \ac{vdm} the status of the \ac{atm} can be retrieved as shown in
-% % \autoref{lst:vdmAtmStatus}. Note that the status flag and message are
-% % returned as fields of the same tuple value.
-
-% % \begin{vdmsl}[style=customVdm,caption={Retrieving the status of the
-% % \ac{atm}.},label={lst:vdmAtmStatus}]
-% % let status = GetStatus()
-% % in
-% %  ...
-% % \end{vdmsl}
-
-% In the generated Java code, every tuple value is represented as an
-% instance of the \texttt{Tuple} class available from the Java code-generator
-% runtime library. Since the \texttt{Tuple} class represents
-% tuple values in general, each instance of this class must be checked
-% against the specific tuple type that it originates from.
-
-% After the status of the \ac{atm} has been retrieved using the
-% \texttt{GetStatus} method in the generated code, the status is checked
-% as shown in \autoref{lst:jmlAtmStatus}. First it is checked that
-% \texttt{status} is a tuple of size two. Afterwards it is checked that
-% the first field is a \kw{boolean} and that the second field is a Java
-% \texttt{String} (which represents the \texttt{\kw{seq of char}} type).
-
-% \begin{lstlisting}[style=customJml,caption={Checking the \ac{atm}
-% status in the generated code.},label={lst:jmlAtmStatus}]
-% Tuple status = GetStatus();
-% //@ assert (V2J.isTup(status,2) && Utils.is_bool(V2J.~field~(status,0)) && Utils.is_(V2J.~field~(status,1),String.class));
-% \end{lstlisting}
-
-% \transRule{Checking of tuple types} {Let \texttt{v} be a value or
-%   object reference in the generated code that originates from a
-%   variable or pattern of the \ac{vdm} tuple type
-%   \texttt{T\sub{1}*...*T\sub{n}} and further define\\
-%   \texttt{Is(v,T\sub{1}*...*T\sub{n}) = V2J.isTup(v,n) \&\&\\
-%     Is(v,T\sub{1}) \&\&...\&\& Is(v,T\sub{n})}\\ To ensure that
-%   \texttt{v} represents a value of type \texttt{T\sub{1}*...*T\sub{n}},
-%   generate a \ac{jml} check to ensure that
-%   \texttt{Is(v,T\sub{1}*...*T\sub{n})} holds.}
-
-% \subsection{Translating union types}
-% \label{sec:unions}
-
-% Attempting to insert a debit card into the \ac{atm} results in the
-% debit card being accepted, if no card is currently inserted and it is
-% considered a valid card by the system. Otherwise the card is
-% rejected. Based on the outcome of this the \texttt{NotifyUser}
-% operation, shown in \autoref{lst:vdmNotifyUser}, displays a message to
-% inform the card holder about the current status of the session. This
-% operation uses a union type, formed by the three quote types
-% \texttt{<Accept>}, \texttt{<Busy>} and \texttt{<Reject>}, to represent
-% one of three outcomes of the card holder attempting to insert a debit
-% card into the \ac{atm}.
-
-% \begin{vdmsl}[style=customVdm,caption={Operation used to notify a
-% \ac{atm} user.},label={lst:vdmNotifyUser}]
-% NotifyUser : <Accept>|<Busy>|<Reject> ==> ()
-% NotifyUser (outcome) ==
-% if outcome = <Accept> then
-%   Display("Card accepted")
-% elseif outcome = <Busy> then
-%   ...
-% \end{vdmsl}
-
-% \noindent The code-generated version of the \texttt{NotifyUser} operation is
-% shown in \autoref{lst:jmlNotifyUser}. Since the \texttt{outcome}
-% parameter originates from the union type formed by the three quote
-% types, it must be checked that \texttt{outcome} equals one of the three
-% possible values. This check is performed immediately after entering
-% the \texttt{NotifyUser} method, as shown in
-% \autoref{lst:jmlNotifyUser}.
-
-% \begin{lstlisting}[style=customJml,caption={Code-generated version of
-% the \texttt{NotifyUser} operation.},label={lst:jmlNotifyUser}]
-% public static void NotifyUser(final Object outcome) {
-%  //@ assert (Utils.is_(outcome,atm.quotes.AcceptQuote.class) || Utils.is_(outcome,atm.quotes.BusyQuote.class) || Utils.is_(outcome,atm.quotes.RejectQuote.class));
-%  if (Utils.equals(outcome, atm.quotes.AcceptQuote.getInstance())) {
-%    Display("Card accepted");
-%  } else if (Utils.equals(outcome, atm.quotes.BusyQuote.getInstance())){
-%    ...
-% }
-% \end{lstlisting}
-
-% \transRule{Checking of union types} {Let \texttt{v} be a value or
-%   object reference in the generated code that originates from a
-%   variable or pattern of the \ac{vdm} union type
-%   \texttt{T\sub{1}|...|T\sub{n}} and further define\\
-%   \texttt{Is(v,T\sub{1}|...|T\sub{n}) = Is(v,T\sub{1}) ||...||\\Is(v,T\sub{n})}\\
-%   To ensure that \texttt{v} represents a value of type
-%   \texttt{T\sub{1}|...|T\sub{n}}, generate a \ac{jml}
-%   check to ensure that\\
-%   \texttt{Is(v,T\sub{1}|...|T\sub{n})} holds.}
+\transRule{Checking of union types} {Let \texttt{v} be a value or
+  object reference in the generated code that originates from a
+  variable or pattern of the \ac{vdm} union type
+  \texttt{T\sub{1}|...|T\sub{n}} and further define\\
+  \texttt{Is(v,T\sub{1}|...|T\sub{n}) = Is(v,T\sub{1}) ||...||\\Is(v,T\sub{n})}\\
+  To ensure that \texttt{v} represents a value of type
+  \texttt{T\sub{1}|...|T\sub{n}}, generate a \ac{jml}
+  check to ensure that\\
+  \texttt{Is(v,T\sub{1}|...|T\sub{n})} holds.}
 
 \subsection{Translating collections}
 \label{sec:col}
