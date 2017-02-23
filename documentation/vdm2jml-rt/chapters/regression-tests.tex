@@ -4,20 +4,12 @@
 
 Since the translation is not formally defined all the translation
 rules have been validated by running examples, or \emph{regression
-  tests}, through the tool. Each test consists of a \ac{vdmsl} model
-that is used to test some aspect of the translation (such as a single
-rule). Using the \ac{jml} translator each test model is translated to
-a \ac{jml}-annotated Java program that is executed using the OpenJML
-runtime assertion checker. The (actual) output obtained by executing
-the generated Java/JML is then compared to some expected result to see
-if the translation works as expected result.
-
-This appendix contains all the regression tests that are used to test
-the translation rules. For each test, the input model, the
-corresponding Java/JML and the OpenJML runtime assertion checker
-output is shown, respectively. Alternatively, all the examples,
-including the generated output, can be downloaded
-via~\cite{AllTestExamples}.
+  tests}, through the tool (see \cref{sec:assess} for details). This
+appendix contains all the regression tests that are used to test the
+translation rules. For each test, the input model, the corresponding
+Java/JML and the OpenJML runtime assertion checker output is shown,
+respectively. Alternatively, all the examples, including the generated
+output, can be downloaded via~\cite{AllTestExamples}.
 
 \input{chapters/generated.tex}
 
