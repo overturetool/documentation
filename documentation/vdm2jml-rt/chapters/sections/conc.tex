@@ -1,7 +1,7 @@
 \section{Conclusion and future plans}
 \label{sec:con}
 
-In this paper we have demonstrated how \ac{vdmsl} models can be
+In this report we have demonstrated how \ac{vdmsl} models can be
 translated to \ac{jml}-annotated Java programs that can be checked for
 correctness using \ac{jml} tools. The \ac{jml} translator uses
 \ac{jml} to represent the \ac{dbc} elements of \ac{vdmsl}, and
@@ -35,7 +35,7 @@ made explicit in Java.
 
 Although \ac{dbc} languages often support many of the same \ac{dbc}
 concepts, it is the semantic differences between the languages that
-make developing a translation challenging. In this paper we have shown
+make developing a translation challenging. In this report we have shown
 several examples of such differences and how they can be
 addressed. Naturally, translating between other specification language
 pairs may reveal other differences and design details that are of
@@ -67,7 +67,7 @@ translations between other specification language pairs:
 \item [Atomic execution:] Languages may use dedicated constructs to
   represent atomic execution (e.g.\ \ac{vdm}) or by allowing
   invariants not to hold at certain times (e.g.\ \ac{jml}). In this
-  paper an example was given of how a dedicated construct can be
+  report an example was given of how a dedicated construct can be
   emulated in a language that does not support one natively.
 
 \item [Old state:] Despite pre- and postconditions being similar
@@ -89,7 +89,7 @@ invariants~\cite{Larsen&10c}.
 
 We plan to code-generate the trace expansion such that the 
 tests can be executed against the code-generated version of the
-model. The work presented in this paper can then be used to detect
+model. The work presented in this report can then be used to detect
 contract or type violations and give verdicts to the code-generated
 trace tests. We believe that this will be particularly advantageous
 for execution of large collections of tests. We expect this approach
@@ -98,7 +98,7 @@ allow more tests to be executed. In addition, we plan to look into
 \ac{jml}-generation for other \ac{vdm} dialects such as
 \ac{vdm}++. However, since \ac{vdm}++ is object-oriented and supports
 concurrency, we envisage that this will give rise to a completely new
-set of challenges not addressed by the work in this paper.
+set of challenges not addressed by the work in this report.
 
 So far the analysis of the generated Java/\ac{jml} has primarily been
 limited to runtime assertion checking. Another item of future work is
@@ -115,12 +115,13 @@ possibility of exceptions or non-terminating behaviour~\cite{Cok05}.
 We hope that our work will serve as inspiration for other researchers
 who seek to bridge the gap between other specification notations and
 implementation technologies that support the \ac{dbc} approach. We
-believe that the rules proposed in this paper can be useful for others
+believe that the rules proposed in this report can be useful for others
 who want to translate between specification languages such as ASM, B
 and Z and implementation technologies such as Spec\#, Sparc-Ada and
 Eiffel.
 
-%%% Local Variables: 
+
+%%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "../paper"
-%%% End: 
+%%% TeX-master: "../../vdm2jml-tr"
+%%% End:
