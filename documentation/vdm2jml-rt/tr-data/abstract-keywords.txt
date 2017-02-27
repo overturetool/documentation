@@ -17,7 +17,11 @@ further demonstrate how dynamic JML assertion checks can be used to
 ensure the consistency of VDM’s subtypes when a model is
 code-generated. The translator is fully automated and produces
 JML-annotated Java programs that can be checked for correctness using
-JML tools.
+JML tools. Specifically, it is shown how such analysis can be
+performed using the OpenJML runtime assertion checker. The translation
+is demonstrated using a case study example of an Automated Teller
+Machine and several other VDM-SL models, which have been used to
+validate and asses the translation.
 
 Keywords
 
