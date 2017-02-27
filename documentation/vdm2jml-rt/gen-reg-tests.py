@@ -25,7 +25,7 @@ for dirname, dirnames, filenames in os.walk(testCopies):
                 out.write("\\section{%s}\n" % f)
                 out.write("%% Test number %s\n\n" % testNo)
                 out.write("\\subsection{The VDM-SL model}")
-                out.write("\\lstinputlisting[language=VDM_SL,style=appendixVdm]{%s}\n\n" % realPath(dirname, f))
+                out.write("\\lstinputlisting[language=VDM_SL,style=appendixVdm,breaklines=true]{%s}\n\n" % realPath(dirname, f))
 
         for f in filenames:
             if f.endswith(".java"):
