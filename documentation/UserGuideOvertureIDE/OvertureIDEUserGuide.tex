@@ -1783,6 +1783,67 @@ public class RemoteController implements RemoteControl
 }
 \end{lstlisting}
 
+\section{Using Remote Control for model observation in Plotting Tool}
+A tool has been developed that enables observation of the variables in VDM++ models through a Remote Control.
+
+\subsection{Setting up Run Configuration for Remote Control}
+To start the model with the Remote Control, one has to create a custom Run Configuration specifying which Remote Control to use. Thus, the library containing the Remote Control needs to be part of the project as a dependency or as part of the Java classpath. It is shown in Figure \ref{fig:gui:remoteControlCfg} how to set up such a run configuration in overture.
+
+\begin{figure}[!h]
+\begin{center}
+  \includegraphics[width=\textwidth]{screenDumps/tempo_run_config}
+  \caption[labelInTOC]{TEMPO Remote Control run configuration.}
+  \label{fig:gui:remoteControlCfg}
+\end{center}
+\end{figure}
+
+\subsection{Executing the model from Plotting Tool}
+After starting the model from overture, the interpreter is now loaded with the model, however no methods have been executed yet. Before executing the world-run method remotely, the Plotting Tool needs to be told which class is the root class and which of its method is the world-run method. Also, any variables that you want to observe, should be configured. Following steps are needed in order to execute a model from the Plotting Tool:
+
+\begin{description}
+\item [Choose root class] Choose which class is the root class containing the world run method and references to all required variables. 
+\item [Choose run function] Choose which function is the world run method, responsible for executing the model.
+\item [Setup plots] Create plots for every variable the is required to be observed.  
+\item [Start model] Execute the model by pressing \texttt{Start}. Now you are able to observe the real-time status of the observed variables from the predefined plots. 
+\end{description}
+
+Figures \ref{fig:gui:tempoChooseRoot}, \ref{fig:gui:tempoChooseRun}, \ref{fig:gui:tempoAddPlot} and \ref{fig:gui:tempoShowPlot} show an example of this sequence of actions.
+
+\begin{figure}[!h]
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{screenDumps/tempo_choose_root}
+  \caption{Illustration of root class selector. Here two classes, Example and Other, are part of the model.}
+  \label{fig:gui:tempoChooseRoot}
+\end{center}
+\end{figure}
+
+\begin{figure}[!h]
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{screenDumps/tempo_choose_run}
+  \caption{Choose run method. Only one method, run, exists in this example.}
+  \label{fig:gui:tempoChooseRun}
+\end{center}
+\end{figure}
+
+\begin{figure}[!h]
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{screenDumps/tempo_add_plot}
+  \caption{Create plot from variables on the root class. Multiple variables can be added from the dropdown.}
+  \label{fig:gui:tempoAddPlot}
+\end{center}
+\end{figure}
+
+\begin{figure}[!h]
+\begin{center}
+  \includegraphics[width=\textwidth]{screenDumps/tempo_show_plot}
+  \caption{Show the plot.}
+  \label{fig:gui:tempoShowPlot}
+\end{center}
+\end{figure}
+
+\subsection{Configuration of the Plotting Tool}
+After setting up the Plotting Tool for a specific model, you are able to save the configuration for later use through the \texttt{Config}-menu. This enables you to later reload the configuration containing root class, run method and all plots (without data).
+
 \section{Using a GUI in a VDM model: Linking Example}\label{sec:gui}
 
 This example describes how the linking functionality can be used to create a graphical representation of a VDM model.
