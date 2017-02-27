@@ -1,27 +1,4 @@
-When a system specified using the Vienna Development Method (VDM) is
-realised using code-generation, no guarantees are currently made about
-the correctness of the generated code. In this technical report, we
-improve code-generation of VDM models by taking contract-based
-elements such as invariants and pre- and postconditions into account
-during the code-generation process. The contract-based elements of the
-Vienna Development Method Specification Language (VDM-SL) are
-translated into corresponding constructs in the Java Modelling
-Language (JML) and used to validate the generated code against the
-properties of the VDM model. VDM-SL and JML are both
-Design-by-Contract (DbC) languages, with the difference that VDM-SL
-supports abstract modelling and system specification, while JML is
-used for detailed specification of Java classes and interfaces. We
-describe the semantic differences between the contract-based elements
-of VDM-SL and JML and formulate the translation as a set of rules. We
-further demonstrate how dynamic JML assertion checks can be used to
-ensure the consistency of VDM’s subtypes when a model is
-code-generated. The translator is fully automated and produces
-JML-annotated Java programs that can be checked for correctness using
-JML tools. Specifically, it is shown how such analysis can be
-performed using the OpenJML runtime assertion checker. The translation
-is demonstrated using a case study example of an Automated Teller
-Machine and several other VDM-SL models, which have been used to
-validate and asses the translation.
+When a system specified using the Vienna Development Method (VDM) is realised using code-generation, no guarantees are currently made about the correctness of the generated code. In this technical report, we improve code-generation of VDM models by taking contract-based elements such as invariants and pre- and postconditions into account during the code-generation process. The contract-based elements of the Vienna Development Method Specification Language (VDM-SL) are translated into corresponding constructs in the Java Modelling Language (JML) and used to validate the generated code against the properties of the VDM model. VDM-SL and JML are both Design-by-Contract (DbC) languages, with the difference that VDM-SL supports abstract modelling and system specification, while JML is used for detailed specification of Java classes and interfaces. We describe the semantic differences between the contract-based elements of VDM-SL and JML and formulate the translation as a set of rules. We further demonstrate how dynamic JML assertion checks can be used to ensure the consistency of VDM’s subtypes when a model is code-generated. The translator is fully automated and produces JML-annotated Java programs that can be checked for correctness using JML tools. Specifically, it is shown how such analysis can be performed using the OpenJML runtime assertion checker. The translation is demonstrated using a case study example of an Automated Teller Machine and several other VDM-SL models, which have been used to validate and asses the translation.
 
 Keywords
 
