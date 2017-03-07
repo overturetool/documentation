@@ -360,7 +360,7 @@ Items in \textcolor{red}{red} are not yet supported.
 %
 \item  Records.
 %
-\item  \textcolor{red}{Products}.
+\item  Products.
 %
 \item  Sets, sequences and maps.
 \begin{itemize}
@@ -375,8 +375,8 @@ Items in \textcolor{red}{red} are not yet supported.
 %
 \item  Loops.
 \begin{itemize}
-\item  \textcolor{red}{For index loops}.
-\item  \textcolor{red}{While loops}.
+\item  For index loops.
+\item  While loops.
 \end{itemize}
 
 %
@@ -388,7 +388,13 @@ Items in \textcolor{red}{red} are not yet supported.
 \item  I/O library.
 \begin{itemize}
 \item  \textcolor{red}{String patterns}.
-\item  \textcolor{red}{File I/O}.
+\item  \textcolor{red}{General file I/O}.
+\end{itemize}
+%
+\item \textcolor{red}{CSV library}.
+\begin{itemize}
+\item  flinecount()
+\item  freadval~[~seq of real~]~()
 \end{itemize}
 %
 \item MATH library.
@@ -429,9 +435,17 @@ Please note that this folder is wiped clean each time code is generated.
 %
 Additional development work on the generated code \emph{must not} be carried out in this folder.
 
-The generator will emit a \texttt{main.c} file containing an empty \texttt{main()} function.
+The generator will emit a \texttt{main.c} file containing a skeletal \texttt{main()} function.
 %
-Moreover, the file contains helper functions for system-wide initialization and tear-down of model \texttt{values} and static fields.
+The body of this function contains calls to initialize and shutdown the garbage collector used to manage memory usage in the generated code.
+%
+The garbage collector is not invoked automatically.
+%
+It is therefore necessary to insert calls to the function \texttt{vdm\_gc()} in order to do so.
+%
+It is safe to insert calls to reclaim unused memory inside code developed by hand, for instance after every execution of a periodic task, but it is generally unsafe to modify the generated code to do so.
+%
+The \texttt{main.c} file also contains helper functions for system-wide initialization and tear-down of model \texttt{values} and static fields.
 %
 The implementation of these is discussed below.
 %
@@ -450,7 +464,7 @@ When renamed to \texttt{CMake}\-\texttt{Lists.txt}, executing
 %
 in the generated code root directory will compile an executable, but inert, binary of the generated model.
 %
-At this point the user is free to populate the \texttt{main} function.
+At this point the user is free to populate the \texttt{main()} function.
 %
 The header file \texttt{Mangled}\-\texttt{Names.h} contains the correspondences between model identifiers and the mangled names used internally in the generated code.
 %
@@ -460,6 +474,9 @@ This file can be used to call into the generated model using approximately the n
 %
 \subsection{The C Translation Strategy}
 \input{sections/codegen-translation-subsection}
+%
+%
+%
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../OvertureIDEUserGuide"
