@@ -153,11 +153,13 @@ elements of the model, i.e.\ the pre conditions, post conditions and
 invariants, are ignored by default. When this option is selected the
 contract-based elements of a VDM-SL model are translated to JML
 annotations~\cite{Burdy&05} that are added to the generated Java
-code. This allows the system properties, expressed in terms of pre
-conditions, post conditions and invariants, to be checked against the
-generated code. The generated JML annotated programs can be checked
-for corrected using a JML tool such as
-OpenJML\footnote{\url{http://www.openjml.org}}.\\
+code~\cite{Jorgensen&17,Jorgensen&17a}. This allows the system
+properties, expressed in terms of pre conditions, post conditions and
+invariants, to be checked against the generated code. The generated
+JML annotated programs can be checked for corrected using a JML tool
+such as OpenJML\footnote{\url{http://www.openjml.org}}. A complete
+definition of the JML translation can be found via the the references
+provided.\\
 
 \subsection{Use JML \textbackslash invariant\_for to explicitly check record invariants}
 \label{sec:inv-for}
