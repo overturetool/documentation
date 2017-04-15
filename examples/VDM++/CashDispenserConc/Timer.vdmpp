@@ -31,7 +31,7 @@ operations
   Stop() ==
     active := false;
 
-  public GetTime : () ==> nat
+  pure public GetTime : () ==> nat
   GetTime() ==
     return curTime;
 

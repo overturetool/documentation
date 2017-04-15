@@ -13,7 +13,7 @@ operations
   PostStatement(letter) == 
     statements := statements ^ [letter];
 
-  public GetLastStatement : () ==> Letter
+  pure public GetLastStatement : () ==> Letter
   GetLastStatement() == 
     return statements(len statements)
   pre statements <> [];

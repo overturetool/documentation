@@ -42,7 +42,7 @@ operations
     (cards := cs;
      balance := b);
 
-  public GetBalance : () ==> nat
+  pure public GetBalance : () ==> nat
   GetBalance() ==
     return balance;
 \end{vdm_al}
@@ -64,7 +64,7 @@ The Withdrawal operation checks that an account and the daily limit are not over
         return false
   pre cardId in set dom cards;
 
-  public MakeStatement : Card`CardId * Clock`Date ==> Letter
+  pure public MakeStatement : Card`CardId * Clock`Date ==> Letter
   MakeStatement(cardId,date) ==
     let nm = cards(cardId).GetName(),
         addr = cards(cardId).GetAddress()

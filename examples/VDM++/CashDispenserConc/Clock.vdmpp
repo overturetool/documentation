@@ -16,7 +16,7 @@ operations
   SetDate(d) ==
     date := d;
 
-  public GetDate : () ==> Date
+  pure public GetDate : () ==> Date
   GetDate() ==
     return date;
 

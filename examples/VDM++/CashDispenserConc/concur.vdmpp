@@ -41,7 +41,7 @@ functions
 
 operations
 
-  public GetTill: TillId ==> Till
+  pure public GetTill: TillId ==> Till
   GetTill(tid) ==
     return tills(tid);
 
@@ -190,7 +190,7 @@ operations
   put(msg) ==
     data := data ^ "\n" ^ msg ;
 
-  public get : () ==> seq of char
+  pure public get : () ==> seq of char
   get() == return data;
 
 sync

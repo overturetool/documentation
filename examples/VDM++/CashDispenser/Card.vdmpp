@@ -24,15 +24,15 @@ operations
      cardId := cid;
      accountId := a);
 
-  public GetCode : () ==> Code
+  pure public GetCode : () ==> Code
   GetCode() ==
     return code;
 
-  public GetAccountId : () ==> Account`AccountId
+  pure public GetAccountId : () ==> Account`AccountId
   GetAccountId() ==
     return accountId;
 
-  public GetCardId : () ==> CardId
+  pure public GetCardId : () ==> CardId
   GetCardId() ==
     return cardId;
 

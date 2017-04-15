@@ -22,11 +22,11 @@ operations
      address := addr;
      return self);
 
-  public GetName : () ==> Name 
+  pure public GetName : () ==> Name 
   GetName () ==
     return name;
 
-  public GetAddress : () ==> Address 
+  pure public GetAddress : () ==> Address 
   GetAddress() ==
     return address;
 

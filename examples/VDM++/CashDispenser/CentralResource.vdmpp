@@ -45,7 +45,7 @@ example, a card may have been reported stolen or illegal in another
 way while it is being used at a till.
 
 \begin{vdm_al}
-  public GetBalance : Account`AccountId ==> [nat]
+  pure public GetBalance : Account`AccountId ==> [nat]
   GetBalance(accountId) ==
     if accountId in set dom accounts then
       accounts(accountId).GetBalance()
@@ -73,14 +73,14 @@ Next some operations follow to check whether cards are legal and
 administrate number of tries stored for each card.
 
 \begin{vdm_al}
-  public IsLegalCard : Account`AccountId * Card`CardId ==> bool
+  pure public IsLegalCard : Account`AccountId * Card`CardId ==> bool
   IsLegalCard(accountId,cardId) ==
     return
       cardId not in set illegalCards and
       accountId in set dom accounts and
       cardId in set accounts(accountId).GetCardIds();
 
-  public NumberOfTriesExceeded : Card`CardId ==> bool
+  pure public NumberOfTriesExceeded : Card`CardId ==> bool
   NumberOfTriesExceeded(cardId) ==
     return numberOfTries(cardId) >= maxNumberOfTries;
 
@@ -111,6 +111,3 @@ The two operations below are used to update the central resource.
 
 end CentralResource
 \end{vdm_al}
-
-
-
