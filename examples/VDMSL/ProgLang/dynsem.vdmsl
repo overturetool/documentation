@@ -54,7 +54,7 @@ is assigned: {\tt false} for Boolean values and {\tt 0} for Integer values.
             elseif tp = <BoolType> 
             then mk_AST`BoolVal(false)
             else mk_AST`IntVal(0)  
-        | mk_AST`Declaration(id, tp, val) in set elems decls};
+        | mk_AST`Declaration(id, tp, val) in seq decls};
 
 \end{vdm_al}
 The evaluation of the statements is rather simple to specify. Only for the block statement the scoping rules have to be considered:

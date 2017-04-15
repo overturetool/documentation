@@ -15,7 +15,7 @@ Kaisa Sere, May 2008.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Hugo Macedo
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

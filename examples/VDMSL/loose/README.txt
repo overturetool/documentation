@@ -12,7 +12,7 @@ Springer Verlag, October 1994.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Peter Gorm Larsen
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

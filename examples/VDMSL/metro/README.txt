@@ -7,7 +7,7 @@ European research project called SPECTRUM.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Sten Agerholm
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

@@ -7,7 +7,7 @@ University, Montreal, Canada, May 1996.
 
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #AUTHOR= V. S. Alagar and D. Muthiayen and K. Periyasamy
 #INV_CHECKS=true
 #POST_CHECKS=true

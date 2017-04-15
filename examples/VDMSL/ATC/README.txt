@@ -23,7 +23,7 @@ pp 169-174.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Natsuki Terada
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

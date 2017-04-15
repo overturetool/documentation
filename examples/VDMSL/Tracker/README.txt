@@ -15,7 +15,7 @@ FACIT Series, 1998.
 #******************************************************
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #AUTHOR= John Fitzgerald and Peter Gorm Larsen
 #INV_CHECKS=true
 #POST_CHECKS=true

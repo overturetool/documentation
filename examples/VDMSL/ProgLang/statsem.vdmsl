@@ -68,14 +68,14 @@ wf_Declarations : seq of AST`Declaration -> bool
 wf_Declarations(decls) ==
   (forall i1, i2 in set inds decls & 
     i1 <> i2 => decls(i1).id <> decls(i2).id) and
-  (forall i in set inds decls & 
-    decls(i).val <> nil => 
-    ((is_AST`BoolVal(decls(i).val) and decls(i).tp = <BoolType>) or 
-     (is_AST`IntVal(decls(i).val) and decls(i).tp = <IntType>)));
+  (forall d in seq decls & 
+    d.val <> nil => 
+    ((is_AST`BoolVal(d.val) and d.tp = <BoolType>) or 
+     (is_AST`IntVal(d.val) and d.tp = <IntType>)));
 
 get_Declarations : seq of AST`Declaration -> StatEnv
 get_Declarations(decls) ==
-  {id |-> tp | mk_AST`Declaration(id, tp, -) in set elems decls};
+  {id |-> tp | mk_AST`Declaration(id, tp, -) in seq decls};
 \end{vdm_al}
 The specification of the static semantics of statements is made by
 a simple case distinction.
@@ -101,7 +101,7 @@ wf_BlockStmt(mk_AST`BlockStmt(decls, stmts), senv) ==
 
 wf_Stmts : seq of AST`Stmt * StatEnv -> bool
 wf_Stmts(stmts, senv) ==
-  forall stmt in set elems stmts & wf_Stmt(stmt, senv);
+  forall stmt in seq stmts & wf_Stmt(stmt, senv);
 \end{vdm_al}
 
 The types of the left-hand and right-hand side of an assignment

@@ -16,7 +16,7 @@ H.Toetenel, Formal Aspects of Computing'' 1994, Vol 6, December
 #------------------------------------------------------
 #AUTHOR= Peter Gorm Larsen
 #DOCUMENT= dfdexample.tex
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

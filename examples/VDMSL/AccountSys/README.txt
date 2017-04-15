@@ -4,12 +4,12 @@ This example comes from the book "Formal Software Development: From VDM to Java"
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Quentin Charatan and Aaron Kans
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true
 #DYNAMIC_TYPE_CHECKS=true
 #SUPPRESS_WARNINGS=false
-#ENTRY_POINT=
+#ENTRY_POINT=DEFAULT`sum([1,2,3,4,5,6,7,8,9])
 #EXPECTED_RESULT=NO_ERROR_TYPE_CHECK
 #******************************************************

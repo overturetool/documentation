@@ -15,7 +15,7 @@ www.stadtools.com.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= Janusz Laski
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true

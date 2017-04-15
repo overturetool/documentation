@@ -11,7 +11,7 @@ operations in the version contained in Section 3.
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
 #AUTHOR= V. S. Alagar \and D. Muthiayen
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true
