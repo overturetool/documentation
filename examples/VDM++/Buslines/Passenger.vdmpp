@@ -25,7 +25,7 @@ class Passenger
 		)
 		pre destination.IsStop() = true;
 		
-		public GetDestination : () ==>  Waypoint
+		pure public GetDestination : () ==>  Waypoint
 		GetDestination()== 
 			return goal;
 
@@ -54,7 +54,7 @@ class Passenger
 			)
 		);
 
-		public Id : () ==> nat
+		pure public Id : () ==> nat
 		Id()== 
 			return passengerId;
 	

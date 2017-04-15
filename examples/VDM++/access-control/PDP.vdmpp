@@ -41,15 +41,15 @@ public Resource = FExp`Id;
 
 operations
 
-public GetpolicyCombAlg: () ==> CombAlg
+pure public GetpolicyCombAlg: () ==> CombAlg
 GetpolicyCombAlg() ==
   return policyCombAlg;
 
-public Getpolicies: () ==> set of Policy
+pure public Getpolicies: () ==> set of Policy
 Getpolicies() ==
   return policies;
 
-public GetEffect: Rule ==> Effect
+pure public GetEffect: Rule ==> Effect
 GetEffect(r) ==
   return r.effect;
 

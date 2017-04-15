@@ -23,7 +23,7 @@ ps : set of Plant`Period = {p1,p2,p3,p4};
 
 operations
 
-public Run: () ==> set of Plant`Period * Expert
+pure public Run: () ==> set of Plant`Period * Expert
 Run() == 
   let periods = plant.ExpertIsOnDuty(ex1),
       expert  = plant.ExpertToPage(a1,p1)

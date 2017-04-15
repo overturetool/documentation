@@ -81,7 +81,7 @@ class Stock is subclass of GLOBAL
     else  
      other((MATH`rand(20) mod len other) + 1);
 
-  MakelistFromSet : set of RateOfChange ==> seq of RateOfChange
+  pure MakelistFromSet : set of RateOfChange ==> seq of RateOfChange
   MakelistFromSet(roc) ==
    return
    if( card roc > 0) then 

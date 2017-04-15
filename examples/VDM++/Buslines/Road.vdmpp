@@ -43,11 +43,11 @@ class Road
 		Covers(waypoints) == 
 			 return {w.GetId() | w in set waypoints} = {w.GetId() | w in set wps};  --does road cover the waypoints in arg
 
-		public GetWaypoints : () ==> set of Waypoint
+		pure public GetWaypoints : () ==> set of Waypoint
 		GetWaypoints()==
 				return wps;
 
-		public OppositeEnd : Waypoint ==> Waypoint
+		pure public OppositeEnd : Waypoint ==> Waypoint
 		OppositeEnd(wp)==
 				 let opposite in set wps \ {wp} in return opposite
 		pre wp in set wps; 	-- if the waypoint is not found on the road
@@ -55,19 +55,19 @@ class Road
 						-- by the same waypoint
 
 		
-		public GetSpeedLimit : () ==> nat
+		pure public GetSpeedLimit : () ==> nat
 		GetSpeedLimit()==
 				return speedlimit;
 
-		public GetLength : () ==> nat
+		pure public GetLength : () ==> nat
 		GetLength() == 
 			return roadLength;
 
-		public GetRoadNumber : () ==> RoadNumber
+		pure public GetRoadNumber : () ==> RoadNumber
 		GetRoadNumber()== 
 				return roadNmbr;
 
-		public GetTimePenalty : () ==> nat
+		pure public GetTimePenalty : () ==> nat
 		GetTimePenalty()== 
 				return timePenalty;
 

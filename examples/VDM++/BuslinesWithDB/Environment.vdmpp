@@ -105,13 +105,13 @@ operations
 						(
 							Printer`Out("Waypoints:");
 							let wps = b.GetWaypoints() in 
-								let wpsIds = [wps(i).GetId() | i in set inds wps] in 
+								let wpsIds = [wp.GetId() | wp in seq wps] in 
 									IO`print(wpsIds);
 
 							Printer`Out("\nStops:");
 
 							let wps = b.GetStops() in 
-								let wpsIds = [wps(i).GetId() | i in set inds wps] in 
+								let wpsIds = [wp.GetId() | wp in seq wps] in 
 									IO`print(wpsIds);
 							Printer`Out("\n");
 							

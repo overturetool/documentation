@@ -21,7 +21,7 @@ p4: Plant`Period = mk_token("Tuesday night");
 
 operations
 
-public Run: () ==> set of Plant`Period * Expert
+pure public Run: () ==> set of Plant`Period * Expert
 Run() == 
   let periods = plant.ExpertIsOnDuty(ex1),
       expert  = plant.ExpertToPage(a1,p1)

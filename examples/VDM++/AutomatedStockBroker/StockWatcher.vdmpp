@@ -17,7 +17,7 @@ class StockWatcher is subclass of GLOBAL
                   or eventHistory(e + 1).Type = <Peak>);
 
  operations
-  public StockWatcher: StockRecord * seq of Event ==> StockWatcher
+  public StockWatcher: StockRecord * seq1 of Event ==> StockWatcher
   StockWatcher(sr, predefinedEvents) == (
    eventHistory := predefinedEvents;
    sm := nil;
@@ -94,8 +94,7 @@ class StockWatcher is subclass of GLOBAL
   public ObserveStock : nat ==> ()
   ObserveStock(time) == (
    if (World`simulate)
-   then( UpdateEvents(time);)
-   else skip;
+   then UpdateEvents(time);
  
    UpdateAction(time);
   )
@@ -132,7 +131,8 @@ class StockWatcher is subclass of GLOBAL
   IsPeak(svs) == 
    let current = hd svs 
     in 
-     let indicesOneAbove = {i | i in set inds svs & current+1 = svs(i) and i <> len svs} 
+     let indicesOneAbove = {i | i in set inds svs 
+                              & current+1 = svs(i) and i <> len svs} 
       in
        exists i in set indicesOneAbove & 
         forall v in set {2,...,i} & current+1 = svs(v)

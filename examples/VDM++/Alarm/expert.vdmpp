@@ -3,7 +3,7 @@ class Expert
 
 instance variables
 
-quali : set of Qualification;
+quali : set1 of Qualification;
 \end{vdm_al}
 
 \begin{vdm_al}
@@ -15,7 +15,7 @@ public Qualification = <Mech> | <Chem> | <Bio> | <Elec>;
 \begin{vdm_al}
 operations
 
-public Expert: set of Qualification ==> Expert
+public Expert: set1 of Qualification ==> Expert
 Expert(qs) ==
   quali := qs;
 \end{vdm_al}

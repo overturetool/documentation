@@ -49,11 +49,11 @@ class Bus
 		)
 		pre p inter seats <> {};
 
-		public GetWaypoints : () ==> seq of Waypoint
+		pure public GetWaypoints : () ==> seq of Waypoint
 		GetWaypoints()== 
 			return wps;
 
-		public GetStops : () ==> seq of Busstop
+		pure public GetStops : () ==> seq of Busstop
 		GetStops()== 
 			return [wps(i) | i in set inds wps & wps(i).IsStop() ];
 		
@@ -192,7 +192,7 @@ class Bus
 	);
 
 	operations
-		private SelectSubset : set of Passenger * nat ==> set of Passenger
+		pure private SelectSubset : set of Passenger * nat ==> set of Passenger
 		SelectSubset(ps, limit)==
 		(
 			--base case

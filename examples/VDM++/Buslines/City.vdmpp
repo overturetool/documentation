@@ -116,12 +116,11 @@ class City
 		and lineNumber not in set dom buses; --bus linenumber is not known
 
 
-		private findRoadsFromRoadNumber : seq of Road`RoadNumber ==> seq of Road
+		pure private findRoadsFromRoadNumber : seq of Road`RoadNumber ==> seq of Road
 		findRoadsFromRoadNumber(route)==  
-				return [roads(route(i)) | i in set inds route]; 
+				return [roads(elem) | elem in seq route]; 
 
-
-		public getCentralStation : () ==> Busstop
+		pure public getCentralStation : () ==> Busstop
 		getCentralStation()== 
 			return central;
 
@@ -133,11 +132,11 @@ class City
 			World`graphics.inflowChanged(inflow);
 		);
 
-		public getInflow : () ==> nat
+		pure public getInflow : () ==> nat
 		getInflow()==
 			return inflow;
 
-		public getBuses : () ==> set of Bus
+		pure public getBuses : () ==> set of Bus
 		getBuses()==
 			return rng buses;
 		

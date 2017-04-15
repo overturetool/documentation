@@ -21,15 +21,15 @@ Request(s,r,aset) ==
   actions  := aset;
 ); 
 
-public GetSubject: () ==> PDP`Subject
+pure public GetSubject: () ==> PDP`Subject
 GetSubject() == 
   return subject;
 
-public GetResource: () ==> PDP`Resource
+pure public GetResource: () ==> PDP`Resource
 GetResource() == 
   return resource;
 
-public GetActions: () ==> set of PDP`Action
+pure public GetActions: () ==> set of PDP`Action
 GetActions() == 
   return actions;
 
