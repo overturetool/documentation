@@ -23,7 +23,7 @@ TimeStamp() ==
 	skip;
 
 -- public operation to get the singleton instance
-public static GetInstance: () ==> TimeStamp
+pure public static GetInstance: () ==> TimeStamp
 GetInstance() ==
   return timeStamp;
 
@@ -91,7 +91,7 @@ public NotifyThread : nat ==> ()
 NotifyThread(tId) ==
  wakeUpMap := {tId} <-: wakeUpMap;
 
-public GetTime : () ==> nat
+pure public GetTime : () ==> nat
 GetTime() ==
   return currentTime;
 

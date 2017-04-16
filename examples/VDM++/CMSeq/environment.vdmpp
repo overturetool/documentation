@@ -85,13 +85,9 @@ public isFinished : () ==> bool
 isFinished () == 
   return inlines = [] and not busy;
 
-public getAperture: () ==> Angle * Angle
+pure public getAperture: () ==> Angle * Angle
 getAperture () == return mk_(0,0);
 
 end Environment
 \end{vdm_al}
-
-\begin{rtinfo}[Environment`createSignal]
-{vdm.tc}[Environment]
-\end{rtinfo}
 

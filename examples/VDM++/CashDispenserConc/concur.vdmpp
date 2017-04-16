@@ -190,7 +190,7 @@ operations
   put(msg) ==
     data := data ^ "\n" ^ msg ;
 
-  pure public get : () ==> seq of char
+  public get : () ==> seq of char
   get() == return data;
 
 sync

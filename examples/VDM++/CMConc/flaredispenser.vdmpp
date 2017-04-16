@@ -48,7 +48,7 @@ FlareDispenser(ang, tDef) ==
   BaseThread(self);
  );
 
-public GetAngle: () ==> nat
+pure public GetAngle: () ==> nat
 GetAngle() ==
   return aperture;
 
@@ -108,7 +108,4 @@ per isFinished => not busy
 end FlareDispenser
 \end{vdm_al}
 
-\begin{rtinfo}[FlareDispenser`FlareDispenser]
-{vdm.tc}[FlareDispenser]
-\end{rtinfo}
 

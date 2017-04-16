@@ -37,7 +37,7 @@ canObserve (pangle, pleft, psize) ==
     -- check between [pleft, pright>
     else return (pangle >= pleft and pangle < pright);
        
-public getAperture: () ==> Angle * Angle
+pure public getAperture: () ==> Angle * Angle
 getAperture () == is subclass responsibility;
 
 end GLOBAL

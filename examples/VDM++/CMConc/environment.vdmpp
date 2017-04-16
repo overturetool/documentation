@@ -100,7 +100,3 @@ per isFinished => not busy;
 end Environment
 \end{vdm_al}
 
-\begin{rtinfo}[Environment`createSignal]
-{vdm.tc}[Environment]
-\end{rtinfo}
-

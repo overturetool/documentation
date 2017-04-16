@@ -16,7 +16,7 @@ private Timer: () ==> Timer
 Timer() ==
   skip;
   
-public static GetInstance: () ==> Timer
+pure public static GetInstance: () ==> Timer
 GetInstance() ==
   return timerInstance;
 
@@ -24,13 +24,9 @@ public StepTime : () ==> ()
 StepTime() ==
   currentTime := currentTime + stepLength;
 
-public GetTime : () ==> nat
+pure public GetTime : () ==> nat
 GetTime() ==
   return currentTime;
 
 end Timer
 \end{vdm_al}
-
-\begin{rtinfo}[Timer`StepTime]
-{vdm.tc}[Timer]
-\end{rtinfo}

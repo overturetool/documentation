@@ -15,7 +15,7 @@ public Sensor: MissileDetector * Angle ==> Sensor
 Sensor (pmd, psa) == ( detector := pmd; aperture := psa);
 
 -- get the left hand-side start point and opening angle
-public getAperture: () ==> GLOBAL`Angle * GLOBAL`Angle
+pure public getAperture: () ==> GLOBAL`Angle * GLOBAL`Angle
 getAperture () == return mk_ (aperture, SENSOR_APERTURE);
 
 -- trip is called asynchronously from the environment to
@@ -31,6 +31,3 @@ pre canObserve(pa, aperture, SENSOR_APERTURE)
 end Sensor
 \end{vdm_al}
 
-\begin{rtinfo}[Sensor`getAperture]
-{vdm.tc}[Sensor]
-\end{rtinfo}

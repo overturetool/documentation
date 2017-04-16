@@ -45,7 +45,7 @@ Step() ==
      dispensers(id).Step());
  
 -- get the left hand-side start point and opening angle
-public getAperture: () ==> GLOBAL`Angle * GLOBAL`Angle
+pure public getAperture: () ==> GLOBAL`Angle * GLOBAL`Angle
 getAperture () == return mk_(aperture, FLARE_APERTURE);
 
 -- addThreat is a helper operation to modify the event
@@ -71,7 +71,4 @@ isFinished () ==
 end FlareController
 \end{vdm_al}
 
-\begin{rtinfo}[FlareController`FlareController]
-{vdm.tc}[FlareController]
-\end{rtinfo}
 

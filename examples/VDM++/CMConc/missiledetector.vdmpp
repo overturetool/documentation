@@ -87,6 +87,3 @@ per isFinished => not busy
 end MissileDetector
 \end{vdm_al}
 
-\begin{rtinfo}[MissileDetector`addController]
-{vdm.tc}[MissileDetector]
-\end{rtinfo}

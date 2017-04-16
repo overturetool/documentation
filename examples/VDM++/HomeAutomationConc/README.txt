@@ -2,7 +2,7 @@
 #******************************************************
 #  AUTOMATED TEST SETTINGS
 #------------------------------------------------------
-#LANGUAGE_VERSION=classic
+#LANGUAGE_VERSION=vdm10
 #INV_CHECKS=true
 #POST_CHECKS=true
 #PRE_CHECKS=true
@@ -11,6 +11,7 @@
 #EXPECTED_RESULT=NO_ERROR_TYPE_CHECK
 #ENCODING=
 #DOCUMENT=
+#ENTRY_POINT=new World().Run()
 #LIB=IO
-#AUTHOR=
+#AUTHOR=Sune Wolff
 #******************************************************

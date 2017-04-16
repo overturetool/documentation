@@ -57,7 +57,7 @@ Step() ==
            )
     );
 
-public GetAngle: () ==> nat
+pure public GetAngle: () ==> nat
 GetAngle() ==
   return aperture;
 
@@ -90,13 +90,10 @@ public isFinished: () ==> bool
 isFinished () == 
   return not busy;
 
-public getAperture: () ==> Angle * Angle
+pure public getAperture: () ==> Angle * Angle
 getAperture () == return mk_(0,0);
 
 end FlareDispenser
 \end{vdm_al}
 
-\begin{rtinfo}[FlareDispenser`FlareDispenser]
-{vdm.tc}[FlareDispenser]
-\end{rtinfo}
 

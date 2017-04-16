@@ -52,7 +52,3 @@ Funtil(p)(f)(x) == if p(x) then x else Funtil[@T](p)(f)(f(x));
 \begin{vdm_al}
 end Diet
 \end{vdm_al}
-
-\begin{rtinfo}
-[TotalxCoverage]{vdm.tc}[Diet]
-\end{rtinfo}

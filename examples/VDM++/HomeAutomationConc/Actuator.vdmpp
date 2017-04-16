@@ -9,15 +9,15 @@ protected Env	: Surroundings;
 
 operations
 
-public GetID: () ==> nat
+pure public GetID: () ==> nat
 GetID() ==
   return ID;
 
-public GetType: () ==> NetworkTypes`nodeType
+pure public GetType: () ==> NetworkTypes`nodeType
 GetType() ==
   return Type;
 
-protected GetCorr: () ==> NetworkTypes`correction
+pure protected GetCorr: () ==> NetworkTypes`correction
 GetCorr() ==
   return Corr;
 

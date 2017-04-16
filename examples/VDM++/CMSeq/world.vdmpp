@@ -49,6 +49,3 @@ Run () ==
 end World
 \end{vdm_al}
 
-\begin{rtinfo}[World`World]
-{vdm.tc}[World]
-\end{rtinfo}
