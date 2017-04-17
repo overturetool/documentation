@@ -29,7 +29,13 @@ operations
             [ mk_Test`TIVD(anns(i).getTargetSpeed())  |
               i in set inds anns ],
             [ mk_Test`TIVE(restr(i).getSpeedRestriction()) |
-              i in set inds restr ]) );
+              i in set inds restr ]) )
+pre isofclass(TIV_E, beacon) => (klv.getFirstSpeedRestriction() or 
+                                 klv.getSpeedRestrictions() <> []);
 
+pure public getBeacon: () ==> Beacon
+getBeacon() ==
+  return beacon;
+ 
 end TailMeetBeaconEvent
 \end{vdm_al}

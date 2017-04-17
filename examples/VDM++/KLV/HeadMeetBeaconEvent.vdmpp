@@ -26,10 +26,12 @@ operations
       let anns = klv.getAnnouncements(),
           restr = klv.getSpeedRestrictions() in
       return mk_Test`BeaconsMet(
-            [ mk_Test`TIVD(anns(i).getTargetSpeed())  | 
-              i in set inds anns ],
-            [ mk_Test`TIVE(restr(i).getSpeedRestriction()) |
-              i in set inds restr ]) );
+            [ mk_Test`TIVD(a.getTargetSpeed()) | a in seq anns ],
+            [ mk_Test`TIVE(r.getSpeedRestriction()) | r in seq restr ]) );
 
+pure public getBeacon: () ==> Beacon
+getBeacon() ==
+  return beacon;
+  
 end HeadMeetBeaconEvent
 \end{vdm_al}

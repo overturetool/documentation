@@ -20,7 +20,7 @@ operations
   setSpeedRestriction (s) ==
     speed := s;
 
-  public
+  pure public
   getSpeedRestriction : () ==> real
   getSpeedRestriction () ==
     return speed

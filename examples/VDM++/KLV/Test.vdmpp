@@ -51,13 +51,19 @@ operations
   public
   runTests : seq of Event ==> seq of TestResult
   runTests (events) ==
-    return [events(i).execute(klv) | i in set inds events ];
+    return [e.execute(klv) | e in seq events ];
 
   public
   runOneTest : Event ==> TestResult
   runOneTest (event) ==
     return event.execute(klv)
---  pre isofclass() => ;
+pre ((isofclass(HeadMeetBeaconEvent,event) => 
+      let e1: HeadMeetBeaconEvent = event
+      in isofclass(TIV_E, e1.getBeacon())) => klv.getAnnouncements() <> []) and
+    ((isofclass(TailMeetBeaconEvent,event) =>
+      let e2: TailMeetBeaconEvent = event
+      in isofclass(TIV_E,e2.getBeacon())) => (klv.getFirstSpeedRestriction() or
+                                             klv.getSpeedRestrictions() <> []));
 
 end Test
 \end{vdm_al}

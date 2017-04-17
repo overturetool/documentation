@@ -91,8 +91,11 @@ tailMeetsBeacon (beacon) ==
                                   else firstspeedrestriction := false,
     (isofclass(TIV_A, beacon)) -> skip,
     (isofclass(FLTV, beacon))  -> ( firstspeedrestriction := true;
-                                    removeSpeedRestriction () )
-  end;
+                                    if not firstspeedrestriction
+                                    then removeSpeedRestriction () )
+  end
+pre isofclass(TIV_E, beacon) => (firstspeedrestriction or
+                                 speedrestrictions <> []);
 \end{vdm_al}
 
 The announceSpeedRestriction operation performs the action of the
@@ -213,12 +216,12 @@ minimal speed of the speed restrictions. Otherwise it will be the
 maximal speed.
 
 \begin{vdm_al}
-public
+pure public
 getMaxSpeed : () ==> real
 getMaxSpeed () ==
   if speedrestrictions <> []
   then let speeds = { tiv_e.getSpeedRestriction()
-                    | tiv_e in set elems speedrestrictions } in
+                    | tiv_e in seq speedrestrictions } in
        let minspeed in set speeds be st forall sp in set speeds &
            minspeed <= sp in
        return minspeed
@@ -237,25 +240,30 @@ pre let mk_(-,eb,-) = cabdisplay.getDisplay() in eb and
 The following four operations returns state information of a KLV object.
 
 \begin{vdm_al}
-public
+pure public
 getCabDisplay : () ==> CabDisplay
 getCabDisplay () ==
   return cabdisplay;
 
-public
+pure public
 getEmergencyBreak : () ==> EmergencyBreak
 getEmergencyBreak () ==
   return emergencybreak;
 
-public
+pure public
 getAnnouncements: () ==> seq of TIV_D
 getAnnouncements () ==
   return announcements;
 
-public
+pure public
 getSpeedRestrictions: () ==> seq of TIV_E
 getSpeedRestrictions () ==
   return speedrestrictions;
+
+pure public
+getFirstSpeedRestriction: () ==> bool
+getFirstSpeedRestriction () ==
+  return firstspeedrestriction;
 
 end KLV
 \end{vdm_al}
