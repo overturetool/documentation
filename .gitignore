@@ -52,6 +52,7 @@ Icon[^-0-9a-zA-Z]
 # maven target directories #
 ############################
 target/
+generated/
 
 # eclipse noise #
 #################
