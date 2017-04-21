@@ -90,7 +90,7 @@ operations
     private Print: nat1 ==> ()
             Print(step) ==
                 def stepText = Pad(VDMUtil`val2seq_of_char[nat1](step));
-                    states = [ stateCharacters(units(i).GetState()) | i in set inds units ]
+                    states = [ stateCharacters(u.GetState()) | u in seq units ]
                 in 
                     IO`println(stepText ^ ": " ^ states);
     

@@ -51,7 +51,7 @@ UnRegisterThread() ==
   --registeredThreads := registeredThreads \ {t};
  );
  
-public IsInitialising: () ==> bool
+pure public IsInitialising: () ==> bool
 IsInitialising() ==
   return isInitialising;
  
@@ -103,7 +103,7 @@ public NotifyThread : nat ==> ()
 NotifyThread(tId) ==
  wakeUpMap := {tId} <-: wakeUpMap;
 
-public GetTime : () ==> nat
+pure public GetTime : () ==> nat
 GetTime() ==
   return currentTime;
 
@@ -117,7 +117,7 @@ ThreadDone() ==
 sync
   per Awake => threadid not in set dom wakeUpMap;
 
-mutex(IsInitialising);
+--mutex(IsInitialising);
 mutex(DoneInitialising);
   -- Is this really needed?
   mutex(AddToWakeUpMap);

@@ -86,7 +86,7 @@ operations
             );
     
     private States: () ==> seq of MetroUnit`MetroUnitState
-            States() == return [ units(i).GetState() | i in set inds units ];
+            States() == return [ u.GetState() | u in seq units ];
     
     -- // PrioritiseUnits //
     public testPrioritiseUnits1: () ==> ()

@@ -19,7 +19,7 @@ pure public getId : () ==> FOId
 getId() ==
   return id;
 
-public getCoordinates : () ==> Coordinates
+pure public getCoordinates : () ==> Coordinates
 getCoordinates() == 
   return coord;
 
@@ -27,7 +27,7 @@ public setCoordinates : Coordinates ==> ()
 setCoordinates(coordarg) ==
   coord := coordarg;
   
-public getAltitude : () ==> Altitude
+pure public getAltitude : () ==> Altitude
 getAltitude() ==
   return alt;
     
@@ -35,9 +35,8 @@ public setAltitude : Altitude ==> ()
 setAltitude(altarg) ==
   alt := altarg;
  
-public getPosition : () ==> Position
+pure public getPosition : () ==> Position
 getPosition() == 
-  return mk_Position(coord,alt); 
-  
+  return mk_Position(coord,alt);  
 
 end FO
