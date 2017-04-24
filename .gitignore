@@ -54,6 +54,10 @@ Icon[^-0-9a-zA-Z]
 target/
 generated/
 
+# VDM project folders #
+############################
+lib/
+
 # eclipse noise #
 #################
 .metadata/
