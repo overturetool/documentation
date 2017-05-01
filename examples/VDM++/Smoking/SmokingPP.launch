@@ -23,7 +23,7 @@
 <booleanAttribute key="vdm_launch_config_post_checks" value="true"/>
 <booleanAttribute key="vdm_launch_config_pre_checks" value="true"/>
 <stringAttribute key="vdm_launch_config_project" value="SmokingPP"/>
-<stringAttribute key="vdm_launch_config_remote_control_class" value=""/>
+<stringAttribute key="vdm_launch_config_remote_control_class" value="gui.SmokerRemote"/>
 <booleanAttribute key="vdm_launch_config_remote_debug" value="false"/>
 <booleanAttribute key="vdm_launch_config_show_vm_settings" value="false"/>
 <booleanAttribute key="vdm_launch_config_static_method" value="false"/>
