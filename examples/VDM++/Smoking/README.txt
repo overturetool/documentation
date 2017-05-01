@@ -13,5 +13,4 @@
 #DOCUMENT=
 #LIB=
 #AUTHOR= Claus Ballegaard Nielsen
-#ENTRY_POINT=new World().Run()
 #******************************************************
