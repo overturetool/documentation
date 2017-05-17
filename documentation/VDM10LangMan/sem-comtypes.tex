@@ -4,5 +4,6 @@
 Field select & yields the value of the field with fieldname {\tt i}
 in the record value {\tt r}. {\tt r} must have a field with name
 {\tt i}. \\ \hline
+Equality\footnote{This quality is implicitly provided with the type. It is possible to override the primitive equality -- see Section \ref{eq}} & Structural equality over the record. That is, field-by-field equality, recursively applying equality to the constituent fields.\\ \hline
 \end{TypeSemantics}
 

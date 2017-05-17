@@ -229,7 +229,7 @@
         Tomohiro Oda\\
         Paul Chisholm}
 
-\date{September 2016}
+\date{May 2017}
 \reportno{TR-001}
 
 \pagenumbering{roman}
@@ -253,6 +253,7 @@ August & 2015 & 7 & 2.3.0 &
 Includes RMs \#27 \\ \hline
 April & 2016 & 8 & 2.3.4 & Review inputs from Paul Chisholm \\ \hline
 September & 2016 & 9 & 2.4.0 & RMs \#35, \#36 \\ \hline
+May & 2017 & 10 & 2.5.0 & RM \#39\\ \hline
 \end{tabular}
 
 %\addtocounter{page}{2}
@@ -996,8 +997,7 @@ predicate and {\tt e} is an arbitrary expression.
     constructs a sequence by evaluating the expression {\tt e} on all the
     bindings for which the predicate {\tt P} evaluates to \keyw{true}. The
     expression {\tt e} will use the identifier {\tt id}. {\tt S} is a set
-    of numbers and {\tt id} will be matched to the numbers in the
-    normal order (the smallest number first).
+    of elements of a type with an order relation (section \ref{ord}  and {\tt id} will be matched to the elements from the set in increasing order.
   \end{description}
   The syntax and semantics of all sequence expressions are given in
   section~\ref{seqexpr}.%
@@ -1864,6 +1864,140 @@ The invariant function implicitly created for this type is:
   inv_Score (sc) ==
     sc.points = 3 * sc.won + sc.drawn;
 \end{lstlisting}
+
+Note that where the {\tt compose} form is used to define a composite type with an invariant, a distinction must be drawn. Consider:
+\begin{lstlisting}
+Range = compose Rng of low:nat high:nat end
+  inv mk_Rng(l, h) == l <= h;
+\end{lstlisting}
+This defines two types, {\tt Range} and {\tt Rng}, where {\tt Rng} is a pair of natural numbers with no constraint, while {\tt Range} is structurally the same as {\tt Rng} but must additionally satisfy the invariant.
+For example, the following definitions are valid
+\begin{lstlisting}
+r:Range = mk_Rng(1, 2);
+r2:Rng = mk_Rng(2, 1);
+r3 = mk_Rng(2, 1);
+\end{lstlisting}
+{\tt r2} and {\tt r3} need not satisfy the invariant (in the absence of explicit declaration, {\tt r3} is of type {\tt Rng}).
+On the other hand,
+\begin{lstlisting}
+r4:Range = mk_Rng(2, 1);
+\end{lstlisting}
+is invalid since {\tt r4} of type {\tt Range} violates the invariant.
+
+\section{Equality}\label{eq}
+Every type defined in VDM, both basic and compound types, is provided with an equality relation by default as described earlier.
+The primitive equality is not always that which is desired.
+If the values of a data type are normalised then structural equality is adequate, but this is not always the case.
+Consider for example a data type that represents times and includes time zones.
+The same point in time is represented differently in different time zones.A type definition allows an equality relation to be defined explicitly for a type.
+In such a case the explicit equality relation is employed when comparing values of the type in preference to the primitive equality.The general scheme for defining an equality relation is:\begin{lstlisting}
+Id = Type  eq pat1 = pat2 == expr\end{lstlisting}
+or
+\begin{lstlisting}
+Id :: fields
+  eq pat1 = pat2 == expr
+\end{lstlisting}{\tt pat1} and {\tt pat2} are patterns for two values of the type (or composite type), and {\tt expr} is a boolean expression that is true exactly when the expressions represented by {\tt pat1} and {\tt pat2} are equal.
+
+When defined, the explicit equality relation is also employed for inequality comparison with {\tt <>}.
+If an {\tt eq} clause is defined, a new (total) function is created implicitly with the signature:\begin{lstlisting}
+eq_T : T * T +> bool
+\end{lstlisting}
+such that {\tt eq\_T(t1,t2)} denotes the same value as {\tt t1 = t2}.
+
+\begin{description}
+\item[Examples:]Flight matching
+\begin{lstlisting}
+Flight :: id        : seq1 of char
+          departure : seq1 of char
+          depTime   : DateTime          destination: seq1 of char  eq mk_Flight(i1,d1,dt1,a1) = mk_Flight(i2,d2,dt2,a2) ==       i1 = i2 and d1 = d2 and a1 = a2 and 
+       within(dt1, dt2, mk_Minute(10));
+\end{lstlisting}
+A simplified definition of a flight consisting of an identifier, departure location, departure date/time, and destination location. Two records refer to the same flight if they have the same identifier, same departure location, same destination location, and a departure time within 10 minutes of each other; it is the last item that renders structural equality inadequate.\footnote{We assume a type {\tt DateTime}, a type {\tt Minute}, and a function {\tt within}.}Given
+\begin{lstlisting}f1 = mk_Flight("QF5", "YSSY", '17-04-01 12:20', "WSSS")f2 = mk_Flight("QF5", "YSSY", '17-04-01 12:28', "WSSS")f3 = mk_Flight("VOZ42", "YSSY", '16-12-25 02:21', "YBBN")
+f4 = mk_Flight("VOZ42", "YSSY", '16-12-24 02:21', "YBBN")
+f5 = mk_Flight("VOZ42", "YSSY", '16-12-24 02:21', "YMML")
+\end{lstlisting}We have
+\begin{tabular}{l l}
+{\tt f1 = f2} & $\equiv$ {\tt true} \\{\tt f3 = f4} & $\equiv$ {\tt false} \\{\tt f1 = f3} & $\equiv$ {\tt false} \\{\tt f2 <> f4} & $\equiv$ {\tt true} \\
+{\tt eq\_Flight(f4, f5)} & $\equiv$ {\tt false}\\ 
+\end{tabular}
+
+The equality relation employed when evaluating an expression depends on the type that is determined for the expression statically; i.e. when type checking occurs, not during expression evaluation. 
+Consider the type definition\begin{lstlisting}
+NATPAIR = nat * nateq e1 = e2 == e1.#1 = e2.#1;\end{lstlisting}
+and the value definitions\begin{lstlisting}
+x1:NATPAIR = mk_(1,2);x2:NATPAIR = mk_(1,3);x3         = mk_(1,2);x4         = mk_(1,3);
+\end{lstlisting}
+The following expressions all evaluate to true.
+
+\begin{tabular}{l}{\tt x1= x2}\\{\tt x1 = mk\_(1,42) x1 <> mk\_(2,2) x1= x3}\\{\tt x1= x4} \\{\tt x3 <> x4} \\{\tt x3 = mk\_(1,2)}\\
+\end{tabular}
+Note for example {\tt x1 = x2} because statically they are of type {\tt NATPAIR} whose equality relation states they are equal if their first elements are equal. 
+On the other hand {\tt x3 <> x4} because statically they are of type {\tt nat * nat} whose implicit equality requires both the first and second elements to be equal.
+{\tt x1 = x4} is true because statically {\tt x4} is interpreted as type {\tt NATPAIR} due to the explicit declaration of {\tt x1:NATPAIR}.
+\end{description}
+
+\section{Order}\label{ord}
+Numeric types (section \ref{numeric}) have a primitive order relation.
+An order relation can be defined explicitly for other types as part of the type definition.The general scheme for defining an order (strict less than) relation is:
+\begin{lstlisting}
+Id = Type  ord pat1 < pat2 == expr
+\end{lstlisting}
+or
+\begin{lstlisting}
+Id :: fields  ord pat1 < pat2 == expr
+\end{lstlisting}{\tt pat1} and {\tt pat2} are patterns for two values of the type (or composite type), and {\tt expr} is a boolean expression that is true exactly when the expression represented by pat1 is less than the expression represented by pat2 in the required order relation.
+If an {\tt ord} clause is defined, three new (total) functions are created implicitly with the signatures:\begin{lstlisting}
+ord_T : T * T +> boolmax_T : T * T +> Tmin_T : T * T +> T\end{lstlisting}
+         such that
+
+\begin{tabular}{l l}
+{\tt ord\_T(t1,t2)} & $\equiv$ {\tt t1 < t2} \\{\tt max\_T(t1,t2)} & $\equiv$ {\tt if ord\_T(t1,t2) or t1 = t2 then t2 else t1}\\
+{\tt min\_T(t1, t2)} & $\equiv$ {\tt if ord\_T(t1, t2) or t1 = t2 then t1 else t2}\\
+\end{tabular}
+
+If an {\tt ord} clause is defined for a type, then the infix operators {\tt <}, {\tt <=}, {\tt >} and {\tt >=} can be employed with expressions of that type.
+
+The equality relation for a type is defined (either explicitly or implicitly), and if the order relation for a type is also defined (explicitly), we have
+
+\begin{tabular}{l l }
+{\tt x <= y} & {\tt <=> x < y or x = y} \\
+{\tt x > y} & {\tt <=> y < x} \\{\tt x >= y} & {\tt <=> x > y or x = y}\\
+\end{tabular}
+
+\begin{description}
+\item [Example:] Score revisited\begin{lstlisting}
+Score :: team   : Team         won    : nat
+         drawn  : nat
+         lost   : nat
+         points : nat
+  inv sc == sc.points = 3 * sc.won + sc.drawn  ord mk_Score(t1,w1,-,-,p1) < mk_Score(t2,w2,-,-,p2) ==    p1 < p2 or    p1 = p2 and w1 < w2 or    p1 = p2 and w1 = w2 and t1 < t2;\end{lstlisting}
+         
+In this case the order is as might be presented in a league table (with greatest element at top):\begin{itemize}
+\item Most points first;\item If equal on points, most wins first;\item Otherwise alphabetic ordering of team name (not defined here).\end{itemize}
+
+Given\begin{lstlisting}
+sc1 = mk_Score (<France>, 2, 2, 0, 8);sc2 = mk_Score (<Scotland>, 3, 0, 0, 9);sc3 = mk_Score (<SouthAfrica>, 0, 3, 0, 3);
+sc4 = mk_Score (<SaudiArabia>, 1, 0, 2, 3);
+\end{lstlisting}
+We have
+
+\begin{tabular}{l l}{\tt sc1 < sc2} & $\equiv$ {\tt true}\\
+{\tt sc1 <= sc3} & $\equiv$ {\tt false}\\
+{\tt sc2 > sc3} & $\equiv$ {\tt true}\\
+{\tt sc4 >= sc3} & $\equiv$ {\tt true}\\
+{\tt sc4 < sc3} & $\equiv$ {\tt false}\\
+{\tt ord\_Score(sc1, sc2)} & $\equiv$ {\tt true}\\
+\end{tabular}
+
+The type argument of a polymorphic function can depend on an order relation.
+For example, the following specifies a function that determines if a sequence is ordered:\begin{lstlisting}
+ascending[@a]: seq of @a -> boolascending(s) ==
+  forall i in set {1,...,len s - 1} & s(i) <= s(i+1);\end{lstlisting}
+
+The specification compares for order values of the type argument {\tt @a}. There is no way to express that {\tt @a} admits an order relation so the function is partial. 
+A type error would be thrown at runtime if the function was executed with a type that does not admit an order relation (such as {\tt bool}).
+\end{description}
 
 \chapter{Algorithm Definitions}
 \label{algorithm}
@@ -3012,12 +3146,13 @@ print_Const(mk_Const(c)) ==
   pattern {\tt pat} (normally this pattern will simply be an
   identifier, but the only real requirement is that exactly one pattern
   identifier must be present in the pattern). {\tt S} is
-  a set of values (normally natural numbers). The bindings of the
-  pattern identifier must be to some kind of numeric values which then
-  are used to indicate the ordering of the elements in
+  a set of values.  The bindings of the
+  pattern identifier must be to a type that admits an order relation, which dictates
+  the ordering of the elements in
   the resulting sequence. It constructs a sequence by evaluating the
-  expression {\tt e} on all the bindings for which the predicate {\tt P}
+  expression {\tt e} on all the (ordered) bindings for which the predicate {\tt P}
   evaluates to \keyw{true}.
+Note it is not the result sequence that is ordered, but the sequence of values of the pattern identifier.
 
   A {\it subsequence} of a sequence {\tt l} is a sequence formed from
   consecutive elements of {\tt l}; from index {\tt n1} up to and including
@@ -10043,8 +10178,8 @@ The access part is only possible in VDM++ and VDM-RT.
   }
 
 \Ruledef{type definition}{
-  \Ruleref{identifier}, \Lit{=}, \Ruleref{type}, \OptPt{\Ruleref{invariant}} \dsep
-  \Ruleref{identifier}, \Lit{::}, \Ruleref{field list}, \OptPt{\Ruleref{invariant}}
+  \Ruleref{identifier}, \Lit{=}, \Ruleref{type}, \OptPt{\Ruleref{invariant}}, \OptPt{\Ruleref{eq clause}}, \OptPt{\Ruleref{ord clause}} \dsep
+  \Ruleref{identifier}, \Lit{::}, \Ruleref{field list}, \OptPt{\Ruleref{invariant}}, \OptPt{\Ruleref{eq clause}}, \OptPt{\Ruleref{ord clause}}
   }
 
 \Ruledef{type}{
@@ -10179,6 +10314,14 @@ The access part is only possible in VDM++ and VDM-RT.
 
 \Ruledef{invariant initial function}{
   \Ruleref{pattern}, \Lit{==}, \Ruleref{expression}
+  }
+
+\Ruledef{eq clause}{
+  \Lop{eq}, \Ruleref{pattern}, \Lop{=}, \Ruleref{pattern}, \Lop{==}, \Ruleref{expression}
+  }
+
+\Ruledef{ord clause}{
+  \Lop{ord}, \Ruleref{pattern}, \Lop{<}, \Ruleref{pattern}, \Lop{==}, \Ruleref{expression}
   }
 
 \subsection{The VDM-SL State Definition}
@@ -11921,6 +12064,7 @@ consecutive symbols must be separated by a separator.
   \Lks{else}
   \Lksb{elseif}
   \Lks{end}
+  \Lks{eq}
   \Lks{error}
   \Lks{errs}
   \Lks{exists}
@@ -11972,6 +12116,7 @@ consecutive symbols must be separated by a separator.
   \Lksb{of}
   \Lks{operations}
   \Lks{or}
+  \Lks{ord}
   \Lks{others}
   \Lks{per}
   \Lks{periodic}
