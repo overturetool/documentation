@@ -1942,6 +1942,24 @@ We have
 {\tt eq\_Flight(f4, f5)} & $\equiv$ {\tt false}\\ 
 \end{tabular}
 
+A proof obligation is a condition that needs to be satisfied to verify a specification is consistent.
+Whenever an equality relation is defined the proof obligation is that it be an equivalence relation; that is, it is reflexive, symmetric and transitive.
+For a type {\tt T} we have:
+\begin{description}
+\item Reflexive:
+\begin{lstlisting}
+forall x:T & x = x
+\end{lstlisting}
+\item Symmetric:
+\begin{lstlisting}
+forall x,y:T & x = y => y = x
+\end{lstlisting}
+\item Transitive:
+\begin{lstlisting}
+forall x,y,z:T & x = y and y = z => x = z
+\end{lstlisting}
+\end{description}
+
 The equality relation employed when evaluating an expression depends on the type that is determined for the expression statically; i.e. when type checking occurs, not during expression evaluation. 
 Consider the type definition
 \begin{lstlisting}
@@ -2010,6 +2028,25 @@ The equality relation for a type is defined (either explicitly or implicitly), a
 {\tt x > y} & {\tt <=> y < x} \\
 {\tt x >= y} & {\tt <=> x > y or x = y}\\
 \end{tabular}
+
+The proof obligation for an order relation is that it be a strict partial order; that is, it is irreflexive and transitive.
+\begin{description}
+\item Irreflexive:
+\begin{lstlisting}
+forall x:T & not x < x 
+\end{lstlisting}
+\item Transitive:
+\begin{lstlisting}
+forall x,y,z:T & x < y and y < z => x < z
+\end{lstlisting}
+
+The conditions relating {\tt <}, {\tt <=}, {\tt >} and {\tt >=} stated above are only guaranteed to hold for an order relation that satisfies the proof obligation. 
+Note a strict partial order must be asymmetric
+\begin{lstlisting}
+forall x,y:T & x < y => not y < x
+\end{lstlisting}
+However, asymmetry is derivable from irreflexivity and transitivity.
+\end{description}
 
 \begin{description}
 \item [Example:] Score revisited
