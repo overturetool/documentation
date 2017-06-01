@@ -2025,8 +2025,8 @@ The equality relation for a type is defined (either explicitly or implicitly), a
 
 \begin{tabular}{l l }
 {\tt x <= y} & {\tt <=> x < y or x = y} \\
-{\tt x > y} & {\tt <=> y < x} \\
-{\tt x >= y} & {\tt <=> x > y or x = y}\\
+{\tt x > y} & {\tt <=> not (x = y or x < y)} \\
+{\tt x >= y} & {\tt <=>  x = y or not x < y}\\
 \end{tabular}
 
 The proof obligation for an order relation is that it be a strict partial order; that is, it is irreflexive and transitive.
