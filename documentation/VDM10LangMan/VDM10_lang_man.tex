@@ -1943,7 +1943,7 @@ We have
 \end{tabular}
 
 A proof obligation is a condition that needs to be satisfied to verify a specification is consistent.
-Whenever an equality relation is defined the proof obligation is that it be an equivalence relation; that is, it is reflexive, symmetric and transitive.
+Whenever an equality relation is defined, the proof obligation requires the relation to be an equivalence relation; that is, it is reflexive, symmetric and transitive\footnote{\url{https://en.wikipedia.org/wiki/Equivalence_relation} gives a quick introduction to equivalence relation.}.
 For a type {\tt T} we have:
 \begin{description}
 \item Reflexive:
@@ -2029,7 +2029,7 @@ The equality relation for a type is defined (either explicitly or implicitly), a
 {\tt x >= y} & {\tt <=>  x = y or not x < y}\\
 \end{tabular}
 
-The proof obligation for an order relation is that it be a strict partial order; that is, it is irreflexive and transitive.
+The proof obligation for an order relation is that it be a strict partial order; that is, it is irreflexive and transitive\footnote{\url{https://en.wikipedia.org/wiki/Partially_ordered_set} gives a quick introduction to ordering relation.}..
 \begin{description}
 \item Irreflexive:
 \begin{lstlisting}
