@@ -1935,11 +1935,11 @@ f5 = mk_Flight("VOZ42", "YSSY", '16-12-24 02:21', "YMML")
 We have
 
 \begin{tabular}{l l}
-{\tt f1 = f2} & $\equiv$ {\tt true} \\
-{\tt f3 = f4} & $\equiv$ {\tt false} \\
-{\tt f1 = f3} & $\equiv$ {\tt false} \\
-{\tt f2 <> f4} & $\equiv$ {\tt true} \\
-{\tt eq\_Flight(f4, f5)} & $\equiv$ {\tt false}\\ 
+{\tt f1 = f2} & $\equiv$  \keyw{true} \\
+{\tt f3 = f4} & $\equiv$  \keyw{false} \\
+{\tt f1 = f3} & $\equiv$  \keyw{false} \\
+{\tt f2 <> f4} & $\equiv$  \keyw{true} \\
+{\tt eq\_Flight(f4, f5)} & $\equiv$  \keyw{false}\\ 
 \end{tabular}
 
 A proof obligation is a condition that needs to be satisfied to verify a specification is consistent.
@@ -1986,7 +1986,7 @@ The following expressions all evaluate to true.
 \end{tabular}
 
 Note for example {\tt x1 = x2} because statically they are of type {\tt NATPAIR} whose equality relation states they are equal if their first elements are equal. 
-On the other hand {\tt x3 <> x4} because statically they are of type {\tt nat * nat} whose implicit equality requires both the first and second elements to be equal.
+On the other hand {\tt x3 <> x4} because statically they are of type {\tt  \keyw{nat} *  \keyw{nat}} whose implicit equality requires both the first and second elements to be equal.
 {\tt x1 = x4} is true because statically {\tt x4} is interpreted as type {\tt NATPAIR} due to the explicit declaration of {\tt x1:NATPAIR}.
 \end{description}
 
@@ -2015,18 +2015,18 @@ min_T : T * T +> T
 
 \begin{tabular}{l l}
 {\tt ord\_T(t1,t2)} & $\equiv$ {\tt t1 < t2} \\
-{\tt max\_T(t1,t2)} & $\equiv$ {\tt if ord\_T(t1,t2) or t1 = t2 then t2 else t1}\\
-{\tt min\_T(t1, t2)} & $\equiv$ {\tt if ord\_T(t1, t2) or t1 = t2 then t1 else t2}\\
+{\tt max\_T(t1,t2)} & $\equiv$ {\tt  \keyw{if} ord\_T(t1,t2)  \keyw{or} t1 = t2  \keyw{then} t2  \keyw{else} t1}\\
+{\tt min\_T(t1, t2)} & $\equiv$ {\tt  \keyw{if} ord\_T(t1, t2)  \keyw{or} t1 = t2  \keyw{then} t1  \keyw{else} t2}\\
 \end{tabular}
 
-If an {\tt ord} clause is defined for a type, then the infix operators {\tt <}, {\tt <=}, {\tt >} and {\tt >=} can be employed with expressions of that type.
+If an  \keyw{ord} clause is defined for a type, then the infix operators {\tt <}, {\tt <=}, {\tt >} and {\tt >=} can be employed with expressions of that type.
 
 The equality relation for a type is defined (either explicitly or implicitly), and if the order relation for a type is also defined (explicitly), we have
 
 \begin{tabular}{l l }
-{\tt x <= y} & {\tt <=> x < y or x = y} \\
-{\tt x > y} & {\tt <=> not (x = y or x < y)} \\
-{\tt x >= y} & {\tt <=>  x = y or not x < y}\\
+{\tt x <= y} & {\tt <=> x < y  \keyw{or} x = y} \\
+{\tt x > y} & {\tt <=>  \keyw{not} (x = y  \keyw{or} x < y)} \\
+{\tt x >= y} & {\tt <=>  x = y  \keyw{or}  \keyw{not} x < y}\\
 \end{tabular}
 
 The proof obligation for an order relation is that it be a strict partial order; that is, it is irreflexive and transitive\footnote{\url{https://en.wikipedia.org/wiki/Partially_ordered_set} gives a quick introduction to ordering relation.}..
@@ -2080,12 +2080,12 @@ sc4 = mk_Score (<SaudiArabia>, 1, 0, 2, 3);
 We have
 
 \begin{tabular}{l l}
-{\tt sc1 < sc2} & $\equiv$ {\tt true}\\
-{\tt sc1 <= sc3} & $\equiv$ {\tt false}\\
-{\tt sc2 > sc3} & $\equiv$ {\tt true}\\
-{\tt sc4 >= sc3} & $\equiv$ {\tt true}\\
-{\tt sc4 < sc3} & $\equiv$ {\tt false}\\
-{\tt ord\_Score(sc1, sc2)} & $\equiv$ {\tt true}\\
+{\tt sc1 < sc2} & $\equiv$  \keyw{true}\\
+{\tt sc1 <= sc3} & $\equiv$  \keyw{false}\\
+{\tt sc2 > sc3} & $\equiv$  \keyw{true}\\
+{\tt sc4 >= sc3} & $\equiv$  \keyw{true}\\
+{\tt sc4 < sc3} & $\equiv$  \keyw{false}\\
+{\tt ord\_Score(sc1, sc2)} & $\equiv$  \keyw{true}\\
 \end{tabular}
 
 The type argument of a polymorphic function can depend on an order relation.
@@ -2097,7 +2097,7 @@ ascending(s) ==
 \end{lstlisting}
 
 The specification compares for order values of the type argument {\tt @a}. There is no way to express that {\tt @a} admits an order relation so the function is partial. 
-A type error would be thrown at runtime if the function was executed with a type that does not admit an order relation (such as {\tt bool}).
+A type error would be thrown at runtime if the function was executed with a type that does not admit an order relation (such as  \keyw{bool}).
 \end{description}
 
 \chapter{Algorithm Definitions}
