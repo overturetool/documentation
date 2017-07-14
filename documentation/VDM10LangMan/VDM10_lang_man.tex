@@ -2162,11 +2162,11 @@ definition of a function is:
 
 \Rule{function definitions}{
   \Lop{functions},
-  \OptPt{\Ruleref{access function definition}}, \lfeed
+  \OptPt{\Ruleref{access function definition}, \lfeed
          \SeqPt{\Lit{;}},
          \Ruleref{access function definition}%
          \Ruleref{function definition},
-         \OptPt{\Lit{;}}
+         \OptPt{\Lit{;}}}
   }
 
 \Rule{access function definition}{
@@ -2219,8 +2219,7 @@ definition of a function is:
   }
 
 \Rule{identifier type pair list}{
-  \Ruleref{identifier}, \Lit{:}, \Ruleref{type}, \lfeed
-  \SeqPt{\Lit{,}, \Ruleref{identifier}, \Lit{:}, \Ruleref{type}}
+  \Ruleref{identifier type pair}, \SeqPt{\Lit{,}, \Ruleref{identifier type pair}}
 }
 
 \Rule{parameter types}{
@@ -3945,22 +3944,7 @@ end A
 
 
   \Rule{is expression}{
-    \Lop{is\_}, \Ruleref{name}, \Lit{(}, \Ruleref{expression}, \Lit{)} \dsep
-    \Ruleref{is basic type}, \Lit{(}, \Ruleref{expression}, \Lit{)}
-    }
-
-  \Rule{is basic type}{
-    \Lop{is\_},
-    \Brack{%
-      \Lop{bool} \dsepl
-      \Lop{nat} \dsepl
-      \Lop{nat1} \dsepl
-      \Lop{int} \dsep
-      \Lop{rat} \dsepl
-      \Lop{real} \dsepl
-      \Lop{char} \dsepl
-      \Lop{token}
-      }
+    \Lop{is\_}, (\Ruleref{name} \dsep \Ruleref{basic type}), \Lit{(}, \Ruleref{expression}, \Lit{)} 
     }
 
   \Rule{type judgement}{
@@ -4164,23 +4148,18 @@ Assuming the classes \texttt{Tree},
     \ldots
   }
   \Rule{act expression}{
-    \Lop{\#act}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#act}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
   \Rule{fin expression}{
-    \Lop{\#fin}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#fin}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
   \Rule{active expression}{
-    \Lop{\#active}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#active}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
   \Rule{req expression}{
-    \Lop{\#req}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#req}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
   \Rule{waiting expression}{
-    \Lop{\#waiting}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#waiting}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
 
@@ -4490,7 +4469,7 @@ an access modifier allowing access to it outside the defining class.
     \Ruleref{seq enum pattern} \dsep
     \Ruleref{seq conc pattern} \dsep
     \Ruleref{map enumeration pattern} \dsep
-    \Ruleref{map muinon pattern} \dsep
+    \Ruleref{map munion pattern} \dsep
     \Ruleref{tuple pattern} \dsep
     \Ruleref{record pattern} \dsep
     \Ruleref{object pattern}
@@ -4533,7 +4512,7 @@ an access modifier allowing access to it outside the defining class.
     \Ruleref{pattern}, \Lit{|->}, \Ruleref{pattern}
   }
 
-   \Rule{map muinon pattern}{
+   \Rule{map munion pattern}{
     \Ruleref{pattern}, \Lit{\keyw{munion}}, \Ruleref{pattern}
   }
 
@@ -4927,10 +4906,10 @@ traditional programming languages.
 \item[Syntax:]
   \Rule{value definitions}{
     \Lop{values},
-    \OptPt{\Ruleref{access value definition}}, \lfeed
+    \OptPt{\Ruleref{access value definition}, \lfeed
            \SeqPt{\Lit{;},
                   \Ruleref{access value definition}},
-           \OptPt{\Lit{;}}
+           \OptPt{\Lit{;}}}
     }
 
 %  \ifthenelse{\boolean{VDMpp}}{
@@ -5037,7 +5016,7 @@ refer to this state as the global state of the object.
   }
 
   \Rule{access assignment definition}{
-    (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep\ (\OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
+    (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}}  \dsep\ \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
     \Ruleref{assignment definition}
   }
 
@@ -5125,10 +5104,6 @@ the VDM interpreters.
   \Rule{state definition}{
     \Lop{state}, \Ruleref{identifier}, \Lop{of}, \Ruleref{field list}, \lfeed
     \OptPt{\Ruleref{invariant}}, \OptPt{\Ruleref{initialisation}}, \Lop{end}, \OptPt{\Lit{;}}
-    }
-
-  \Rule{invariant}{
-    \Lop{inv}, \Ruleref{invariant initial function}
     }
 
   \Rule{initialisation}{
@@ -5221,10 +5196,10 @@ only be used in the VDM-RT dialect.
 \item[Syntax:]
   \Rule{operation definitions}{
     \Lop{operations},
-    \OptPt{\Ruleref{access operation definition}}, \lfeed
+    \OptPt{\Ruleref{access operation definition}, \lfeed
            \SeqPt{\Lit{;},
                   \Ruleref{access operation definition}} ,  \OptPt{\Lit{;}
-    }}
+    }}}
 
     \Rule{access operation definition}{(
       \OptPt{\Lop{pure}},
@@ -5907,11 +5882,11 @@ or in the context of a VDM++ instance variables
 %\ifthenelse{\boolean{VDMpp}}{%
   \Rule{multiple assign statement}{
     \Lop{atomic},
-    \Lit{(}
+    \Lit{(},
       \Ruleref{assign statement}, \Lit{;}, \lfeed
       \Ruleref{assign statement},
       \lfeed
-      \OptPt{\SeqPt{\Lit{;},\Ruleref{assign statement}}}
+      \OptPt{\SeqPt{\Lit{;},\Ruleref{assign statement}}},
     \Lit{)}
     }
 %  }%
@@ -7190,15 +7165,10 @@ Thus, a complete specification, or document, has the following syntax.
 \begin{description}
 \item[Syntax:]
 \Rule{document}{
-  \Ruleref{any module}, \SeqPt{\Ruleref{any module}} \dsep
+  \Ruleref{module}, \SeqPt{\Ruleref{module}} \dsep
    \Ruleref{definition block}, \SeqPt{\Ruleref{definition block}}
   }
 
-\Rule{any module}{
-  \Ruleref{module}
-%\dsep
-%  \Ruleref{dynamic link module}
-  }
 \end{description}
 
 \subsection{A Flat Specification}\label{flat}
@@ -7369,7 +7339,7 @@ Note that the identifier after \keyw{module} and \keyw{end} should be identical.
     }
 
   \Rule{export functions signature}{
-    \Lop{functions} \Ruleref{function signature}, \lfeed
+    \Lop{functions}, \Ruleref{function signature}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{function signature}}, \OptPt{\Lit{;}}
     }
 
@@ -7379,7 +7349,7 @@ Note that the identifier after \keyw{module} and \keyw{end} should be identical.
     }
 
   \Rule{export operations signature}{
-    \Lop{operations} \Ruleref{operation signature}, \lfeed
+    \Lop{operations}, \Ruleref{operation signature}, \lfeed
     \SeqPt{\Lit{;}, \Ruleref{operation signature}}, \OptPt{\Lit{;}}
     }
 
@@ -7697,8 +7667,8 @@ is possible to have a \keyw{system} class.
 \begin{description}
 \item[Syntax:]
 \Rule{document}{
-   \Ruleref{class}
-   \dsepl\ \Ruleref{system}
+   (\Ruleref{class}
+   \dsepl\ \Ruleref{system})
    ,\SeqPt{\Ruleref{class}
    \dsepl\ \Ruleref{system}
          }
@@ -7892,7 +7862,7 @@ class is described.
   \Lop{end}, \Ruleref{identifier}
 }
 \Rule{inheritance clause}{
-      \Lop{is subclass of}, \Ruleref{identifier}, \Lit{,}, \SeqPt{\Ruleref{identifier}}
+      \Lop{is subclass of}, \Ruleref{identifier}, \SeqPt{\Lit{,}, \Ruleref{identifier}}
 }
 \Rule{class body}{\Ruleref{definition block}, \SeqPt{\Ruleref{definition block}}
 }
@@ -8366,8 +8336,7 @@ Some notes are given explaining these features.
       \Ruleref{mutex predicate}}
 
 \Rule{mutex predicate}{
-       \Lop{mutex}, \Lit{(}, \Lop{all}, \Lit{)}  \dsep
-       \Lop{mutex}, \Lit{(}, \Ruleref{name list} \Lit{)}}
+       \Lop{mutex}, \Lit{(}, (\Lop{all} \dsep \Ruleref{name list}, \Lit{)}}
 
 \item[Semantics:] Permission to accept execution of a requested
 operation depends on a guard condition in a (deontic) permission
@@ -9804,7 +9773,7 @@ same prefix will be skipped automatically.
 \begin{description}
 \item[Syntax:]
 \Ruledef{traces definitions}{\Lop{traces},
-   \OptPt{named trace}, \SeqPt{\Lit{;}, \Ruleref{named trace}}
+   \OptPt{\Ruleref{named trace}, \SeqPt{\Lit{;}, \Ruleref{named trace}}}
 }
 
 \Ruledef{named trace}{\Ruleref{identifier},
@@ -9818,8 +9787,7 @@ same prefix will be skipped automatically.
 }
 
 \Ruledef{trace definition term}{
-  \Ruleref{trace definition} \dsep
-  \Ruleref{trace definition term}, \Lit{|}, \Ruleref{trace definition}
+  \Ruleref{trace definition}, \SeqPt{\Lit{|}, \Ruleref{trace definition}}
 }
 
 \Rule{trace definition}{
@@ -9839,7 +9807,7 @@ same prefix will be skipped automatically.
 }
 
 \Ruledef{trace let best binding}{
-  \Lop{let} \Ruleref{multiple bind},
+  \Lop{let}, \Ruleref{multiple bind},
   \OptPt{\Lop{be}, \Lop{st}, \Ruleref{expression}}, \lfeed
   \Lop{in}, \Ruleref{trace definition}
 }
@@ -9853,9 +9821,7 @@ same prefix will be skipped automatically.
   \Lit{*} \dsep
   \Lit{+} \dsep
   \Lit{?} \dsep
-  \Lit{\{}, \Ruleref{numeric literal}, \Lit{\}} \dsep
-  \Lit{\{}, \Ruleref{numeric literal}, \Lit{,}
-  \Ruleref{numeric literal}, \Lit{\}}
+  \Lit{\{}, \Ruleref{numeric literal}, \OptPt{\Lit{,} \Ruleref{numeric literal}, \Lit{\}}}
 }
 
 \Rule{trace core definition}{
@@ -10006,14 +9972,8 @@ the VDM languages.
 \section{VDM-SL Document}
 
 \Ruledef{document}{
-  \Ruleref{any module}, \SeqPt{\Ruleref{any module}} \dsep
+  \Ruleref{module}, \SeqPt{\Ruleref{module}} \dsep
    \Ruleref{definition block}, \SeqPt{\Ruleref{definition block}}
-  }
-
-\Ruledef{any module}{
-  \Ruleref{module}
-%\dsep
-%  \Ruleref{dynamic link module}
   }
 
 \subsection{Modules}
@@ -10201,8 +10161,8 @@ VDM-SL standard.
 \section{VDM++ and VDM-RT Document}
 
 \Ruledef{document}{
-   \Ruleref{class}
-   \dsepl\ \Ruleref{system}
+   (\Ruleref{class}
+   \dsepl\ \Ruleref{system})
    , \SeqPt{\Ruleref{class}
    \dsepl\ \Ruleref{system}
    }
@@ -10226,7 +10186,7 @@ VDM-SL standard.
 }
 
 \Ruledef{inheritance clause}{
-      \Lop{is subclass of}, \Ruleref{identifier}, \Lit{,}, \SeqPt{\Ruleref{identifier}}
+      \Lop{is subclass of}, \Ruleref{identifier}, \SeqPt{\Lit{,}, \Ruleref{identifier}}
       }
 
 \section{Definitions}
@@ -10258,17 +10218,17 @@ VDM-SL standard.
 
 \Ruledef{type definitions}{
   \Lop{types},
-  \OptPt{\Ruleref{access type definition}}
+  \OptPt{\Ruleref{access type definition}
          , \lfeed
          \SeqPt{\Lit{;},
                {\Ruleref{access type definition}}},
-         \OptPt{\Lit{;}}
+         \OptPt{\Lit{;}}}
         }
 %  }%
   \nonstandard{1}
 
   \Ruledef{access type definition}{
-     (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsepl\ (\OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
+     (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}}  \dsepl\ \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
      \Ruleref{type definition}
     }
 
@@ -10431,27 +10391,20 @@ The access part is only possible in VDM++ and VDM-RT.
   \Lop{state}, \Ruleref{identifier}, \Lop{of}, \Ruleref{field list}, \lfeed
   \OptPt{\Ruleref{invariant}}, \OptPt{\Ruleref{initialisation}}, \Lop{end}, \OptPt{\Lit{;}}
   }\nonstandard{1}
-\Ruledef{invariant}{
-  \Lop{inv}, \Ruleref{invariant initial function}
-  }
 
 \Ruledef{initialisation}{
   \Lop{init}, \Ruleref{invariant initial function}
-  }
-
-\Ruledef{invariant initial function}{
-  \Ruleref{pattern}, \Lit{==}, \Ruleref{expression}
   }
 
 \subsection{Value Definitions}
 
 \Ruledef{value definitions}{
   \Lop{values},
-  \OptPt{\Ruleref{access value definition}}, \lfeed
+  \OptPt{\Ruleref{access value definition}, \lfeed
          \SeqPt{\Lit{;},
                \Ruleref{access value definition}
                },
-         \OptPt{\Lit{;}}
+         \OptPt{\Lit{;}}}
         }
 %  }
   \nonstandard{1}
@@ -10472,11 +10425,11 @@ The access part is only possible in VDM++ and VDM-RT.
 
 \Ruledef{function definitions}{
   \Lop{functions},
-  \OptPt{\Ruleref{access function definition}}, \lfeed
+    \OptPt{\Ruleref{access function definition}, \lfeed
          \SeqPt{\Lit{;},
                 \Ruleref{access function definition}},
-         \OptPt{\Lit{;}
-        }
+         \OptPt{\Lit{;}}
+    }
   }
 %  \nonstandard{1}
 
@@ -10515,7 +10468,7 @@ The access part is only possible in VDM++ and VDM-RT.
   \Lop{post}, \Ruleref{expression}
   }
 
-In VDM-SL extended explicit function definition looks like:
+%In VDM-SL extended explicit function definition looks like:
 
 %This should be removed and exchanged with a more general solution.
 %#ifdef VDMSL
@@ -10528,19 +10481,20 @@ In VDM-SL extended explicit function definition looks like:
   \Ruleref{identifier type pair list}, \lfeed
   \Lit{==}, \Ruleref{function body}, \lfeed
   \OptPt{\Lop{pre}, \Ruleref{expression}}, \lfeed
-  \OptPt{\Lop{post}, \Ruleref{expression}}
+  \OptPt{\Lop{post}, \Ruleref{expression}},
+  \OptPt{\Lop{measure}, \Ruleref{expression}}
 }
 %#endif VDMSL
-In VDM++ and VDM-RT extended explicit function definition looks like:
+%In VDM++ and VDM-RT extended explicit function definition looks like:
 %#ifdef VDMPP
-\Ruledef{extended explicit function definition}{
-  \Ruleref{identifier}, \OptPt{\Ruleref{type variable list}}, \lfeed
-  \Ruleref{parameter types}, \lfeed
-  \Ruleref{identifier type pair list}, \lfeed
-  \Lit{==}, \Ruleref{function body}, \lfeed
-  \OptPt{\Lop{pre}, \Ruleref{expression}}, \lfeed
-  \OptPt{\Lop{post}, \Ruleref{expression}}
-}
+%\Ruledef{extended explicit function definition}{
+%  \Ruleref{identifier}, \OptPt{\Ruleref{type variable list}}, \lfeed
+%  \Ruleref{parameter types}, \lfeed
+%  \Ruleref{identifier type pair list}, \lfeed
+%  \Lit{==}, \Ruleref{function body}, \lfeed
+%  \OptPt{\Lop{pre}, \Ruleref{expression}}, \lfeed
+%  \OptPt{\Lop{post}, \Ruleref{expression}}
+%}
 %#endif VDMPP
 
 \Ruledef{type variable list}{
@@ -10557,8 +10511,7 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
   }
 
 \Ruledef{identifier type pair list}{
-  \Ruleref{identifier}, \Lit{:}, \Ruleref{type}, \lfeed
-  \SeqPt{\Lit{,}, \Ruleref{identifier}, \Lit{:}, \Ruleref{type}}
+  \Ruleref{identifier type pair}, \SeqPt{\Lit{,}, \Ruleref{identifier type pair}}
 }
 
 \Ruledef{pattern type pair list}{
@@ -10584,11 +10537,11 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
 
 \Ruledef{operation definitions}{
   \Lop{operations},
-  \OptPt{\Ruleref{access operation definition}}, \lfeed
+  \OptPt{\Ruleref{access operation definition}, \lfeed
          \SeqPt{\Lit{;},
                 \Ruleref{access operation definition}
                },
-         \OptPt{\Lit{;}}
+         \OptPt{\Lit{;}}}
   }\nonstandard{1}
 
 %  \ifthenelse{\boolean{VDMpp}}{
@@ -10698,8 +10651,8 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
   }
 
   \Rule{access assignment definition}{
-    (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep
-    (\OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
+    (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}}  \dsep
+    \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
     \Ruleref{assignment definition}
   }
 
@@ -10744,8 +10697,7 @@ In VDM++ and VDM-RT extended explicit function definition looks like:
       \Ruleref{mutex predicate}}
 
 \Ruledef{mutex predicate}{
-       \Lop{mutex}, \Lit{(}, \Lop{all}, \Lit{)}  \dsep
-       \Lop{mutex}, \Lit{(}, \Ruleref{name list} \Lit{)}}
+       \Lop{mutex}, \Lit{(}, (\Lop{all} \dsep \Ruleref{name list}), \Lit{)}}
 
 % \Ruledef{trace structures}{
 %       \SeqPt{\Ruleref{subtrace structure}, \Lit{;}},
@@ -10822,7 +10774,7 @@ For both VDM++ and VDM-RT, we can define:
 \subsection{Trace Definitions}
 
 \Ruledef{traces definitions}{\Lop{traces},
-   \OptPt{named trace}, \SeqPt{\Lit{;}, \Ruleref{named trace}}
+   \OptPt{\Ruleref{named trace}, \SeqPt{\Lit{;}, \Ruleref{named trace}}}
 }
 
 \Ruledef{named trace}{\Ruleref{identifier},
@@ -10836,8 +10788,7 @@ For both VDM++ and VDM-RT, we can define:
 }
 
 \Ruledef{trace definition term}{
-  \Ruleref{trace definition} \dsep
-  \Ruleref{trace definition term}, \Lit{|}, \Ruleref{trace definition}
+  \Ruleref{trace definition}, \SeqPt{\Lit{|}, \Ruleref{trace definition}}
 }
 
 \Rule{trace definition}{
@@ -10848,7 +10799,7 @@ For both VDM++ and VDM-RT, we can define:
 \Ruledef{trace binding definition}{
   \Ruleref{trace let def binding} \dsep
   \Ruleref{trace let best binding}
-};
+}
 
 \Ruledef{trace let def binding}{
   \Lop{let}, \Ruleref{local definition},
@@ -10857,7 +10808,7 @@ For both VDM++ and VDM-RT, we can define:
 }
 
 \Ruledef{trace let best binding}{
-  \Lop{let} \Ruleref{multiple bind},
+  \Lop{let}, \Ruleref{multiple bind},
   \OptPt{\Lop{be}, \Lop{st}, \Ruleref{expression}}, \lfeed
   \Lop{in}, \Ruleref{trace definition}
 }
@@ -10871,9 +10822,7 @@ For both VDM++ and VDM-RT, we can define:
   \Lit{*} \dsep
   \Lit{+} \dsep
   \Lit{?} \dsep
-  \Lit{\{}, \Ruleref{numeric literal}, \Lit{\}} \dsep
-  \Lit{\{}, \Ruleref{numeric literal}, \Lit{,}
-  \Ruleref{numeric literal}, \Lit{\}}
+  \Lit{\{}, \Ruleref{numeric literal}, \OptPt{\Lit{,} \Ruleref{numeric literal}}, \Lit{\}}
 }
 
 \Rule{trace core definition}{
@@ -10929,6 +10878,7 @@ For both VDM++ and VDM-RT, we can define:
   \Ruleref{tuple select} \dsep
   \Ruleref{function type instantiation} \dsep
   \Ruleref{lambda expression} \dsep
+  \Ruleref{narrow expression} \dsep
   \Ruleref{new expression} \dsep
   \Ruleref{self expression} \dsep
   \Ruleref{threadid expression} \dsep
@@ -11461,9 +11411,8 @@ For both VDM++ and VDM-RT, we can define:
   }
 
 \Ruledef{is expression}{
-  \Lit{\keyw{is}\_},\nmk \Ruleref{name}, \Lit{(}, \Ruleref{expression}, \Lit{)} \dsep
-  \Ruleref{is basic type}, \Lit{(}, \Ruleref{expression}, \Lit{)}
-  }
+  \Lit{\keyw{is}\_},\nmk (\Ruleref{name} \dsep \Ruleref{basic type}), \Lit{(}, \Ruleref{expression}, \Lit{)}
+}
 \ntext{no delimiter is allowed}
 
 \Ruledef{type judgement}{
@@ -11479,7 +11428,7 @@ For both VDM++ and VDM-RT, we can define:
 
 \subsection{The Precondition Expression}
 
-\Ruledef{pre-condition expression}{
+\Ruledef{precondition expression}{
   \Lop{pre\_}, \Lit{(}, \Ruleref{expression}, \lfeed
                         \OptPt{\SeqPt{\Lit{,}, \Ruleref{expression}}},
                \Lit{)}
@@ -11510,23 +11459,18 @@ For both VDM++ and VDM-RT, we can define:
 \subsection{History Expressions (VDM++ and VDM-RT)}
 
   \Ruledef{act expression}{
-    \Lop{\#act}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#act}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
   \Ruledef{fin expression}{
-    \Lop{\#fin}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#fin}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
   \Ruledef{active expression}{
-    \Lop{\#active}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#active}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
   \Ruledef{req expression}{
-    \Lop{\#req}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#req}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
   \Ruledef{waiting expression}{
-    \Lop{\#waiting}, \Lit{(}, \Ruleref{name}, \Lit{)} \dsep
     \Lop{\#waiting}, \Lit{(}, \Ruleref{name list}, \Lit{)}
   }
 
@@ -11672,7 +11616,7 @@ For both VDM++ and VDM-RT, we can define:
 %\ifthenelse{\boolean{VDMpp}}{%
   \Ruledef{multiple assign statement}{
     \Lop{atomic},
-    \Lit{(}
+    \Lit{(},
       \Ruleref{assign statement}, \Lit{;}, \lfeed
       \Ruleref{assign statement},
       \lfeed
@@ -11760,7 +11704,7 @@ In VDM++ and VDM-RT a call statement looks like:
 %#ifdef VDMPP
   \Ruledef{call statement}{
     \OptPt{\Ruleref{object designator}, \Lit{.}},\lfeed
-    \Ruleref{name}, \Lit{(}, \OptPt{\Ruleref{expression list}}, \Lit{)},
+    \Ruleref{name}, \Lit{(}, \OptPt{\Ruleref{expression list}}, \Lit{)}
     }
   \Ruledef{object designator}{
     \Ruleref{name} \dsep
@@ -11888,7 +11832,7 @@ In VDM++ and VDM-RT a call statement looks like:
   \Ruleref{seq enum pattern} \dsep
   \Ruleref{seq conc pattern} \dsep
   \Ruleref{map enumeration pattern} \dsep
-  \Ruleref{map muinon pattern} \dsep
+  \Ruleref{map munion pattern} \dsep
   \Ruleref{tuple pattern} \dsep
   \Ruleref{object pattern} \dsep
   \Ruleref{record pattern}
@@ -11931,7 +11875,7 @@ In VDM++ and VDM-RT a call statement looks like:
     \Ruleref{pattern}, \Lit{|->}, \Ruleref{pattern}
   }
 
-\Ruledef{map muinon pattern}{
+\Ruledef{map munion pattern}{
     \Ruleref{pattern}, \Lit{\keyw{munion}}, \Ruleref{pattern}
   }
 
@@ -12319,20 +12263,6 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
   \Lit{@}, \Ruleref{identifier}
   }
 
-\Ruledef{is basic type}{
-  \Lop{is\_},
-  \Brack{%
-    \Lop{bool} \dsepl
-    \Lop{nat} \dsepl
-    \Lop{nat1} \dsepl
-    \Lop{int} \dsepl
-    \Lop{rat} \dsep
-    \Lop{real} \dsepl
-    \Lop{char} \dsepl
-    \Lop{token}
-    }
-  }
-
 \Ruledef{symbolic literal}{
   \Ruleref{numeric literal} \dsepl
   \Ruleref{boolean literal} \dsep
@@ -12358,7 +12288,7 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
 
 \Ruledef{decimal literal}{
   \Ruleref{numeral},
-  \OptPt{\Lit{.}, \hyperlink{charSetTable}{digit}, \SeqPt{\hyperlink{charSetTable}{digit}}},
+  \OptPt{\Lit{.}, \Ruleref{numeral}},
   \OptPt{\Ruleref{exponent}}
 }
 
@@ -12375,8 +12305,8 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
   }
 
 \Ruledef{character literal}{
-  \Lit{\mbox{\,}'\mbox{\,}}, \Ruleref{character} \dsepl
-  \Ruleref{escape sequence} \dsep
+  \Lit{\mbox{\,}'\mbox{\,}}, (\Ruleref{character} \dsepl
+  \Ruleref{escape sequence},
   \Lit{\mbox{\,}'\mbox{\,}}
   }\nonstandard{1}
 
@@ -12384,12 +12314,12 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
   \Lit{\char'134\char'134} \dsepl \Lit{{\char'134}r} \dsepl
   \Lit{{\char'134}n} \dsepl \Lit{{\char'134}t} \dsepl
   \Lit{{\char'134}f} \dsepl \Lit{{\char'134}e} \dsepl \Lit{{\char'134}a} \dsep
-  \Lit{{\char'134}x} \hyperlink{charSetTable}{hexadecimal
-    digit},\hyperlink{charSetTable}{hexadecimal digit} \dsep
-  \Lit{{\char'134}u} \hyperlink{charSetTable}{hexadecimal
-    digit},\hyperlink{charSetTable}{hexadecimal digit},  \lfeed \hyperlink{charSetTable}{hexadecimal digit},\hyperlink{charSetTable}{hexadecimal digit} \dsep
-  \Lit{{\char'134}c} \Ruleref{character} \dsep
-  \Lit{{\char'134}} \hyperlink{charSetTable}{octal digit}, \hyperlink{charSetTable}{octal digit}, \hyperlink{charSetTable}{octal digit} \dsep
+  \Lit{{\char'134}x}, 2 * \hyperlink{charSetTable}{hexadecimal
+    digit} \dsep
+  \Lit{{\char'134}u}, 4 * \hyperlink{charSetTable}{hexadecimal
+    digit} \dsep
+  \Lit{{\char'134}c}, \Ruleref{character} \dsep
+  \Lit{{\char'134}}, 3 * \hyperlink{charSetTable}{octal digit} \dsep
   \Lit{{\char'134}"} \dsepl
   \Lit{{\char'134}'} \dsepl
   }
@@ -12410,11 +12340,11 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
 
   }
 
-\Ruledef{Single-line comment}{
+\Ruledef{single line comment}{
   \Lit{--}, \SeqPt{\Ruleref{character} -- newline}, newline
   }
 
-\Ruledef{Multiple-line comment}{
+\Ruledef{multiple line comment}{
   \Lit{/*}, \SeqPt{\Ruleref{character}}, \Lit{*/}
   }
 
@@ -12434,14 +12364,14 @@ Sequence & Interpretation\\ \hline
   \Lit{{\char'134}x} hexadecimal digit, hexadecimal digit
                            & U+00xy (hex representation of character\\
                            & (e.g.\ \texttt{{\char'134}x41} is `A'))\\
-  \Lit{{\char'134}u} hexadecimal digit, hexadecimal digit,
+  \Lit{{\char'134}u}, 4 * hexadecimal digit
                            & U+abcd (hex representation of character\\
-hexadecimal digit, hexadecimal digit  & (e.g.\ \texttt{{\char'134}u0041} is `A'))\\
-  \Lit{{\char'134}c} character
+                           & (e.g.\ \texttt{{\char'134}u0041} is `A'))\\
+  \Lit{{\char'134}c}, character
                            & U+00nn (control character)\\
                            & (e.g.\ \texttt{{\char'134}cA} $\equiv$
                                     \texttt{{\char'134}x01})\\
-  \Lit{{\char'134}} octal digit, octal digit, octal digit
+  \Lit{{\char'134}}, 3 * octal digit
                            & U+00nn (octal representation of character)\\
   \Lit{{\char'134}{\char'042}}       & U+0022 (double quote)\\
   \Lit{{\char'134}'}       & U+0027 (apostrophe) \\ \hline
