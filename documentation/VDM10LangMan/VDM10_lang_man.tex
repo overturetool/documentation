@@ -3944,7 +3944,7 @@ end A
 
 
   \Rule{is expression}{
-    \Lop{is\_}, (\Ruleref{name} \dsep \Ruleref{basic type}), \Lit{(}, \Ruleref{expression}, \Lit{)} 
+    \Lop{is\_}, (\Ruleref{name} \dsepl \Ruleref{basic type}), \Lit{(}, \Ruleref{expression}, \Lit{)} 
     }
 
   \Rule{type judgement}{
@@ -4407,9 +4407,7 @@ an access modifier allowing access to it outside the defining class.
     \Ruleref{precondition expression}
     }
   \Rule{precondition expression}{
-    \Lop{pre\_}, \Lit{(}, \Ruleref{expression}, \lfeed
-                          \OptPt{\SeqPt{\Lit{,}, \Ruleref{expression}}},
-                 \Lit{)}
+    \Lop{pre\_}, \Lit{(}, \Ruleref{expression list}, \Lit{)}
     }
 
 \item[Semantics:]
@@ -5016,7 +5014,7 @@ refer to this state as the global state of the object.
   }
 
   \Rule{access assignment definition}{
-    (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}}  \dsep\ \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
+    (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}}  \dsepl \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
     \Ruleref{assignment definition}
   }
 
@@ -5886,7 +5884,7 @@ or in the context of a VDM++ instance variables
       \Ruleref{assign statement}, \Lit{;}, \lfeed
       \Ruleref{assign statement},
       \lfeed
-      \OptPt{\SeqPt{\Lit{;},\Ruleref{assign statement}}},
+      \SeqPt{\Lit{;},\Ruleref{assign statement}},
     \Lit{)}
     }
 %  }%
@@ -8336,7 +8334,7 @@ Some notes are given explaining these features.
       \Ruleref{mutex predicate}}
 
 \Rule{mutex predicate}{
-       \Lop{mutex}, \Lit{(}, (\Lop{all} \dsep \Ruleref{name list}, \Lit{)}}
+       \Lop{mutex}, \Lit{(}, (\Lop{all} \dsepl \Ruleref{name list}, \Lit{)}}
 
 \item[Semantics:] Permission to accept execution of a requested
 operation depends on a guard condition in a (deontic) permission
@@ -9821,7 +9819,7 @@ same prefix will be skipped automatically.
   \Lit{*} \dsep
   \Lit{+} \dsep
   \Lit{?} \dsep
-  \Lit{\{}, \Ruleref{numeric literal}, \OptPt{\Lit{,} \Ruleref{numeric literal}, \Lit{\}}}
+  \Lit{\{}, \Ruleref{numeric literal}, \OptPt{\Lit{,}, \Ruleref{numeric literal}, \Lit{\}}}
 }
 
 \Rule{trace core definition}{
@@ -10092,7 +10090,7 @@ VDM-SL standard.
   }
 
 \Ruledef{export functions signature}{
-  \Lop{functions} \Ruleref{function signature}, \lfeed
+  \Lop{functions}, \Ruleref{function signature}, \lfeed
   \SeqPt{\Lit{;}, \Ruleref{function signature}}, \OptPt{\Lit{;}}
   }
 
@@ -10102,7 +10100,7 @@ VDM-SL standard.
   }
 
 \Ruledef{export operations signature}{
-  \Lop{operations} \Ruleref{operation signature}, \lfeed
+  \Lop{operations}, \Ruleref{operation signature}, \lfeed
   \SeqPt{\Lit{;}, \Ruleref{operation signature}}, \OptPt{\Lit{;}}
   }
 
@@ -10651,7 +10649,7 @@ The access part is only possible in VDM++ and VDM-RT.
   }
 
   \Rule{access assignment definition}{
-    (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}}  \dsep
+    (\OptPt{\Ruleref{access}}, \OptPt{\Lop{static}}  \dsepl
     \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
     \Ruleref{assignment definition}
   }
@@ -10697,7 +10695,7 @@ The access part is only possible in VDM++ and VDM-RT.
       \Ruleref{mutex predicate}}
 
 \Ruledef{mutex predicate}{
-       \Lop{mutex}, \Lit{(}, (\Lop{all} \dsep \Ruleref{name list}), \Lit{)}}
+       \Lop{mutex}, \Lit{(}, (\Lop{all} \dsepl \Ruleref{name list}), \Lit{)}}
 
 % \Ruledef{trace structures}{
 %       \SeqPt{\Ruleref{subtrace structure}, \Lit{;}},
@@ -10822,7 +10820,7 @@ For both VDM++ and VDM-RT, we can define:
   \Lit{*} \dsep
   \Lit{+} \dsep
   \Lit{?} \dsep
-  \Lit{\{}, \Ruleref{numeric literal}, \OptPt{\Lit{,} \Ruleref{numeric literal}}, \Lit{\}}
+  \Lit{\{}, \Ruleref{numeric literal}, \OptPt{\Lit{,}, \Ruleref{numeric literal}}, \Lit{\}}
 }
 
 \Rule{trace core definition}{
@@ -11411,7 +11409,7 @@ For both VDM++ and VDM-RT, we can define:
   }
 
 \Ruledef{is expression}{
-  \Lit{\keyw{is}\_},\nmk (\Ruleref{name} \dsep \Ruleref{basic type}), \Lit{(}, \Ruleref{expression}, \Lit{)}
+  \Lit{\keyw{is}\_},\nmk (\Ruleref{name} \dsepl \Ruleref{basic type}), \Lit{(}, \Ruleref{expression}, \Lit{)}
 }
 \ntext{no delimiter is allowed}
 
@@ -11429,9 +11427,7 @@ For both VDM++ and VDM-RT, we can define:
 \subsection{The Precondition Expression}
 
 \Ruledef{precondition expression}{
-  \Lop{pre\_}, \Lit{(}, \Ruleref{expression}, \lfeed
-                        \OptPt{\SeqPt{\Lit{,}, \Ruleref{expression}}},
-               \Lit{)}
+  \Lop{pre\_}, \Lit{(}, \Ruleref{expression list}, \Lit{)}
   }
 
 \subsection{Base Class Membership (VDM++ and VDM-RT)}
@@ -11620,7 +11616,7 @@ For both VDM++ and VDM-RT, we can define:
       \Ruleref{assign statement}, \Lit{;}, \lfeed
       \Ruleref{assign statement},
       \lfeed
-      \OptPt{\SeqPt{\Lit{;},\Ruleref{assign statement}}},
+      \SeqPt{\Lit{;},\Ruleref{assign statement}},
     \Lit{)}
     }
 %  }%
@@ -12306,7 +12302,7 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
 
 \Ruledef{character literal}{
   \Lit{\mbox{\,}'\mbox{\,}}, (\Ruleref{character} \dsepl
-  \Ruleref{escape sequence},
+  \Ruleref{escape sequence}),
   \Lit{\mbox{\,}'\mbox{\,}}
   }\nonstandard{1}
 
@@ -12321,7 +12317,7 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
   \Lit{{\char'134}c}, \Ruleref{character} \dsep
   \Lit{{\char'134}}, 3 * \hyperlink{charSetTable}{octal digit} \dsep
   \Lit{{\char'134}"} \dsepl
-  \Lit{{\char'134}'} \dsepl
+  \Lit{{\char'134}'}
   }
 
 \Ruledef{text literal}{
