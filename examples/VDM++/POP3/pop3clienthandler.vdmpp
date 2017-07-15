@@ -157,7 +157,11 @@ set2seq(s) ==
 if s = {}
 then []
 else let v in set s in
-  [v] ^ set2seq[@tp](s \ {v});
+  [v] ^ set2seq[@tp](s \ {v})
+measure Size;
+
+Size[@tp]: set of @tp -> nat
+Size(list) == card list;
 
 MakeScanListing: set of POP3Server`MessageInfo -> seq of char
 MakeScanListing(msgs) ==
