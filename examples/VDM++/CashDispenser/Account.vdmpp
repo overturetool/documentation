@@ -120,7 +120,11 @@ The transactions invariant first computes all dates in the sequence of transacti
   Sum(rs) ==
     if rs = [] then 0
     else
-      hd rs + Sum(tl rs);
+      hd rs + Sum(tl rs)
+  measure Len;
+ 
+ Len: seq of real -> nat
+ Len(list) == len list;
  
 end Account
 \end{vdm_al}
