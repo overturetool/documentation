@@ -5199,15 +5199,15 @@ only be used in the VDM-RT dialect.
                   \Ruleref{access operation definition}} ,  \OptPt{\Lit{;}
     }}}
 
-    \Rule{access operation definition}{(
-      \OptPt{\Lop{pure}},
-      \OptPt{\Lop{async}}
-      \OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep\
-     (
-      \OptPt{\Lop{pure}}, \OptPt{\Lop{async}}
-      \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
-      \Ruleref{operation definition}
+\Rule{access operation definition}{
+    \SeqPt{
+        \Lop{pure} \dsep
+        \Lop{async} \dsep
+        \Ruleref{access} \dsep
+        \Lop{static}}, \lfeed
+    \Ruleref{operation definition}
     }
+
 
 \Rule{operation definition}{
   \Ruleref{explicit operation definition} \dsep
@@ -10543,16 +10543,14 @@ The access part is only possible in VDM++ and VDM-RT.
   }\nonstandard{1}
 
 %  \ifthenelse{\boolean{VDMpp}}{
-    \Ruledef{access operation definition}{(
+    \Ruledef{access operation definition}{
+    \SeqPt{
 %#ifdef VICEMAN
-      \OptPt{\Lop{pure}}, \OptPt{\Lop{async}}
+      \Lop{pure} \dsep
+      \Lop{async} \dsep
 %#endif VICEMAN
-      \OptPt{\Ruleref{access}}, \OptPt{\Lop{static}})  \dsep\
-     (
-%#ifdef VICEMAN
-      \OptPt{\Lop{pure}}, \OptPt{\Lop{async}}
-%#endif VICEMAN
-      \OptPt{\Lop{static}}, \OptPt{\Ruleref{access}}), \lfeed
+      \Ruleref{access} \dsep
+      \Lop{static}}, \lfeed
       \Ruleref{operation definition}
     }
 %}{}
