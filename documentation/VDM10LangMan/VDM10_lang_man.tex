@@ -2347,7 +2347,6 @@ function \texttt{\keyw{post\_}f} with signature
   post_f : T1 * ... * Tn * Tr +> bool
 \end{lstlisting}
 
-%%% from here %%%
 Functions can be defined using recursion (i.e. by calling themselves). When recursion is used one is recommended to add a `\keyw{measure}' clause that can be used in the proof obligations generated from the model such that termination proofs can be carried out. A measure clause has one of two forms:
 
 \begin{enumerate}
@@ -2430,7 +2429,7 @@ dupe(s) == cases s:
 measure len s;
 \end{lstlisting}
 
-As before the s in the measure clause is the argument variable in the definition of {\tt dupe}. The measure function reduces because the semantics of concatenation patterns ensure that the sequence s is split into {\tt t} and {\tt u} such that {\tt t} and {\tt u} contain at least one element each.
+As before the {\tt s} in the measure clause is the argument variable in the definition of {\tt dupe}. The measure function reduces because the semantics of concatenation patterns ensure that the sequence {\tt s} is split into {\tt t} and {\tt u} such that {\tt t} and {\tt u} contain at least one element each.
 
 A measure clause is recommended for recursive functions, but not mandatory. VDM implementations typically issue a warning if a recursive function is defined without a measure clause. If one explicitly does not want to provide a measure clause and avoid a warning the \keyw{is not yet specified} expression can be used.
 
@@ -2449,7 +2448,7 @@ In some situations a measure clause that evaluates to a single \keyw{nat} is not
 ackermann: nat * nat +> nat
 ackermann(m,n) == cases mk_(m,n):
                     mk_(0,q) -> q+1,
-                    mk_(p,0) -> ackermann(p-1,0),
+                    mk_(p,0) -> ackermann(p-1,1),
                     mk_(p,q) -> ackermann(p-1,ackermann(p,q-1))
                   end; 
 \end{lstlisting}
@@ -2461,8 +2460,6 @@ measure mk_(m,n)
 \end{lstlisting}
 
 Order is lexicographic ordering on the \keyw{nat} tuple: in each recursive call either the first argument reduces, or the first argument is unchanged and the second argument reduces. Generally an arbitrary tuple can be expressed as the value in a measure clause.
-
-%%% end here %%%
 
 \section{Polymorphic Functions}
 
