@@ -2347,37 +2347,122 @@ function \texttt{\keyw{post\_}f} with signature
   post_f : T1 * ... * Tn * Tr +> bool
 \end{lstlisting}
 
-Functions can also be defined using recursion (i.e.\ by calling
-themselves). When this is done one is recommended to add
-a \Lop{measure} function that can be used in the proof obligations
-generated from the model such that termination proofs can be carried
-out. The {\bf\ttfamily measure} function shall take the same type of
-parameters as the recursive function itself and it yield a natural
-number. A simple example here could be the traditional factorial function
-defined as:
-\begin{lstlisting}
-functions
+%%% from here %%%
+Functions can be defined using recursion (i.e. by calling themselves). When recursion is used one is recommended to add a `\keyw{measure}' clause that can be used in the proof obligations generated from the model such that termination proofs can be carried out. A measure clause has one of two forms:
 
+\begin{enumerate}
+  \item The identifier of a function whose argument type is that of the function being defined and result type is \keyw{nat}.
+  \item  An expression of type \keyw{nat} that may include free instances of the argument variables in the function definition.
+\end{enumerate}
+
+A slightly more general form is described later.
+
+Consider the definition of the factorial function:
+
+\begin{lstlisting}
 fac: nat +> nat
 fac(n) ==
-  if n = 0
-  then 1
-  else n * fac(n - 1)
+    if n = 0
+    then 1
+    else n*fac(n-1);
+\end{lstlisting}
+
+A \keyw{measure} clause (of the first type) could be added by appending
+
+\begin{lstlisting}
 measure id
 \end{lstlisting}
-where \texttt{id} would be defined as:
+
+where
+
 \begin{lstlisting}
 id: nat +> nat
-id(n) == n
+id(n) == n;
 \end{lstlisting}
-Here the proof obligation will become:
+
+giving
+
+\begin{lstlisting}
+fac: nat +> nat
+fac(n) ==
+    if n = 0
+    then 1
+    else n*fac(n-1)
+measure id;
+\end{lstlisting}
+
+The proof obligation becomes
+
 \begin{lstlisting}
 forall n:nat &
-  (not (n = 0) =>
-    id(n) > id(n - 1))
+  (not (n=0) =>
+    id(n) > id(n-1));
 \end{lstlisting}
-\noindent This proof obligation will ensure that the recursive
-function will terminate and thus sooner or later reach the base case.
+
+Verifying the proof obligation ensures the recursive function will terminate; the value of the measure function is smaller on each recursive call, and being of type \keyw{nat} the value cannot go below 0.
+
+The second form of measure clause employs an expression of type \keyw{nat}
+
+\begin{lstlisting}
+measure n
+\end{lstlisting}
+
+Note in this case the {\tt n} in the measure clause is the argument variable {\tt n} in the definition of {\tt fac}. The full definition is
+
+\begin{lstlisting}
+fac: nat +> nat
+fac(n) ==
+    if n = 0
+    then 1
+    else n*fac(n-1)
+measure n;
+\end{lstlisting}
+
+An example on sequences
+
+\begin{lstlisting}
+dupe[@a]: seq of @a +> seq of @a
+dupe(s) == cases s:
+             []  -> [],
+             [x] -> [x,x],
+             t^u -> dupe t ^ dupe u
+           end
+measure len s;
+\end{lstlisting}
+
+As before the s in the measure clause is the argument variable in the definition of {\tt dupe}. The measure function reduces because the semantics of concatenation patterns ensure that the sequence s is split into {\tt t} and {\tt u} such that {\tt t} and {\tt u} contain at least one element each.
+
+A measure clause is recommended for recursive functions, but not mandatory. VDM implementations typically issue a warning if a recursive function is defined without a measure clause. If one explicitly does not want to provide a measure clause and avoid a warning the \keyw{is not yet specified} expression can be used.
+
+\begin{lstlisting}
+fac: nat +> nat
+fac(n) ==
+    if n = 0
+    then 1
+    else n*fac(n-1)
+measure is not yet specified;
+\end{lstlisting}
+
+In some situations a measure clause that evaluates to a single \keyw{nat} is not adequate. More generally a measure clause can be a function that returns a \keyw{nat} product, or an expression whose type is a \keyw{nat} product. Consider the Ackermann function
+
+\begin{lstlisting}
+ackermann: nat * nat +> nat
+ackermann(m,n) == cases mk_(m,n):
+                    mk_(0,q) -> q+1,
+                    mk_(p,0) -> ackermann(p-1,0),
+                    mk_(p,q) -> ackermann(p-1,ackermann(p,q-1))
+                  end; 
+\end{lstlisting}
+
+Note that in the recursive calls either the first or the second argument reduces, but not both. The measure clause is
+
+\begin{lstlisting}
+measure mk_(m,n)
+\end{lstlisting}
+
+Order is lexicographic ordering on the \keyw{nat} tuple: in each recursive call either the first argument reduces, or the first argument is unchanged and the second argument reduces. Generally an arbitrary tuple can be expressed as the value in a measure clause.
+
+%%% end here %%%
 
 \section{Polymorphic Functions}
 
