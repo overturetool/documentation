@@ -2193,7 +2193,7 @@ definition of a function is:
   \Ruleref{function body}, \lfeed
   \OptPt{\Lop{pre}, \Ruleref{expression}}, \lfeed
   \OptPt{\Lop{post}, \Ruleref{expression}}, \lfeed
-  \OptPt{\Lop{measure}, \Ruleref{name}}
+  \OptPt{\Lop{measure}, \Ruleref{measure body}}
   }
 
 \Rule{implicit function definition}{
@@ -2210,7 +2210,8 @@ definition of a function is:
   \Ruleref{identifier type pair list}, \lfeed
   \Lit{==}, \Ruleref{function body}, \lfeed
   \OptPt{\Lop{pre}, \Ruleref{expression}}, \lfeed
-  \OptPt{\Lop{post}, \Ruleref{expression}}
+  \OptPt{\Lop{post}, \Ruleref{expression}}, \lfeed
+  \OptPt{\Lop{measure}, \Ruleref{measure body}}
 }
 
 \Rule{type variable list}{
@@ -2260,6 +2261,11 @@ definition of a function is:
   \Ruleref{expression} \dsep
   \Lop{is not yet specified}\index{\keyw{is not yet specified}!functions}
   \dsep \Lop{is subclass responsibility}\index{\keyw{is subclass responsibility}!functions}
+  }
+
+\Rule{measure body}{
+  \Ruleref{expression} \dsep
+  \Lop{is not yet specified}\index{\keyw{is not yet specified}!functions}
   }
 
 Here \keyw{is not yet specified} may be used as the function body
@@ -10536,7 +10542,7 @@ The access part is only possible in VDM++ and VDM-RT.
   \Lit{==}, \Ruleref{function body}, \lfeed
   \OptPt{\Lop{pre}, \Ruleref{expression}}
     , \lfeed \OptPt{\Lop{post}, \Ruleref{expression}}, \lfeed
-  \OptPt{\Lop{measure}, \Ruleref{name}}
+  \OptPt{\Lop{measure}, \Ruleref{measure body}}
   }
   \nonstandard{1}
 
@@ -10561,8 +10567,8 @@ The access part is only possible in VDM++ and VDM-RT.
   \Ruleref{identifier type pair list}, \lfeed
   \Lit{==}, \Ruleref{function body}, \lfeed
   \OptPt{\Lop{pre}, \Ruleref{expression}}, \lfeed
-  \OptPt{\Lop{post}, \Ruleref{expression}},
-  \OptPt{\Lop{measure}, \Ruleref{expression}}
+  \OptPt{\Lop{post}, \Ruleref{expression}}, \lfeed
+  \OptPt{\Lop{measure}, \Ruleref{measure body}}
 }
 %#endif VDMSL
 %In VDM++ and VDM-RT extended explicit function definition looks like:
@@ -10610,6 +10616,11 @@ The access part is only possible in VDM++ and VDM-RT.
 \Ruledef{function body}{
   \Ruleref{expression} \dsep
   \Lop{is subclass responsibility} \dsep
+  \Lop{is not yet specified}
+  }
+
+\Ruledef{measure body}{
+  \Ruleref{expression} \dsep
   \Lop{is not yet specified}
   } \nonstandard{1}
 
