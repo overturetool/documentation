@@ -1905,7 +1905,7 @@ Id :: fields
 {\tt pat1} and {\tt pat2} are patterns for two values of the type (or composite type), and {\tt expr} is a boolean expression that is true exactly when the expressions represented by {\tt pat1} and {\tt pat2} are equal.
 
 When defined, the explicit equality relation is also employed for inequality comparison with {\tt <>}.
-If an {\tt eq} clause is defined, a new (total) function is created implicitly with the signature:
+If an \keyw{eq} clause is defined, a new (total) function is created implicitly with the signature:
 \begin{lstlisting}
 eq_T : T * T +> bool
 \end{lstlisting}
@@ -2005,7 +2005,7 @@ Id :: fields
 \end{lstlisting}
 {\tt pat1} and {\tt pat2} are patterns for two values of the type (or composite type), and {\tt expr} is a boolean expression that is true exactly when the expression represented by {\tt pat1} is less than the expression represented by {\tt pat2} in the required order relation.
 
-If an {\tt ord} clause is defined, three new (total) functions are created implicitly with the signatures:
+If an \keyw{ord} clause is defined, three new functions are created implicitly with the signatures:
 \begin{lstlisting}
 ord_T : T * T +> bool
 max_T : T * T +> T
@@ -2029,7 +2029,7 @@ The equality relation for a type is defined (either explicitly or implicitly), a
 {\tt x >= y} & {\tt <=>  x = y  \keyw{or}  \keyw{not} x < y}\\
 \end{tabular}
 
-The proof obligation for an order relation is that it be a strict partial order; that is, it is irreflexive and transitive\footnote{\url{https://en.wikipedia.org/wiki/Partially_ordered_set} gives a quick introduction to ordering relation.}..
+The proof obligation for an order relation is that it be a strict partial order; that is, it is irreflexive and transitive\footnote{\url{https://en.wikipedia.org/wiki/Partially_ordered_set} gives a quick introduction to ordering relation.}.
 \begin{description}
 \item Irreflexive:
 \begin{lstlisting}
@@ -4535,6 +4535,25 @@ an access modifier allowing access to it outside the defining class.
   \end{itemize}
   Note that however \texttt{h} is bound, the last argument
   (\texttt{-1}) is never used.
+
+When a function is defined to be total, that totality is with respect to the pre-condition.
+Consider an alternative definition of ‘f’
+
+\begin{lstlisting}
+f: nat * nat +> nat
+f(m,n) == m div n pre n <> 0; 
+\end{lstlisting}
+
+The definition states the function is total for all values of type nat*nat where the second element of the pair is non-zero.
+Therefore, even though the function is not defined for values such as {\tt mk\_(4,0)} it is still a total function.
+On the other hand, the definition
+\begin{lstlisting}
+f: nat * nat +> nat
+f(m,n) == m div n;
+\end{lstlisting}
+is incorrect because it is not defined for values such as {\tt mk\_(4,0)} hence not total.  
+
+
 \end{description}
 
 
