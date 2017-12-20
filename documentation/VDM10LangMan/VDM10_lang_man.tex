@@ -4541,10 +4541,11 @@ Consider an alternative definition of `{\tt f}'
 
 \begin{lstlisting}
 f: nat * nat +> nat
-f(m,n) == m div n pre n <> 0; 
+f(m,n) == m div n
+pre n <> 0; 
 \end{lstlisting}
 
-The definition states the function is total for all values of type nat*nat where the second element of the pair is non-zero.
+The definition states the function is total for all values of type \keyw{nat}{\tt *}\keyw{nat} where the second element of the pair is non-zero.
 Therefore, even though the function is not defined for values such as {\tt mk\_(4,0)} it is still a total function.
 On the other hand, the definition
 \begin{lstlisting}
