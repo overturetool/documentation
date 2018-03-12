@@ -2305,8 +2305,8 @@ context of the specification loaded. For example, to load and interpret a
 VDM-SL specification from a single file called \texttt{shmem.vdmsl},
 the following options would be used:
 
-\begin{lstlisting}
-$ !\textbf{java -jar Overture-x.x.x.jar -vdmsl -i shmem.vdmsl}!
+\begin{lstlisting}[escapechar=@]
+$ @\textbf{java -jar Overture-x.x.x.jar -vdmsl -i shmem.vdmsl}@
 Parsed 1 module in 0.14 secs. No syntax errors
 Warning 5000: Definition 'i' not used in 'M' (shmem.vdmsl) 
   at line 129:7
@@ -2453,13 +2453,13 @@ permitted for some, shown in square brackets):
   interpreter.\index{quit}\index{command!quit}
 \end{description}
 
-\begin{lstlisting}
-> !\textbf{modules}!
+\begin{lstlisting}[escapechar=@]
+> @\textbf{modules}@
 M (default)
 \end{lstlisting}
 
-\begin{lstlisting}
-> !\textbf{state}!
+\begin{lstlisting}[escapechar=@]
+> @\textbf{state}@
 Q4 = [mk_M(<FREE>, 0, 9999)]
 rseed = 87654321
 Memory = mk_Memory(87654321, [mk_M(<FREE>, 0, 9999)],
@@ -2467,20 +2467,20 @@ Memory = mk_Memory(87654321, [mk_M(<FREE>, 0, 9999)],
 Q3 = [mk_M(<FREE>, 0, 9999)]
 \end{lstlisting}
 
-\begin{lstlisting}
-> !\textbf{print rand(100)}!
+\begin{lstlisting}[escapechar=@]
+> @\textbf{print rand(100)}@
 = 71
 Executed in 0.063 secs.
 \end{lstlisting}
 
-\begin{lstlisting}
-> !\textbf{print rand(100)}!
+\begin{lstlisting}[escapechar=@]
+> @\textbf{print rand(100)}@
 = 44
 Executed in 0.0 secs.
 \end{lstlisting}
 
-\begin{lstlisting}
-> !\textbf{state}!
+\begin{lstlisting}[escapechar=@]
+> @\textbf{state}@
 Q4 = [mk_M(<FREE>, 0, 9999)]
 rseed = 566044643
 Memory = mk_Memory(566044643, [mk_M(<FREE>, 0, 9999)],
@@ -2488,13 +2488,13 @@ Memory = mk_Memory(566044643, [mk_M(<FREE>, 0, 9999)],
 Q3 = [mk_M(<FREE>, 0, 9999)]
 \end{lstlisting}
 
-\begin{lstlisting}
-> !\textbf{init}!
+\begin{lstlisting}[escapechar=@]
+> @\textbf{init}@
 Global context initialized
 \end{lstlisting}
 
-\begin{lstlisting}
-> !\textbf{state}!
+\begin{lstlisting}[escapechar=@]
+> @\textbf{state}@
 Q4 = [mk_M(<FREE>, 0, 9999)]
 rseed = 87654321
 Memory = mk_Memory(87654321, [mk_M(<FREE>, 0, 9999)],
@@ -2514,8 +2514,8 @@ Q3 = [mk_M(<FREE>, 0, 9999)]
 %Executed in 0.0 secs.
 %\end{lstlisting}
 
-\begin{lstlisting}
-> !\textbf{env}!
+\begin{lstlisting}[escapechar=@]
+> @\textbf{env}@
 fragments = (M`Quadrant -> nat)
 combine = (M`Quadrant -> M`Quadrant)
 tryBest = (nat ==> nat)
