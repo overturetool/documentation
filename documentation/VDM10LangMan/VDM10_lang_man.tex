@@ -117,7 +117,7 @@
 \lstset{language=VDM++}
 \lstset{alsolanguage=Java}
 % The command below enables you to escape into normal LaTeX mode inside your 
-% VDM chunks by starting with a `!��? character and ending with a `!��?
+% VDM chunks by starting with a `!\UTF{FFFD}\UTF{FFFD}? character and ending with a `!\UTF{FFFD}\UTF{FFFD}?
 \lstset{escapeinside=!!}
 
 %\newcommand{\kw}[1]{{\tt #1}}
@@ -2467,6 +2467,10 @@ measure mk_(m,n)
 \end{lstlisting}
 
 Order is lexicographic ordering on the \keyw{nat} tuple: in each recursive call either the first argument reduces, or the first argument is unchanged and the second argument reduces. Generally an arbitrary tuple can be expressed as the value in a measure clause.
+
+Defining a measure for a function {\tt f} with signature {\tt f : T1 * } \ldots {\tt * Tn -> T} causes creation of a function {\tt measure\_f} with signature
+{\tt measure\_f : T1 * }\ldots{\tt * Tn +> nat} or
+{\tt measure\_f : T1 * }\ldots{\tt * Tn +> nat * }\ldots{\tt * nat}.
 
 \section{Polymorphic Functions}
 
