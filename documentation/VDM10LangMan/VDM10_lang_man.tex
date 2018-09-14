@@ -1739,7 +1739,7 @@ supplied (see the examples below).
 \begin{description}
 \item[Syntax:]
   \Rule{type}{
-    \Ruleref{partial function type} \dsep
+    \Ruleref{function type} \dsep
     \ldots
     }
 
@@ -1756,9 +1756,7 @@ supplied (see the examples below).
 
   \Rule{discretionary type}{\Ruleref{type} \dsepl \Lit{(},\Lit{)}}
 
-\item[Equation:] {\tt F = A +> B}\footnote{Note that the total
-function arrow can only be used in signatures of totally defined
-functions and thus not in a type definition.} or {\tt F = A -> B}%
+\item[Equation:] {\tt F = A +> B} or {\tt F = A -> B}%
 \index{\texttt{->}}\index{\texttt{+>}}
 
 \item[Constructors:] In addition to the traditional function
@@ -2583,7 +2581,7 @@ so \texttt{filter[\keyw{real}](\keyw{lambda} x:\keyw{real} \&
 Functions may also return functions as results. An example of this is
 the function \texttt{fmap}:
 \begin{lstlisting}
-  fmap[@elem]: (@elem -> @elem) -> seq of @elem -> seq of @elem
+  fmap[@elem]: (@elem +> @elem) +> seq of @elem +> seq of @elem
   fmap (f)(l) ==
     if l = []
     then []
@@ -10365,7 +10363,7 @@ The access part is only possible in VDM++ and VDM-RT.
   \Ruleref{set type} \dsep
   \Ruleref{seq type} \dsep
   \Ruleref{map type} \dsep
-  \Ruleref{partial function type} \dsep
+  \Ruleref{function type} \dsep
   \Ruleref{type name} \dsep
   \Ruleref{type variable}
   }
