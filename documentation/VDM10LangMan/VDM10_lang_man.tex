@@ -3296,7 +3296,7 @@ print_Const(mk_Const(c)) ==
     }
 
   \Rule{sequence comprehension}{
-    \Lit{[}, \Ruleref{expression}, \Lit{|}, \Ruleref{bind list}, \lfeed
+    \Lit{[}, \Ruleref{expression}, \Lit{|}, \Ruleref{set bind} \dsepl \Ruleref{seq bind}, \lfeed
     \OptPt{\Lit{\char'046}, \Ruleref{expression}}, \Lit{]}
     }
 
@@ -3306,7 +3306,7 @@ print_Const(mk_Const(c)) ==
     \Lit{,}, \Lit{\Range},
     \Lit{,},
     \Ruleref{expression}, \Lit{)}
-    }
+  }
 
 \item[Semantics:] A {\it sequence enumeration} has the form:
   \begin{lstlisting}
@@ -3320,10 +3320,8 @@ print_Const(mk_Const(c)) ==
   \begin{lstlisting}
     [e | pat in seq S & P]
   \end{lstlisting}
-  where the expression \texttt{e} will use the identifiers from the
-  pattern \texttt{pat} (normally this pattern will simply be an
-  identifier, but the only real requirement is that exactly one
-  pattern identifier must be present in the pattern). \texttt{S} is a
+  where the expression \texttt{e} may refer to the identifiers introduced by the
+  one pattern \texttt{pat}. \texttt{S} is a
   sequence of values. It constructs a sequence by evaluating the
   expression \texttt{e} on all the bindings for which the predicate
   \texttt{P} evaluates to true, preserving the order of elements in
@@ -11415,7 +11413,7 @@ For both VDM++ and VDM-RT, we can define:
   }
 
 \Ruledef{sequence comprehension}{
-  \Lit{[}, \Ruleref{expression}, \Lit{|}, \Ruleref{bind list}, \lfeed
+  \Lit{[}, \Ruleref{expression}, \Lit{|}, \Ruleref{set bind} \dsepl \Ruleref{seq bind}, \lfeed
   \OptPt{\Lit{\&}, \Ruleref{expression}},
   \Lit{]}
   }
