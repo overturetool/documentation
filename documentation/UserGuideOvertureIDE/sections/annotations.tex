@@ -1,5 +1,5 @@
 
-\chapter{Annotations}\label{sec:annotations}
+\chapter{Model Annotations}\label{sec:annotations}
 
 \section{Overview}
 
@@ -121,7 +121,7 @@ $ !\ldots!
 \end{lstlisting}
 
 
-\section{Standard Annotations}
+\section{Standard Annotations}\label{sec:standard-annotations}
 
 Overture includes some standard annotations. They are provided in a
 separate jar file which needs to be on the classpath when Overture is
@@ -203,9 +203,18 @@ the arguments and then passes the values generated to
 \lstinline[language=VDM++]|IO`printf|, the format string can only
 contain \%s converters, even if the values being printed are numeric.
 
-% \section{Creating New Annotations}
+\section{Creating New Annotations}
 
-
+It is possible for users to add their own annotations although this
+requires some knowledge of the Overture internals. Specifically how to
+traverse Overture's internal representation of the model, referred to
+as the abstract syntax tree. For more information about tree traversal
+using visitors, the reader is referred to the Overture Visitor
+Guide~\cite{VisitorGuide}. Moreover, Overture provides several
+examples to support the creation of new annotations such as the
+standard annotations described above~\cite{AnnotationsProvided} and
+other more ``exotic'' examples that (say) require extending the VDM
+parser~\cite{AnnotationsExamples}.
 
 %%% Local Variables:
 %%% mode: latex
