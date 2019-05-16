@@ -40,7 +40,7 @@ operations
 \noindent Or the value of variables can be traced during execution as
 follows:
 
-\begin{lstlisting}[language=VDM++, frame=tlbr]
+\begin{lstlisting}[language=VDM++, frame=tlbr, label={lst:annotations-trace-ex}]
 functions
   add: nat * nat +> nat
   add(a, b) ==
@@ -97,29 +97,32 @@ behaviour, this is strongly discouraged.
 
 \section{Loading and Checking}
 
-A global flag can be set by an \texttt{-annotations} command line
-argument, or the \texttt{set} command. This flag controls whether the
-comments in a specification are parsed for annotations. It defaults to
-false, so unless the command line switch or \texttt{set} command is
-used, no annotation processing will be performed. If the set command
-is used from within Overture, the specification must be reloaded to
-parse the comments:
+In order to load and check annotations, the jar file containing the
+annotations must be added to the classpath. As an example of this, we
+will assume the existence of a file \lstinline[style=tool]|test.vdmsl|
+that contains the \lstinline[language=VDM++]|@Trace| annotated
+\lstinline[language=VDM++]|add| function in
+Section~\ref{sec:annotations-syntax}. Now, to load annotations and
+trace the parameters of this function we do as follows:
 
-\begin{lstlisting}[style=tool,escapechar=!]
-$ !\textbf{set}!
-Preconditions are enabled
-Postconditions are enabled
-Invariants are enabled
-Dynamic type checks are enabled
-!Pre/post/inv! exceptions are disabled
-Measure checks are enabled
-Annotations are disabled
-$ !\textbf{set annotations on}!
-Specification must now !be! re-parsed (reload)
-$ !\textbf{reload}!
+\begin{lstlisting}[style=tool,breaklines=true,escapechar=!,frame=tb,label={lst:annotations-cli-ex}]
+$ !\textbf{java -cp "Overture.jar:annotations.jar" org.overture.interpreter.VDMJ -vdmsl -i test.vdmsl}!
+
+!Parsed 1 module in 0.055 secs. No syntax errors!
+!Type checked 1 module in 0.055 secs. No type errors!
+!Initialized 1 module in 0.048 secs.!
+Interpreter started
+> p add(1,2)
+!Trace: in 'DEFAULT' (test.vdmsl) at line 4:9, a = 1!
+!Trace: in 'DEFAULT' (test.vdmsl) at line 4:9, b = 2!
+= 3
+!Executed in 0.028 secs.!
 $ !\ldots!
 \end{lstlisting}
 
+An annotation will be checked whenever it is available on the
+classpath. So the easiest way to disable checking of annotations is
+simply to remove the annotations jar from the classpath.
 
 \section{Standard Annotations}\label{sec:standard-annotations}
 
@@ -142,7 +145,7 @@ definition. Lastly, if there is no ``inherited'' definition that this
 definition overrides, an error is
 raised, e.g.:\\
 
-\noindent \texttt{Error 3363: Definition does not @Override superclass
+\noindent \texttt{Error 6004: Definition does not @Override superclass
   in 'A'\\ (test.vpp) at line 3:9}\\
 
 \noindent The annotation has no effect on the interpreter or the PO
@@ -183,7 +186,7 @@ applied to a class/module, a definition, a statement or an
 expression. The typechecker checks
 that the annotation has no arguments passed, e.g.:\\
 
-\noindent \texttt{Error 3361: @NoPOG has no arguments in 'A'
+\noindent \texttt{Error 6000: @NoPOG has no arguments in 'A'
   (test.vdm) at line 9:13}\\
 
 The PO generator clears the list of proof obligations generated for
