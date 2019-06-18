@@ -1,0 +1,225 @@
+
+\chapter{Model Annotations}\label{sec:annotations}
+
+\section{Overview}
+
+Annotations were introduced in Overture version 2.7.0 as a means to
+allow a specifier to affect the tool’s behaviour without affecting the
+meaning of the specification. The idea is similar to the notion of
+annotations in Java, which can be used to affect the Java compiler,
+but do not alter the runtime behaviour of a program. Overture provides
+some standard annotations, but the intent is that specifiers can
+create new annotations and add them to the Overture system
+easily. Note that this feature is currently \emph{limited to the
+  Overture command-line interface}.
+
+\section{Syntax}\label{sec:annotations-syntax}
+
+Annotations are added to a specification either as block comments or
+one-line comments. This is so that other VDM tools will not be
+affected by the addition of annotations, and emphasises the idea that
+annotations do not alter the meaning of a specification. An annotation
+must be present at the start of a comment, and has the following
+default syntax:
+
+\begin{description}
+\item `@', identifier, [ `(', expression list, `)' ]
+\end{description}
+
+\noindent So for example, an operation in a VDM++ class could be
+annotated as follows:
+
+\begin{lstlisting}[language=VDM++, frame=tlbr,escapechar=!]
+class A
+operations
+  -- @Override
+  public add: nat * nat ==> nat
+  add(a, b) == !\ldots!
+\end{lstlisting}
+
+\noindent Or the value of variables can be traced during execution as
+follows:
+
+\begin{lstlisting}[language=VDM++, frame=tlbr, label={lst:annotations-trace-ex}]
+functions
+  add: nat * nat +> nat
+  add(a, b) ==
+    /* @Trace(a, b) */ a + b;
+\end{lstlisting}
+
+\section{Location}
+
+Annotations are always located next to another syntactic category,
+even if they do not affect the behaviour or meaning of that
+construct. In the examples above, the
+\lstinline[language=VDM++]|@Override| annotation applies to the
+definition of the add operation, and the
+\lstinline[language=VDM++]|@Trace| annotation applies to the
+expression \lstinline[language=VDM++]|a + b|.
+
+Specific annotations may limit where they can be applied (for example,
+\lstinline[language=VDM++]|@Override| only makes sense for operations
+and functions in VDM++ specifications), but in general annotations can
+be applied to the following:
+
+\begin{itemize}
+  \item classes or modules.
+  \item definitions within a class or module.
+  \item expressions within a definition.
+  \item statements within an operation body.
+\end{itemize}
+
+In each case, the annotation must appear in a comment, by itself,
+before the construct concerned. Multiple annotations can be applied to
+the same construct, and may be interleaved with other textual
+comments, but each annotation must appear in its own comment.
+
+\section{Tool Effects}
+
+Annotations can be used to affect the following aspects of Overture's
+operation:
+
+\begin{itemize}
+  \item The parser (for example) to enable or disable new language
+  features.
+  \item The type checker (for example) to check for overrides or
+  suppress warnings
+  \item The interpreter (for example) to trace the execution path or
+  variables' values
+  \item The PO generator to (for example) skip obligations for an area
+  of specification.
+\end{itemize}
+
+Note that none of these examples affect the meaning of the
+specification, only the operation of the tool. Although it would be
+possible to create an annotation to affect a specification's
+behaviour, this is strongly discouraged.
+
+\section{Loading and Checking}
+
+In order to load and check annotations, the jar file containing the
+annotations must be added to the classpath. As an example of this, we
+will assume the existence of a file \lstinline[style=tool]|test.vdmsl|
+that contains the \lstinline[language=VDM++]|@Trace| annotated
+\lstinline[language=VDM++]|add| function in
+Section~\ref{sec:annotations-syntax}. Now, to load annotations and
+trace the parameters of this function we do as follows:
+
+\begin{lstlisting}[style=tool,breaklines=true,escapechar=!,frame=tb,label={lst:annotations-cli-ex}]
+$ !\textbf{java -cp "Overture.jar:annotations.jar" org.overture.interpreter.VDMJ -vdmsl -i test.vdmsl}!
+
+!Parsed 1 module in 0.055 secs. No syntax errors!
+!Type checked 1 module in 0.055 secs. No type errors!
+!Initialized 1 module in 0.048 secs.!
+Interpreter started
+> p add(1,2)
+!Trace: in 'DEFAULT' (test.vdmsl) at line 4:9, a = 1!
+!Trace: in 'DEFAULT' (test.vdmsl) at line 4:9, b = 2!
+= 3
+!Executed in 0.028 secs.!
+$ !\ldots!
+\end{lstlisting}
+
+An annotation will be checked whenever it is available on the
+classpath. So the easiest way to disable checking of annotations is
+simply to remove the annotations jar from the classpath.
+
+\section{Standard Annotations}\label{sec:standard-annotations}
+
+Overture includes some standard annotations. They are provided in a
+separate jar file which needs to be on the classpath when Overture is
+started. If the jar is not on the classpath, annotations will be
+silently ignored. The standard annotations perform the following
+processing:
+
+\subsection{@Override}
+
+This annotation is similar to the Java
+\lstinline[language=Java]|@Override| annotation, which is used to
+verify that a Java method overrides a superclass method, raising an
+error if not. In Overture, the override applies to operations or
+functions in a VDM++ class. The typecheck of the annotation verifies
+that the dialect is VDM++, that the annotation has no arguments, and
+that it is applied to either an operation or a function
+definition. Lastly, if there is no ``inherited'' definition that this
+definition overrides, an error is
+raised, e.g.:\\
+
+\noindent \texttt{Error 6004: Definition does not @Override superclass
+  in 'A'\\ (test.vpp) at line 3:9}\\
+
+\noindent The annotation has no effect on the interpreter or the PO
+generator.
+
+\subsection{@Trace}
+
+The \lstinline[language=VDM++]|@Trace| annotation is intended to trace
+the flow of control in the interpreter, either to note that a
+particular point in the execution has been reached, or to log the
+values of variables at that location. The typechecker checks that the
+annotation is applied to a statement or an expression only. The check
+also makes sure that any arguments supplied are simple variable names
+and refer to variables that are in scope. When the interpreter is
+running it either just prints out the current location to stderr, or
+it prints the location and
+``\textless{}name{}\textgreater{}={}\textless{}value{}\textgreater''
+for each argument (i.e.\ each variable name traced). For example, the
+specification in Section~\ref{sec:annotations-syntax} produces the
+following:
+
+\begin{lstlisting}[style=tool,escapechar=!]
+$ p !\textbf{add(1,2)}!
+Trace: !in! 'A' (test.vdm) at line 9:13, A`a = 1
+Trace: !in! 'A' (test.vdm) at line 9:13, A`b = 2
+= 3
+Executed !in! 0.007 secs.
+\end{lstlisting}
+
+\noindent The annotation has no effect on the execution values or the
+PO generator.
+
+\subsection{@NoPOG}
+
+The \lstinline[language=VDM++]|@NoPOG| annotation is intended to
+suppress PO generation over a region of the specification. It can be
+applied to a class/module, a definition, a statement or an
+expression. The typechecker checks
+that the annotation has no arguments passed, e.g.:\\
+
+\noindent \texttt{Error 6000: @NoPOG has no arguments in 'A'
+  (test.vdm) at line 9:13}\\
+
+The PO generator clears the list of proof obligations generated for
+the annotated element (class/module, definition, statement or
+expression). The annotation has no effect on the interpreter.
+
+\subsection{@Printf}
+
+The \lstinline[language=VDM++]|@Printf| annotation is almost identical
+to the \lstinline[language=VDM++]|IO`printf| library operation, except
+that as an annotation it can be used in functions as well as
+operations, and the arguments do not have to be presented as a
+sequence literal. The typecheck checks that the annotation has a
+string as its first argument. Execution of the annotation evaluates
+the arguments and then passes the values generated to
+\lstinline[language=Java]|System.out.printf|. Note that, as with
+\lstinline[language=VDM++]|IO`printf|, the format string can only
+contain \%s converters, even if the values being printed are numeric.
+
+\section{Creating New Annotations}
+
+It is possible for users to add their own annotations although this
+requires some knowledge of the Overture internals. Specifically how to
+traverse Overture's internal representation of the model, referred to
+as the abstract syntax tree. For more information about tree traversal
+using visitors, the reader is referred to the Overture Visitor
+Guide~\cite{VisitorGuide}. Moreover, Overture provides several
+examples to support the creation of new annotations such as the
+standard annotations described above~\cite{AnnotationsProvided} and
+other more ``exotic'' examples that (say) require extending the VDM
+parser~\cite{AnnotationsExamples}.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../OvertureIDEUserGuide"
+%%% End:
