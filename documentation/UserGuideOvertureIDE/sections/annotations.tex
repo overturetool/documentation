@@ -74,6 +74,32 @@ before the construct concerned. Multiple annotations can be applied to
 the same construct, and may be interleaved with other textual
 comments, but each annotation must appear in its own comment.
 
+Note that an annotation in an expression effectively acts as an
+operator which has a high binding precedence. So in the
+\lstinline[language=VDM++]|@Trace| example above, the annotation binds
+to the \lstinline[language=VDM++]|a| variable sub- expression, not
+\lstinline[language=VDM++]|a + b|. This makes no difference with
+\lstinline[language=VDM++]|@Trace|, but
+\lstinline[language=VDM++]|@NoPOG| and
+\lstinline[language=VDM++]|@OnFail| apply to a specific sub-expression
+and they should be used with bracketed expressions to make that
+clear. For example:
+
+\begin{lstlisting}[language=VDM++, frame=tlbr]
+divide: nat * nat +> real
+divide(p, q) ==
+/* @NoPOG */ (p/q);
+\end{lstlisting}
+
+Without the brackets around \lstinline[language=VDM++]|p/q| you
+would get the warning shown below, and the
+\lstinline[language=VDM++]|@NoPOG| would only apply to the
+\lstinline[language=VDM++]|p|, which would therefore
+still generate a PO for the division operator.\\
+
+\noindent \texttt{Warning 5030: Annotation is not followed by
+  bracketed\\ sub-expression}\\
+
 \section{Tool Effects}
 
 Annotations can be used to affect the following aspects of Overture's
@@ -205,6 +231,53 @@ the arguments and then passes the values generated to
 \lstinline[language=Java]|System.out.printf|. Note that, as with
 \lstinline[language=VDM++]|IO`printf|, the format string can only
 contain \%s converters, even if the values being printed are numeric.
+
+\subsection{@OnFail}
+
+The \lstinline[language=VDM++]|@OnFail| annotation is virtually the
+same as the \lstinline[language=VDM++]|@Printf| annotation, except
+that it can only be used to annotate boolean expressions --- and the
+expression that follows should be bracketed to make it clear. The
+annotation will only print the output if the evaluation of the
+expression is false. This is useful to add at various points in
+complex boolean expressions, such as large pre/postconditions or type
+invariants. For example:
+
+\begin{lstlisting}[language=VDM++, frame=tlbr, escapechar=!]
+inv !\textbf{mk\_}!R(p, q) ==
+  -- @OnFail("p=%s, should be <10", p)
+  (p < 10)
+  -- @OnFail("p=%s, should be in PSET", p)
+  and (p in set PSET)
+  -- @OnFail("q=%s, should be >10", q)
+  and (q > 10)
+  -- @OnFail("q=%s, should be in QSET", q)
+  and (q in set QSET);
+\end{lstlisting}
+
+If this type invariant is violated, the error message indicates that
+the error is where the invalid value is generated (the console, here),
+rather than where in the invariant that the boolean expression
+fails. The \lstinline[language=VDM++]|@OnFail| annotations catch the
+failing sub-clause and print a helpful message:
+
+\begin{lstlisting}[style=tool,escapechar=!, breaklines=true]
+> p mk_R(10,2)
+p=10, should !be! <10 !in! 'DEFAULT' (test.vdm) at line 10:13
+Error 4079: Type invariant violated !by! mk_R arguments !in! 'DEFAULT' (console)
+
+> p mk_R(5,10)
+p=5, should !be! !in! PSET !in! 'DEFAULT' (test.vdm) at line 13:13
+Error 4079: Type invariant violated !by! mk_R arguments !in! 'DEFAULT' (console)
+
+> p mk_R(1,2)
+q=2, should !be! >10 !in! 'DEFAULT' (test.vdm) at line 16:13
+Error 4079: Type invariant violated !by! mk_R arguments !in! 'DEFAULT' (console)
+
+> p mk_R(1,15)
+q=15, should !be! !in! QSET !in! 'DEFAULT' (test.vdm) at line 19:13
+Error 4079: Type invariant violated !by! mk_R arguments !in! 'DEFAULT' (console)
+\end{lstlisting}
 
 \section{Creating New Annotations}
 
