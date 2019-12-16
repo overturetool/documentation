@@ -12813,6 +12813,11 @@ The grouping of operands of the binary operators are as follows:
 \item[Constructors:] No grouping, as it has no meaning.
 \end{list}
 
+Note: the '{\tt =}' operator is in the Relations family, which does not have specified grouping.
+However, it is possible to construct a meaningful expression with a chain of '{\tt =}' operators comparing Boolean values, such as {\tt true = 3 = 3}. This is parsed as {\tt true = (3 = 3)} -- i.e. the '{\tt =}' operator has right grouping.
+
+The '{\tt **}' operator is always treated as an iterator for the purpose of grouping, and is therefore a member of the Combinators family and has right grouping.
+
 \section{The Type Operators}\label{preceedence}
 
 Type operators have their own separate precedence ordering, as follows:
