@@ -33,7 +33,7 @@ functions
   formatNat(n) == if n < 10
                   then [toChar(n)]
                   else formatNat(n div 10) ^ [toChar(n mod 10)]
-  measure size1;
+  measure n;
 
   -- Convert a character digit to the corresponding natural number.
   fromChar: Char`Digit +> nat
@@ -48,7 +48,7 @@ functions
 
   -- Format a natural number as a string with leading zeros up to a specified length.
   zeroPad: nat * nat1 +> seq of Char`Digit
-  zeroPad(n,w) == Seq`padLeft[char](formatNat(n),'0',w);
+  zeroPad(n,w) == Seq`padLeft[Char`Digit](formatNat(n),'0',w);
 
   -- The following functions wrap primitives for convenience, to allow them for example to
   -- serve as function arguments.
@@ -61,9 +61,5 @@ functions
   mult: real * real +> real
   mult(m,n) == m*n;
 
-  -- Measure functions.
-
-  size1: nat +> nat
-  size1(n) == n;
 
 end Numeric

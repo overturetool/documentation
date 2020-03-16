@@ -166,14 +166,14 @@ IsSymmetrical(R)==
  pre n>0;
 
   
- max_set: set1 of int -> int
+ maxset: set1 of int -> int
  -- returns maximum of set 
- max_set(S) == 
+ maxset(S) == 
    let x in set S
    in
      if card S = 1 
      then x
-     else max2(x,max_set(S\ {x}));
+     else max2(x,maxset(S\ {x}));
 
 
  max2: int * int -> int
@@ -191,7 +191,7 @@ Warshall(Q) ==
  (dcl i: nat1, j: nat1, k: nat1, R: BinRel;
    
  R := Q;
-   let n = max_set (field(R))
+   let n = maxset (field(R))
      in
   for  k = 1 to n do
     for  i = 1 to n do 

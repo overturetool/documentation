@@ -10,7 +10,7 @@ imports from Seq all
 exports types Upper
               Lower
               Letter
-              Digit
+              struct Digit 
               Octal
               Hex
               AlphaNum
@@ -26,7 +26,8 @@ exports types Upper
               TextLower
         values SP, TB, CR, LF : char
                WHITE_SPACE, UPPER, LOWER, DIGIT, OCTAL, HEX : set of char
-               UPPERS, LOWERS, DIGITS, OCTALS, HEXS: seq of char
+               UPPERS, LOWERS, OCTALS, HEXS: seq of char
+               DIGITS : seq of Digit
         functions toLower: Upper +> Lower
                   toUpper: Lower +> Upper
 
