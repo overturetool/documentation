@@ -14,6 +14,6 @@ in 1999 in connection with FM'99.
 #PRE_CHECKS=true
 #DYNAMIC_TYPE_CHECKS=true
 #SUPPRESS_WARNINGS=false
-#ENTRY_POINT= DEFAULT`TestCash()
+#ENTRY_POINT= DEFAULT`IdealHeart()
 #EXPECTED_RESULT=NO_ERROR_TYPE_CHECK
 #******************************************************
