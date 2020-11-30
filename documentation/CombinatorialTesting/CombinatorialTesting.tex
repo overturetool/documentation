@@ -1,0 +1,337 @@
+% Overture Combinatorial Testing Guidelines
+\documentclass{overturerepchap}
+\usepackage{url}
+\usepackage{graphics}
+\usepackage{times}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{longtable} % ,multirow
+\usepackage{vdmsl-2e}
+\usepackage{makeidx}
+\usepackage{hyperref}
+\usepackage{ifthen}
+\usepackage{makeidx}
+\usepackage{fancyhdr}
+
+\newcommand{\nonstandard}[1]{}
+\newcommand{\vdmtools}{VDMTools}
+\newcommand{\vdmstyle}[1]{\texttt{#1}}
+\newcounter{exerciseno}
+\newcommand{\vdmsl}{VDM-SL}
+\newcommand{\vdmpp}{VDM++}
+\newcommand{\Index}[1]{#1\index{#1}}
+
+%\newcommand{\Exercise}[1]{%
+%    \textbf{Exercise \thechapter.\theexerciseno}
+%   \refstepcounter{exerciseno} #1 $\Box$\\ }%}
+%\newcommand{\initexercise}{\setcounter{exerciseno}{0}}
+%\newcounter{exerciseno}
+\newcommand{\MYEQUIV}{$\equiv$}
+\newenvironment{TypeSemantics}{\begin{longtable}[r]{|p{3.5cm}|p{9cm}|}\hline%
+  Operator Name & Semantics Description \\ \hline\hline \endhead}%
+  {\hline\end{longtable}}
+
+\newcommand\thebookexercise{\thechapter.\arabic{exerciseno}}
+\newenvironment{myexercise}{\par
+  \refstepcounter{exerciseno}%
+  \indent\textbf{Exercise\ \thebookexercise}\enskip}{$\Box$\\
+}
+\newenvironment{myhardexercise}{\par
+  \refstepcounter{exerciseno}%
+  \indent\textbf{Exercise\ \thebookexercise $\star$}\enskip}{$\Box$\\
+}
+\newcommand{\initexercise}{\setcounter{exerciseno}{0}}
+%\newenvironment{mysolution}{
+%} %% This will be replaced by a perl script extracting the solutions
+  %% and inserting them automatically into the solutions chapter.
+\newcommand{\insertfig}[4]{ % Filename, epsheight, epswidth, caption,  label
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=#2]{#1}
+\end{center}
+\caption{{\em #3}} #4
+\end{figure}
+}
+
+\newcommand{\insertfignw}[3]{ % Filename, caption,  label
+\begin{figure}[h]
+\begin{center}
+\includegraphics{#1}
+\end{center}
+\caption{{\em #2}} #3
+\end{figure}
+}
+
+\newcommand{\insertfignwrot}[3]{ % Filename, caption,  label
+\begin{figure}[h]
+\begin{center}
+\scalebox{1}%
+{\rotatebox{270}{%
+\includegraphics{#1}}}
+\end{center}
+\caption{{\em #2}} #3
+\end{figure}
+}
+
+%\newcommand{\insertcommentedvdm*}[2]{}
+  %% This macro is identified by perl script which will move the
+  %% parameter to the solutions chapter.
+% definition of VDM++, JavaCC, JJTree, JTB, ANTLR and SableCC for listings
+\include{customlangdef}
+% define the layout for listings
+\lstdefinestyle{tool}{basicstyle=\ttfamily,
+                         frame=trBL,
+			 showstringspaces=false,
+			 frameround=ffff,
+			 framexleftmargin=0mm,
+			 framexrightmargin=0mm}
+\lstdefinestyle{mystyle}{basicstyle=\ttfamily,
+                         frame=trBL,
+%                         numbers=left,
+%			 gobble=0,
+			 showstringspaces=false,
+%			 linewidth=\textwidth,
+			 frameround=fttt,
+			 aboveskip=5mm,
+			 belowskip=5mm,
+			 framexleftmargin=0mm,
+			 framexrightmargin=0mm}
+%\lstdefinestyle{mystyle}{basicstyle=\sffamily\small,
+%			 frame=tb,
+%                         numbers=left,
+%			 gobble=0,
+%			 showstringspaces=false,
+%			 linewidth=345pt,
+%			 frameround=ffff,
+%			 framexleftmargin=8mm,
+%			 framexrightmargin=8mm,
+%			 framextopmargin=1mm,
+%			 framexbottommargin=1mm,
+%			 aboveskip=7mm,
+%			 belowskip=5mm,
+%			 xleftmargin=10mm,}
+
+\lstset{style=mystyle}
+\lstset{language=VDM++}
+\lstset{alsolanguage=Java}
+% The command below enables you to escape into normal LaTeX mode inside your 
+% VDM chunks by starting with a `!\UTF{FFFD}\UTF{FFFD}? character and ending with a `!\UTF{FFFD}\UTF{FFFD}?
+\lstset{escapeinside=!!}
+
+%\newcommand{\kw}[1]{{\tt #1}}
+
+%%%%%%%%%%%%%%%%%% Commands for bibtex %%%%%%%%%%%%%%%%%%%%%%%
+%************************************************************************
+%                                                                       *
+%       Bibliography and Terminology supporting commands                *
+%                                                                       *
+%************************************************************************
+
+\newcommand{\bthisbibliography}[1]{\chapter*{References}%
+   \begin {list} {}%
+     {\settowidth {\labelwidth} {[#1]XX}%
+      \setlength {\leftmargin} {\labelwidth}%
+      \addtolength{\leftmargin} {\labelsep}%
+      \setlength {\parsep} {1ex}%
+      \setlength {\itemsep} {2ex}%
+     }
+  }
+\newcommand{\ethisbibliography}{\end{list}}
+\newcommand{\refitem}[2]
+  {\bibitem[#1]{#2}}
+
+% Requirements environment
+\newenvironment{reqs}{%
+\begin{enumerate}
+%\renewcommand{\labelenumi}{\textbf{R\theenumi}}
+\renewcommand{\theenumi}{\textbf{R\arabic{enumi}}}
+}{%
+\end{enumerate}}
+
+%\newcommand{\Exercise}[1]{%
+%    \textbf{Exercise \thechapter.\theexerciseno}
+%   \refstepcounter{exerciseno} #1 $\Box$\\ }%}
+%\newcommand{\initexercise}{\setcounter{exerciseno}{0}}
+\newcommand{\Lit}[1]{`{\tt #1}\Quote}
+\newcommand{\Rule}[2]{
+  \begin{quote}\begin{tabbing}
+    #1\index{#1}\ \ \= = \ \ \= #2  ; %    Adds production rule to index
+
+  \end{tabbing}\end{quote}
+  }
+\newcommand{\RuleTarget}[1]{\hypertarget{rule:#1}{}}
+\newcommand{\Ruledef}[2]
+{
+  \RuleTarget{#1}\Rule{#1}{#2}%
+  }
+\newcommand{\Ruleref}[1]{
+  \hyperlink{rule:#1}{#1}}
+\newcommand{\SeqPt}[1]{\{\ #1\ \}}
+\newcommand{\lfeed}{\\ \> \>}
+\newcommand{\dsepl}{\ $|$\ }
+\newcommand{\dsep}{\\ \> $|$ \>}
+\newcommand{\Lop}[1]{`{\bf\ttfamily #1}\Quote}
+\newcommand{\blankline}{\vspace{\baselineskip}}
+\newcommand{\Brack}[1]{(\ #1\ )}
+\newcommand{\nmk}{\footnotemark}
+\newcommand{\ntext}[1]{\footnotetext{{\bf Note: } #1}}
+\newlength{\kwlen}
+\newcommand{\Keyw}[1]{\settowidth{\kwlen}{\tt
+    #1}\makebox[\kwlen][l]{{\bf\ttfamnily #1}}}
+\newcommand{\keyw}[1]{{\bf\ttfamily #1}}
+\newcommand{\id}[1]{{\tt #1}}
+\newcommand{\metaiv}[1]{\begin{lstlisting}\input{#1}\end{lstlisting}}
+
+\newcommand{\OptPt}[1]{[\ #1\ ]}
+\newcommand{\MAP}[2]{\keyw{map }#1\keyw{ to }#2}
+\newcommand{\INMAP}[2]{\keyw{inmap }#1\keyw{ to }#2}
+\newcommand{\SEQ}[1]{\keyw{seq of }#1}
+\newcommand{\NSEQ}[1]{\keyw{seq1 of }#1}
+\newcommand{\SET}[1]{\keyw{set of }#1}
+\newcommand{\SETONE}[1]{\keyw{set1 of }#1}
+\newcommand{\PROD}[2]{#1 * #2}
+\newcommand{\TO}[2]{#1 $\To$ #2}
+\newcommand{\FUN}[2]{#1 $\To$ #2}
+\newcommand{\PUBLIC}{\ifthenelse{\boolean{VDMpp}}{public\mbox{}}{\mbox{}}}
+\newcommand{\PRIVATE}{\ifthenelse{\boolean{VDMpp}}{private}{\mbox{}}}
+\newcommand{\PROTECTED}{\ifthenelse{\boolean{VDMpp}}{protected}{\mbox{}}}
+
+\newcommand{\experience}[1]{%
+\begin{center}
+\fbox{
+\begin{minipage}[t]{.8\textwidth}
+#1
+\end{minipage}}
+\end{center}}
+
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[LO]{\leftmark}
+\fancyhead[RE]{VDM-10 Language Manual}
+\fancyhead[RO,LE]{\resizebox{0.05\textwidth}{!}{\includegraphics{overture}}}
+\fancyfoot[C]{\thepage}
+\makeindex
+
+\begin{document}
+
+\title{Guidelines for using VDM Combinatorial Testing Features}
+\author{Nick Battle\\
+            Peter Gorm Larsen}
+
+\date{December 2020}
+\reportno{TR-005}
+
+\pagenumbering{roman}
+\maketitle
+
+
+{\textbf{Document history}}
+
+\begin{tabular}{|l|l|l|l|l|}\hline
+Month   & Year & Version & Version of Overture.exe & Comment \\ \hline
+December   & 2010 &         & 3.0.2   & Initial version\\ \hline
+\end{tabular}
+
+%\addtocounter{page}{2}
+\tableofcontents
+\newpage
+\mbox{}
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\chapter{Introduction}
+
+
+\chapter{Combinatorial Testing Syntax}
+\label{chap:CTsyntax}
+
+\Ruledef{traces definitions}{\Lop{traces},
+   \OptPt{\Ruleref{named trace}, \SeqPt{\Lit{;}, \Ruleref{named trace}}}
+}
+
+\Ruledef{named trace}{\Ruleref{identifier},
+  \SeqPt{\Lit{/}, \Ruleref{identifier}},
+  \Lit{:},\Ruleref{trace definition list}
+}
+
+\Ruledef{trace definition list}{
+  \Ruleref{trace definition term},
+  \SeqPt{\Lit{;}, \Ruleref{trace definition term}}
+}
+
+\Ruledef{trace definition term}{
+  \Ruleref{trace definition}, \SeqPt{\Lit{|}, \Ruleref{trace definition}}
+}
+
+\Rule{trace definition}{
+  \Ruleref{trace binding definition} \dsep
+  \Ruleref{trace repeat definition}
+}
+
+\Ruledef{trace binding definition}{
+  \Ruleref{trace let def binding} \dsep
+  \Ruleref{trace let best binding}
+}
+
+\Ruledef{trace let def binding}{
+  \Lop{let}, \Ruleref{local definition},
+  \SeqPt{ \Lit{,}, \Ruleref{local definition}}, \lfeed
+  \Lop{in}, \Ruleref{trace definition}
+}
+
+\Ruledef{trace let best binding}{
+  \Lop{let}, \Ruleref{multiple bind},
+  \OptPt{\Lop{be}, \Lop{st}, \Ruleref{expression}}, \lfeed
+  \Lop{in}, \Ruleref{trace definition}
+}
+
+\Ruledef{trace repeat definition}{
+  \Ruleref{trace core definition},
+  \OptPt{\Ruleref{trace repeat pattern}}
+}
+
+\Ruledef{trace repeat pattern}{
+  \Lit{*} \dsep
+  \Lit{+} \dsep
+  \Lit{?} \dsep
+  \Lit{\{}, \Ruleref{numeric literal}, \OptPt{\Lit{,}, \Ruleref{numeric literal}, \Lit{\}}}
+}
+
+\Rule{trace core definition}{
+  \Ruleref{trace apply expression} \dsep
+  \Ruleref{trace concurrent expression} \dsep
+  \Ruleref{trace bracketed expression}
+}
+
+\Rule{trace apply expression}{
+  \Ruleref{call statement}
+}
+
+\Rule{trace concurrent expression}{
+  \Lit{||}, \Lit{(}, \Ruleref{trace definition}, \lfeed
+  \Lit{,}, \Ruleref{trace definition}, \lfeed
+  \SeqPt{\Lit{,}, \Ruleref{trace definition}}, \Lit{)}
+}
+
+\Ruledef{trace bracketed expression}{
+  \Lit{(}, \Ruleref{trace definition list}, \Lit{)}
+}
+
+\chapter{Combinatorial Testing Patterns}
+\label{chap:patterns}
+
+\chapter{Combinatorial Testing Examples}
+\label{chap:examples}
+
+
+\bibliographystyle{newalpha}
+
+\bibliography{../bib/dan}
+
+\end{document}
+
+
