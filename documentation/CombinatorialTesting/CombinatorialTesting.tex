@@ -728,11 +728,48 @@ All tests passed
 \end{verbatim}
 \normalsize
 
-As well as defining a variable value from a set, a variable can be used to
+If two variables should take values from the same set of values, it is possible
+to use a \texttt{multiple bind} in a trace, but not a \texttt{bind list}. For
+example:
+
+\small
+\begin{verbatim}
+traces
+    T1:
+        let a, b in set {1, 2, 3} in
+            ( obj.inc(a); obj.dec(b) );
+
+> runtrace Tester`T1
+Generated 9 tests
+Test 1 = obj.inc(1); obj.dec(1)
+Result = [1, 0, PASSED]
+Test 2 = obj.inc(2); obj.dec(1)
+Result = [2, 1, PASSED]
+Test 3 = obj.inc(3); obj.dec(1)
+Result = [3, 2, PASSED]
+Test 4 = obj.inc(1); obj.dec(2)
+Result = [1, -1, PASSED]
+Test 5 = obj.inc(2); obj.dec(2)
+Result = [2, 0, PASSED]
+Test 6 = obj.inc(3); obj.dec(2)
+Result = [3, 1, PASSED]
+Test 7 = obj.inc(1); obj.dec(3)
+Result = [1, -2, PASSED]
+Test 8 = obj.inc(2); obj.dec(3)
+Result = [2, -1, PASSED]
+Test 9 = obj.inc(3); obj.dec(3)
+Result = [3, 0, PASSED]
+Executed in 0.061 secs. 
+All tests passed
+\end{verbatim}
+\normalsize
+
+
+As well as defining a variable value from a set, variables can be used to
 simplify calculations that would otherwise have to be made in the arguments to
 operation calls. These simpler \texttt{let} definitions do not increase the
-number of tests generated from the trace, they just introduce a new name in the
-scope that follows:
+number of tests generated from the trace, they just introduce new names in the
+scope that follows. Multiple definitions can be declared in one expression.
 
 \small
 \begin{verbatim}
@@ -755,9 +792,9 @@ All tests passed
 \end{verbatim}
 \normalsize
 
-Lastly, note that if repetitions are added to a clause within a \texttt{let}
-body, they bind tightly to the operation call rather than the entire
-\texttt{let} clause. If you want to repeat the entire \texttt{let}, you have to
+If repetitions are added to a clause within a \texttt{let} body, they bind
+tightly to the operation call rather than the entire \texttt{let} clause.
+If you want to repeat the entire \texttt{let}, you have to
 bracket the whole clause and add a repetition to that. For example:
 
 \small
@@ -822,6 +859,110 @@ The difference may seem subtle, but the effect is significant. T1 behaves like a
 simple ``\{1, 2\}'' repetition for each of the \texttt{let} values, whereas T2
 produces either one or two cases from the \emph{entire set} created by the \texttt{let}
 clause.
+
+Although the example above uses a \texttt{let <set bind>} expression, it is also
+possible to use a \texttt{let <seq bind>} or \texttt{let <type bind>}. In a
+trace context, the ordering that a sequence bind carries does not affect the
+generation of tests; if the example had \texttt{let a in seq [1,2,3]}, the
+same tests would be generated, and since tests are indepedent their order is not
+meaningful. So sequence binds are not particularly useful in traces. However
+type binds (of finite types) are a shorthand for ``all values of this type'',
+which can be useful in some circumstances. This is covered later in Chapter
+\ref{chap:patterns}.
+
+\section{Tests with Errors}
+
+The examples so far have only includes tests that PASSED. This means that they
+completed the sequence of operation calls without violating any preconditions,
+postconditions, state invariants, type invariants or dynamic type checks.
+
+If a sequence of operations causes a postcondition failure, then it
+is certain that there is a problem with the specification – it should not be
+possible to provoke a post condition failure with a set of legal calls (ie. ones
+which pass the preconditions and type invariants). On the other hand, if a 
+sequence of operations violates a precondition, or a type or class invariant, 
+then it is \emph{possible} that the specification has a problem, but it is also 
+possible that the test itself is at fault (passing illegal values).
+
+The combinatorial testing environment indicates the exit status of the test  in
+the verdict returned in the last item of the results (all PASSED above). So if 
+pre/post/invariant conditions are violated during a test, this may be set to 
+FAILED or INDETERMINATE\footnote{The tools sometimes call this INCONCLUSIVE}. If
+a test fails, then any subsequent test which starts with the \emph{same sequence of calls} as the entire failed sequence will also
+fail. These tests are filtered out of the remaining test sequence automatically,
+and not executed.
+
+For example, if we introduce a pre- and postcondition into our example, we see
+this behaviour:
+
+\scriptsize
+\begin{verbatim}
+    public inc: int ==> int
+    inc(i) == ( total := total + i; return total; )
+    pre i < 10
+    post total < 20;
+
+traces
+    T1:
+        let a in set {6, 7, 10} in
+            obj.inc(a){1, 5}
+
+> runtrace Tester`T1
+Generated 15 tests
+Test 1 = obj.inc(6)
+Result = [6, PASSED]
+Test 2 = obj.inc(6); obj.inc(6)
+Result = [6, 12, PASSED]
+Test 3 = obj.inc(6); obj.inc(6); obj.inc(6)
+Result = [6, 12, 18, PASSED]
+Test 4 = obj.inc(6); obj.inc(6); obj.inc(6); obj.inc(6)
+Result = [6, 12, 18, Error 4072: Postcondition failure: post_inc in 'Counter' at line 15:16, FAILED]
+Test 5 = obj.inc(6); obj.inc(6); obj.inc(6); obj.inc(6); obj.inc(6)
+Test 5 FILTERED by test 4
+Test 6 = obj.inc(7)
+Result = [7, PASSED]
+Test 7 = obj.inc(7); obj.inc(7)
+Result = [7, 14, PASSED]
+Test 8 = obj.inc(7); obj.inc(7); obj.inc(7)
+Result = [7, 14, Error 4072: Postcondition failure: post_inc in 'Counter' at line 15:16, FAILED]
+Test 9 = obj.inc(7); obj.inc(7); obj.inc(7); obj.inc(7)
+Test 9 FILTERED by test 8
+Test 10 = obj.inc(7); obj.inc(7); obj.inc(7); obj.inc(7); obj.inc(7)
+Test 10 FILTERED by test 8
+Test 11 = obj.inc(10)
+Result = [Error 4071: Precondition failure: pre_inc in 'Counter' at line 14:11, INCONCLUSIVE]
+Test 12 = obj.inc(10); obj.inc(10)
+Test 12 FILTERED by test 11
+Test 13 = obj.inc(10); obj.inc(10); obj.inc(10)
+Test 13 FILTERED by test 11
+Test 14 = obj.inc(10); obj.inc(10); obj.inc(10); obj.inc(10)
+Test 14 FILTERED by test 11
+Test 15 = obj.inc(10); obj.inc(10); obj.inc(10); obj.inc(10); obj.inc(10)
+Test 15 FILTERED by test 11
+Executed in 0.075 secs. 
+Some tests failed or indeterminate
+\end{verbatim}
+\normalsize
+
+So the \texttt{inc} operation now has a precondition that the argument must be
+less than 10 and that the resulting total must be less than 20. The trace makes
+1 to 5 calls to the operation with arguments 6, 7 and 10.
+
+The first three tests are fine, but Test 4 fails because the fourth call to
+\texttt{inc(6)} pushes the total over the limit. This is therefore a
+postcondition FAILED test. Test 5 then tries to do the same, but add a further
+call. This must fail in the same place as Test 4, because Test 4 is the ``stem''
+of Test 5. Therefore this test is ``FILTERED by Test 4''. Similarly, Test 8
+fails and Tests 9 and 10 are filtered by this failure.
+
+Test 11 fails on the first call to \texttt{inc(10)}, since the argument must be
+less than 10. This produces an INDETERMINATE error because we are not sure
+whether this is a problem with the trace or the specification being tested.
+Lastly, Tests 12 to 15 are filtered by Test 11, since they would behave the same
+way.
+
+At the end of the run, the \texttt{runtrace} command indicates that some tests
+failed or were indeterminate, just to remind you.
 
 
 \chapter{Combinatorial Testing Patterns}
