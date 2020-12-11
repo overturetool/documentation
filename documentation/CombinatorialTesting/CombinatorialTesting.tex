@@ -343,13 +343,15 @@ end Tester
 Notice that there are two classes, Counter and Tester. The Counter defines a
 simple class that increments and decrements a total state value that is
 initially zero. The Tester class creates an instance of Counter and defines a
-single trace called T1. This is the simplest trace possible and indicates that
-the trace should expand to a single test that calls \texttt{obj.inc()}.
+single trace called T1. Trace names are simple identifiers, optionally separated
+by slashes (eg. \texttt{item456/interface/all}). This example is the simplest
+trace possible and indicates that the trace should expand to a single test that
+just calls \texttt{obj.inc()}.
 
 This trace can either be executed in Overture in the Combinatorial Testing
-perspective, or it can be executed from the command line using the
-\texttt{runtrace} command. The command line output is illustrated here for
-simplicity:
+perspective (see Appendix \ref{chap:OvertureShots}), or it can be executed from
+the command line using the \texttt{runtrace} command. The command line output is
+illustrated here for simplicity:
 
 \begin{verbatim}
 > runtrace Tester`T1
@@ -408,7 +410,7 @@ object is re-created for each test. It does not decrement the counter back to
 zero after the first test incremented it.
 
 If we want to test an increment followed by a decrement, that would be expressed
-using semi-colon separators:
+using a semi-colon separator:
 
 \small
 \begin{verbatim}
@@ -430,8 +432,8 @@ All tests passed
 \normalsize
 
 This generates a single test again, but you can see that the test involves two
-calls and that they return 1 and 0. So this time the second call is operating on
-the same object instance as the first.
+calls and that they return 1 and 0, respectively. So this time the second call
+is operating on the same object instance as the first.
 
 If the increment and decrement operations are independent, it makes sense to
 test calls to them in either order, which would be expressed as:
@@ -443,7 +445,7 @@ traces
 \end{verbatim}
 \normalsize
 
-That produces the output:
+Notice that the separator has changed to a comma. That produces the output:
 
 \small
 \begin{verbatim}
@@ -463,8 +465,9 @@ particular trace construct naturally expands to an arbitrary number of calls and
 produces a test for every permutation of the calls in brackets.
 
 But what if some tests are a pair of calls and some are not? If we want to make
-a call optional, the \texttt{?} operator can be added to indicate that this will
-match tests where the call is made and where it is not. For example:
+a call optional, the \texttt{?} operator can be added to any operation call
+(ie. not just within \texttt{||} operators) to indicate that this will match
+tests where the call is made and where it is not. For example:
 
 \small
 \begin{verbatim}
@@ -496,11 +499,11 @@ All tests passed
 You see that the decrement call is sometimes present and sometimes replaced by
 \texttt{skip}, which indicates the absence of an optional call. Notice also that
 the \texttt{||} operator and the \texttt{?} operator work together to combine their
-effects.
+effects in this example, though \texttt{?} can be used for any operation call.
 
 Along the same lines as \texttt{?}, it is possible to add \texttt{*} and
-\texttt{+} operators to a call, which indicate that it should be called zero or
-more times, and one or more times. The maximum number of times is a tool preset
+\texttt{+} operators to any call, which indicate that it should be called zero
+or more times, and one or more times. The maximum number of times is a tool preset
 value that defaults to 5, though it can be changed. So for example:
 
 \small
@@ -693,7 +696,8 @@ All tests passed
 This example produces a test for every combination of ``a'' and ``b'' values,
 which is therefore nine tests. The round brackets are needed around the pair of
 operation calls because a call binds tightly to the \texttt{let}. Without the
-brackets, you get the following scope error, referring to the 2nd ``a'':
+brackets, you get the following scope error, referring to the ``a'' in the
+second call to \texttt{obj.dec(a)}:
 
 \scriptsize
 \begin{verbatim}
@@ -786,25 +790,26 @@ As well as defining a variable value from a set, variables can be used to
 simplify calculations that would otherwise have to be made in the arguments to
 operation calls. These simpler \texttt{let} definitions do not increase the
 number of tests generated from the trace, they just introduce new names in the
-scope that follows. Multiple definitions can be declared in one expression.
+scope that follows. Multiple variable definitions can be declared in 
+one \texttt{let} expression. For example:
 
 \small
 \begin{verbatim}
 traces
-    T1:
-        let a in set {1, 2, 3} in
-            let b = a + 1 in
-                ( obj.inc(a); obj.dec(b) );
+T1:
+    let a in set {1, 2, 3} in
+        let b = a + 1, c = a - 1 in
+            ( obj.inc(b); obj.dec(c) );
 
 > runtrace Tester`T1
 Generated 3 tests
-Test 1 = obj.inc(1); obj.dec(2)
-Result = [1, -1, PASSED]
-Test 2 = obj.inc(2); obj.dec(3)
-Result = [2, -1, PASSED]
-Test 3 = obj.inc(3); obj.dec(4)
-Result = [3, -1, PASSED]
-Executed in 0.036 secs. 
+Test 1 = obj.inc(2); obj.dec(0)
+Result = [2, 2, PASSED]
+Test 2 = obj.inc(3); obj.dec(1)
+Result = [3, 2, PASSED]
+Test 3 = obj.inc(4); obj.dec(2)
+Result = [4, 2, PASSED]
+Executed in 0.054 secs. 
 All tests passed
 \end{verbatim}
 \normalsize
@@ -891,7 +896,8 @@ which can be useful in some circumstances. This is covered later in Chapter
 
 The examples so far have only includes tests that PASSED. This means that they
 completed the sequence of operation calls without violating any preconditions,
-postconditions, state invariants, type invariants or dynamic type checks.
+postconditions, state invariants, type invariants, recursive measures or dynamic
+type checks.
 
 If a sequence of operations causes a postcondition failure, then it
 is certain that there is a problem with the specification – it should not be
@@ -905,15 +911,16 @@ The combinatorial testing environment indicates the exit status of the test  in
 the verdict returned in the last item of the results (all PASSED above). So if 
 pre/post/invariant conditions are violated during a test, this may be set to 
 FAILED or INDETERMINATE\footnote{The tools sometimes call this INCONCLUSIVE}. If
-a test fails, then any subsequent test which starts with the \emph{same sequence of calls} as the entire failed sequence will also
-fail. These tests are filtered out of the remaining test sequence automatically,
-and not executed.
+a test fails, then any subsequent test which starts \emph{with the same
+sequence of calls} as the failed sequence will also fail. These tests are
+filtered out of the remaining test sequence automatically, and not executed.
 
 For example, if we introduce a pre- and postcondition into our example, we see
 this behaviour:
 
 \scriptsize
 \begin{verbatim}
+...
     public inc: int ==> int
     inc(i) == ( total := total + i; return total; )
     pre i < 10
@@ -961,20 +968,22 @@ Some tests failed or indeterminate
 \end{verbatim}
 \normalsize
 
-So the \texttt{inc} operation now has a precondition that the argument must be
-less than 10 and that the resulting total must be less than 20. The trace makes
-1 to 5 calls to the operation with arguments 6, 7 and 10.
+The \texttt{inc} operation now has a precondition that the argument must be
+less than 10 and a postcondition that the resulting total must be less than 20.
+The trace makes 1 to 5 calls to the \texttt{inc} operation with arguments 6, 7
+and 10, respectively.
 
 The first three tests are fine, but Test 4 fails because the fourth call to
 \texttt{inc(6)} pushes the total over the limit. This is therefore a
-postcondition FAILED test. Test 5 then tries to do the same, but add a further
-call. This must fail in the same place as Test 4, because Test 4 is the ``stem''
-of Test 5. Therefore this test is ``FILTERED by Test 4''. Similarly, Test 8
-fails and Tests 9 and 10 are filtered by this failure.
+postcondition FAILED test, and the error message is listed along with the
+results of the earlier operation calls. Test 5 then tries to do the same, but
+adds a further call. This must fail in the same place as Test 4, because Test 4
+is the ``stem'' of Test 5. Therefore this test is ``FILTERED by Test 4''.
+Similarly, Test 8 fails and Tests 9 and 10 are filtered by this failure.
 
 Test 11 fails on the first call to \texttt{inc(10)}, since the argument must be
-less than 10. This produces an INDETERMINATE error because we are not sure
-whether this is a problem with the trace or the specification being tested.
+less than 10. This produces an INDETERMINATE error because we are not
+sure whether this is a problem with the trace or the specification being tested.
 Lastly, Tests 12 to 15 are filtered by Test 11, since they would behave the same
 way.
 
@@ -1063,6 +1072,9 @@ failed or were indeterminate, just to remind you.
 \Ruledef{trace bracketed expression}{
   \Lit{(}, \Ruleref{trace definition list}, \Lit{)}
 }
+
+\chapter{Overture Screenshots}
+\label{chap:OvertureShots}
 
 
 \bibliographystyle{newalpha}
