@@ -691,7 +691,24 @@ All tests passed
 \normalsize
 
 This example produces a test for every combination of ``a'' and ``b'' values,
-which is therefore nine tests. Note also that the variables defined are in scope
+which is therefore nine tests. The round brackets are needed around the pair of
+operation calls because a call binds tightly to the \texttt{let}. Without the
+brackets, you get the following scope error, referring to the 2nd ``a'':
+
+\scriptsize
+\begin{verbatim}
+traces
+    T1:
+        let a in set {6, 7, 10} in
+            obj.inc(a); obj.dec(a)
+
+Error 3182: Name 'Tester`a' is not in scope in 'Tester' (example.vpp) at line 28:29
+Type checked 2 classes in 0.12 secs. Found 1 type error
+
+\end{verbatim}
+\normalsize
+
+Note also that the variables defined are in scope
 throughout the clauses below, so the ``a'' variable could be used to define the
 set of ``b'' values:
 
