@@ -990,6 +990,51 @@ way.
 At the end of the run, the \texttt{runtrace} command indicates that some tests
 failed or were indeterminate, just to remind you.
 
+\section{How Does Trace Expansion Work?}
+
+The sections above have given an overview of all the trace operators, and there
+are some examples of combinations of operators. But to see how traces are
+expanded in general, we need to look at traces from a different point of view.
+The syntax of traces is deliberately made similar to the syntax of VDM-SL, but
+to understand how operators combine to produce multiple tests, it helps to look
+at operators as though they followed a separate ``expansion'' grammar. In the
+description that follows, a \texttt{set} is a set of tests:
+
+\begin{itemize}
+\item \texttt{set = object.opname(args)}. The simplest form of a trace is a set
+that comprises a single call to an operation or function with arguments. The
+arguments can be symbolic, and bound to various values by the \texttt{let}
+operator described below.
+\item \texttt{set = set1; set2; ...; setn}. A set of tests may be formed from
+an ordered sequence of sets. This expands to all possible selections of one test
+from each of the sets. In its simplest form, this could be a sequence of
+operation calls which therefore just expands to one test. But a combination of
+sets of tests results in a set of the product of the sizes of those sets.
+\item \texttt{set = set1 ?}. A set of tests may be formed from another set with
+a \texttt{?} operator. This produces the same set, but includes a ``skip'' step.
+\item \texttt{set = set1 \{n[, n]\}}. A set of tests may be formed from another
+set with a \texttt{\{n\}} or \texttt{\{n1, n2\}} operator. This produces a set
+with every member of the original set repeated \texttt{n} times, or between
+\texttt{n1} and \texttt{n2} times (inclusive).
+\item \texttt{set = set1 *|+}. A set of tests may be formed from another set
+with a \texttt{*} or \texttt{+} operator. This produces another set with every member
+of the original set repeated from 0 to N times (with \texttt{*}) or 1 to N times
+(with \texttt{+}). The value of N is tool dependent, but defaults to 5.
+\item \texttt{set = set1 | set2 | ... setn}. A set of tests may be formed by
+combining a number of other test sets with a \texttt{|} operator. This produces
+a set with the union of the other sets.
+\item \texttt{set = || (set1, set2, ..., setn)}. A set may be formed from the
+permutations of a number of other sets. This produces a set with each
+permutation of each selection of one test from each set.
+\item \texttt{set = let <multiple bind> [be st <cond>] in set1}. A set of
+tests may be formed from a \texttt{multiple bind}, which expands to the
+substitution of all the possible the bound values in the original set.
+\item \texttt{set = let <name> = <exp> [, <name2> = <exp2>, ...] in set1}. A set
+of tests may be evaluated in a scope that defines name/value pairs. This does
+not increase the number of tests in the set, but just binds free variables.
+\end{itemize}
+
+!!!Include some examples of expansions here!!!
 
 \chapter{Combinatorial Testing Patterns}
 \label{chap:patterns}
