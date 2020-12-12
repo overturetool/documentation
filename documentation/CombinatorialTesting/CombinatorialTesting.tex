@@ -1050,7 +1050,43 @@ of tests may be evaluated in a scope that defines name/value pairs. This does
 not increase the number of tests in the set, but just binds free variables.
 \end{itemize}
 
-!!!Include some examples of expansions here!!!
+For example, if (for brevity) we say that a test with a single call to
+\texttt{obj.opA()} is written as ``[A]'', and similarly ``[B]'' and ``[C]'' 
+for other operation calls, and ``[-]'' for a skip, then we can say the 
+following trace operators produce these sets of tests:
+
+\small
+\begin{verbatim}
+A? = { [A], [-] }
+A;B = { [AB] }
+A;B? = { [AB], [A] }
+A* = { [-], [A], [AA], [AAA], [AAAA], [AAAAA], ... }
+A+ = { [A], [AA], [AAA], [AAAA], [AAAAA], ... }
+A{3} = { [AAA] }
+A{1,3} = { [A], [AA], [AAA] }
+A | B = { [A], [B] }
+A | B? = { [A], [B], [-] )
+|| (A, B, C) = { [ABC], [ACB], [BAC], [BCA], [CAB], [CBA] }
+|| (A, (B;C)) = { [ABC], [BCA] }
+|| (A, B+) = { [AB], [BA], [ABB], [BBA], [ABBB], [BBBA], ... }
+let a in set {1,2,3} in A(a) = { [A(1)], [A(2)], [A(3)] }
+let b : bool * bool in B(b) = {
+    [B(true, true)], [B(true, false)],
+    [B(false, true)], [B(false, false)]
+}
+let z = 1 in B(z) = { [B(1}] }
+\end{verbatim}
+\normalsize
+
+Note that the repeat limits in a trace (like \{1,3\}) must be numeric literals.
+But values in a multiple bind set or sequence can be variables, either bound
+earlier in the trace or other fields within scope of the trace inside the object
+or module where it is defined. Similarly, the values in the right hand side of
+let definitions can be variables within the trace or the object/module scope.
+These variables are evaluated \emph{during the trace expansion}, whereas the
+substituted values operation arguments are evaluated \emph{during test
+execution}.
+
 
 \chapter{Combinatorial Testing Patterns}
 \label{chap:patterns}
