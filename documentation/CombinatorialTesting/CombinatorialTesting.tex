@@ -628,7 +628,7 @@ like this:
 
 \small
 \begin{lstlisting}
-	...
+...
     public inc: int ==> int
     inc(i) == ( total := total + i; return total; );
 
@@ -709,13 +709,15 @@ operation calls because a call binds tightly to the \texttt{let}. Without the
 brackets, you get the following scope error, referring to the ``a'' in the
 second call to \texttt{obj.dec(a)}:
 
-\scriptsize
-\begin{verbatim}
+\small
+\begin{lstlisting}
 traces
     T1:
         let a in set {6, 7, 10} in
             obj.inc(a); obj.dec(a)
-
+\end{lstlisting}
+\scriptsize
+\begin{verbatim}
 Error 3182: Name 'Tester`a' is not in scope in 'Tester' (example.vpp) at line 28:29
 Type checked 2 classes in 0.12 secs. Found 1 type error
 
@@ -808,13 +810,15 @@ scope that follows. Multiple variable definitions can be declared in
 one \texttt{let} expression. For example:
 
 \small
-\begin{verbatim}
+\begin{lstlisting}
 traces
 T1:
     let a in set {1, 2, 3} in
         let b = a + 1, c = a - 1 in
             ( obj.inc(b); obj.dec(c) );
+\end{lstlisting}
 
+\begin{verbatim}
 > runtrace Tester`T1
 Generated 3 tests
 Test 1 = obj.inc(2); obj.dec(0)
@@ -934,8 +938,8 @@ filtered out of the remaining test sequence automatically, and not executed.
 For example, if we introduce a pre- and postcondition into our example, we see
 this behaviour:
 
-\scriptsize
-\begin{verbatim}
+\small
+\begin{lstlisting}
 ...
     public inc: int ==> int
     inc(i) == ( total := total + i; return total; )
@@ -946,7 +950,10 @@ traces
     T1:
         let a in set {6, 7, 10} in
             obj.inc(a){1, 5}
+\end{lstlisting}
 
+\scriptsize
+\begin{verbatim}
 > runtrace Tester`T1
 Generated 15 tests
 Test 1 = obj.inc(6)
@@ -1036,7 +1043,7 @@ with every member of the original set repeated \texttt{n} times, or between
 with a \texttt{*} or \texttt{+} operator. This produces another set with every member
 of the original set repeated from 0 to N times (with \texttt{*}) or 1 to N times
 (with \texttt{+}). The value of N is tool dependent, but defaults to 5.
-\item \texttt{set = set1 | set2 | ... setn}. A set of tests may be formed by
+\item \texttt{set = set1 | set2 | ... | setn}. A set of tests may be formed by
 combining a number of other test sets with a \texttt{|} operator. This produces
 a set with the union of the other sets.
 \item \texttt{set = || (set1, set2, ..., setn)}. A set may be formed from the
