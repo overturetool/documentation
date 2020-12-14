@@ -1094,6 +1094,144 @@ These variables are evaluated \emph{during the trace expansion}, whereas the
 substituted values operation arguments are evaluated \emph{during test
 execution}.
 
+\section{Language Considerations}
+
+Combinatorial tests are available for both VDM-SL and VDM++/VDM-RT. The process 
+of trace expansion and execution is very similar in all cases, but there are
+some differences that are described below.
+
+\subsection{Traces in VDM-SL}
+
+Traces are added in a ``traces'' section within a VDM-SL specification. This can
+either be within one or more modules or within a flat specification. The name of
+the traces in a module are implicitly exported, so the are referred to as
+\texttt{<modulename>`<tracename>}. You can omit the module name if it is the
+default module.
+
+The equivalent VDM-SL specification that is equivalent to the example used above
+is like this:
+
+\small
+\begin{lstlisting}
+module Counter
+exports all
+definitions
+
+state S of
+    total:int
+init s == s = mk_S(0)
+end
+
+operations
+    inc: int ==> int
+    inc(i) == ( total := total + i; return total; );
+
+    dec: int ==> int
+    dec(i) == ( total := total - i; return total; )
+end Counter
+
+module Tester
+imports from Counter all
+definitions
+
+traces
+    T1: Counter`inc(1)*;
+
+end Tester
+\end{lstlisting}
+\normalsize
+
+And in the VDM-SL command line, that would be executed as follows. Note that
+Tester is not the default module, so the trace name is qualified:
+
+\scriptsize
+\begin{verbatim}
+> modules
+Counter (default)
+Tester
+> runtrace Tester`T1
+Generated 6 tests in 0.002 secs. 
+Test 1 = skip
+Result = [(), PASSED]
+Test 2 = inc(1)
+Result = [1, PASSED]
+Test 3 = inc(1); inc(1)
+Result = [1, 2, PASSED]
+Test 4 = inc(1); inc(1); inc(1)
+Result = [1, 2, 3, PASSED]
+Test 5 = inc(1); inc(1); inc(1); inc(1)
+Result = [1, 2, 3, 4, PASSED]
+Test 6 = inc(1); inc(1); inc(1); inc(1); inc(1)
+Result = [1, 2, 3, 4, 5, PASSED]
+Executed in 0.019 secs. 
+All tests passed
+>
+\end{verbatim}
+\normalsize
+
+So this model is very similar to the VDM++ example. The Counter module has a
+single state that is equivalent to the VDM++ ``total'' instance variable. Note
+that this is reset to zero automatically before each test is executed. This is
+because each test effectively re-initializes the specification, and the module
+state has an ``init'' clause that sets the total to zero.
+
+Notice also that the operation calls are not applied to a Counter object, unlike
+VDM++.
+
+\subsection{Traces in VDM++ and VDM-RT}
+
+Traces are added in a ``traces'' section within a VDM++ or VDM-RT
+specification, inside one or more classes. In effect the name of the trace is
+a public static symbol, so it is referred to as
+\texttt{<classname>`<tracename>}, as we have seen in the examples above. You
+can omit the class name if that is the default class.
+
+Although a VDM++ trace is effectively a static scope, and can call static
+operations directly (similar to a VDM-SL trace), every test execution occurs in
+a \emph{new instance} of the containing class - in our examples, in a new Tester
+instance. This means that objects created within the Tester's construction will
+be freshly initialized and ready for use in each test run. In the example, the
+Counter object is created for each test, because the ``obj'' instance variable
+is initialized at construction.
+
+\subsection{Expansion and Execution Considerations}
+
+The process of running a combinatorial test has two phases: expanding the trace
+to a number of test definitions; and subsequently executing those definitions.
+The trace expansion typically does not take very long, since it is only
+constructing a tree of iterators that are capable of generating the tests one
+after another. The subsequent execution of those tests can obviously take a long
+time, depending on how many there are.
+
+We have seen (above) how the specification is initialized before test execution,
+and the state of the module or class is available to the trace, but care must be
+taken if operations or functions within the environment are used as part of a
+trace. This is because some expressions are evaluated during expansion and some
+during execution. For example:
+
+\small
+\begin{lstlisting}
+...
+functions
+    private static range: int * int -> set of int
+    range(a, b) == {a, ..., b};
+
+values
+    Z = 100;
+
+traces
+    T1: let x in set range(3, 5) in
+        let y in set range(x, x+2) in
+            obj.inc(Z + x + y);
+\end{lstlisting}
+\normalsize
+
+In this case, the \texttt{range} function is used to create a set for the
+multi-binds, and this is executed during expansion - once for ``x'' and three
+times for ``y''. But the addition of \texttt{Z + x + y} in the argument to
+\texttt{inc} is called during execution.
+
+
 
 \chapter{Combinatorial Testing Patterns}
 \label{chap:patterns}
