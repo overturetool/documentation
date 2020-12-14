@@ -1078,10 +1078,10 @@ A | B? = { [A], [B], [-] )
 || (A, B+) = { [AB], [BA], [ABB], [BBA], [ABBB], [BBBA], ... }
 let a in set {1,2,3} in A(a) = { [A(1)], [A(2)], [A(3)] }
 let b : bool * bool in B(b) = {
-    [B(true, true)], [B(true, false)],
-    [B(false, true)], [B(false, false)]
+    [B(mk_(true, true))], [B(mk_(true, false))],
+    [B(mk_(false, true))], [B(mk_(false, false))]
 }
-let z = 1 in B(z) = { [B(1}] }
+let z = 1 in B(z) = { [B(1)] }
 \end{verbatim}
 \normalsize
 
@@ -1090,9 +1090,6 @@ But values in a multiple bind set or sequence can be variables, either bound
 earlier in the trace or other fields within scope of the trace inside the object
 or module where it is defined. Similarly, the values in the right hand side of
 let definitions can be variables within the trace or the object/module scope.
-These variables are evaluated \emph{during the trace expansion}, whereas the
-substituted values operation arguments are evaluated \emph{during test
-execution}.
 
 \section{Language Considerations}
 
@@ -1108,8 +1105,8 @@ the traces in a module are implicitly exported, so the are referred to as
 \texttt{<modulename>`<tracename>}. You can omit the module name if it is the
 default module.
 
-The equivalent VDM-SL specification that is equivalent to the example used above
-is like this:
+The VDM-SL specification that is equivalent to the example used above is like
+this:
 
 \small
 \begin{lstlisting}
@@ -1169,7 +1166,7 @@ All tests passed
 \end{verbatim}
 \normalsize
 
-So this model is very similar to the VDM++ example. The Counter module has a
+This trace is very similar to the VDM++ example. The Counter module has a
 single state that is equivalent to the VDM++ ``total'' instance variable. Note
 that this is reset to zero automatically before each test is executed. This is
 because each test effectively re-initializes the specification, and the module
@@ -1181,7 +1178,7 @@ VDM++.
 \subsection{Traces in VDM++ and VDM-RT}
 
 Traces are added in a ``traces'' section within a VDM++ or VDM-RT
-specification, inside one or more classes. In effect the name of the trace is
+specification, inside one or more classes. In effect, the name of the trace is
 a public static symbol, so it is referred to as
 \texttt{<classname>`<tracename>}, as we have seen in the examples above. You
 can omit the class name if that is the default class.
@@ -1191,8 +1188,8 @@ operations directly (similar to a VDM-SL trace), every test execution occurs in
 a \emph{new instance} of the containing class - in our examples, in a new Tester
 instance. This means that objects created within the Tester's construction will
 be freshly initialized and ready for use in each test run. In the example, the
-Counter object is created for each test, because the ``obj'' instance variable
-is initialized at construction.
+Counter object \texttt{obj} is created for each test, because the instance
+variable is initialized at construction.
 
 \subsection{Expansion and Execution Considerations}
 
@@ -1206,8 +1203,8 @@ time, depending on how many there are.
 We have seen (above) how the specification is initialized before test execution,
 and the state of the module or class is available to the trace, but care must be
 taken if operations or functions within the environment are used as part of a
-trace. This is because some expressions are evaluated during expansion and some
-during execution. For example:
+trace. This is because some expressions are evaluated during trace expansion and
+some during test execution. For example:
 
 \small
 \begin{lstlisting}
@@ -1227,11 +1224,25 @@ traces
 \normalsize
 
 In this case, the \texttt{range} function is used to create a set for the
-multi-binds, and this is executed during expansion - once for ``x'' and three
-times for ``y''. But the addition of \texttt{Z + x + y} in the argument to
-\texttt{inc} is called during execution.
+multi-binds, and this is executed during expansion, once for ``x'' and three
+times for ``y''. Similarly, the right hand side of simple let definitions are
+executed during trace expansion. But the addition of \texttt{Z + x + y} in the
+argument to \texttt{inc} is called during execution (once for each test).
 
+Trace generation starts inside a fresh object instance of the class (or
+initialized module) that contains the trace. So if operations are called during
+trace \emph{expansion}, these can modify state and so affect subsequent
+operation calls elsewhere in the expansion. This can become very confusing, and
+it is not a recommended trace design strategy! On the other hand, calling
+functions as part of the trace expansion can make traces easier to understand
+and can provide the means to build complex sets that would be difficult to
+construct directly within the trace statements.
 
+The operation calls that each expanded test contains do not have to be
+operations on the ``main'' specification, but can rather be testing operations
+that maintain their own state and then call on to main operations. This allows
+more complex trace scenarios to be created without encoding the detail in the
+trace statements. More examples of this strategy are given in the next chapter.
 
 \chapter{Combinatorial Testing Patterns}
 \label{chap:patterns}
