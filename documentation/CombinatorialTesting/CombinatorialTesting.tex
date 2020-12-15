@@ -1101,7 +1101,7 @@ some differences that are described below.
 
 Traces are added in a ``traces'' section within a VDM-SL specification. This can
 either be within one or more modules or within a flat specification. The name of
-the traces in a module are implicitly exported, so the are referred to as
+the traces in a module are implicitly exported, so they are referred to as
 \texttt{<modulename>`<tracename>}. You can omit the module name if it is the
 default module.
 
@@ -1169,7 +1169,7 @@ All tests passed
 This trace is very similar to the VDM++ example. The Counter module has a
 single state that is equivalent to the VDM++ ``total'' instance variable. Note
 that this is reset to zero automatically before each test is executed. This is
-because each test effectively re-initializes the specification, and the module
+because each test re-initializes the specification, and the module
 state has an ``init'' clause that sets the total to zero.
 
 Notice also that the operation calls are not applied to a Counter object, unlike
@@ -1224,10 +1224,10 @@ traces
 \normalsize
 
 In this case, the \texttt{range} function is used to create a set for the
-multi-binds, and this is executed during expansion, once for ``x'' and three
+multi-binds, and this is executed during \emph{expansion}, once for ``x'' and three
 times for ``y''. Similarly, the right hand side of simple let definitions are
 executed during trace expansion. But the addition of \texttt{Z + x + y} in the
-argument to \texttt{inc} is called during execution (once for each test).
+argument to \texttt{inc} is called during \emph{execution} (once for each test).
 
 Trace generation starts inside a fresh object instance of the class (or
 initialized module) that contains the trace. So if operations are called during
@@ -1237,6 +1237,29 @@ it is not a recommended trace design strategy! On the other hand, calling
 functions as part of the trace expansion can make traces easier to understand
 and can provide the means to build complex sets that would be difficult to
 construct directly within the trace statements.
+
+When a test is listed in the trace output, the arguments that are passed to
+operation calls are shown as literals, if possible. As seen in the examples
+here, a call to \texttt{obj.inc(1)} is shown, rather than \texttt{obj.inc(a)}. This is
+possible whenever arguments can be easily evaluated. For example the \texttt{Z
++ x + y} case above would produce \texttt{Test 1 = obj.inc(106)}, which is 100 +
+3 + 3. But if the argument is a more complex expression involving operation
+applies or new object creation, these cannot be evaluated and so the argument
+expression is listed ``as is''. For example, if the trace above is changed to
+call \texttt{obj.inc(max(x, y))}, the test would be listed with ``x'' and ``y''
+rather than their current values:
+
+\small
+\begin{verbatim}
+> runtrace Tester`T1
+Generated 9 tests in 0.006 secs. 
+Test 1 = inc(max(x, y))
+Result = [3, PASSED]
+Test 2 = inc(max(x, y))
+Result = [3, PASSED]
+...
+\end{verbatim}
+\normalsize
 
 The operation calls that each expanded test contains do not have to be
 operations on the ``main'' specification, but can rather be testing operations
