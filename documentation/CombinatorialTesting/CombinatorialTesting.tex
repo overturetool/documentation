@@ -1060,6 +1060,166 @@ way.
 At the end of the run, the \texttt{runtrace} command indicates that some tests
 failed or were indeterminate, just to remind you.
 
+\section{Trace Reduction}
+
+A trace may expand to many millions of tests and these may take many hours to
+execute. This can make large traces difficult to work with, both while the trace
+is being developed and subsequently when traces are used to check that a change
+to a specification is sound.
+
+Therefore the trace system provides the means to reduce the number of tests that
+are generated. This limited number can then be checked more quickly, which
+naturally does not provide the confidence of a full execution, but is convenient
+to work with when a sample of tests is sufficient.
+
+Trace reduction can be achieved in four different ways:
+
+\begin{itemize}
+\item \emph{RANDOM} reduction. This is the simplest kind of reduction, and is
+used to randomly select tests from the full set. For example, a 1\% RANDOM 
+reduction of a trace that expands to a million tests would select 10,000 tests
+from the set. The pseudorandom selection is seeded, so that a consistent subset
+of the tests can be selected.
+\item \emph{SHAPES_NOVARS} reduction. The ``shape'' of a test means the sequence
+of operation names (regardless of arguments passed), and the idea of shaped
+reduction is to preserve \emph{at least one test} of every shape in the full
+set. So for example, a test that calls \texttt{[opA(1), opB(2), opC(3)]} would
+be considered the same shape as a test that calls \texttt{[opA(111), opB(222),
+opC(333)]}, but different to a test that calls \texttt{[opX(1), opY(2)]}. So a
+shaped reduction of 1\% of one million tests would try to select 10,000 tests,
+but it also guarantees to include at least one test of every shape within the
+million, even if that means the reduction is (say) 1.5\%.
+\item \emph{SHAPES_VARNAMES} reduction. The simple interpretation of a
+shape above only looks at the names of the operations called. This second kind
+of shaped reduction looks at the variable names used in the \texttt{let}
+bindings and constants as well as the names of the operations. So with this kind
+of reduction, \texttt{[opA(a), opA(b)]} is different to \texttt{[opA(x),
+opA(y)]}, even if the values of ``a'' and ``x'' can sometimes be the same.
+Typically, different variable names are used in different parts of a complex
+trace and so this reduction method is trying to select all of the different
+parts of a trace, even if the sequence of operation names produced is the same
+as another part of the trace.
+\item \emph{SHAPES_VARVALUES} reduction. The third type of shaped reduction is
+even more specific about what constitutes a shape, taking into account the
+\emph{value} of the variables used as well as their names. So \texttt{[opA(a)]}
+will be considered a diffent shape to another \texttt{[opA(a)]} elsewhere, as
+long as ``a'' is bound to a different value.
+\end{itemize}
+
+The following simple trace, using the \texttt{Counter} example from previous
+chapters, illustrates RANDOM reduction:
+
+\small
+\begin{lstlisting}
+traces
+    T1:
+        let a in set {1, ..., 1000} in
+        let b in set {1, ..., 1000} in
+            ( obj.inc(a); obj.dec(b) );
+\end{lstlisting}
+
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
+> filter
+Usage: filter %age | RANDOM | SHAPES_NOVARS | SHAPES_VARNAMES | SHAPES_VARVALUES
+Trace filter currently 100.0% NONE (seed 0)
+ 
+> filter random
+Trace filter currently 100.0% RANDOM (seed 0)
+
+> filter 1
+Trace filter currently 1.0% RANDOM (seed 0)
+
+> seedtrace 1234
+Seed now set to 1234
+
+> runtrace Tester`T1
+Generated 1000000 tests, reduced to 10000, in 1.571 secs. 
+Test 66 = obj.inc(1); obj.dec(66)
+Result = [1, -65, PASSED]
+Test 155 = obj.inc(1); obj.dec(155)
+Result = [1, -154, PASSED]
+Test 323 = obj.inc(1); obj.dec(323)
+Result = [1, -322, PASSED]
+Test 419 = obj.inc(1); obj.dec(419)
+Result = [1, -418, PASSED]
+...
+Test 999815 = obj.inc(1000); obj.dec(815)
+Result = [1000, 185, PASSED]
+Test 999894 = obj.inc(1000); obj.dec(894)
+Result = [1000, 106, PASSED]
+Test 999992 = obj.inc(1000); obj.dec(992)
+Result = [1000, 8, PASSED]
+Executed in 4.932 secs. 
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
+\normalsize
+
+The ``filter'' and ``seedtrace'' commands are used to set the filtering
+required, then the trace is executed as normal. But we see that the million
+tests have been reduced to 10,000 (taking a few seconds). Then instead of trying
+every combination of ``a'' and ``b'', the filtering selects them at random,
+starting with \texttt{a = 1, b = 65} and ending with \texttt{a = 1000, b = 992}.
+
+The next example illustrates shaped reduction. The trace joins together two
+\texttt{let} bindings, repeating each call once and twice. This would normally
+produce 36 tests.
+
+\small
+\begin{lstlisting}
+traces
+    T1:
+        let a in set {1, 2, 3} in obj.inc(a){1,2};
+        let b in set {1, 2, 3} in obj.dec(b){1,2}
+\end{lstlisting}
+
+\lstset{style=tool,language=}
+\begin{lstlisting}
+> filter 1
+Trace filter currently 1.0% RANDOM (seed 0)
+
+> filter shapes_novars
+Trace filter currently 1.0% SHAPES_NOVARS (seed 0)
+
+> rt Tester`T1
+Generated 36 tests, reduced by SHAPES_NOVARS, in 0.001 secs. 
+Test 1 = obj.inc(1); obj.dec(1)
+Result = [1, 0, PASSED]
+Test 2 = obj.inc(1); obj.inc(1); obj.dec(1)
+Result = [1, 2, 1, PASSED]
+Test 7 = obj.inc(1); obj.dec(1); obj.dec(1)
+Result = [1, 0, -1, PASSED]
+Test 8 = obj.inc(1); obj.inc(1); obj.dec(1); obj.dec(1)
+Result = [1, 2, 1, 0, PASSED]
+Executed in 0.006 secs. 
+All tests passed
+>
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
+\normalsize
+
+Here, we try to reduce this to 1\%, but using the SHAPES_NOVARS option. A
+reduction of 1\% of 36 tests ought to produce a single test (reduction will
+never produce zero tests), but in fact the shaped reduction produces four. You
+can see that there is one case of each ``shape'': one inc and one dec; two incs
+and one dec, and so on. So the idea is that the shaped reduction has given a
+representative sample of all of the possible shapes, disregarding variable names
+or values.
+
+Reducing this trace using SHAPES_VARNAMES produces the same number of shapes,
+since the two calls always use the same variable names. But reduction using
+SHAPES_VARVALUES regards all of the tests as different shapes, because the
+variable/value/operation combinations are different in all of the tests.
+
+In practice, the most useful reductions are RANDOM and SHAPES_NOVARS. Random
+reductions give a simple way to cut down a large number of tests. Shaped
+reduction is choosing one example of every ``path'' that the trace is taking the
+specification through, which is often closely related to the different use cases
+that the system has.
+
+
 \section{How Does Trace Expansion Work?}
 
 The sections above have given an overview of all the trace operators, and there
