@@ -304,6 +304,27 @@ it does not violate the specification's constraints, or the test's validation
 conjectures. Individual failed tests can be executed in isolation to find out
 why they failed, which is similar to a model checker's counter example. 
 
+\section{The Structure of this Document}
+
+The document is intended to be read sequentially, but readers who are familiar
+with the basics of VDM traces can skip Chapter \ref{chap:traces} and go straight
+to the patterns in Chapter \ref{chap:patterns}.
+
+\begin{itemize}
+\item Chapter \ref{chap:traces}, \nameref{chap:traces} introduces the concept of
+a combinatorial test and explains how to work with traces in VDM.
+\item Chapter \ref{chap:patterns}, \nameref{chap:patterns} looks at common ways
+of using traces that are useful in many different situations.
+\item Chapter \ref{chap:examples}, \nameref{chap:examples} uses two more
+significant specifications to demonstrate typical usage of traces in real life.
+\item Appendix \ref{chap:CTsyntax}, \nameref{chap:CTsyntax} defines the formal
+grammar of traces.
+\item Appendix \ref{chap:OvertureShots}, \nameref{chap:OvertureShots} includes
+screen shots of the Combinatorial Testing perspective in Overture.
+\item Appendix \ref{chap:listings}, \nameref{chap:listings} contains the full
+listings of the models explored in Chapter \ref{chap:examples}.
+\end{itemize}
+
 \chapter{Working with Traces}
 \label{chap:traces}
 
@@ -1490,6 +1511,9 @@ trace statements. More examples of this strategy are given in the next chapter.
 \chapter{Combinatorial Testing Examples}
 \label{chap:examples}
 
+\section{The LUHN Check Digit Model}
+\section{The Basket Service Model}
+
 \appendix
 \chapter{Combinatorial Testing Syntax}
 \label{chap:CTsyntax}
@@ -1569,6 +1593,13 @@ trace statements. More examples of this strategy are given in the next chapter.
 \chapter{Overture Screenshots}
 \label{chap:OvertureShots}
 
+\chapter{Example Model Listings}
+\label{chap:listings}
+The VDM models listed in this appendix are described in detail in Chapter
+\ref{chap:examples}
+
+\section{The LUHN Check Digit Model}
+\section{The Basket Service Model}
 
 \bibliographystyle{newalpha}
 
