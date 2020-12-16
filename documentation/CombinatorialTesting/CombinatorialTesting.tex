@@ -254,7 +254,7 @@ working knowledge of VDM, in particular, the VDM++ and VDM-SL dialects.
 Creating a comprehensive set of tests for VDM specifications can be a time
 consuming process. To try to make the generation of test cases simpler, Overture
 provides a VDM language extension (for all dialects) called Combinatorial
-Testing.
+Testing \cite{Nie&11,Larsen&10c}.
 
 In general, specifications are tested to verify that certain properties or
 behaviours are met, as specified by constraints in the specification and
@@ -272,10 +272,10 @@ mathematical proof that it will never violate its constraints, and always meet
 its validation conjectures if presented with a legal sequence of operation
 calls. This provides the highest level of confidence in the correctness of a
 specification, but it can be unrealistic to produce a complete formal proof for
-complex specifications, even with tool support.
+complex specifications, even with tool support \cite{Paulson97,Bicarregui&94}.
 
 Model checking provides an approach to formal testing that is considerably
-better than ad-hoc testing but not as complete as formal proof. This approach
+better than ad-hoc testing but not as complete as formal proof \cite{Clarke&99}. This approach
 uses a formal specification of the system properties desired, often written in a
 temporal calculus, and the model checker symbolically executes the
 specification searching for execution paths that violate the constraints. Since
@@ -287,7 +287,7 @@ that is too great for model checkers.
 
 Combinatorial testing is an approach that is far more powerful than ad-hoc
 testing, but not as complete as model checking. Tests are produced automatically
-from ``traces'' that are relatively simple to define. The approach allows
+from ``\texttt{\textbf{traces}}'' that are relatively simple to define. The approach allows
 specifications to be tested with perhaps millions of test cases, but cannot
 guarantee to catch every corner case in the way that a model checker can.
 Therefore the technique is useful for specifications that are too complex for
@@ -309,7 +309,7 @@ why they failed, which is similar to a model checker's counter example.
 
 \section{Basic Trace Constructs}
 Combinatorial tests are embedded within a VDM specification using a section
-called ``traces''. Typically, one or more traces are added to a separate class
+called ``\texttt{\textbf{traces}}''. Typically, one or more traces are added to a separate class
 or module that is intended for testing rather than the main specification,
 though you can add traces to any class you wish. In this chapter, we will use
 the example classes below:
@@ -340,11 +340,11 @@ end Tester
 \end{lstlisting}
 \normalsize
 
-Notice that there are two classes, Counter and Tester. The Counter defines a
-simple class that increments and decrements a total state value that is
-initially zero. The Tester class creates an instance of Counter and defines a
-single trace called T1. Trace names are simple identifiers, optionally separated
-by slashes (eg. \texttt{item456/interface/all}). This example is the simplest
+Notice that there are two classes, \texttt{Counter} and \texttt{Tester}. The \texttt{Counter} class defines a
+simple operation that increments and decrements a total state value that is
+initially zero. The \texttt{Tester} class creates an instance of Counter and defines a
+single trace called \texttt{T1}. Trace names are simple identifiers, optionally separated
+by slashes (e.g.\ \texttt{item456/interface/all}). This example is the simplest
 trace possible and indicates that the trace should expand to a single test that
 just calls \texttt{obj.inc()}.
 
@@ -353,14 +353,17 @@ perspective (see Appendix \ref{chap:OvertureShots}), or it can be executed from
 the command line using the \texttt{runtrace} command. The command line output is
 illustrated here for simplicity:
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 1 tests in 0.004 secs. 
 Test 1 = obj.inc()
 Result = [1, PASSED]
 Executed in 0.007 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 
 The first line of output indicates that one test has been generated from the
 trace. With more complex examples, this generation could expand to thousands or
@@ -392,7 +395,8 @@ The trace is now saying that it would match either a call to \texttt{obj.inc()}
 or a call to \texttt{obj.dec()}. Therefore the test expansion produces the
 following:
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 2 tests
 Test 1 = obj.inc()
@@ -401,11 +405,13 @@ Test 2 = obj.dec()
 Result = [-1, PASSED]
 Executed in 0.033 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 
 This time two tests are generated. The first calls \texttt{obj.inc()}, the
 second \texttt{obj.dec()}. Notice that the decrement test is completely separate
-from the increment test. It produces -1 as its result, because the Counter
+from the increment test. It produces -1 as its result, because the \texttt{Counter}
 object is re-created for each test. It does not decrement the counter back to
 zero after the first test incremented it.
 
@@ -422,13 +428,16 @@ traces
 This produces the output:
 
 \small
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 Generated 1 tests
 Test 1 = obj.inc(); obj.dec()
 Result = [1, 0, PASSED]
 Executed in 0.027 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 This generates a single test again, but you can see that the test involves two
@@ -448,7 +457,8 @@ traces
 Notice that the separator has changed to a comma. That produces the output:
 
 \small
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 Generated 2 tests
 Test 1 = obj.inc(); obj.dec()
 Result = [1, 0, PASSED]
@@ -456,7 +466,9 @@ Test 2 = obj.dec(); obj.inc()
 Result = [-1, 0, PASSED]
 Executed in 0.029 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 So now both orderings of the two calls are produced. This is because there are
@@ -466,7 +478,7 @@ produces a test for every permutation of the calls in brackets.
 
 But what if some tests are a pair of calls and some are not? If we want to make
 a call optional, the \texttt{?} operator can be added to any operation call
-(ie. not just within \texttt{||} operators) to indicate that this will match
+(i.e.\ not just within \texttt{||} operators) to indicate that this will match
 tests where the call is made and where it is not. For example:
 
 \small
@@ -481,7 +493,8 @@ the orderings of the pair, it should also be absent in some cases. This
 example produces the following:
 
 \small
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 Generated 4 tests
 Test 1 = obj.inc(); skip
 Result = [1, (), PASSED]
@@ -493,11 +506,13 @@ Test 4 = obj.dec(); obj.inc()
 Result = [-1, 0, PASSED]
 Executed in 0.043 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 You see that the decrement call is sometimes present and sometimes replaced by
-\texttt{skip}, which indicates the absence of an optional call. Notice also that
+\texttt{\textbf{skip}}, which indicates the absence of an optional call. Notice also that
 the \texttt{||} operator and the \texttt{?} operator work together to combine their
 effects in this example, though \texttt{?} can be used for any operation call.
 
@@ -513,7 +528,8 @@ traces
     T2: obj.dec()+;
 \end{lstlisting}
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 6 tests
 Test 1 = skip
@@ -545,11 +561,13 @@ Test 5 = obj.dec(); obj.dec(); obj.dec(); obj.dec(); obj.dec()
 Result = [-1, -2, -3, -4, -5, PASSED]
 Executed in 0.042 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
-The important difference between these two is that T1 includes an extra
-\texttt{skip} case, whereas T2 does not.
+The important difference between these two is that \texttt{T1} includes an extra
+\texttt{\textbf{skip}} case, whereas \texttt{T2} does not.
 
 Lastly, it is possible to indicate a specific number of repetitions of a call or
 a range of repetitions. For example:
@@ -561,7 +579,8 @@ traces
     T2: obj.dec(){2, 4};
 \end{lstlisting}
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 1 tests
 Test 1 = obj.inc(); obj.inc(); obj.inc()
@@ -579,11 +598,13 @@ Test 3 = obj.dec(); obj.dec(); obj.dec(); obj.dec()
 Result = [-1, -2, -3, -4, PASSED]
 Executed in 0.01 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
-The T1 trace now produces a single test with precisely three repetitions, while
-the T2 trace gives three tests with 2, 3 and 4 repetitions respectively.
+The \texttt{T1} trace now produces a single test with precisely three repetitions, while
+the \texttt{T2} trace gives three tests with 2, 3 and 4 repetitions respectively.
 
 If you combine a \texttt{||} operator with a repetition, the result is to repeat
 all of the possibilities of the permutation with the given number of repetitions.
@@ -595,7 +616,8 @@ traces
     T1: || ( obj.inc(), obj.dec() ) {2};
 \end{lstlisting}
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 4 tests
 Test 1 = obj.inc(); obj.dec(); obj.inc(); obj.dec()
@@ -608,10 +630,12 @@ Test 4 = obj.dec(); obj.inc(); obj.dec(); obj.inc()
 Result = [-1, 0, -1, 0, PASSED]
 Executed in 0.038 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
-Here, the \texttt{||} operator produces (inc, dec) and (dec, inc); then the
+Here, the \texttt{||} operator produces (\texttt{inc}, \texttt{dec}) and (\texttt{dec}, \texttt{inc}); then the
 repetition doubles this, but it doubles every combination of the two rather than
 simply repeating each one twice.
 
@@ -641,7 +665,8 @@ traces
             obj.inc(a);
 \end{lstlisting}
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 5 tests
 Test 1 = obj.inc(2)
@@ -656,16 +681,18 @@ Test 5 = obj.inc(10)
 Result = [10, PASSED]
 Executed in 0.04 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
-In a standard VDM specification, the \texttt{let\ldots be st} expression would
+In a standard VDM specification, the \texttt{\textbf{let}\ldots \textbf{be st}} expression would
 choose an arbitrary element from the set that meets the \texttt{st} clause. But
 in a trace context, this looseness is used as a pattern that expands to a test
 covering each possible set value that would match. Notice that the tests list
 the actual value of the argument passed, rather than the symbolic name, ``a''.
 
-A trace can include multiple \texttt{let} clauses, but if these are nested, then
+A trace can include multiple \texttt{\textbf{let}} clauses, but if these are nested, then
 the trace expands to the \emph{combination} of the variables. For example:
 
 \small
@@ -677,7 +704,8 @@ traces
                 ( obj.inc(a); obj.dec(b) );
 \end{lstlisting}
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 9 tests
 Test 1 = obj.inc(1); obj.dec(4)
@@ -700,12 +728,14 @@ Test 9 = obj.inc(3); obj.dec(6)
 Result = [3, -3, PASSED]
 Executed in 0.066 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
-This example produces a test for every combination of ``a'' and ``b'' values,
+This example produces a test for every combination of ``\texttt{a}'' and ``\texttt{b}'' values,
 which is therefore nine tests. The round brackets are needed around the pair of
-operation calls because a call binds tightly to the \texttt{let}. Without the
+operation calls because a call binds tightly to the \texttt{\textbf{let}}. Without the
 brackets, you get the following scope error, referring to the ``a'' in the
 second call to \texttt{obj.dec(a)}:
 
@@ -717,16 +747,18 @@ traces
             obj.inc(a); obj.dec(a)
 \end{lstlisting}
 \scriptsize
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 Error 3182: Name 'Tester`a' is not in scope in 'Tester' (example.vpp) at line 28:29
 Type checked 2 classes in 0.12 secs. Found 1 type error
-
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 Note also that the variables defined are in scope
-throughout the clauses below, so the ``a'' variable could be used to define the
-set of ``b'' values:
+throughout the clauses below, so the ``\texttt{a}'' variable could be used to define the
+set of ``\texttt{b}'' values:
 
 \small
 \begin{lstlisting}
@@ -737,7 +769,8 @@ traces
                 ( obj.inc(a); obj.dec(b) );
 \end{lstlisting}
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 9 tests
 Test 1 = obj.inc(1); obj.dec(1)
@@ -760,7 +793,9 @@ Test 9 = obj.inc(3); obj.dec(5)
 Result = [3, -2, PASSED]
 Executed in 0.059 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 If two variables should take values from the same set of values, it is possible
@@ -775,7 +810,8 @@ traces
             ( obj.inc(a); obj.dec(b) );
 \end{lstlisting}
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 9 tests
 Test 1 = obj.inc(1); obj.dec(1)
@@ -798,16 +834,18 @@ Test 9 = obj.inc(3); obj.dec(3)
 Result = [3, 0, PASSED]
 Executed in 0.061 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 
 As well as defining a variable value from a set, variables can be used to
 simplify calculations that would otherwise have to be made in the arguments to
-operation calls. These simpler \texttt{let} definitions do not increase the
+operation calls. These simpler \texttt{\textbf{let}} definitions do not increase the
 number of tests generated from the trace, they just introduce new names in the
 scope that follows. Multiple variable definitions can be declared in 
-one \texttt{let} expression. For example:
+one \texttt{\textbf{let}} expression. For example:
 
 \small
 \begin{lstlisting}
@@ -818,7 +856,8 @@ T1:
             ( obj.inc(b); obj.dec(c) );
 \end{lstlisting}
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 3 tests
 Test 1 = obj.inc(2); obj.dec(0)
@@ -829,12 +868,14 @@ Test 3 = obj.inc(4); obj.dec(2)
 Result = [4, 2, PASSED]
 Executed in 0.054 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
-If repetitions are added to a clause within a \texttt{let} body, they bind
-tightly to the operation call rather than the entire \texttt{let} clause.
-If you want to repeat the entire \texttt{let}, you have to
+If repetitions are added to a clause within a \texttt{\textbf{let}} body, they bind
+tightly to the operation call rather than the entire \texttt{\textbf{let}} clause.
+If you want to repeat the entire \texttt{\textbf{let}}, you have to
 bracket the whole clause and add a repetition to that. For example:
 
 \small
@@ -848,7 +889,8 @@ traces
             obj.inc(a) ){1, 2}
 \end{lstlisting}
 
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 6 tests
 Test 1 = obj.inc(1)
@@ -894,19 +936,21 @@ Test 12 = obj.inc(3); obj.inc(3)
 Result = [3, 6, PASSED]
 Executed in 0.03 secs. 
 All tests passed
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 The difference may seem subtle, but the effect is significant. T1 behaves like a
-simple ``\{1, 2\}'' repetition for each of the \texttt{let} values, whereas T2
-produces either one or two cases from the \emph{entire set} created by the \texttt{let}
+simple ``\{1, 2\}'' repetition for each of the \texttt{\textbf{let}} values, whereas T2
+produces either one or two cases from the \emph{entire set} created by the \texttt{\textbf{let}}
 clause.
 
 Although the example above uses a \texttt{let <set bind>} expression, it is also
-possible to use a \texttt{let <seq bind>} or \texttt{let <type bind>}. In a
+possible to use a \texttt{\textbf{let} <seq bind>} or \texttt{\textbf{let} <type bind>}. In a
 trace context, the ordering that a sequence bind carries does not affect the
-generation of tests; if the example had \texttt{let a in seq [1,2,3]}, the
-same tests would be generated, and since tests are indepedent their order is not
+generation of tests; if the example had \texttt{\textbf{let} a \textbf{in seq} [1,2,3]}, the
+same tests would be generated, and since tests are independent their order is not
 meaningful. So sequence binds are not particularly useful in traces. However
 type binds (of finite types) are a shorthand for ``all values of this type'',
 which can be useful in some circumstances. This is covered later in Chapter
@@ -914,23 +958,23 @@ which can be useful in some circumstances. This is covered later in Chapter
 
 \section{Tests with Errors}
 
-The examples so far have only includes tests that PASSED. This means that they
-completed the sequence of operation calls without violating any preconditions,
-postconditions, state invariants, type invariants, recursive measures or dynamic
+The examples so far have only includes tests that \textbf{PASSED}. This means that they
+completed the sequence of operation calls without violating any pre-conditions,
+post-conditions, state invariants, type invariants, recursive measures or dynamic
 type checks.
 
-If a sequence of operations causes a postcondition failure, then it
-is certain that there is a problem with the specification – it should not be
-possible to provoke a post condition failure with a set of legal calls (ie. ones
-which pass the preconditions and type invariants). On the other hand, if a 
-sequence of operations violates a precondition, or a type or class invariant, 
+If a sequence of operations causes a post-condition failure, then it
+is certain that there is a problem with the specification –- it should not be
+possible to provoke a post-condition failure with a set of legal calls (ie. ones
+which pass the pre-conditions and type invariants). On the other hand, if a 
+sequence of operations violates a pre-condition, or a type or class invariant, 
 then it is \emph{possible} that the specification has a problem, but it is also 
 possible that the test itself is at fault (passing illegal values).
 
 The combinatorial testing environment indicates the exit status of the test  in
-the verdict returned in the last item of the results (all PASSED above). So if 
+the verdict returned in the last item of the results (all \texttt{PASSED} above). So if 
 pre/post/invariant conditions are violated during a test, this may be set to 
-FAILED or INDETERMINATE\footnote{The tools sometimes call this INCONCLUSIVE}. If
+\texttt{FAILED} or \texttt{INDETERMINATE}\footnote{The tools sometimes call this \texttt{INCONCLUSIVE}}. If
 a test fails, then any subsequent test which starts \emph{with the same
 sequence of calls} as the failed sequence will also fail. These tests are
 filtered out of the remaining test sequence automatically, and not executed.
@@ -953,7 +997,8 @@ traces
 \end{lstlisting}
 
 \scriptsize
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 15 tests
 Test 1 = obj.inc(6)
@@ -988,24 +1033,26 @@ Test 15 = obj.inc(10); obj.inc(10); obj.inc(10); obj.inc(10); obj.inc(10)
 Test 15 FILTERED by test 11
 Executed in 0.075 secs. 
 Some tests failed or indeterminate
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
-The \texttt{inc} operation now has a precondition that the argument must be
+The \texttt{inc} operation now has a pre-condition that the argument must be
 less than 10 and a postcondition that the resulting total must be less than 20.
 The trace makes 1 to 5 calls to the \texttt{inc} operation with arguments 6, 7
 and 10, respectively.
 
-The first three tests are fine, but Test 4 fails because the fourth call to
+The first three tests are fine, but \texttt{Test 4} fails because the fourth call to
 \texttt{inc(6)} pushes the total over the limit. This is therefore a
-postcondition FAILED test, and the error message is listed along with the
+post-condition \texttt{FAILED} test, and the error message is listed along with the
 results of the earlier operation calls. Test 5 then tries to do the same, but
-adds a further call. This must fail in the same place as Test 4, because Test 4
-is the ``stem'' of Test 5. Therefore this test is ``FILTERED by Test 4''.
-Similarly, Test 8 fails and Tests 9 and 10 are filtered by this failure.
+adds a further call. This must fail in the same place as \texttt{Test 4}, because\texttt{Test 4}
+is the ``stem'' of \texttt{Test 5}. Therefore this test is ``\texttt{FILTERED} by \texttt{Test 4}''.
+Similarly, \texttt{Test 8} fails and Tests 9 and 10 are filtered by this failure.
 
 Test 11 fails on the first call to \texttt{inc(10)}, since the argument must be
-less than 10. This produces an INDETERMINATE error because we are not
+less than 10. This produces an \texttt{INDETERMINATE} error because we are not
 sure whether this is a problem with the trace or the specification being tested.
 Lastly, Tests 12 to 15 are filtered by Test 11, since they would behave the same
 way.
@@ -1063,7 +1110,8 @@ for other operation calls, and ``[-]'' for a skip, then we can say the
 following trace operators produce these sets of tests:
 
 \small
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 A? = { [A], [-] }
 A;B = { [AB] }
 A;B? = { [AB], [A] }
@@ -1082,7 +1130,9 @@ let b : bool * bool in B(b) = {
     [B(mk_(false, true))], [B(mk_(false, false))]
 }
 let z = 1 in B(z) = { [B(1)] }
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 Note that the repeat limits in a trace (like \{1,3\}) must be numeric literals.
@@ -1142,7 +1192,8 @@ And in the VDM-SL command line, that would be executed as follows. Note that
 Tester is not the default module, so the trace name is qualified:
 
 \scriptsize
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > modules
 Counter (default)
 Tester
@@ -1163,14 +1214,16 @@ Result = [1, 2, 3, 4, 5, PASSED]
 Executed in 0.019 secs. 
 All tests passed
 >
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
-This trace is very similar to the VDM++ example. The Counter module has a
+This trace is very similar to the VDM++ example. The \texttt{Counter} module has a
 single state that is equivalent to the VDM++ ``total'' instance variable. Note
 that this is reset to zero automatically before each test is executed. This is
 because each test re-initializes the specification, and the module
-state has an ``init'' clause that sets the total to zero.
+state has an ``\texttt{\textbf{init}}'' clause that sets the total to zero.
 
 Notice also that the operation calls are not applied to a Counter object, unlike
 VDM++.
@@ -1246,11 +1299,12 @@ possible whenever arguments can be easily evaluated. For example the \texttt{Z
 3 + 3. But if the argument is a more complex expression involving operation
 applies or new object creation, these cannot be evaluated and so the argument
 expression is listed ``as is''. For example, if the trace above is changed to
-call \texttt{obj.inc(max(x, y))}, the test would be listed with ``x'' and ``y''
+call \texttt{obj.inc(max(x, y))}, the test would be listed with ``\texttt{x}'' and ``\texttt{y}''
 rather than their current values:
 
 \small
-\begin{verbatim}
+\lstset{style=tool,language=}
+\begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
 Generated 9 tests in 0.006 secs. 
 Test 1 = inc(max(x, y))
@@ -1258,7 +1312,9 @@ Result = [3, PASSED]
 Test 2 = inc(max(x, y))
 Result = [3, PASSED]
 ...
-\end{verbatim}
+\end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 The operation calls that each expanded test contains do not have to be
