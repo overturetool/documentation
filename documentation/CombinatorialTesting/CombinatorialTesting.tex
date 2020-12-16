@@ -1080,7 +1080,7 @@ used to randomly select tests from the full set. For example, a 1\% RANDOM
 reduction of a trace that expands to a million tests would select 10,000 tests
 from the set. The pseudorandom selection is seeded, so that a consistent subset
 of the tests can be selected.
-\item \emph{SHAPES_NOVARS} reduction. The ``shape'' of a test means the sequence
+\item \emph{SHAPES\_NOVARS} reduction. The ``shape'' of a test means the sequence
 of operation names (regardless of arguments passed), and the idea of shaped
 reduction is to preserve \emph{at least one test} of every shape in the full
 set. So for example, a test that calls \texttt{[opA(1), opB(2), opC(3)]} would
@@ -1089,7 +1089,7 @@ opC(333)]}, but different to a test that calls \texttt{[opX(1), opY(2)]}. So a
 shaped reduction of 1\% of one million tests would try to select 10,000 tests,
 but it also guarantees to include at least one test of every shape within the
 million, even if that means the reduction is (say) 1.5\%.
-\item \emph{SHAPES_VARNAMES} reduction. The simple interpretation of a
+\item \emph{SHAPES\_VARNAMES} reduction. The simple interpretation of a
 shape above only looks at the names of the operations called. This second kind
 of shaped reduction looks at the variable names used in the \texttt{let}
 bindings and constants as well as the names of the operations. So with this kind
@@ -1099,7 +1099,7 @@ Typically, different variable names are used in different parts of a complex
 trace and so this reduction method is trying to select all of the different
 parts of a trace, even if the sequence of operation names produced is the same
 as another part of the trace.
-\item \emph{SHAPES_VARVALUES} reduction. The third type of shaped reduction is
+\item \emph{SHAPES\_VARVALUES} reduction. The third type of shaped reduction is
 even more specific about what constitutes a shape, taking into account the
 \emph{value} of the variables used as well as their names. So \texttt{[opA(a)]}
 will be considered a diffent shape to another \texttt{[opA(a)]} elsewhere, as
@@ -1119,6 +1119,7 @@ traces
 \end{lstlisting}
 
 \lstset{style=tool,language=}
+\scriptsize
 \begin{lstlisting}[escapechar=@]
 > filter
 Usage: filter %age | RANDOM | SHAPES_NOVARS | SHAPES_VARNAMES | SHAPES_VARVALUES
@@ -1200,7 +1201,7 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-Here, we try to reduce this to 1\%, but using the SHAPES_NOVARS option. A
+Here, we try to reduce this to 1\%, but using the SHAPES\_NOVARS option. A
 reduction of 1\% of 36 tests ought to produce a single test (reduction will
 never produce zero tests), but in fact the shaped reduction produces four. You
 can see that there is one case of each ``shape'': one inc and one dec; two incs
@@ -1208,12 +1209,12 @@ and one dec, and so on. So the idea is that the shaped reduction has given a
 representative sample of all of the possible shapes, disregarding variable names
 or values.
 
-Reducing this trace using SHAPES_VARNAMES produces the same number of shapes,
+Reducing this trace using SHAPES\_VARNAMES produces the same number of shapes,
 since the two calls always use the same variable names. But reduction using
-SHAPES_VARVALUES regards all of the tests as different shapes, because the
+SHAPES\_VARVALUES regards all of the tests as different shapes, because the
 variable/value/operation combinations are different in all of the tests.
 
-In practice, the most useful reductions are RANDOM and SHAPES_NOVARS. Random
+In practice, the most useful reductions are RANDOM and SHAPES\_NOVARS. Random
 reductions give a simple way to cut down a large number of tests. Shaped
 reduction is choosing one example of every ``path'' that the trace is taking the
 specification through, which is often closely related to the different use cases
