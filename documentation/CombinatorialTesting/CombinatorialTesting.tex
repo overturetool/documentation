@@ -1481,8 +1481,8 @@ possible whenever arguments can be easily evaluated. For example the \texttt{Z
 3 + 3. But if the argument is a more complex expression involving operation
 applies or new object creation, these cannot be evaluated and so the argument
 expression is listed ``as is''. For example, if the trace above is changed to
-call \texttt{obj.inc(max(x, y))}, the test would be listed with ``\texttt{x}'' and ``\texttt{y}''
-rather than their current values:
+call \texttt{obj.inc(max(x, y))}, the test would be listed with ``\texttt{x}''
+and ``\texttt{y}'' rather than their current values:
 
 \small
 \lstset{style=tool,language=}
@@ -1499,14 +1499,114 @@ Result = [3, PASSED]
 \lstset{language=VDM++}
 \normalsize
 
-The operation calls that each expanded test contains do not have to be
-operations on the ``main'' specification, but can rather be testing operations
-that maintain their own state and then call on to main operations. This allows
-more complex trace scenarios to be created without encoding the detail in the
-trace statements. More examples of this strategy are given in the next chapter.
-
 \chapter{Combinatorial Testing Patterns}
 \label{chap:patterns}
+
+\section{Traces and Test Operations}
+
+After expanding a trace to all of the operation call sequences that match, a
+test is ultimately just a sequence of operation or function calls. But these
+calls do not have to be the primary operations that drive the specification. In
+some cases, it makes sense for traces to expand to a set of tests that call
+\emph{test operations} that maintain their own state and exercise the main
+specification, checking the responses and the main state. Checks like this, that
+do not directly form part of the constraints of the specification, are usually
+called \emph{validation conjectures}. The task of the testing operations is
+therefore to check that, whatever the call sequence made by the trace, the
+validation conjectures for the specification are maintained.
+
+For example, a specification may describe how a sequence of parts are produced
+as calls are made to \texttt{newPart(), adjustPart(), completePart()}. The
+process of creation of individual parts may well involve preconditions,
+postconditions, type invariants and so on. But there may also be a requirement
+that (say) over time, the total number of parts of type A and type B never
+differ by more than a tolerance. This is a validation conjecture: it is not
+directly stated in the constraints of the specification, but it is a behaviour
+that must be manifest by the system over time. Therefore the trace(s) for such
+a system can call the main operations via test operations, like
+\texttt{testNewPart()} and so on, and the \texttt{testCompletePart()} operation
+can check the history of parts created to validate that the tolerance is always
+respected, regardless of the sequence of operations that the trace tries. Note
+that these test operations can maintain their own state that is private and
+separate from that of the main specification.
+
+In such cases, it makes sense to add all of the test operations to a separate
+class or module, to make it clear that they are not part of the main
+specification. This is illustrated in the Basket Service example in Chapter
+\ref{chap:examples}.
+
+\section{Common Patterns}
+
+Experience has shown that the testing of many specifications with traces
+requires several common ``patterns'' to create data selections or sequences of
+operations. These are presented in this chapter.
+
+\subsection{Sets for ``let'' bindings}
+
+The set of values that is used by a \texttt{let multiple-bind} is usually
+shown as an enumeration of literals in examples. But the set value can use any
+VDM expression that yields a set. The following cases are generally useful:
+
+\begin{itemize}
+  \item Set comprehensions can be used to select values from a larger set that
+  meet the membership predicate. This is similar to the use of the \texttt{be
+  st} clause, but the filter acts on the members of the set rather than the
+  values that are bound:
+\small
+\begin{verbatim}
+let pair in set {mk_(a, b) | a, b in set VALUES & a > b} in ...
+\end{verbatim}
+\normalsize
+  \item The \texttt{power} operator can be used to produce all possible subsets
+  from another set, though you often have to eliminate the empty set, which is
+  produced by the operator:
+\small
+\begin{verbatim}
+let options in set power ALL_OPTIONS \ {{}} in ...
+\end{verbatim}
+\normalsize
+  \item If you are using finite types (i.e. types that have a finite number of
+  values), then you can use a type multiple bind to conveniently choose all of
+  the possible values of that type:
+\small
+\begin{verbatim}
+let product : Product in ...
+\end{verbatim}
+\normalsize
+  \item Often elements have to be chosen from a set such that they are different
+  to previous selections from the same set. This can sometimes be done in a
+  single \texttt{let} bind by using a \texttt{be st} clause that states that the
+  values are different. But a common usage is to make a selection from a set
+  that has had the first choice(s) eliminated:
+\small
+\begin{verbatim}
+let a, b in set S be st a <> b in ...
+let c in set S \ {a, b} in ...
+let d in set S be st d not in set {a, b, c} in ...
+\end{verbatim}
+\normalsize
+  \item A common requirement is to select names items from a set, such that the
+  items form every possible permutation of that set. This can be done by using
+  the looseness of a set bind, which expands to such a permutation. Note the use
+  of the set pattern and the set-of-set \texttt{\{S\}} in the bind values:
+\small
+\begin{verbatim}
+let {a, b, c, d, e} in set {S} be st ... in ...
+\end{verbatim}
+\normalsize
+\end{itemize}
+
+\subsection{Bracketing operations with headers and trailers}
+
+\subsection{Graph searching by traces}
+
+\subsection{Building data in stages}
+
+\subsection{Oracle functions}
+
+\subsection{Using positive and negative sense checks}
+
+\section{Avoiding Test Explosions}
 
 \chapter{Combinatorial Testing Examples}
 \label{chap:examples}
