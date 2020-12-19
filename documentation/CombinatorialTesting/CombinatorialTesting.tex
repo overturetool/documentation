@@ -1553,25 +1553,25 @@ VDM expression that yields a set. The following cases are generally useful:
   st} clause, but the filter acts on the members of the set rather than the
   values that are bound:
 \small
-\begin{verbatim}
+\begin{lstlisting}
 let pair in set {mk_(a, b) | a, b in set VALUES & a > b} in ...
-\end{verbatim}
+\end{lstlisting}
 \normalsize
   \item The \texttt{power} operator can be used to produce all possible subsets
   from another set, though you often have to eliminate the empty set, which is
   produced by the operator:
 \small
-\begin{verbatim}
+\begin{lstlisting}
 let options in set power ALL_OPTIONS \ {{}} in ...
-\end{verbatim}
+\end{lstlisting}
 \normalsize
   \item If you are using finite types (i.e. types that have a finite number of
   values), then you can use a type multiple bind to conveniently choose all of
   the possible values of that type:
 \small
-\begin{verbatim}
+\begin{lstlisting}
 let product : Product in ...
-\end{verbatim}
+\end{lstlisting}
 \normalsize
   \item Often elements have to be chosen from a set such that they are different
   to previous selections from the same set. This can sometimes be done in a
@@ -1579,11 +1579,11 @@ let product : Product in ...
   values are different. But a common usage is to make a selection from a set
   that has had the first choice(s) eliminated:
 \small
-\begin{verbatim}
+\begin{lstlisting}
 let a, b in set S be st a <> b in ...
 let c in set S \ {a, b} in ...
 let d in set S be st d not in set {a, b, c} in ...
-\end{verbatim}
+\end{lstlisting}
 \normalsize
   \item A common requirement is to select names items from a set \emph{of a
   known size}, such that the items form every possible permutation of that set.
@@ -1591,9 +1591,9 @@ let d in set S be st d not in set {a, b, c} in ...
   permutation. Note the use of the set pattern and the set-of-set
   \texttt{\{S\}} in the bind values:
 \small
-\begin{verbatim}
+\begin{lstlisting}
 let {a, b, c, d, e} in set {S} be st ... in ...
-\end{verbatim}
+\end{lstlisting}
 \normalsize
 \end{itemize}
 
