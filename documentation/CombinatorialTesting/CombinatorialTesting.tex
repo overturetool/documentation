@@ -1504,7 +1504,7 @@ Result = [3, PASSED]
 
 \section{Traces and Test Operations}
 
-After expanding a trace to all of the operation call sequences that match, a
+After expanding a trace to all of the call sequences that match, a
 test is ultimately just a sequence of operation or function calls. But these
 calls do not have to be the primary operations that drive the specification. In
 some cases, it makes sense for traces to expand to a set of tests that call
@@ -1570,7 +1570,7 @@ let options in set power ALL_OPTIONS \ {{}} in ...
   the possible values of that type:
 \small
 \begin{lstlisting}
-let product : Product in ...
+let p1, p2 : Product in ...
 \end{lstlisting}
 \normalsize
   \item Often elements have to be chosen from a set such that they are different
@@ -1585,14 +1585,16 @@ let c in set S \ {a, b} in ...
 let d in set S be st d not in set {a, b, c} in ...
 \end{lstlisting}
 \normalsize
-  \item A common requirement is to select names items from a set \emph{of a
-  known size}, such that the items form every possible permutation of that set.
-  This can be done by using the looseness of a set bind, which expands to such a
-  permutation. Note the use of the set pattern and the set-of-set
-  \texttt{\{S\}} in the bind values:
+  \item A common requirement is to select combinations from, or permutations
+  of a set. This can be done by using the looseness of a set bind. Note the
+  cardinality check in the k-combination example (k=3), and the use of the set
+  pattern and the set-of-set \texttt{\{S\}} in the k-permutation example (k=5):
 \small
 \begin{lstlisting}
-let {a, b, c, d, e} in set {S} be st ... in ...
+-- Combinations of 3 values from S
+let c1, c2, c3 in set S be st card {c1, c2, c3} = 3 in ...
+-- Permutations of all 5 values in S
+let {p1, p2, p3, p4, p5} in set {S} in ...
 \end{lstlisting}
 \normalsize
 \end{itemize}
