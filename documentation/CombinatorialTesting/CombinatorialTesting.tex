@@ -1593,7 +1593,7 @@ let d in set S be st d not in set {a, b, c} in ...
 \begin{lstlisting}
 -- Combinations of 3 values from S
 let c1, c2, c3 in set S be st card {c1, c2, c3} = 3 in ...
--- Permutations of all 5 values in S
+-- Permutations of 5 values from S
 let {p1, p2, p3, p4, p5} in set {S} in ...
 \end{lstlisting}
 \normalsize
@@ -1601,15 +1601,244 @@ let {p1, p2, p3, p4, p5} in set {S} in ...
 
 \subsection{Bracketing operations with headers and trailers}
 
+A very common requirement is to make a number of fixed setup calls,
+followed by a large number of different test calls, followed by a number of
+fixed closedown calls. This pattern emerges naturally from a semi-colon
+separated trace sequence with a complex ``middle'':
+\small
+\begin{lstlisting}
+SetSystemDate(221220);
+LoadCertificates(RefData);
+	test1() |
+	test2() |
+	test3() |
+	test4() |
+	test5() |
+	test6() |
+	test7();
+EndTransaction();
+\end{lstlisting}
+\normalsize
+This produces a set of seven tests, calling tests 1 to 7, each of which is
+sandwiched by calls that set up the system and close down the transation.
+Clearly the body containing the alternative tests can be arbitrarily
+complicated, for example using variable binds to generate many possiblities.
+
 \subsection{Graph searching by traces}
+
+Traces that explore all of the possibile uses cases of a system frequently
+need to search a graph that describes the possible paths through the use case.
+This is translated into a trace by generating a call for each step through the
+graph, where the trace expands to the possibilities at each step. For example:
+\scriptsize
+\begin{lstlisting}
+values
+	TESTSTATES : map TestState to map Event to TestState =
+	{
+		<READY>	|->
+		{
+			<SEND>		|-> <SENT>
+		},
+
+		<SENT> |->
+		{
+			<RX_NACK>	|-> <RESEND1>,
+			<RX_ACK>	|-> <END>,
+			<TIMEOUT>	|-> <RESEND1>,
+			<PARTIAL>	|-> <SENT>
+		},
+		...
+	}
+
+traces
+	AllTransitions:
+		let s1 = <READY> in
+		let ev1 in set dom TESTSTATES(s1) in
+		let s2 = TESTSTATES(s1)(ev1) in
+		let ev2 in set dom TESTSTATES(s2) in
+		let s3 = TESTSTATES(s2)(ev2) in
+		let ev3 in set dom TESTSTATES(s3) in
+		let s4 = TESTSTATES(s3)(ev3) in
+		let ev4 in set dom TESTSTATES(s4) in
+		let s5 = TESTSTATES(s4)(ev4) in
+		let ev5 in set dom TESTSTATES(s5) in
+			execute([ev1, ev2, ev3, ev4, ev5])
+\end{lstlisting}
+\normalsize
+Here the system starts in state \texttt{s1}, which must be \texttt{READY}. From
+there, a number of events are possible given by the domain of a lookup of the
+state in the \texttt{TESTSTATES} map. One of these events is selected as
+\texttt{ev1}, which then moves us to state \texttt{s2}, and so on. After five
+events have been generated, they are passed to an \texttt{execute} method which
+uses the events to test that particular path through the graph.
+
+Note that a graph searching cascade like this can generate tens of thousands of
+possibilities very quickly, even with comparatively simple graphs.
 
 \subsection{Building data in stages}
 
+A cascade of let bindings can be used to build a complex data structure in
+stages, rather than each binding having to create a complete value. For example:
+\scriptsize
+\begin{lstlisting}
+EPATest:
+    let a, b, c, d, e in set    -- Pick five branches
+    {
+        mk_B([1],        0),
+        mk_B([-1, 2],    1),
+        mk_B([1, 2, 0],  2)
+    }
+    in
+
+    let branches in set         -- Between one and five of them
+    {
+        [a],
+        [a,b],
+        [a,b,c],
+        [a,b,c,d],
+        [a,b,c,d,e]
+    }
+    in
+ 
+    let epa = mk_InputFile(     -- EPA InputFile from those B values
+        mk_Header(),
+        mk_PaymentSummary(getPS(branches)),
+        {
+            mk_Branch(
+                mk_SummaryOfCharge(mk_token(mk_("MID", B)), ...),
+                {
+                    mk_RecordOfCharge(... mk_("TxnNum", B, i) ...)
+                    | i in set inds branches(B).ROCs
+                },
+                {
+                    mk_Adjustment(mk_token(mk_(B, i)))
+                    | i in set {1, ..., branches(B).ADJs}
+                }
+            )
+            | B in set inds branches
+        },
+        mk_Trailer(getTR(branches) + 1)
+    )
+    in
+
+    -- Finally, transform the EPA file into the various output formats.
+    (
+        transformAudit(epa);
+        transformC4D(epa)
+    );
+\end{lstlisting}
+\normalsize
+This example creates \texttt{InputFiles}, which contain various records that
+relate to electronic payments taken from a branch of a business. The objective of the
+trace is to check a large number of different input files with different numbers
+of branches and various record types.
+
+Creating such files in a single trace step would be difficult, if not
+impossible. But here, we see that the generation starts with a selection of
+``B'' values from a set of possibilities. Then sequences of between one and five
+of these values is created. Then these ``branch'' sequences are used in nested
+set comprehensions to create an \texttt{InputFile}. Lastly, every InputFile
+created is processed by a couple of operations.
+
 \subsection{Oracle functions}
+
+In many cases, the expected result of an operation or function call is too
+complicated to predict simply in a trace - assuming you have a support function
+that checks the result with (say) a postcondition:
+
+\small
+\begin{lstlisting}
+assert: seq1 of nat * seq1 of nat +> bool
+assert(data, expected) == data = expected
+post RESULT = true;
+\end{lstlisting}
+\normalsize
+
+Here, we assume that the ``data'' argument passed comes from some processing in
+the specification, but where does the ``expected'' value come from? It could be
+a literal in the trace, but this is not practical for non-trivial examples, so
+it is common to create support functions that produce answers that are correct
+\emph{by definition}. Such functions are called \emph{oracles}.
+
+\scriptsize
+\begin{lstlisting}
+Scenarios:
+    let s = mk_Service(...) in
+    let q in set ... in
+    let mk_(first, second) in set ... in 
+    let test = mk_Test(
+        [s],
+        keyStrokesFor(q, first, second),    -- Expected keystrokes
+        basketFor(first, second))           -- Expected basket
+    in
+        run(test);
+\end{lstlisting}
+\normalsize
+
+In this example, a ``Test'' is created that includes the expected keystrokes and
+the expected basket result for a retail application in a given scenario (use
+case). The \texttt{run} operation uses the key strokes to drive the
+specification under test and then check that the expected basket is produced
+correctly. Both of these functions are oracles.
 
 \subsection{Using positive and negative sense checks}
 
+The natural way to think about testing a specification is to consider all of the
+success paths and then design traces that exercise those paths. But in many
+cases, a specification is also required to ``fail'' in the correct way; that is,
+there certain inputs or call sequences that require a specific error condition
+to be generated, even though that is a failure in some sense.
+
+There is an example of this in the Luhn specification described in Chapter
+\ref{chap:examples}. The Luhn algorithm is a kind of checksum. Therefore it is
+\emph{required} to fail if a piece of data is corrupted in specific ways, which
+shows that the checksum is doing its job, detecting the corruption. So the Luhn
+specification tests deliberately corrupt a piece of data and then verify that
+the algorithm generates a \emph{different} check digit - i.e. they verify that a
+check with the original check digit fails correctly:
+
+\small
+\begin{lstlisting}
+checkFail: seq1 of nat * nat * nat ==> bool
+checkFail(data, expected, base) ==
+	return luhn(data, base) <> expected	-- Expect failure
+post RESULT = true;
+\end{lstlisting}
+\normalsize
+
 \section{Avoiding Test Explosions}
+
+It is extremely easy to write a comparatively simple looking trace definition
+that expands into a collection of tests that is so large that it is not
+practical to execute, either because it would take too long or because the
+generation process takes up too much memory.
+
+The following tips will help you to avoid this pitfall:
+
+\begin{itemize}
+  \item \emph{Start small}. It is tempting to write traces as clearly as
+  possible to start with, and that may lead to the binding of values from sets
+  of data or types with many values. The combinatorial expansion process will
+  then either multiply these data sizes together, or in some cases generate 
+  combinations that depend on the \emph{factorial} of the data sizes. So a
+  modest set of 50 values might therefore generate over $10^{64}$ tests (i.e.
+  the factorial of 50). So start small: design and test traces with small
+  example sets and types, and only expand the data selections when you can see
+  that the trace is expanding as you require.
+  \item \emph{Split up traces}. The alternation operator, \texttt{|}, will join
+  together two sets of tests in a trace. It may therefore be tempting to write a
+  single trace that is composed of many parts, testing different parts of the
+  system, joined by alternation. This has the advantage that the whole
+  specification can be tested by running one trace. But it also means that the
+  trace expands to the sum of all of the tests within all of the parts. That is
+  much better than a product or factorial combination, but if the parts are
+  genuinely separate, you will be able to do more tests in the parts by
+  separating them into multiple traces.
+  \item \emph{Be careful with multiple-binds and power sets}. As mentioned
+  above, factorial scaling is extremely expensive. This occurs most commonly
+  with multiple-binds that are used for k-combinations or k-permutations, and
+  with the \texttt{power} operator on sets.
+\end{itemize}
 
 \chapter{Combinatorial Testing Examples}
 \label{chap:examples}
