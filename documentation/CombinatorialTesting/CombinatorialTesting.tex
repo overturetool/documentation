@@ -1623,10 +1623,11 @@ T:
     EndTransaction();
 \end{lstlisting}
 \normalsize
-This produces a set of seven tests, calling tests 1 to 7, each of which is
-sandwiched by calls that set up the system and close down the transation.
-Clearly the body containing the alternative tests can be arbitrarily
-complicated, for example using variable binds to generate many possiblities.
+This produces a set of seven tests, calling \texttt{test1} to \texttt{test7},
+each of which is sandwiched by calls that set up the system and close down the
+transaction. Clearly the body containing the alternative tests can be
+arbitrarily complicated, for example using variable binds to generate many
+possiblities.
 
 \subsection{Graph searching by traces}
 
@@ -1639,17 +1640,17 @@ graph, where the trace expands to the possibilities at each step. For example:
 values
     TESTSTATES : map TestState to map Event to TestState =
     {
-        <READY>    |->
+        <READY> |->
         {
-            <SEND>        |-> <SENT>
+            <SEND>    |-> <SENT>
         },
 
         <SENT> |->
         {
-            <RX_NACK>    |-> <RESEND1>,
-            <RX_ACK>    |-> <END>,
-            <TIMEOUT>    |-> <RESEND1>,
-            <PARTIAL>    |-> <SENT>
+            <RX_NACK> |-> <RESEND1>,
+            <RX_ACK>  |-> <END>,
+            <TIMEOUT> |-> <RESEND1>,
+            <PARTIAL> |-> <SENT>
         },
         ...
     }
