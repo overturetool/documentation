@@ -1598,7 +1598,26 @@ let c1, c2, c3 in set S be st card {c1, c2, c3} = 3 in ...
 let {p1, p2, p3, p4, p5} in set {S} in ...
 \end{lstlisting}
 \normalsize
-  \item Something about combinations!!
+  \item It is sometimes useful to be able to select all k-combinations from
+  a set, rather than permutations. It is not as easy as creating permutations,
+  but can be done in two steps. The first step creates a set of the combinations
+  and chooses a value; the second step maps the chosen combination to individual
+  variables. This can't be done in one step, because within a trace the binding
+  of set values will always permute the elements; the simple \texttt{let}
+  definition does not permute the set elements.
+\small
+\begin{lstlisting}
+-- k-combinations of 2 values from S
+let c in set {{x, y} | x, y in set S & card {x, y} = 2} in
+let {p, q} = c in ...
+\end{lstlisting}
+\normalsize
+  Note that in this pattern, the combinations of \texttt{p,q} are repeated.
+  This is because the \texttt{c} value is taking on multiple permutations of its
+  elements, like \texttt{{1,2}} and \texttt{{2,1}}. Obviously these sets are
+  equal, but the elements are in different orders. This order does not affect
+  the second trace expression, which produces repeats of the same combination
+  for each set ordering. \emph{Unfortunately, this is hard to avoid}.
 \end{itemize}
 
 \subsection{Bracketing operations with headers and trailers}
