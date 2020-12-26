@@ -1592,32 +1592,23 @@ let d in set S be st d not in set {a, b, c} in ...
   have to know the size of the set to match the pattern:
 \small
 \begin{lstlisting}
--- k-permutations of 3 values from S
+-- Every k-permutation of 3 values from S
 let c1, c2, c3 in set S be st card {c1, c2, c3} = 3 in ...
 -- Permutations of all values from S
 let {p1, p2, p3, p4, p5} in set {S} in ...
 \end{lstlisting}
 \normalsize
   \item It is sometimes useful to be able to select all k-combinations from
-  a set, rather than permutations. It is not as easy as creating permutations,
-  but can be done in two steps. The first step creates a set of the combinations
-  and chooses a value; the second step maps the chosen combination to individual
-  variables. This can't be done in one step, because within a trace the binding
-  of set values will always permute the elements; the simple \texttt{let}
-  definition does not permute the set elements.
+  a set, rather than k-permutations. This can't be done with sets, because
+  within a trace the binding of set values will always permute the elements.
+  Instead, sequence patterns are used, along with a discriminator that selects
+  one unique combination from the possible orderings (here, \texttt{x < y}):
 \small
 \begin{lstlisting}
--- k-combinations of 2 values from S
-let c in set {{x, y} | x, y in set S & card {x, y} = 2} in
-let {p, q} = c in ...
+-- Every k-combination of 2 values from S
+let [a, b] in set {[x, y] | x, y in set S & x < y} in
 \end{lstlisting}
 \normalsize
-  Note that in this pattern, the combinations of \texttt{p,q} are repeated.
-  This is because the \texttt{c} value is taking on multiple permutations of its
-  elements, like \texttt{{1,2}} and \texttt{{2,1}}. Obviously these sets are
-  equal, but the elements are in different orders. This order does not affect
-  the second trace expression, which produces repeats of the same combination
-  for each set ordering. \emph{Unfortunately, this is hard to avoid}.
 \end{itemize}
 
 \subsection{Bracketing operations with headers and trailers}
@@ -1753,6 +1744,7 @@ EPATest:
     );
 \end{lstlisting}
 \normalsize
+
 This example creates \texttt{InputFiles}, which contain various records that
 relate to electronic payments taken from a branch of a business. The objective of the
 trace is to check a large number of different input files with different numbers
@@ -1862,7 +1854,8 @@ The following tips will help you to avoid this pitfall:
   \item \emph{Be careful with multiple-binds and power sets}. As mentioned
   above, factorial scaling is extremely expensive. This occurs most commonly
   with multiple-binds that are used for k-permutations, and with the
-  \texttt{power} operator on sets.
+  \texttt{power} operator on sets. As suggested above, in these case start with
+  small sets and increase them with care!
 \end{itemize}
 
 \chapter{Combinatorial Testing Examples}
