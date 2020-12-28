@@ -1592,20 +1592,20 @@ VDM expression that yields a set. The following cases are generally useful:
 \small
 \begin{lstlisting}
 -- Every k-permutation of 3 values from S
-  let c1, c2, c3 in set S be st card {c1, c2, c3} = 3 in ...
+  let p1, p2, p3 in set S be st card {p1, p2, p3} = 3 in ...
 -- Permutations of all values from S
   let {p1, p2, p3, p4, p5} in set {S} in ...
 \end{lstlisting}
 \normalsize
   \item It is sometimes useful to be able to select all k-combinations from
-  a set, rather than k-permutations. This cannot be done with sets, because
-  within a trace the binding of set values will always permute the elements.
-  Instead, sequence patterns are used, along with a discriminator that selects
-  one unique combination from the possible orderings (here, \texttt{x < y}):
+  a set, rather than k-permutations. This is similar, but with a \texttt{be st}
+  discriminator that selects one unique combination from the possible orderings
+  (here, \texttt{c1 < c2 and c2 < c3}):
 \small
 \begin{lstlisting}
--- Every k-combination of 2 values from S
-  let [a, b] in set {[x, y] | x, y in set S & x < y} in
+-- Every k-combination of 3 values from S
+  let c1, c2, c3 in set S be st card {c1, c2, c3} = 3
+      and c1 < c2 and c2 < c3 in ...
 \end{lstlisting}
 \normalsize
 \end{itemize}
