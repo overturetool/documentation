@@ -1501,6 +1501,24 @@ Result = [3, PASSED]
 \chapter{Combinatorial Testing Patterns}
 \label{chap:patterns}
 
+\section{Data and Process Traces}
+
+Traces fall into two broad categories, although you can have a mixture
+of both in a specification. One category is focussed on the behaviour of a
+single function or operation when presented with a large variety of different
+data structures; the other category is focussed on the process behaviour of a
+system when exercised by a large number of different operation call paths.
+
+In one sense this distinction is artificial. You can create a trace that
+explores many process paths and also creates a wide variety of data values to
+pass to the operations called on the way. But these aspects of a specification's
+behaviour are often separable, and little advantage is gained by trying to test
+everything at once. 
+
+The patterns described in this chapter are generally useful in one or other of
+the trace styles. The styles are also illustrated in more detail by the
+examples in Chapter \ref{chap:examples}.
+
 \section{Traces and Test Operations}
 
 After expanding a trace to all of the call sequences that match, a
@@ -1538,7 +1556,7 @@ specification. This is illustrated in the Basket Service example in Chapter
 
 Experience has shown that the testing of many specifications with traces
 requires several common ``patterns'' to create data selections or sequences of
-operations. These are presented in this chapter.
+operations. These are presented in this section.
 
 \subsection{Sets for ``let'' bindings}
 
@@ -1860,8 +1878,131 @@ The following tips will help you to avoid this pitfall:
 \chapter{Combinatorial Testing Examples}
 \label{chap:examples}
 
-\section{The LUHN Check Digit Model}
+This Chapter looks at two significant specifications and their traces.
+Extracts of the specifications are given, but the full listing of both can be
+found in Appendix \ref{chap:listings}.
+
+\section{The Luhn Check Digit Model}
+
+\subsection{Background}
+
+The Luhn\footnote{See https://en.wikipedia.org/wiki/Luhn\_algorithm} check digit
+algorithm is commonly used in commercial systems to provide a simple means to
+check the integrity of a number, such as a credit card number or a product barcode.
+
+The simplest version of the algorithm is able to check strings of decimal
+digits. A more complex version is defined for checking strings of digits in an
+arbitrary numerical base and encoding. In both cases, the check digit produced
+is a valid character in the numerical base of the input. The example presented
+here is the more complex algorithm.
+
+The Luhn algorithm can detect a wide range of common transcription errors, for
+example when adjacent digits are swapped in the input. But its error detection
+is not perfect. In particular, there are specific patterns of input corruption
+that are \emph{not detected} by the algorithm. The testing of the specification
+has to verify both the correct detection of most corruptions, and the the
+correct failure to detect the known weaknesses.
+
+\subsection{The Structure of the Specification}
+
+The Luhn algorithm is defined in a singe class, called ``LUHN''.
+
+The first part of the specification defines the encoding for the digit
+strings that are to be checked. The algorithm is defined for a given
+\emph{base}, and therefore a set of characters for the base must be defined. In
+the simple base-10 case, the ten characters are usually '0', '1', \ldots, '9',
+but they could be any selection of ten distinct characters. Similarly, other
+bases require more or fewer characters, and the choice is arbitrary. A given
+choice is defined by a \texttt{Mapping} type in the model:
+
+\small
+\begin{lstlisting}
+-- A type describing valid character mappings. The map must be
+-- injective, and it must map arbitrary characters onto the set
+-- {0, ..., N-1}, where N is the base of the algorithm.
+
+public Mapping = inmap char to nat
+inv m == rng m = {0, ..., card rng m - 1};
+\end{lstlisting}
+\normalsize
+
+\noindent The top level Luhn algorithm is then a function which takes a
+\texttt{Mapping} as well as a base and a string of characters, returning a single check digit:
+
+\small
+\begin{lstlisting}
+public luhns: seq1 of char * nat1 * Mapping -> char
+luhns(string, base, mapping) ==
+    let encoded = [ mapping(string(i)) | i in set inds string ] in
+        (inverse mapping)(luhn(encoded, base))
+
+pre (elems string subset dom mapping) and (card rng mapping = base)
+post RESULT in set dom mapping;
+\end{lstlisting}
+\normalsize
+
+The precondition checks that the string passed is only comprised of characters
+in the domain of the mapping, and that the base is consistent with the size of
+the mapping. The postcondition checks that the character returned is also a
+member of the mapping.
+
+The body of the function uses the mapping to encode the input string into a
+sequence of numbers. These are then processed by a lower level \texttt{luhn}
+function to produce a check value, which is finally mapped back to a character
+using the inverse of the mapping.
+
+The \texttt{luhn} function is passed a sequence of numbers and a base, returning
+another number of that base:
+
+\small
+\begin{lstlisting}
+public luhn: seq1 of nat * nat1 -> nat
+luhn(data, base) ==
+    let remainder = total(data, base) mod base in
+        (base - remainder) mod base
+pre forall i in set inds data & data(i) < base
+post RESULT < base and (total(data, base) + RESULT) mod base = 0;
+\end{lstlisting}
+\normalsize
+
+The Luhn check value is defined in terms of a \texttt{total} function. The
+Luhn result is difference between the total function and the base (modulo the
+base). The precondition checks that all of the values in the input string are
+within the base, and the postcondition checks that the result is within the base
+and that adding the total value to the result gives zero (modulo the base).
+
+Lastly, the \texttt{total} function is passed the string of input values and
+produces a total, which is the sum of the digits of the value, multiplied by a
+factor which alternates between 1 and 2, such that the \emph{rightmost}
+factor is always 2.
+
+\small
+\begin{lstlisting}
+private total: seq of nat * nat1 -> nat
+total(data, base) ==
+    if data = []
+    then 0
+    else total(tl data, base) +
+        let multipler = (len data) mod 2 + 1,
+            code = hd data,
+            product = code * multipler
+        in
+            sumDigits(product, base)
+
+pre forall i in set inds data & data(i) < base
+measure len data;
+\end{lstlisting}
+\normalsize
+
+The precondition checks that the values in the input are within the base. There
+is also a recursive measure that checks that the string of data being totalled
+is always decreasing in length.
+
 \section{The Basket Service Model}
+
+\subsection{Background}
+
+\subsection{The Structure of the Specification}
 
 \appendix
 \chapter{Combinatorial Testing Syntax}
