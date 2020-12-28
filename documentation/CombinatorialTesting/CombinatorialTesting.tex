@@ -339,23 +339,23 @@ the example classes below:
 \begin{lstlisting}
 class Counter
 instance variables
-    total:int := 0;
+  total:int := 0;
 
 operations
-    public inc: () ==> int
-    inc() == ( total := total + 1; return total; )
+  public inc: () ==> int
+  inc() == ( total := total + 1; return total; )
 
-    public dec: () ==> int
-    dec() == ( total := total - 1; return total; )
+  public dec: () ==> int
+  dec() == ( total := total - 1; return total; )
 
 end Counter
 
 class Tester
 instance variables
-    obj:Counter := new Counter();
+  obj:Counter := new Counter();
 
 traces
-    T1: obj.inc();
+  T1: obj.inc();
 
 end Tester
 \end{lstlisting}
@@ -408,7 +408,7 @@ the trace to the following:
 \small
 \begin{lstlisting}
 traces
-    T1: obj.inc() | obj.dec();
+  T1: obj.inc() | obj.dec();
 \end{lstlisting}
 \normalsize
 
@@ -442,7 +442,7 @@ using a semi-colon separator:
 \small
 \begin{lstlisting}
 traces
-    T1: obj.inc(); obj.dec();
+  T1: obj.inc(); obj.dec();
 \end{lstlisting}
 \normalsize
 
@@ -471,7 +471,7 @@ test calls to them in either order, which would be expressed as:
 \small
 \begin{lstlisting}
 traces
-    T1: || ( obj.inc(), obj.dec() );
+  T1: || ( obj.inc(), obj.dec() );
 \end{lstlisting}
 \normalsize
 
@@ -505,7 +505,7 @@ tests where the call is made and where it is not. For example:
 \small
 \begin{lstlisting}
 traces
-    T1: || ( obj.inc(), obj.dec()? );
+  T1: || ( obj.inc(), obj.dec()? );
 \end{lstlisting}
 \normalsize
 
@@ -545,8 +545,8 @@ value that defaults to 5, though it can be changed. So for example:
 \small
 \begin{lstlisting}
 traces
-    T1: obj.inc()*;
-    T2: obj.dec()+;
+  T1: obj.inc()*;
+  T2: obj.dec()+;
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -596,8 +596,8 @@ a range of repetitions. For example:
 \small
 \begin{lstlisting}
 traces
-    T1: obj.inc(){3};
-    T2: obj.dec(){2, 4};
+  T1: obj.inc(){3};
+  T2: obj.dec(){2, 4};
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -634,7 +634,7 @@ For example:
 \small
 \begin{lstlisting}
 traces
-    T1: || ( obj.inc(), obj.dec() ) {2};
+  T1: || ( obj.inc(), obj.dec() ) {2};
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -674,16 +674,16 @@ like this:
 \small
 \begin{lstlisting}
 ...
-    public inc: int ==> int
-    inc(i) == ( total := total + i; return total; );
+  public inc: int ==> int
+  inc(i) == ( total := total + i; return total; );
 
-    public dec: int ==> int
-    dec(i) == ( total := total - i; return total; )
+  public dec: int ==> int
+  dec(i) == ( total := total - i; return total; )
 
 traces
-    T1:
-        let a in set {1, ..., 10} be st a mod 2 = 0 in
-            obj.inc(a);
+  T1:
+      let a in set {1, ..., 10} be st a mod 2 = 0 in
+          obj.inc(a);
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -719,10 +719,10 @@ the trace expands to the \emph{combination} of the variables. For example:
 \small
 \begin{lstlisting}
 traces
-    T1:
-        let a in set {1, 2, 3} in
-            let b in set {4, 5, 6} in
-                ( obj.inc(a); obj.dec(b) );
+  T1:
+      let a in set {1, 2, 3} in
+          let b in set {4, 5, 6} in
+              ( obj.inc(a); obj.dec(b) );
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -763,9 +763,9 @@ second call to \texttt{obj.dec(a)}:
 \small
 \begin{lstlisting}
 traces
-    T1:
-        let a in set {6, 7, 10} in
-            obj.inc(a); obj.dec(a)
+  T1:
+      let a in set {6, 7, 10} in
+          obj.inc(a); obj.dec(a)
 \end{lstlisting}
 \scriptsize
 \lstset{style=tool,language=}
@@ -784,10 +784,10 @@ set of ``\texttt{b}'' values:
 \small
 \begin{lstlisting}
 traces
-    T1:
-        let a in set {1, 2, 3} in
-            let b in set {a, ..., a + 2} in
-                ( obj.inc(a); obj.dec(b) );
+  T1:
+      let a in set {1, 2, 3} in
+          let b in set {a, ..., a + 2} in
+              ( obj.inc(a); obj.dec(b) );
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -826,9 +826,9 @@ example:
 \small
 \begin{lstlisting}
 traces
-    T1:
-        let a, b in set {1, 2, 3} in
-            ( obj.inc(a); obj.dec(b) );
+  T1:
+      let a, b in set {1, 2, 3} in
+          ( obj.inc(a); obj.dec(b) );
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -902,12 +902,12 @@ bracket the whole clause and add a repetition to that. For example:
 \small
 \begin{lstlisting}
 traces
-    T1:
-        let a in set {1, 2, 3} in
-            obj.inc(a){1, 2}
-    T2:
-        ( let a in set {1, 2, 3} in
-            obj.inc(a) ){1, 2}
+  T1:
+      let a in set {1, 2, 3} in
+          obj.inc(a){1, 2}
+  T2:
+      ( let a in set {1, 2, 3} in
+          obj.inc(a) ){1, 2}
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -974,8 +974,7 @@ generation of tests; if the example had \texttt{\textbf{let} a \textbf{in seq} [
 same tests would be generated, and since tests are independent their order is not
 meaningful. So sequence binds are not particularly useful in traces. However
 type binds (of finite types) are a shorthand for ``all values of this type'',
-which can be useful in some circumstances. This is covered later in Chapter
-\ref{chap:patterns}.
+which can be useful in some circumstances. This is covered later in Chapter~\ref{chap:patterns}.
 
 \section{Tests with Errors}
 
@@ -1006,15 +1005,15 @@ this behaviour:
 \small
 \begin{lstlisting}
 ...
-    public inc: int ==> int
-    inc(i) == ( total := total + i; return total; )
-    pre i < 10
-    post total < 20;
+  public inc: int ==> int
+  inc(i) == ( total := total + i; return total; )
+  pre i < 10
+  post total < 20;
 
 traces
-    T1:
-        let a in set {6, 7, 10} in
-            obj.inc(a){1, 5}
+  T1:
+      let a in set {6, 7, 10} in
+          obj.inc(a){1, 5}
 \end{lstlisting}
 
 \scriptsize
@@ -1099,7 +1098,7 @@ Trace reduction can be achieved in four different ways:
 \item \emph{RANDOM} reduction. This is the simplest kind of reduction, and is
 used to randomly select tests from the full set. For example, a 1\% RANDOM 
 reduction of a trace that expands to a million tests would select 10,000 tests
-from the set. The pseudorandom selection is seeded, so that a consistent subset
+from the set. The pseudo-random selection is seeded, so that a consistent subset
 of the tests can be selected.
 \item \emph{SHAPES\_NOVARS} reduction. The ``shape'' of a test means the sequence
 of operation names (regardless of arguments passed), and the idea of shaped
@@ -1115,7 +1114,7 @@ shape above only looks at the names of the operations called. This second kind
 of shaped reduction looks at the variable names used in the \texttt{let}
 bindings and constants as well as the names of the operations. So with this kind
 of reduction, \texttt{[opA(a), opA(b)]} is different to \texttt{[opA(x),
-opA(y)]}, even if the values of ``a'' and ``x'' can sometimes be the same.
+opA(y)]}, even if the values of ``\texttt{a}'' and ``\texttt{x}'' can sometimes be the same.
 Typically, different variable names are used in different parts of a complex
 trace and so this reduction method is trying to select all of the different
 parts of a trace, even if the sequence of operation names produced is the same
@@ -1123,8 +1122,8 @@ as another part of the trace.
 \item \emph{SHAPES\_VARVALUES} reduction. The third type of shaped reduction is
 even more specific about what constitutes a shape, taking into account the
 \emph{value} of the variables used as well as their names. So \texttt{[opA(a)]}
-will be considered a diffent shape to another \texttt{[opA(a)]} elsewhere, as
-long as ``a'' is bound to a different value.
+will be considered a different shape to another \texttt{[opA(a)]} elsewhere, as
+long as ``\texttt{a}'' is bound to a different value.
 \end{itemize}
 
 The following simple trace, using the \texttt{Counter} example from previous
@@ -1133,10 +1132,10 @@ chapters, illustrates RANDOM reduction:
 \small
 \begin{lstlisting}
 traces
-    T1:
-        let a in set {1, ..., 1000} in
-        let b in set {1, ..., 1000} in
-            ( obj.inc(a); obj.dec(b) );
+  T1:
+      let a in set {1, ..., 1000} in
+      let b in set {1, ..., 1000} in
+          ( obj.inc(a); obj.dec(b) );
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -1181,19 +1180,19 @@ Executed in 4.932 secs.
 The ``filter'' and ``seedtrace'' commands are used to set the filtering
 required, then the trace is executed as normal. But we see that the million
 tests have been reduced to 10,000 (taking a few seconds). Then instead of trying
-every combination of ``a'' and ``b'', the filtering selects them at random,
+every combination of ``\texttt{a}'' and ``\texttt{b}'', the filtering selects them at random,
 starting with \texttt{a = 1, b = 65} and ending with \texttt{a = 1000, b = 992}.
 
 The next example illustrates shaped reduction. The trace joins together two
-\texttt{let} bindings, repeating each call once and twice. This would normally
+\texttt{\textbf{let}} bindings, repeating each call once and twice. This would normally
 produce 36 tests.
 
 \small
 \begin{lstlisting}
 traces
-    T1:
-        let a in set {1, 2, 3} in obj.inc(a){1,2};
-        let b in set {1, 2, 3} in obj.dec(b){1,2}
+  T1:
+      let a in set {1, 2, 3} in obj.inc(a){1,2};
+      let b in set {1, 2, 3} in obj.dec(b){1,2}
 \end{lstlisting}
 
 \lstset{style=tool,language=}
@@ -1225,8 +1224,8 @@ All tests passed
 Here, we try to reduce this to 1\%, but using the SHAPES\_NOVARS option. A
 reduction of 1\% of 36 tests ought to produce a single test (reduction will
 never produce zero tests), but in fact the shaped reduction produces four. You
-can see that there is one case of each ``shape'': one inc and one dec; two incs
-and one dec, and so on. So the idea is that the shaped reduction has given a
+can see that there is one case of each ``shape'': one \texttt{inc} and one \texttt{dec}; two \texttt{inc}'s
+and one \texttt{dec}, and so on. So the idea is that the shaped reduction has given a
 representative sample of all of the possible shapes, disregarding variable names
 or values.
 
@@ -1242,7 +1241,7 @@ specification through, which is often closely related to the different use cases
 that the system has.
 
 
-\section{How Does Trace Expansion Work?}
+\section{How does Trace Expansion Work?}
 
 The sections above have given an overview of all the trace operators, and there
 are some examples of combinations of operators. But to see how traces are
@@ -1255,7 +1254,7 @@ description that follows, a \texttt{set} is a set of tests:
 \begin{itemize}
 \item \texttt{set = object.opname(args)}. The simplest form of a trace is a set
 that comprises a single call to an operation or function with arguments. The
-arguments can be symbolic, and bound to various values by the \texttt{let}
+arguments can be symbolic, and bound to various values by the \texttt{\textbf{let}}
 operator described below.
 \item \texttt{set = set1; set2; ...; setn}. A set of tests may be formed from
 an ordered sequence of sets. This expands to all possible selections of one test
@@ -1404,7 +1403,7 @@ All tests passed
 This trace is very similar to the VDM++ example. The \texttt{Counter} module has a
 single state that is equivalent to the VDM++ ``total'' instance variable. Note
 that this is reset to zero automatically before each test is executed. This is
-because each test re-initializes the specification, and the module
+because each test re-initialises the specification, and the module
 state has an ``\texttt{\textbf{init}}'' clause that sets the total to zero.
 
 Notice also that the operation calls are not applied to a Counter object, unlike
@@ -1420,11 +1419,11 @@ can omit the class name if that is the default class.
 
 Although a VDM++ trace is effectively a static scope, and can call static
 operations directly (similar to a VDM-SL trace), every test execution occurs in
-a \emph{new instance} of the containing class - in our examples, in a new Tester
+a \emph{new instance} of the containing class -- in our examples, in a new Tester
 instance. This means that objects created within the Tester's construction will
-be freshly initialized and ready for use in each test run. In the example, the
+be freshly initialised and ready for use in each test run. In the example, the
 Counter object \texttt{obj} is created for each test, because the instance
-variable is initialized at construction.
+variable is initialised at construction.
 
 \subsection{Expansion and Execution Considerations}
 
@@ -1435,7 +1434,7 @@ constructing a tree of iterators that are capable of generating the tests one
 after another. The subsequent execution of those tests can obviously take a long
 time, depending on how many there are.
 
-We have seen (above) how the specification is initialized before test execution,
+We have seen (above) how the specification is initialised before test execution,
 and the state of the module or class is available to the trace, but care must be
 taken if operations or functions within the environment are used as part of a
 trace. This is because some expressions are evaluated during trace expansion and
@@ -1445,27 +1444,27 @@ some during test execution. For example:
 \begin{lstlisting}
 ...
 functions
-    private static range: int * int -> set of int
-    range(a, b) == {a, ..., b};
+  private static range: int * int -> set of int
+  range(a, b) == {a, ..., b};
 
 values
-    Z = 100;
+  Z = 100;
 
 traces
-    T1: let x in set range(3, 5) in
-        let y in set range(x, x+2) in
-            obj.inc(Z + x + y);
+  T1: let x in set range(3, 5) in
+      let y in set range(x, x+2) in
+          obj.inc(Z + x + y);
 \end{lstlisting}
 \normalsize
 
 In this case, the \texttt{range} function is used to create a set for the
-multi-binds, and this is executed during \emph{expansion}, once for ``x'' and three
-times for ``y''. Similarly, the right hand side of simple let definitions are
+multi-binds, and this is executed during \emph{expansion}, once for ``\texttt{x}'' and three
+times for ``\texttt{y}''. Similarly, the right hand side of simple let definitions are
 executed during trace expansion. But the addition of \texttt{Z + x + y} in the
 argument to \texttt{inc} is called during \emph{execution} (once for each test).
 
 Trace generation starts inside a fresh object instance of the class (or
-initialized module) that contains the trace. So if operations are called during
+initialised module) that contains the trace. So if operations are called during
 trace \emph{expansion}, these can modify state and so affect subsequent
 operation calls elsewhere in the expansion. This can become very confusing, and
 it is not a recommended trace design strategy! On the other hand, calling
@@ -1543,18 +1542,18 @@ operations. These are presented in this chapter.
 
 \subsection{Sets for ``let'' bindings}
 
-The set of values that is used by a \texttt{let multiple-bind} is usually
+The set of values that is used by a \texttt{\textbf{let} multiple-bind} is usually
 shown as an enumeration of literals in examples. But the set value can use any
 VDM expression that yields a set. The following cases are generally useful:
 
 \begin{itemize}
   \item Set comprehensions can be used to select values from a larger set that
-  meet the membership predicate. This is similar to the use of the \texttt{be
-  st} clause, but the filter acts on the members of the set rather than the
+  meet the membership predicate. This is similar to the use of the \texttt{\textbf{be
+  st}} clause, but the filter acts on the members of the set rather than the
   values that are bound:
 \small
 \begin{lstlisting}
-let pair in set {mk_(a, b) | a, b in set VALUES & a > b} in ...
+  let pair in set {mk_(a, b) | a, b in set VALUES & a > b} in ...
 \end{lstlisting}
 \normalsize
   \item The \texttt{power} operator can be used to produce all possible subsets
@@ -1562,7 +1561,7 @@ let pair in set {mk_(a, b) | a, b in set VALUES & a > b} in ...
   produced by the operator:
 \small
 \begin{lstlisting}
-let options in set power ALL_OPTIONS \ {{}} in ...
+  let options in set power ALL_OPTIONS \ {{}} in ...
 \end{lstlisting}
 \normalsize
   \item If you are using finite types (i.e. types that have a finite number of
@@ -1570,19 +1569,19 @@ let options in set power ALL_OPTIONS \ {{}} in ...
   the possible values of that type:
 \small
 \begin{lstlisting}
-let p1, p2 : Product in ...
+  let p1, p2 : Product in ...
 \end{lstlisting}
 \normalsize
   \item Often elements have to be chosen from a set such that they are different
   to previous selections from the same set. This can sometimes be done in a
-  single \texttt{let} bind by using a \texttt{be st} clause that states that the
+  single \texttt{\textbf{let}} bind by using a \texttt{\textbf{be st}} clause that states that the
   values are different. But a common usage is to make a selection from a set
   that has had the first choice(s) eliminated:
 \small
 \begin{lstlisting}
-let a, b in set S be st a <> b in ...
-let c in set S \ {a, b} in ...
-let d in set S be st d not in set {a, b, c} in ...
+  let a, b in set S be st a <> b in ...
+  let c in set S \ {a, b} in ...
+  let d in set S be st d not in set {a, b, c} in ...
 \end{lstlisting}
 \normalsize
   \item A common requirement is to select permutations of a set. This can be
@@ -1593,20 +1592,20 @@ let d in set S be st d not in set {a, b, c} in ...
 \small
 \begin{lstlisting}
 -- Every k-permutation of 3 values from S
-let c1, c2, c3 in set S be st card {c1, c2, c3} = 3 in ...
+  let c1, c2, c3 in set S be st card {c1, c2, c3} = 3 in ...
 -- Permutations of all values from S
-let {p1, p2, p3, p4, p5} in set {S} in ...
+  let {p1, p2, p3, p4, p5} in set {S} in ...
 \end{lstlisting}
 \normalsize
   \item It is sometimes useful to be able to select all k-combinations from
-  a set, rather than k-permutations. This can't be done with sets, because
+  a set, rather than k-permutations. This cannot be done with sets, because
   within a trace the binding of set values will always permute the elements.
   Instead, sequence patterns are used, along with a discriminator that selects
   one unique combination from the possible orderings (here, \texttt{x < y}):
 \small
 \begin{lstlisting}
 -- Every k-combination of 2 values from S
-let [a, b] in set {[x, y] | x, y in set S & x < y} in
+  let [a, b] in set {[x, y] | x, y in set S & x < y} in
 \end{lstlisting}
 \normalsize
 \end{itemize}
@@ -1620,7 +1619,7 @@ separated trace sequence with a complex ``middle'':
 \scriptsize
 \begin{lstlisting}
 traces
-T:
+  T:
     SetSystemDate(221220);
     LoadCertificates(RefData);
         test1() |
@@ -1637,18 +1636,18 @@ This produces a set of seven tests, calling \texttt{test1} to \texttt{test7},
 each of which is sandwiched by calls that set up the system and close down the
 transaction. Clearly the body containing the alternative tests can be
 arbitrarily complicated, for example using variable binds to generate many
-possiblities.
+possibilities.
 
 \subsection{Graph searching by traces}
 
-Traces that explore all of the possibile uses cases of a system frequently
+Traces that explore all of the possible uses cases of a system frequently
 need to search a graph that describes the possible paths through the use case.
 This is translated into a trace by generating a call for each step through the
 graph, where the trace expands to the possibilities at each step. For example:
 \scriptsize
 \begin{lstlisting}
 values
-    TESTSTATES : map TestState to map Event to TestState =
+  TESTSTATES : map TestState to map Event to TestState =
     {
         <READY> |->
         {
@@ -1666,18 +1665,18 @@ values
     }
 
 traces
-    AllTransitions:
-        let s1 = <READY> in
-        let ev1 in set dom TESTSTATES(s1) in
-        let s2 = TESTSTATES(s1)(ev1) in
-        let ev2 in set dom TESTSTATES(s2) in
-        let s3 = TESTSTATES(s2)(ev2) in
-        let ev3 in set dom TESTSTATES(s3) in
-        let s4 = TESTSTATES(s3)(ev3) in
-        let ev4 in set dom TESTSTATES(s4) in
-        let s5 = TESTSTATES(s4)(ev4) in
-        let ev5 in set dom TESTSTATES(s5) in
-            execute([ev1, ev2, ev3, ev4, ev5]);
+  AllTransitions:
+      let s1 = <READY> in
+      let ev1 in set dom TESTSTATES(s1) in
+      let s2 = TESTSTATES(s1)(ev1) in
+      let ev2 in set dom TESTSTATES(s2) in
+      let s3 = TESTSTATES(s2)(ev2) in
+      let ev3 in set dom TESTSTATES(s3) in
+      let s4 = TESTSTATES(s3)(ev3) in
+      let ev4 in set dom TESTSTATES(s4) in
+      let s5 = TESTSTATES(s4)(ev4) in
+      let ev5 in set dom TESTSTATES(s5) in
+          execute([ev1, ev2, ev3, ev4, ev5]);
  
 \end{lstlisting}
 \normalsize
@@ -1685,7 +1684,7 @@ Here the system starts in state \texttt{s1}, which must be \texttt{READY}. From
 there, a number of events are possible given by the domain of a lookup of the
 state in the \texttt{TESTSTATES} map. One of these events is selected as
 \texttt{ev1}, which then moves us to state \texttt{s2}, and so on. After five
-events have been generated, they are passed to an \texttt{execute} method which
+events have been generated, they are passed to an \texttt{execute} operation which
 uses the events to test that particular path through the graph.
 
 Note that a graph searching cascade like this can generate tens of thousands of
@@ -1761,18 +1760,18 @@ created is processed by a couple of operations.
 
 In many cases, the expected result of an operation or function call is too
 complicated to predict simply in a trace - assuming you have a support function
-that checks the result with (say) a postcondition:
+that checks the result with (say) a post-condition:
 
 \scriptsize
 \begin{lstlisting}
-    assert: seq1 of nat * seq1 of nat +> bool
-    assert(data, expected) == data = expected
-    post RESULT = true;
+  assert: seq1 of nat * seq1 of nat +> bool
+  assert(data, expected) == data = expected
+  post RESULT = true;
 \end{lstlisting}
 \normalsize
 
-Here, we assume that the ``data'' argument passed comes from some processing in
-the specification, but where does the ``expected'' value come from? It could be
+Here, we assume that the ``\texttt{data}'' argument passed comes from some processing in
+the specification, but where does the ``\texttt{expected}'' value come from? It could be
 a literal in the trace, but this is not practical for non-trivial examples, so
 it is common to create support functions that produce answers that are correct
 \emph{by definition}. Such functions are called \emph{oracles}. For example:
@@ -1780,15 +1779,15 @@ it is common to create support functions that produce answers that are correct
 \scriptsize
 \begin{lstlisting}
 Scenarios:
-    let s = mk_Service(...) in
-    let q in set ... in
-    let mk_(first, second) in set ... in 
-    let test = mk_Test(
-        [s],
-        keyStrokesFor(q, first, second),    -- Expected keystrokes
-        basketFor(first, second))           -- Expected basket
-    in
-        run(test);
+  let s = mk_Service(...) in
+  let q in set ... in
+  let mk_(first, second) in set ... in 
+  let test = mk_Test(
+      [s],
+      keyStrokesFor(q, first, second),    -- Expected keystrokes
+      basketFor(first, second))           -- Expected basket
+  in
+      run(test);
 \end{lstlisting}
 \normalsize
 
@@ -1811,15 +1810,15 @@ There is an example of this in the Luhn specification described in Chapter
 \emph{required} to fail if a piece of data is corrupted in specific ways, which
 shows that the checksum is doing its job, detecting the corruption. So the Luhn
 specification tests deliberately corrupt a piece of data and then verify that
-the algorithm generates a \emph{different} check digit - i.e. they verify that a
+the algorithm generates a \emph{different} check digit -- i.e.\ they verify that a
 check with the original check digit fails correctly:
 
 \scriptsize
 \begin{lstlisting}
-    checkFail: seq1 of nat * nat * nat ==> bool
-    checkFail(data, expected, base) ==
-        return luhn(data, base) <> expected    -- Expect failure
-    post RESULT = true;
+  checkFail: seq1 of nat * nat * nat ==> bool
+  checkFail(data, expected, base) ==
+      return luhn(data, base) <> expected    -- Expect failure
+  post RESULT = true;
 \end{lstlisting}
 \normalsize
 
@@ -1832,17 +1831,17 @@ generation process takes up too much memory.
 
 The following tips will help you to avoid this pitfall:
 
-\begin{itemize}
-  \item \emph{Start small}. It is tempting to write traces as clearly as
+\begin{description}
+  \item[Start small:] It is tempting to write traces as clearly as
   possible to start with, and that may lead to the binding of values from sets
   of data or types with many values. The combinatorial expansion process will
   then either multiply these data sizes together, or in some cases generate 
   combinations that depend on the product of the \emph{factorial} of the data
   sizes. So a modest set of 50 values might therefore generate of the order of
-  $10^{64}$ tests (i.e. the factorial of 50). So start small: design and test 
+  $10^{64}$ tests (i.e.\ the factorial of 50). So start small: design and test 
   traces with small example sets and types, and only expand the data selections
   when you can see that the trace is expanding as you require.
-  \item \emph{Split up traces}. The alternation operator, \texttt{|}, will join
+  \item[Split up traces:] The alternation operator, \texttt{|}, will join
   together two sets of tests in a trace. It may therefore be tempting to write a
   single trace that is composed of many parts, testing different parts of the
   system, joined by alternation. This has the advantage that the whole
@@ -1851,12 +1850,12 @@ The following tips will help you to avoid this pitfall:
   much better than a product or factorial combination, but if the parts are
   genuinely separate, you will be able to do more tests in the parts by
   separating them into multiple traces.
-  \item \emph{Be careful with multiple-binds and power sets}. As mentioned
+  \item[Be careful with multiple-binds and power sets:] As mentioned
   above, factorial scaling is extremely expensive. This occurs most commonly
   with multiple-binds that are used for k-permutations, and with the
-  \texttt{power} operator on sets. As suggested above, in these case start with
+  \texttt{\textbf{power}} operator on sets. As suggested above, in these case start with
   small sets and increase them with care!
-\end{itemize}
+\end{description}
 
 \chapter{Combinatorial Testing Examples}
 \label{chap:examples}
