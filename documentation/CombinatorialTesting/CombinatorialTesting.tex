@@ -1917,17 +1917,14 @@ choice is defined by a \texttt{Mapping} type in the model:
 
 \small
 \begin{lstlisting}
--- A type describing valid character mappings. The map must be
--- injective, and it must map arbitrary characters onto the set
--- {0, ..., N-1}, where N is the base of the algorithm.
-
 public Mapping = inmap char to nat
 inv m == rng m = {0, ..., card rng m - 1};
 \end{lstlisting}
 \normalsize
 
 \noindent The top level Luhn algorithm is then a function which takes a
-\texttt{Mapping} as well as a base and a string of characters, returning a single check digit:
+\texttt{Mapping} as well as a base and a string of characters, returning a
+single check digit:
 
 \small
 \begin{lstlisting}
@@ -1951,8 +1948,8 @@ sequence of numbers. These are then processed by a lower level \texttt{luhn}
 function to produce a check value, which is finally mapped back to a character
 using the inverse of the mapping.
 
-The \texttt{luhn} function is passed a sequence of numbers and a base, returning
-another number of that base:
+The \texttt{luhn} core function is passed a sequence of numbers and a base,
+returning another number of that base:
 
 \small
 \begin{lstlisting}
@@ -1972,37 +1969,171 @@ within the base, and the postcondition checks that the result is within the base
 and that adding the total value to the result gives zero (modulo the base).
 
 Lastly, the \texttt{total} function is passed the string of input values and
-produces a total, which is the sum of the digits of the value, multiplied by a
+produces a total, which is the sum of the digits of the value multiplied by a
 factor which alternates between 1 and 2, such that the \emph{rightmost}
 factor is always 2.
 
+\subsection{Testing Approach}
+
+The natural approach to test the algorithm is to produce a check digit for some
+strings with known check digits, such as a credit or debit card
+number\footnote{No, this isn't my real credit card number!}, where the Luhn
+calculation is in base-10 and computed over the first 15 digits of the number:
+
 \small
 \begin{lstlisting}
-private total: seq of nat * nat1 -> nat
-total(data, base) ==
-    if data = []
-    then 0
-    else total(tl data, base) +
-        let multipler = (len data) mod 2 + 1,
-            code = hd data,
-            product = code * multipler
-        in
-            sumDigits(product, base)
-
-pre forall i in set inds data & data(i) < base
-measure len data;
+> print Test`luhn10("492912341234999")
+= '5'
+Executed in 0.006 secs. 
 \end{lstlisting}
 \normalsize
 
-The precondition checks that the values in the input are within the base. There
-is also a recursive measure that checks that the string of data being totalled
-is always decreasing in length.
+This is a perfectly valid way to test, and quickly gives confidence that the
+LUHN specification is roughly correct. But of course there may be many edge
+cases and strange combinations of digits that cause issues. This is where
+combinatorial tests give us more testing power.
+
+The first trace creates a large set of test strings to check whether the
+specification produces a result that does not violate any of the constraints:
+
+\small
+\begin{lstlisting}
+values
+  charToCodeMap10 : LUHN`Mapping =
+    let decimal = "0123456789" in
+      { decimal(a) |-> (a-1) | a in set inds decimal };
+
+traces
+  FirstN:
+    let a,b,c,d in set dom charToCodeMap10 in
+    (
+      luhn10([a])     |
+      luhn10([a,b])   |
+      luhn10([a,b,c]) |
+      luhn10([a,b,c,d])
+    );
+\end{lstlisting}
+\normalsize
+
+\noindent This uses the domain of the \texttt{Mapping} for base 10 to produce
+\emph{all possible} sequences of 1, 2, 3 and 4 digits, calculating the Luhn
+check digit for each. Note the following:
+
+\begin{itemize}
+	\item Unlike the ad-hoc tests of various credit card examples, this trace does
+	not include the correct answer for each test. Rather, it depends on the
+	postcondition of the \texttt{luhn} function, which says that the \texttt{total}
+	function plus the check digit must be zero (mod 10). This is generally the case
+	for combinatorial tests, unless you produce an oracle function instead of a
+	postcondition. In this case, such an oracle would have to reproduce the Luhn
+	algorithm, and so this would add little value (i.e. the oracle could be wrong
+	as well).
+	\item The trace only includes strings of length 1 to 4, not 5 and beyond. Why
+	not? The reason is a judgement, made by the tester. A string with a single value
+	may well be a special case; similarly a string of two is the minimal example of
+	a multi-character string. The Luhn algorithm treats alternate places in the
+	string differently, so adding three and four values covers cases for the second
+	pair. Tests of five or more values are probably adding less value, and at
+	some point you simply have to stop. This trace produces 40,000 tests. If you
+	have time, it would be easy to extend it to produce a million, but if the first
+	40,000 work there is unlikely to be a problem in the remainder.
+\end{itemize}
+
+After the \texttt{FirstN} trace, there is a second one called
+\texttt{FirstN\_16}, which does the same processing but in base 16 rather than
+base 10. This naturally produces more test cases (because the alphabet is
+larger), so to keep the trace size manageable, it covers strings of length 1 to
+3. As before, this can be extended (with diminishing returns) if you have time.
+
+So at this point, we have much greater confidence that the specification is
+producing results that meet the internal constraints. But recall that the
+correct Luhn specification is also \emph{unable} to detect certain changes in
+its input. This is an unusual case where the algorithm is required to produce a
+particular ``wrong'' behaviour, in a sense. So next we can design traces that
+test this particular aspect.
+
+The first trace checks that the algorithm correctly detects all single-digit
+errors. This means all cases where a single digit is changed to another value:
+
+\small
+\begin{lstlisting}
+  AllOneDigitErrors:
+    let base = 16 in
+    let input = conc [[a, a] | a in set {0, ..., base-1}] in
+    let expected = LUHN`luhn(input, base) in
+    let pos in set inds input in
+    let replacement in set {0, ..., base-1} \ {input(pos)} in
+    let corrupt = input(1, ..., pos-1) ^
+                  [replacement] ^ input(pos+1, ..., len input)
+    in
+      checkFail(corrupt, expected, base);
+\end{lstlisting}
+\normalsize
+
+\noindent This trace is mostly simple definitions. The test uses \texttt{base}
+16; an \texttt{input} string is created formed from pairs of all digits from the base;
+the \texttt{expected} Luhn check digit for the string is calculated. There are
+duplicated pairs because the Luhn algorithm treats odd and even positions
+differently, so both should be tried for every value. Then the \texttt{pos}
+value considers every position in the string and \texttt{replacement} takes the
+value of every other possible digit at that position. The \texttt{corrupt}
+value is then the original input with the digit at \texttt{pos} replaced by
+\texttt{replacement}. This corrupt string ought to produce a different Luhn
+check digit to the \texttt{expected} value from the original input, which is
+verified by \texttt{checkFail}.
+
+So having verified the correct detection of all single digit errors, we have to
+check for the cases that are \emph{not detected} by the algorithm. This happens
+in two special cases, firstly for swapped pairs of digits in the input, where
+one digit is zero and the other is base-1 (e.g. 'F' in hexadcimal or '9' in
+base-10). The trace to prove this is as follows:
+
+\small
+\begin{lstlisting}
+AllAdjacentTranspositions:
+  let base = 16 in
+  let a, b in set {0, ..., base-1} be st a <> b in
+  let pass = (a = 0 and b = base-1) or (a = base-1 and b = 0) in
+  let expected = LUHN`luhn([a, b], base) in
+    checkResult([b, a], expected, base, pass);
+\end{lstlisting}
+\normalsize
+
+\noindent This trace produces all \texttt{[a, b]} pairs for the given base,
+where the two values are different. The expected Luhn check value is calculated for the pair
+and then the result is checked for the swap of the two values, \texttt{[b, a]}.
+The \texttt{pass} value is true for the special cases where the algorithm
+explicitly should \emph{not} detect the swap - the \texttt{checkResult}
+operation uses the pass argument to call \texttt{checkOK} or \texttt{checkFail}.
+
+The second special case that is not detected by the Luhn algorithm is with the
+exchange of some pairs of digits. Specifically it will not detect 22 $<->$ 55,
+33 $<->$ 66 or 44 $<->$ 77. The trace to verify this is as follows:
+
+\small
+\begin{lstlisting}
+AllTwinErrors:
+  let base = 10 in
+  let a, b in set {0, ..., base-1} be st a <> b in
+  let pass = {a, b} in set {{2, 5}, {3, 6}, {4, 7}} in
+  let expected = LUHN`luhn([a, a], base) in
+    checkResult([b, b], expected, base, pass);
+\end{lstlisting}
+\normalsize
+
+\noindent The trace generates all possible pairs of values for the base, and
+then creates a pair from one value and checks that a substitution with a pair of the other is
+detected as a change. Note that the \texttt{pass} value is true for the cases
+that should not be detected.
 
 \section{The Basket Service Model}
 
 \subsection{Background}
 
 \subsection{The Structure of the Specification}
+
+\subsection{Testing Approach}
+
 
 \appendix
 \chapter{Combinatorial Testing Syntax}
