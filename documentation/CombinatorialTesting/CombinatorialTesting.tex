@@ -1502,6 +1502,7 @@ Result = [3, PASSED]
 \label{chap:patterns}
 
 \section{Data and Process Traces}
+\label{chap:dataprocess}
 
 Traces fall into two broad categories, although you can have a mixture
 of both in a specification. One category is focussed on the behaviour of a
@@ -1903,6 +1904,12 @@ that are \emph{not detected} by the algorithm. The testing of the specification
 has to verify both the correct detection of most corruptions, and the the
 correct failure to detect the known weaknesses.
 
+The discussion below starts by describing the structure and traces used to test
+a standard version of the Luhn algorithm. Then we look at a \emph{non-standard}
+implementation from a real life example, and show how combinatorial tests not
+only identify the problem, but also show that the level of error checking
+provided by the non-standard implementation is weaker than the standard one.
+
 \subsection{The Structure of the Specification}
 
 The Luhn algorithm is defined in a singe class, called ``LUHN''.
@@ -1992,6 +1999,11 @@ This is a perfectly valid way to test, and quickly gives confidence that the
 LUHN specification is roughly correct. But of course there may be many edge
 cases and strange combinations of digits that cause issues. This is where
 combinatorial tests give us more testing power.
+
+The style of combinatorial testing needed for a specification like LUHN is the
+``data'' style, where traces are used to generate a large number of input data
+strings, which are then verified by a single function. See
+\ref{chap:dataprocess}.
 
 The first trace creates a large set of test strings to check whether the
 specification produces a result that does not violate any of the constraints:
@@ -2125,6 +2137,11 @@ AllTwinErrors:
 then creates a pair from one value and checks that a substitution with a pair of the other is
 detected as a change. Note that the \texttt{pass} value is true for the cases
 that should not be detected.
+
+\subsection{Real World Luhn, the ACME Example}
+
+
+
 
 \section{The Basket Service Model}
 
