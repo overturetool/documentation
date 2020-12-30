@@ -2138,9 +2138,150 @@ then creates a pair from one value and checks that a substitution with a pair of
 detected as a change. Note that the \texttt{pass} value is true for the cases
 that should not be detected.
 
+The final trace to test the algorithm checks that a prefix of an arbitrary
+number of zero characters does not affect the check digit value:
+
+\small
+\begin{lstlisting}
+ZeroPadding:
+  let base = 16 in
+  let input = [x | x in set {0, ..., base-1}] in
+  let expected = LUHN`luhn(input, base) in
+  let number in set {1, ..., 8} in
+  let padding = [p-p | p in set {1, ..., number}] in 
+    checkOK(padding ^ input, expected, base);
+\end{lstlisting}
+\normalsize
+
+The call to \texttt{checkOK} verifies that the check digit produced from the
+original input is the same as that produced for the same with a varying prefix
+of between 1 and 8 zeros.
+
 \subsection{Real World Luhn, the ACME Example}
 
+The sections above describe a formal specification of the standard Luhn
+algorithm, and traces that can be used to verify that the specification is
+correct, compared to the published algorithm.
 
+It is always useful to have a formal specification of an algorithm, but in the
+real world, implementations are often created by programmers (with the best of
+intentions) on a rather less formal basis. In some cases, their implementations
+are not correct, though they may still pass the simple ad-hoc levels of testing
+that are usually performed.
+
+The authors are familiar with a particular case of an invalid Luhn
+implementation written by the ACME\footnote{Not their real name!} Company. ACME
+is in the business of tracking the movement of a large number of parcels around
+the country. Each parcel is marked with a (hexadecimal) barcode, and these have
+a base-16 Luhn check digit. ACME employees use barcode scanners to check
+parcels in and out of depots and delivery vans, and the software in the
+scanners checks the Luhn check digit on each one. The same Luhn software is
+used to create the barcodes for new parcels.
+
+Unfortunately, the Luhn implementation used by ACME had a fault. The software
+was originally written in Visual Basic for base-10 and subsequently extended to
+cover base-16. But internally, a VB library to convert decimal characters to
+numbers was silently ignoring hexadecimal characaters. This meant that although
+the barcodes produced by the software could be checked by the scanners, the
+check digits produced were not the standard check digits.
+
+This went unnnoticed for some considerable time. But eventually the software
+used to produce the barcodes had to be updated as part of a planned system
+enhancement, leaving the barcode scanners unchanged. The informal specifications
+of the system stated that it used the Luhn base-16 algorithm, and that was duly
+re-implemented (correctly) in the upgrade.
+
+Of course, when the new barcodes were checked with the old scanners, the check
+digits \emph{sometimes} failed - not always, because the invalid algorithm was
+only incorrectly handling hexadecimal characters, but it was still a serious
+problem.
+
+This caused a great deal of confusion about which implementation was correct! It
+led to the creation of the formal model above and this was used to demonstrate
+that the ACME implementation was at fault. However, since at any one time there
+are very many ACME parcels in circulation, and many barcode scanners would have
+had to change too, the decision was taken to reproduce the invalid algorithm in
+the software upgrade.
+
+But what was the invalid algorithm? And what were its error detection
+characteristics? This had to be discovered by careful reverse engineering of the
+ACME Visual Basic code, and was captured in an ACME variant of the formal model,
+which we present in this section.
+
+\subsubsection{The ACME Total Function}
+
+The error in the ACME implementation was tracked back to the \texttt{total}
+function that is used to multiply and add the digits of the input. First we
+show the standard algorithm for the core of the \texttt{total} function:
+
+\small
+\begin{lstlisting}
+-- The standard algorithm:
+let multipler = (len data) mod 2 + 1,
+    code = hd data,
+    product = code * multipler
+in
+    sumDigits(product, base)
+\end{lstlisting}
+\normalsize
+
+\noindent The \texttt{sumDigits} function adds the digits of its argument in the
+given base (e.g. the sum of 123 in base 10 is 1+2+3=6). Here is the equivalent
+in the ACME implementation:
+
+\small
+\begin{lstlisting}
+-- The ACME algorithm:
+let multipler = (len data) mod 2 + 1,
+    code = hd data,
+    product = code * multipler
+in
+    if hasNonDecimals(product, base)
+    then code
+    else sumDigits(product, base)
+\end{lstlisting}
+\normalsize
+
+\noindent Notice that the ACME algorithm has an extra test for
+\texttt{hasNonDecimals}. This function is true if there are any A-F characters
+in the product. If there are none, then the result of the ACME \texttt{total}
+function will be exactly the same as the standard; but if there are non-decimal
+characters, the function returns the \texttt{code} value - i.e. the
+unmultiplied and unsummed input value. Obviously this is wrong.
+
+Using this new specification, we could show that it seemed to produce ACME
+check digits that agree with the old ACME software, both with and without
+hexadecimal characters. But how could we test this specification further with
+traces, if we were not sure of the error detection characteristics of the ACME
+algorithm?
+
+Clearly, without a complete analysis of the ACME algorithm we could not
+\emph{predict} its error detection characteristics. But by using the traces for
+the standard algorithm, we could easily \emph{discover} whether the ACME
+version was detecting the same, or more, or fewer error cases. The results were
+as follows:
+
+\begin{description}
+  \item[FirstN and FirstN\_16:] These traces still operate correctly under the
+  ACME variant because they are testing for violation of constraints in the
+  specification rather than checking individual check digit values. This tells
+  us that the ACME algorithm does produce something that meets all of the pre-
+  and postconditions defined.
+  \item[AllOneDigitErrors:] This trace produces no errors with the standard
+  algorithm, because it is capable of detecting all single digit errors.
+  However, the ACME variant produces six errors. On closer examination, we find
+  that it cannot dectect substitutions of 3 $<->$ 6, 5 $<->$ A, 7 $<->$ B.
+  \item[AllAdjacentTranspositions:] This trace has two exceptions that are not
+  detected by the standard algorithm, 0 $<->$ F and F $<->$ 0. The ACME variant
+  has these two exceptions as well, but in addition it has 40 others.
+  \item[AllTwinErrors and ZeroPadding:] These traces behave in the same way as
+  the standard algorithm.
+\end{description}
+
+\noindent So, with the help of a formal model and combinatorial testing, we
+could show the ACME company not only that their implementation was at fault, but
+that the invalid implementation was significantly weaker at error detection
+than the standard algorithm (and we could characterize its weaknesses).
 
 
 \section{The Basket Service Model}
