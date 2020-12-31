@@ -1521,6 +1521,7 @@ the trace styles. The styles are also illustrated in more detail by the
 examples in Chapter \ref{chap:examples}.
 
 \section{Traces and Test Operations}
+\label{chap:testops}
 
 After expanding a trace to all of the call sequences that match, a
 test is ultimately just a sequence of operation or function calls. But these
@@ -2285,9 +2286,201 @@ than the standard algorithm (and we could characterize its weaknesses).
 
 \subsection{Background}
 
+The Basket Service model describes the behaviour of a simple client-server
+system that manages a basket of retail items. Initially a basket is empty, and
+can have multiple items added and cancelled (removed), before finally the entire
+basket is settled (the customer pays for the items) or cancelled.
+
 \subsection{The Structure of the Specification}
 
+The Basket Service is modelled by a single class, called BasketService, which
+includes the current basket in its state:
+
+\small
+\begin{lstlisting}
+types
+public Product = seq1 of char;
+
+private BasketItem ::
+  iid      : nat		-- Unique per basket
+  product  : Product
+  amount   : real;
+
+private Basket ::
+  items : [seq of BasketItem]
+inv
+  basket ==
+    basket.items <> nil =>
+      let ids = { item.iid | item in seq basket.items } in
+        card ids = len basket.items;
+
+instance variables
+  basket : Basket := mk_Basket(nil);
+\end{lstlisting}
+\normalsize
+
+\noindent The client-server messages are modelled by record types for each
+transaction type, either adding or cancelling an item from the bsaket, or cancelling or
+settling the entire basket. For example:
+
+\small
+\begin{lstlisting}
+public AddItemRequest ::
+  uid      : nat
+  product  : Product
+  amount   : real;
+
+public CancelItemRequest ::
+  uid      : nat
+  iid      : nat;
+
+public CancelBasketRequest ::
+  uid      : nat;
+
+public SettleBasketRequest ::
+  uid      : nat;
+
+public Response ::
+  type     : <OK> | <FAILED> | <SEQERR>
+  sid      : nat
+  message  : [seq of char]
+  iid      : [nat]
+  total    : real;
+\end{lstlisting}
+\normalsize
+
+\noindent In addition to the simple values that populate the basket, the
+requests carry a \texttt{uid} (a \emph{user} message ID), and responses include
+a \texttt{sid} (a \emph{server} message ID). The protocol requires that both
+user IDs and server IDs are incremented for every message sent or received.
+Responses also include the total amount of the basket so far (which may be
+zero, if it is empty).
+
+The processing of each message type is specified as a \emph{pair} of operations,
+like \texttt{addItem} and \texttt{addItemImpl}. The first is the public
+interface which checks the arguments passed and the message sequencing before
+calling the second operation; the second is private, assumes the arguments are
+correct, and performs the core processing of the request. The postcondition on
+the first operation defines the overall behaviour \emph{in detail}; the
+precondition on the second operation verifies that the arguments are valid. For
+example, the \texttt{cancelItem} operations are as follows:
+
+\scriptsize
+\begin{lstlisting}
+public cancelItem: CancelItemRequest ==> Response
+cancelItem(request) ==
+(
+  if lastuid <> nil and request.uid <> lastuid + 1
+  then return seqerrResponse("Invalid sequence")
+  else
+  (
+    lastuid := request.uid;
+
+    if basket.items = nil
+    then return errorResponse("Basket is empty", nil)
+    else if request.iid not in set basketItems(basket)
+         then return errorResponse("No such item", request.iid)
+         else return cancelItemImpl(request)
+  )
+)
+post
+  cases RESULT.type:
+    <SEQERR> ->
+      basket = basket~  -- sid changes, nothing else
+      and lastuid = lastuid~
+      and iid = iid~
+      and sid = sid~ + 1,
+
+    <FAILED> ->
+      basket = basket~  -- lastuid and sid change
+      and lastuid = request.uid
+      and iid = iid~
+      and sid = sid~ + 1,
+
+    <OK> ->
+      lastuid = request.uid
+      and iid = iid~
+      and sid = sid~ + 1
+      and len basket.items = len basket~.items - 1
+      and RESULT.total = basketTotal(basket.items)
+      and RESULT.iid not in set basketItems(basket)
+  end;
+
+private cancelItemImpl: CancelItemRequest ==> Response
+cancelItemImpl(request) ==
+(
+  basket.items := [ item | item in seq basket.items & item.iid <> request.iid ];
+  return okResponse(request.iid)
+)
+pre lastuid = request.uid
+  and basket.items <> nil
+  and request.iid in set basketItems(basket);
+\end{lstlisting}
+\normalsize
+
+\noindent Notice how the main public operation performs basic checks and then
+delegates to the private ``Impl'' operation, which actually performs the update. The
+postcondition on main operation has a detailed postcondition that considers
+each possible result type and states the changes in the system state and
+message counters that result. You can see that if the result is \texttt{<OK>},
+then the basket is edited to remove a single item and return the new basket
+total.
+
+From a combinatorial testing perspective, this style of specification allows us
+to make lots of experimental calls to the public interface operations, in the
+confidence that the constraints will very precisely check that the operations
+are modifying the state of the server correctly. Although note that the server
+only checks the sequence of the user message ID; it is still up to the
+``caller'' to check that the server message IDs returned are in sequence.
+
 \subsection{Testing Approach}
+
+The obvious way to create a simple test of this model is to write a sequence of
+public interface calls, and check that the return response from each is as
+expected. For example:
+
+\scriptsize
+\begin{lstlisting}
+  public testAdHoc: () ==> seq of bool
+  testAdHoc() == let s = new BasketService() in return
+  [
+    s.cancelItem(mk_BasketService`CancelItemRequest(0, 99))
+      = mk_BasketService`Response(<FAILED>, 1, "Basket is empty", nil, 0),
+    s.cancelBasket(mk_BasketService`CancelBasketRequest(1))
+      = mk_BasketService`Response(<FAILED>, 2, "Basket is empty", nil, 0),
+    s.addItem(mk_BasketService`AddItemRequest(2, "apples", -99))
+      = mk_BasketService`Response(<FAILED>, 3, "Amount invalid", nil, 0),
+    s.addItem(mk_BasketService`AddItemRequest(3, "apples", 1.23))
+      = mk_BasketService`Response(<OK>,     4, nil, 1, 1.23),
+    s.addItem(mk_BasketService`AddItemRequest(99, "pears", 2.34))
+      = mk_BasketService`Response(<SEQERR>, 5, "Invalid sequence", nil, 1.23),
+    s.addItem(mk_BasketService`AddItemRequest(4, "pears", 2.34))
+      = mk_BasketService`Response(<OK>,     6, nil, 2, 3.57),
+    s.cancelItem(mk_BasketService`CancelItemRequest(5, 1))
+      = mk_BasketService`Response(<OK>,     7, nil, 1, 2.34),
+    s.cancelItem(mk_BasketService`CancelItemRequest(6, 99))
+      = mk_BasketService`Response(<FAILED>, 8, "No such item", 99, 2.34),
+    s.settleBasket(mk_BasketService`SettleBasketRequest(7))
+      = mk_BasketService`Response(<OK>,     9, nil, nil, 2.34)
+  ]
+  post elems RESULT = {true};
+\end{lstlisting}
+\normalsize
+
+\noindent This test operation returns a sequence of booleans, each one made from
+an assertion that a call to a particular public operation will return a particular
+Response message. The postcondition effectively asserts that the whole test
+passes.
+
+As discussed above, this type of ad-hoc testing is perfectly valid, but there
+are very many paths through the server behaviour that are not exercised by such
+tests. Here, combinatorial traces can give us a great deal more testing power.
+The Basket Service model lends itself to the \emph{process} style of
+combinatorial testing, discussed in \ref{chap:dataprocess}. But we also have to
+consider creating supporting test operations that maintain the ``client'' state
+of the system in order to make sensible sequences of interface calls on the
+server with a trace. See \ref{chap:testops}.
+
 
 
 \appendix
