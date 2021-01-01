@@ -210,14 +210,14 @@
 \pagestyle{fancy}
 \fancyhead{}
 \fancyhead[LO]{\leftmark}
-\fancyhead[RE]{The VDM Combinatorial Testing Guidelines}
+\fancyhead[RE]{VDM Combinatorial Testing Guidelines}
 \fancyhead[RO,LE]{\resizebox{0.05\textwidth}{!}{\includegraphics{overture}}}
 \fancyfoot[C]{\thepage}
 \makeindex
 
 \begin{document}
 
-\title{Guidelines for using VDM Combinatorial Testing Features}
+\title{VDM Combinatorial Testing Guidelines}
 \author{Nick Battle\\
             Peter Gorm Larsen}
 
@@ -232,7 +232,7 @@
 
 \begin{tabular}{|l|l|l|l|l|}\hline
 Month   & Year & Version & Version of Overture.exe & Comment \\ \hline
-December   & 2010 &    0.1     & 3.0.2   & Initial version\\ \hline
+December   & 2020 &    0.1     & 3.0.2   & Initial version\\ \hline
 \end{tabular}
 
 %\addtocounter{page}{2}
@@ -319,8 +319,8 @@ of using traces that are useful in many different situations.
 significant specifications to demonstrate typical usage of traces in real life.
 \item Appendix \ref{chap:CTsyntax}, \nameref{chap:CTsyntax} defines the formal
 grammar of traces.
-\item Appendix \ref{chap:OvertureShots}, \nameref{chap:OvertureShots} includes
-screen shots of the Combinatorial Testing perspective in Overture.
+\item Appendix \ref{chap:tools}, \nameref{chap:tools} describes how to use
+Combinatorial Testing in various tools.
 \item Appendix \ref{chap:listings}, \nameref{chap:listings} contains the full
 listings of the models explored in Chapter \ref{chap:examples}.
 \end{itemize}
@@ -1203,7 +1203,7 @@ Trace filter currently 1.0% RANDOM (seed 0)
 > filter shapes_novars
 Trace filter currently 1.0% SHAPES_NOVARS (seed 0)
 
-> rt Tester`T1
+> runtrace Tester`T1
 Generated 36 tests, reduced by SHAPES_NOVARS, in 0.001 secs. 
 Test 1 = obj.inc(1); obj.dec(1)
 Result = [1, 0, PASSED]
@@ -2507,8 +2507,7 @@ operations
   (
     if ok then  UID := UID + 1;
 
-    let uid = if ok then UID else 0,
-        response = server.addItem(mk_BasketService`AddItemRequest(uid, product, amount)) in
+    let response = server.addItem(mk_BasketService`AddItemRequest(UID, product, amount)) in
     (
       if response.type = <OK> then iids := iids union {response.iid};
       checkSID(response.sid);
@@ -2539,7 +2538,7 @@ operation):
 \begin{lstlisting}
   if iids <> {} then
     let iid in set iids in
-      ... -- cancel item iid
+      ... -- call cancelItem(iid)
   else return nil
 \end{lstlisting}
 \normalsize
@@ -2761,8 +2760,64 @@ used in the full test suite.
   \Lit{(}, \Ruleref{trace definition list}, \Lit{)}
 }
 
-\chapter{Overture Screenshots}
-\label{chap:OvertureShots}
+\chapter{Tool Support}
+\label{chap:tools}
+
+\section{Overture GUI}
+
+The Overture IDE includes a perspective that is intended for working with
+combinatorial tests in a specifiction. The features available are described in
+Chaper 10 of the Overture User Guide.
+
+\section{Command Line Tools}
+
+Although the Overture IDE is convenient for developing combinatorial tests, to
+push the tool to the limit of what is possible it is better to use the command
+line. This allows more memory to be allocated to the process running the traces
+without the IDE occupying space itself.
+
+\subsection{Overture Command Line}
+
+The following command line options are available for working with traces. Many
+of them have already been illustrated in section \ref{chap:traces}.
+
+\begin{description}
+\item[\texttt{runtrace <name> [test number]}] This command runs the named trace,
+and without further arguments will expand the trace and execute all of the
+tests. If a test number is provided, one single test will be executed.
+\item[\texttt{debugtrace <name> [test number]}] This is the same as the
+\texttt{runtrace} command, but if the test execution process encounters a
+constraint violation, like a precondition or postcondition failure, execution
+will trip into the debugger rather than recording the test as having failed.
+\item[\texttt{filter <\%age> | <reduction type>}] This command can be used to
+set the percentage of trace reduction, or the trace reduction type. This affects
+subsequent \texttt{runtrace} executions (assuming no trace number is given).
+\end{description}
+
+\subsection{VDMJ Command Line}
+
+VDMJ\footnote{https://github.com/nickbattle/vdmj/releases} is very similar to
+Overture, but the tool has some extra commands and the combinatorial expansion
+of tests is more efficient. It is likely that VDMJ can execute larger traces
+than Overture. The following extra or modified commands are available:
+
+\begin{description}
+\item[\texttt{runtrace <name> [start test [end test]]}] This is the same as
+Overture, except a start-end test number range can be given.
+\item[\texttt{debugtrace <name> [start test [end test]]}] This is the same as
+Overture, except a start-end test number range can be given.
+\item[\texttt{savetrace [<file> | off]}] Trace execution output can be directed
+to a file using this command. All trace output goes to the file until the
+command is repeated with an ``off'' option. Without arguments, the command
+indicates where output is currently redirected.
+\item[\texttt{seedtrace <number>}] This command allows trace reduction to be
+seeded with a particular value.
+\item[\texttt{runalltraces [<class/module name>]}] This option either runs all
+visible traces or all traces within the named class or module. This is useful
+when there is a large number of traces in a specification.
+\end{description}
+
+
 
 \chapter{Example Model Listings}
 \label{chap:listings}
