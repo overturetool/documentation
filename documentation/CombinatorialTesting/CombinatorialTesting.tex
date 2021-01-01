@@ -2507,7 +2507,8 @@ operations
   (
     if ok then  UID := UID + 1;
 
-    let response = server.addItem(mk_BasketService`AddItemRequest(UID, product, amount)) in
+    let uid = if ok then UID else 0,
+        response = server.addItem(mk_BasketService`AddItemRequest(uid, product, amount)) in
     (
       if response.type = <OK> then iids := iids union {response.iid};
       checkSID(response.sid);
@@ -2661,17 +2662,17 @@ Test 4321 = addItemTest(true, "apples", 1.23);
             skip;
             cancelBasketTest(true)
 Result = [mk_Response(<OK>, 1, nil, 1, 1.23),
-         (),
-         mk_Response(<OK>, 2, nil, 2, 3.57),
-         (),
-         (),
-         mk_Response(<OK>, 3, nil, nil, 0),
-         mk_Response(<OK>, 4, nil, 1, 1.23),
-         mk_Response(<OK>, 5, nil, 1, 0),
-         mk_Response(<SEQERR>, 6, "Invalid sequence", nil, 0),
-         nil,
-         (),
-         mk_Response(<SEQERR>, 7, "Invalid sequence", nil, 0), PASSED]
+          (),
+          mk_Response(<OK>, 2, nil, 2, 3.57),
+          (),
+          (),
+          mk_Response(<OK>, 3, nil, nil, 0),
+          mk_Response(<OK>, 4, nil, 1, 1.23),
+          mk_Response(<OK>, 5, nil, 1, 0),
+          mk_Response(<SEQERR>, 6, "Invalid sequence", nil, 0),
+          nil,
+          (),
+          mk_Response(<OK>, 7, nil, nil, 0), PASSED]
 Excluded 46655 tests Executed in 1.486 secs.
 All tests passed
 \end{lstlisting}
