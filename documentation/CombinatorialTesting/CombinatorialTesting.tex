@@ -2430,7 +2430,7 @@ From a combinatorial testing perspective, this style of specification allows us
 to make lots of experimental calls to the public interface operations, in the
 confidence that the constraints will very precisely check that the operations
 are modifying the state of the server correctly. Although note that the server
-only checks the sequence of the user message ID; it is still up to the
+only checks the sequence of the user message IDs; it is still up to the
 ``caller'' to check that the server message IDs returned are in sequence.
 
 \subsection{Testing Approach}
@@ -2481,7 +2481,208 @@ consider creating supporting test operations that maintain the ``client'' state
 of the system in order to make sensible sequences of interface calls on the
 server with a trace. See \ref{chap:testops}.
 
+To create test operations, we need to be able to track the server message ID (to
+check that returned values are continuous) as well as creating a contiguous
+client message ID for new requests. We also need to be able to track the item
+IDs returned when new items are added to the basket, so that the cancelItem
+operation can select items that are in the basket. Lastly, it would be useful to
+be able to create errors in the IDs, so that we can check this behaviour as
+well. This leads to a \texttt{Tests} class with state and operations as
+follows:
 
+\scriptsize
+\begin{lstlisting}
+class Tests
+
+-- State for the combinatorial tests.
+instance variables
+  SID : nat              := 0;
+  UID : nat              := 0;
+  iids : set of nat      := {};
+  server : BasketService := new BasketService();
+
+operations
+  private addItemTest: bool * BasketService`Product * real ==> BasketService`Response
+  addItemTest(ok, product, amount) ==
+  (
+    if ok then  UID := UID + 1;
+
+    let response = server.addItem(mk_BasketService`AddItemRequest(UID, product, amount)) in
+    (
+      if response.type = <OK> then iids := iids union {response.iid};
+      checkSID(response.sid);
+      return response
+    )
+  );
+
+  private checkSID: nat ==> ()
+  checkSID(s) == SID := s
+  pre s = SID + 1;
+
+\end{lstlisting}
+\normalsize
+
+\noindent So the \texttt{addItemTest} operation (conditionally) increments the
+client UID value and uses this to build a Request. If the result is
+\texttt{<OK>}, the IID returned is added to the set. The server SID is checked
+and updated, and the response is returned so that the tests from the trace show
+the result details.
+
+Similar test operations are created for the other server interface operations,
+which similarly use the state data to prepare their requests. For example, the
+\texttt{cancelItemTest} operation includes a line to select an arbitrary IID to
+cancel, or return nil if there are no items in the basket (i.e. skip the
+operation):
+
+\scriptsize
+\begin{lstlisting}
+  if iids <> {} then
+    let iid in set iids in
+      ... -- cancel item iid
+  else return nil
+\end{lstlisting}
+\normalsize
+
+Given that all of the server interface operations check their actions in detail,
+it is tempting to create a combinatorial test that just tries all of the
+operations in every possible order, including with a \emph{false} argument to
+cause error cases:
+
+\small
+\begin{lstlisting}
+traces
+  TryEverything: ||
+  (
+    addItemTest(true, "apples", 1.23),
+    addItemTest(false, "pears", 4.56),
+    cancelItemTest(true),
+    cancelItemTest(false),
+    cancelBasketTest(true),
+    cancelBasketTest(false),
+    settleBasketTest(true),
+    settleBasketTest(false)
+  );
+\end{lstlisting}
+\normalsize
+
+\noindent This approach does have some value. It produces 8! tests (40,320),
+like this, selecting test number 1234 to illustrate:
+
+\scriptsize
+\lstset{style=tool,language=}
+\begin{lstlisting}
+> runtrace TryEverything 1234
+Generated 40320 tests in 0.001 secs. 
+Test 1234 = addItemTest(true, "apples", 1.23);
+            cancelItemTest(true);
+            settleBasketTest(true);
+            cancelItemTest(false);
+            cancelBasketTest(true);
+            cancelBasketTest(false);
+            settleBasketTest(false);
+            addItemTest(false, "pears", 4.56)
+Result = [mk_Response(<OK>, 1, nil, 1, 1.23),
+          mk_Response(<OK>, 2, nil, 1, 0),
+          mk_Response(<OK>, 3, nil, nil, 0),
+          nil,
+          mk_Response(<FAILED>, 4, "Basket is empty", nil, 0),
+          mk_Response(<SEQERR>, 5, "Invalid sequence", nil, 0),
+          mk_Response(<SEQERR>, 6, "Invalid sequence", nil, 0),
+          mk_Response(<SEQERR>, 7, "Invalid sequence", nil, 0), PASSED]
+Excluded 40319 tests
+Executed in 0.024 secs. 
+All tests passed
+\end{lstlisting}
+\normalsize
+
+\noindent Although this permutation approach might show up some corner cases,
+most of the permutations do not represent a realistic call sequence of a
+client (like this example!). At most a permutation will add one item to the
+basket and only settle one basket. To be more realistic, we need more basket
+activity before it is either settled or cancelled. That could be achieved by
+adding more \texttt{addItemTest} or \texttt{settleBasketTest} calls to the
+trace, but even if we only add two, that takes the total number of permutation
+up to 10! (3,628,800), which will take a very long time to execute.
+
+A more considered approach yields a larger number of realistic test sequences.
+Here, we build a trace using a typical sequence of actions from a client, some
+of which are alternated or optional (to cover varying possibilities). At the
+end, the whole sequence is duplicated (\texttt{\{2\}}) to produce tests that
+complete one basket and then another:
+
+\small
+\begin{lstlisting}
+TwoBaskets:
+  (
+    addItemTest(true, "apples", 1.23) |
+    addItemTest(false, "apples", 1.23);
+    ( cancelItemTest(true) |
+      cancelItemTest(false) )?;
+
+    addItemTest(true, "pears", 2.34) |
+    addItemTest(false, "pears", 2.34);
+    ( cancelItemTest(true) |
+      cancelItemTest(false) )?;
+
+    ( cancelBasketTest(false) |
+      settleBasketTest(false) )?;
+
+    cancelBasketTest(true) |
+    settleBasketTest(true)
+  ) {2}
+\end{lstlisting}
+\normalsize
+
+\noindent This trace means that we always start by adding, or failing to add an
+item; then we either cancel or fail to cancel it or we skip this step; then we add or fail
+to add a second item; then we cancel or fail to cancel or we skip; then we fail
+to cancel the basket or fail to settle the basket; and lastly we successfully
+cancel or settle the basket; and overall we repeat all \emph{combinations} of these
+sequences twice.
+
+This produces far more realistic test sequences and expands to 46,656 tests.
+Here is one selected for illustration:
+
+\scriptsize
+\lstset{style=tool,language=}
+\begin{lstlisting}
+> runtrace TwoBaskets 4321
+Generated 46656 tests in 0.001 secs. 
+Test 4321 = addItemTest(true, "apples", 1.23);
+            skip;
+            addItemTest(true, "pears", 2.34);
+            skip;
+            skip;
+            cancelBasketTest(true);
+            addItemTest(true, "apples", 1.23);
+            cancelItemTest(true);
+            addItemTest(false, "pears", 2.34);
+            cancelItemTest(true);
+            skip;
+            cancelBasketTest(true)
+Result = [mk_Response(<OK>, 1, nil, 1, 1.23),
+         (),
+         mk_Response(<OK>, 2, nil, 2, 3.57),
+         (),
+         (),
+         mk_Response(<OK>, 3, nil, nil, 0),
+         mk_Response(<OK>, 4, nil, 1, 1.23),
+         mk_Response(<OK>, 5, nil, 1, 0),
+         mk_Response(<SEQERR>, 6, "Invalid sequence", nil, 0),
+         nil,
+         (),
+         mk_Response(<SEQERR>, 7, "Invalid sequence", nil, 0), PASSED]
+Excluded 46655 tests Executed in 1.486 secs.
+All tests passed
+\end{lstlisting}
+\normalsize
+
+\noindent You can see that this is a more rational client call sequence (though
+only just!). So by composing a trace that is focussed on more realistic behaviour, we
+have managed to produce a comparable number of tests to the full permutation
+approach (of the order of 40K), but each one should be adding more value
+than a random permutation of interface calls. Of course, both traces can be
+used in the full test suite.
 
 \appendix
 \chapter{Combinatorial Testing Syntax}
