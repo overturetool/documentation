@@ -361,7 +361,7 @@ end Tester
 \end{lstlisting}
 \normalsize
 
-Notice that there are two classes, \texttt{Counter} and \texttt{Tester}. The \texttt{Counter} class defines a
+\noindent Notice that there are two classes, \texttt{Counter} and \texttt{Tester}. The \texttt{Counter} class defines a
 simple operation that increments and decrements a total state value that is
 initially zero. The \texttt{Tester} class creates an instance of Counter and defines a
 single trace called \texttt{T1}. Trace names are simple identifiers, optionally separated
@@ -369,10 +369,10 @@ by slashes (e.g.\ \texttt{item456/interface/all}). This example is the simplest
 trace possible and indicates that the trace should expand to a single test that
 just calls \texttt{obj.inc()}.
 
-This trace can either be executed in Overture in the Combinatorial Testing
-perspective (see Appendix \ref{chap:OvertureShots}), or it can be executed from
+This trace can either be executed in Overture IDE in the Combinatorial Testing
+perspective (see Appendix \ref{chap:tools}), or it can be executed from
 the command line using the \texttt{runtrace} command. The command line output is
-illustrated here for simplicity:
+illustrated in this document for simplicity:
 
 \lstset{style=tool,language=}
 \begin{lstlisting}[escapechar=@]
@@ -386,18 +386,16 @@ All tests passed
 \lstset{style=mystyle}
 \lstset{language=VDM++}
 
-The first line of output indicates that one test has been generated from the
+\noindent The first line of output indicates that one test has been generated from the
 trace. With more complex examples, this generation could expand to thousands or
 millions of tests, and consequently it may take a few seconds.
 
 The next line of the output describes the test that was generated. Note that
 this is called ``Test 1'', and consists of a single call to \texttt{obj.inc()}.
-
 The line below the test gives the result of executing that test. There is a
 single return value from the call to \texttt{obj.inc()}, 1, which is listed
 along with the word ``PASSED'' that indicates that there were no constraint violations
 in the test execution.
-
 Lastly the time taken to execute all of the tests is given, and an indication of
 whether any tests failed.
 
@@ -412,7 +410,7 @@ traces
 \end{lstlisting}
 \normalsize
 
-The trace is now saying that it would match either a call to \texttt{obj.inc()}
+\noindent The trace is now saying that it would match either a call to \texttt{obj.inc()}
 or a call to \texttt{obj.dec()}. Therefore the test expansion produces the
 following:
 
@@ -430,7 +428,7 @@ All tests passed
 \lstset{style=mystyle}
 \lstset{language=VDM++}
 
-This time two tests are generated. The first calls \texttt{obj.inc()}, the
+\noindent This time two tests are generated. The first calls \texttt{obj.inc()}, the
 second \texttt{obj.dec()}. Notice that the decrement test is completely separate
 from the increment test. It produces -1 as its result, because the \texttt{Counter}
 object is re-created for each test. It does not decrement the counter back to
@@ -446,7 +444,7 @@ traces
 \end{lstlisting}
 \normalsize
 
-This produces the output:
+\noindent This produces the output:
 
 \small
 \lstset{style=tool,language=}
@@ -461,7 +459,7 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-This generates a single test again, but you can see that the test involves two
+\noindent This generates a single test again, but you can see that the test involves two
 calls and that they return 1 and 0, respectively. So this time the second call
 is operating on the same object instance as the first.
 
@@ -475,7 +473,7 @@ traces
 \end{lstlisting}
 \normalsize
 
-Notice that the separator has changed to a comma. That produces the output:
+\noindent Notice that the separator has changed to a comma. That produces the output:
 
 \small
 \lstset{style=tool,language=}
@@ -492,10 +490,10 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-So now both orderings of the two calls are produced. This is because there are
+\noindent So now both orderings of the two calls are produced. This is because there are
 two orderings that match the pattern \texttt{|| ( \ldots, \ldots )}. This
-particular trace construct naturally expands to an arbitrary number of calls and
-produces a test for every permutation of the calls in brackets.
+particular trace construct naturally expands to an arbitrary number of comma-separated
+calls and produces a test for every \emph{permutation} of the calls in brackets.
 
 But what if some tests are a pair of calls and some are not? If we want to make
 a call optional, the \texttt{?} operator can be added to any operation call
@@ -509,7 +507,7 @@ traces
 \end{lstlisting}
 \normalsize
 
-This means that the decrement call is optional and so although it is included in
+\noindent This means that the decrement call is optional and so although it is included in
 the orderings of the pair, it should also be absent in some cases. This
 example produces the following:
 
@@ -532,10 +530,12 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-You see that the decrement call is sometimes present and sometimes replaced by
+\noindent You see that the decrement call is sometimes present and sometimes replaced by
 \texttt{\textbf{skip}}, which indicates the absence of an optional call. Notice also that
-the \texttt{||} operator and the \texttt{?} operator work together to combine their
-effects in this example, though \texttt{?} can be used for any operation call.
+the \texttt{||} operator and the \texttt{?} operator work together to
+\emph{combine} their effects in this example, though \texttt{?} can be used for
+any operation call (strictly, for any \emph{trace core definition}, see
+\ref{chap:CTsyntax}).
 
 Along the same lines as \texttt{?}, it is possible to add \texttt{*} and
 \texttt{+} operators to any call, which indicate that it should be called zero
@@ -587,9 +587,8 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-The important difference between these two is that \texttt{T1} includes an extra
+\noindent The important difference between these two is that \texttt{T1} includes an extra
 \texttt{\textbf{skip}} case, whereas \texttt{T2} does not.
-
 Lastly, it is possible to indicate a specific number of repetitions of a call or
 a range of repetitions. For example:
 
@@ -624,8 +623,9 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-The \texttt{T1} trace now produces a single test with precisely three repetitions, while
-the \texttt{T2} trace gives three tests with 2, 3 and 4 repetitions respectively.
+\noindent The \texttt{T1} trace now produces a single test with precisely three
+repetitions, while the \texttt{T2} trace gives three tests with 2, 3 and 4
+repetitions respectively.
 
 If you combine a \texttt{||} operator with a repetition, the result is to repeat
 all of the possibilities of the permutation with the given number of repetitions.
@@ -656,9 +656,10 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-Here, the \texttt{||} operator produces (\texttt{inc}, \texttt{dec}) and (\texttt{dec}, \texttt{inc}); then the
-repetition doubles this, but it doubles every combination of the two rather than
-simply repeating each one twice.
+\noindent Here, the \texttt{||} operator produces (\texttt{inc}, \texttt{dec})
+and (\texttt{dec}, \texttt{inc}); then the repetition doubles this, but it
+doubles every \emph{combination} of the two rather than simply repeating each
+one twice.
 
 \section{Using Variables}
 
@@ -707,11 +708,12 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-In a standard VDM specification, the \texttt{\textbf{let}\ldots \textbf{be st}} expression would
-choose an arbitrary element from the set that meets the \texttt{st} clause. But
-in a trace context, this looseness is used as a pattern that expands to a test
-covering each possible set value that would match. Notice that the tests list
-the actual value of the argument passed, rather than the symbolic name, ``a''.
+\noindent In a standard VDM specification, the \texttt{\textbf{let}\ldots\
+\textbf{be st}} expression would choose an arbitrary element from the set that
+meets the \texttt{\textbf{be st}} clause. But in a trace context, this
+looseness is used as a pattern that expands to a test covering every
+\emph{possible} set value that would match. Notice that the tests list the
+actual value of the argument passed, rather than the symbolic name, ``a''.
 
 A trace can include multiple \texttt{\textbf{let}} clauses, but if these are nested, then
 the trace expands to the \emph{combination} of the variables. For example:
@@ -754,11 +756,11 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-This example produces a test for every combination of ``\texttt{a}'' and ``\texttt{b}'' values,
-which is therefore nine tests. The round brackets are needed around the pair of
-operation calls because a call binds tightly to the \texttt{\textbf{let}}. Without the
-brackets, you get the following scope error, referring to the ``a'' in the
-second call to \texttt{obj.dec(a)}:
+\noindent This example produces a test for every combination of ``\texttt{a}''
+and ``\texttt{b}'' values, which is therefore nine tests. The round brackets
+are needed around the pair of operation calls because a call binds tightly to
+the \texttt{\textbf{let}}. Without the brackets, you get the following scope
+error, referring to the ``a'' in the second call to \texttt{obj.dec(a)}:
 
 \small
 \begin{lstlisting}
@@ -777,7 +779,7 @@ Type checked 2 classes in 0.12 secs. Found 1 type error
 \lstset{language=VDM++}
 \normalsize
 
-Note also that the variables defined are in scope
+\noindent Note also that the variables defined are in scope
 throughout the clauses below, so the ``\texttt{a}'' variable could be used to define the
 set of ``\texttt{b}'' values:
 
@@ -819,7 +821,7 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-If two variables should take values from the same set of values, it is possible
+\noindent If two variables should take values from the same set of values, it is possible
 to use a \texttt{multiple bind} in a trace, but not a \texttt{bind list}. For
 example:
 
@@ -860,8 +862,7 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-
-As well as defining a variable value from a set, variables can be used to
+\noindent As well as defining a variable value from a set, variables can be used to
 simplify calculations that would otherwise have to be made in the arguments to
 operation calls. These simpler \texttt{\textbf{let}} definitions do not increase the
 number of tests generated from the trace, they just introduce new names in the
@@ -894,7 +895,7 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-If repetitions are added to a clause within a \texttt{\textbf{let}} body, they bind
+\noindent If repetitions are added to a clause within a \texttt{\textbf{let}} body, they bind
 tightly to the operation call rather than the entire \texttt{\textbf{let}} clause.
 If you want to repeat the entire \texttt{\textbf{let}}, you have to
 bracket the whole clause and add a repetition to that. For example:
@@ -962,12 +963,12 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-The difference may seem subtle, but the effect is significant. T1 behaves like a
+\noindent The difference may seem subtle, but the effect is significant. T1 behaves like a
 simple ``\{1, 2\}'' repetition for each of the \texttt{\textbf{let}} values, whereas T2
 produces either one or two cases from the \emph{entire set} created by the \texttt{\textbf{let}}
 clause.
 
-Although the example above uses a \texttt{let <set bind>} expression, it is also
+Although the example above uses a \texttt{\textbf{let} <set bind>} expression, it is also
 possible to use a \texttt{\textbf{let} <seq bind>} or \texttt{\textbf{let} <type bind>}. In a
 trace context, the ordering that a sequence bind carries does not affect the
 generation of tests; if the example had \texttt{\textbf{let} a \textbf{in seq} [1,2,3]}, the
@@ -978,8 +979,8 @@ which can be useful in some circumstances. This is covered later in Chapter~\ref
 
 \section{Tests with Errors}
 
-The examples so far have only includes tests that \textbf{PASSED}. This means that they
-completed the sequence of operation calls without violating any pre-conditions,
+The examples so far have only includes tests that \texttt{PASSED}. This means
+that they completed the sequence of operation calls without violating any pre-conditions,
 post-conditions, state invariants, type invariants, recursive measures or dynamic
 type checks.
 
@@ -1028,7 +1029,7 @@ Result = [6, 12, PASSED]
 Test 3 = obj.inc(6); obj.inc(6); obj.inc(6)
 Result = [6, 12, 18, PASSED]
 Test 4 = obj.inc(6); obj.inc(6); obj.inc(6); obj.inc(6)
-Result = [6, 12, 18, Error 4072: Postcondition failure: post_inc in 'Counter' at line 15:16, FAILED]
+Result = [6, 12, 18, Error 4072: Postcondition fail: post_inc in 'Counter' at line 15:16, FAILED]
 Test 5 = obj.inc(6); obj.inc(6); obj.inc(6); obj.inc(6); obj.inc(6)
 Test 5 FILTERED by test 4
 Test 6 = obj.inc(7)
@@ -1036,13 +1037,13 @@ Result = [7, PASSED]
 Test 7 = obj.inc(7); obj.inc(7)
 Result = [7, 14, PASSED]
 Test 8 = obj.inc(7); obj.inc(7); obj.inc(7)
-Result = [7, 14, Error 4072: Postcondition failure: post_inc in 'Counter' at line 15:16, FAILED]
+Result = [7, 14, Error 4072: Postcondition fail: post_inc in 'Counter' at line 15:16, FAILED]
 Test 9 = obj.inc(7); obj.inc(7); obj.inc(7); obj.inc(7)
 Test 9 FILTERED by test 8
 Test 10 = obj.inc(7); obj.inc(7); obj.inc(7); obj.inc(7); obj.inc(7)
 Test 10 FILTERED by test 8
 Test 11 = obj.inc(10)
-Result = [Error 4071: Precondition failure: pre_inc in 'Counter' at line 14:11, INCONCLUSIVE]
+Result = [Error 4071: Precondition fail: pre_inc in 'Counter' at line 14:11, INCONCLUSIVE]
 Test 12 = obj.inc(10); obj.inc(10)
 Test 12 FILTERED by test 11
 Test 13 = obj.inc(10); obj.inc(10); obj.inc(10)
@@ -1058,7 +1059,7 @@ Some tests failed or indeterminate
 \lstset{language=VDM++}
 \normalsize
 
-The \texttt{inc} operation now has a pre-condition that the argument must be
+\noindent The \texttt{inc} operation now has a pre-condition that the argument must be
 less than 10 and a postcondition that the resulting total must be less than 20.
 The trace makes 1 to 5 calls to the \texttt{inc} operation with arguments 6, 7
 and 10, respectively.
@@ -1090,9 +1091,8 @@ to a specification is sound.
 Therefore the trace system provides the means to reduce the number of tests that
 are generated. This limited number can then be checked more quickly, which
 naturally does not provide the confidence of a full execution, but is convenient
-to work with when a sample of tests is sufficient.
-
-Trace reduction can be achieved in four different ways:
+to work with when a sample of tests is sufficient. Trace reduction can be
+achieved in four different ways:
 
 \begin{itemize}
 \item \emph{RANDOM} reduction. This is the simplest kind of reduction, and is
@@ -1111,10 +1111,11 @@ but it also guarantees to include at least one test of every shape within the
 million, even if that means the reduction is (say) 1.5\%.
 \item \emph{SHAPES\_VARNAMES} reduction. The simple interpretation of a
 shape above only looks at the names of the operations called. This second kind
-of shaped reduction looks at the variable names used in the \texttt{let}
-bindings and constants as well as the names of the operations. So with this kind
-of reduction, \texttt{[opA(a), opA(b)]} is different to \texttt{[opA(x),
-opA(y)]}, even if the values of ``\texttt{a}'' and ``\texttt{x}'' can sometimes be the same.
+of shaped reduction looks at the variable names used in the
+\texttt{\textbf{let}} bindings and constants as well as the names of the
+operations. So with this kind of reduction, \texttt{[opA(a), opA(b)]} is
+different to \texttt{[opA(x), opA(y)]}, even if the values of ``\texttt{a}''
+and ``\texttt{x}'' can sometimes be the same.
 Typically, different variable names are used in different parts of a complex
 trace and so this reduction method is trying to select all of the different
 parts of a trace, even if the sequence of operation names produced is the same
@@ -1126,7 +1127,7 @@ will be considered a different shape to another \texttt{[opA(a)]} elsewhere, as
 long as ``\texttt{a}'' is bound to a different value.
 \end{itemize}
 
-The following simple trace, using the \texttt{Counter} example from previous
+\noindent The following simple trace, using the \texttt{Counter} example from previous
 chapters, illustrates RANDOM reduction:
 
 \small
@@ -1177,7 +1178,7 @@ Executed in 4.932 secs.
 \lstset{language=VDM++}
 \normalsize
 
-The ``filter'' and ``seedtrace'' commands are used to set the filtering
+\noindent The ``filter'' and ``seedtrace'' commands are used to set the filtering
 required, then the trace is executed as normal. But we see that the million
 tests have been reduced to 10,000 (taking a few seconds). Then instead of trying
 every combination of ``\texttt{a}'' and ``\texttt{b}'', the filtering selects them at random,
@@ -1221,7 +1222,7 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-Here, we try to reduce this to 1\%, but using the SHAPES\_NOVARS option. A
+\noindent Here, we try to reduce this to 1\%, but using the SHAPES\_NOVARS option. A
 reduction of 1\% of 36 tests ought to produce a single test (reduction will
 never produce zero tests), but in fact the shaped reduction produces four. You
 can see that there is one case of each ``shape'': one \texttt{inc} and one \texttt{dec}; two \texttt{inc}'s
@@ -1260,7 +1261,7 @@ operator described below.
 an ordered sequence of sets. This expands to all possible selections of one test
 from each of the sets. In its simplest form, this could be a sequence of
 operation calls which therefore just expands to one test. But a combination of
-sets of tests results in a set of the product of the sizes of those sets.
+sets of tests expands to a set of the product of the sizes of those sets.
 \item \texttt{set = set1 ?}. A set of tests may be formed from another set with
 a \texttt{?} operator. This produces the same set, but includes a ``skip'' step.
 \item \texttt{set = set1 \{n[, n]\}}. A set of tests may be formed from another
@@ -1277,15 +1278,17 @@ a set with the union of the other sets.
 \item \texttt{set = || (set1, set2, ..., setn)}. A set may be formed from the
 permutations of a number of other sets. This produces a set with each
 permutation of each selection of one test from each set.
-\item \texttt{set = let <multiple bind> [be st <cond>] in set1}. A set of
-tests may be formed from a \texttt{multiple bind}, which expands to the
-substitution of all the possible the bound values in the original set.
-\item \texttt{set = let <name> = <exp> [, <name2> = <exp2>, ...] in set1}. A set
-of tests may be evaluated in a scope that defines name/value pairs. This does
+\item \texttt{set = \textbf{let} <multiple bind> [\textbf{be st} <cond>]
+\textbf{in} set1}. A set of tests may be formed from a \texttt{multiple bind},
+which expands to the substitution of all the possible the bound values in the
+original set.
+\item \texttt{set = \textbf{let} <name> = <exp> [, <name2> = <exp2>,
+...]\ \textbf{in} set1}.
+A set of tests may be evaluated in a scope that defines name/value pairs. This does
 not increase the number of tests in the set, but just binds free variables.
 \end{itemize}
 
-For example, if (for brevity) we say that a test with a single call to
+\noindent For example, if (for brevity) we say that a test with a single call to
 \texttt{obj.opA()} is written as ``[A]'', and similarly ``[B]'' and ``[C]'' 
 for other operation calls, and ``[-]'' for a skip, then we can say the 
 following trace operators produce these sets of tests:
@@ -1316,8 +1319,8 @@ let z = 1 in B(z) = { [B(1)] }
 \lstset{language=VDM++}
 \normalsize
 
-Note that the repeat limits in a trace (like \{1,3\}) must be numeric literals.
-But values in a multiple bind set or sequence can be variables, either bound
+\noindent Note that the repeat limits in a trace (like \{1,3\}) must be numeric literals.
+But values in a multiple set or sequence bind can be variables, either bound
 earlier in the trace or other fields within scope of the trace inside the object
 or module where it is defined. Similarly, the values in the right hand side of
 let definitions can be variables within the trace or the object/module scope.
@@ -1330,8 +1333,9 @@ some differences that are described below.
 
 \subsection{Traces in VDM-SL}
 
-Traces are added in a ``traces'' section within a VDM-SL specification. This can
-either be within one or more modules or within a flat specification. The name of
+Traces are added in a \texttt{\textbf{traces}} section within a VDM-SL
+specification.
+This can either be within one or more modules or within a flat specification. The name of
 the traces in a module are implicitly exported, so they are referred to as
 \texttt{<modulename>`<tracename>}. You can omit the module name if it is the
 default module.
@@ -1369,7 +1373,7 @@ end Tester
 \end{lstlisting}
 \normalsize
 
-And in the VDM-SL command line, that would be executed as follows. Note that
+\noindent And in the VDM-SL command line, that would be executed as follows. Note that
 Tester is not the default module, so the trace name is qualified:
 
 \scriptsize
@@ -1400,18 +1404,18 @@ All tests passed
 \lstset{language=VDM++}
 \normalsize
 
-This trace is very similar to the VDM++ example. The \texttt{Counter} module has a
-single state that is equivalent to the VDM++ ``total'' instance variable. Note
-that this is reset to zero automatically before each test is executed. This is
+\noindent This trace is very similar to the VDM++ example. The \texttt{Counter} module has a
+single state that is equivalent to the VDM++ \texttt{total} instance variable.
+Note that this is reset to zero automatically before each test is executed. This is
 because each test re-initialises the specification, and the module
-state has an ``\texttt{\textbf{init}}'' clause that sets the total to zero.
+state has an \texttt{\textbf{init}} clause that sets the total to zero.
 
 Notice also that the operation calls are not applied to a Counter object, unlike
 VDM++.
 
 \subsection{Traces in VDM++ and VDM-RT}
 
-Traces are added in a ``traces'' section within a VDM++ or VDM-RT
+Traces are added in a \texttt{\textbf{traces}} section within a VDM++ or VDM-RT
 specification, inside one or more classes. In effect, the name of the trace is
 a public static symbol, so it is referred to as
 \texttt{<classname>`<tracename>}, as we have seen in the examples above. You
@@ -1457,7 +1461,7 @@ traces
 \end{lstlisting}
 \normalsize
 
-In this case, the \texttt{range} function is used to create a set for the
+\noindent In this case, the \texttt{range} function is used to create a set for the
 multi-binds, and this is executed during \emph{expansion}, once for ``\texttt{x}'' and three
 times for ``\texttt{y}''. Similarly, the right hand side of simple let definitions are
 executed during trace expansion. But the addition of \texttt{Z + x + y} in the
@@ -1497,6 +1501,12 @@ Result = [3, PASSED]
 \lstset{style=mystyle}
 \lstset{language=VDM++}
 \normalsize
+
+\noindent Arguments passed to functions or operations can sometimes be very
+large when represented as literals. So to avoid producing trace output that has (say)
+a million identical copies of a very large map value, trace output uses the
+variable name if the literal value is longer than a particular limit, by default
+50 characters\footnote{VDMJ only. The limit can be changed via a property.}.
 
 \chapter{Combinatorial Testing Patterns}
 \label{chap:patterns}
@@ -1576,8 +1586,8 @@ VDM expression that yields a set. The following cases are generally useful:
   let pair in set {mk_(a, b) | a, b in set VALUES & a > b} in ...
 \end{lstlisting}
 \normalsize
-  \item The \texttt{power} operator can be used to produce all possible subsets
-  from another set, though you often have to eliminate the empty set, which is
+  \item The \texttt{\textbf{power}} operator can be used to produce all possible
+  subsets from another set, though you often have to eliminate the empty set, which is
   produced by the operator:
 \small
 \begin{lstlisting}
@@ -1652,7 +1662,8 @@ traces
     EndTransaction();
 \end{lstlisting}
 \normalsize
-This produces a set of seven tests, calling \texttt{test1} to \texttt{test7},
+
+\noindent This produces a set of seven tests, calling \texttt{test1} to \texttt{test7},
 each of which is sandwiched by calls that set up the system and close down the
 transaction. Clearly the body containing the alternative tests can be
 arbitrarily complicated, for example using variable binds to generate many
@@ -1664,6 +1675,7 @@ Traces that explore all of the possible uses cases of a system frequently
 need to search a graph that describes the possible paths through the use case.
 This is translated into a trace by generating a call for each step through the
 graph, where the trace expands to the possibilities at each step. For example:
+
 \scriptsize
 \begin{lstlisting}
 values
@@ -1700,7 +1712,8 @@ traces
  
 \end{lstlisting}
 \normalsize
-Here the system starts in state \texttt{s1}, which must be \texttt{READY}. From
+
+\noindent Here the system starts in state \texttt{s1}, which must be \texttt{READY}. From
 there, a number of events are possible given by the domain of a lookup of the
 state in the \texttt{TESTSTATES} map. One of these events is selected as
 \texttt{ev1}, which then moves us to state \texttt{s2}, and so on. After five
@@ -1712,8 +1725,9 @@ possibilities very quickly, even with comparatively simple graphs.
 
 \subsection{Building data in stages}
 
-A cascade of let bindings can be used to build a complex data structure in
-stages, rather than each binding having to create a complete value. For example:
+A cascade of \texttt{\textbf{let}} bindings can be used to build a complex data
+structure in stages, rather than each binding having to create a complete value. For example:
+
 \scriptsize
 \begin{lstlisting}
 EPATest:
@@ -1764,7 +1778,7 @@ EPATest:
 \end{lstlisting}
 \normalsize
 
-This example creates \texttt{InputFiles}, which contain various records that
+\noindent This example creates \texttt{InputFiles}, which contain various records that
 relate to electronic payments taken from a branch of a business. The objective of the
 trace is to check a large number of different input files with different numbers
 of branches and various record types.
@@ -1790,7 +1804,7 @@ that checks the result with (say) a post-condition:
 \end{lstlisting}
 \normalsize
 
-Here, we assume that the ``\texttt{data}'' argument passed comes from some processing in
+\noindent Here, we assume that the ``\texttt{data}'' argument passed comes from some processing in
 the specification, but where does the ``\texttt{expected}'' value come from? It could be
 a literal in the trace, but this is not practical for non-trivial examples, so
 it is common to create support functions that produce answers that are correct
@@ -1811,11 +1825,12 @@ Scenarios:
 \end{lstlisting}
 \normalsize
 
-In this example, a \texttt{Test} record is created that includes a Service, the
+\noindent In this example, a \texttt{Test} record is created that includes a Service, the
 expected keystrokes and the expected basket result for a retail application in
 a given scenario (use case). The \texttt{run} operation uses the key strokes to
 drive the specification under test and then check that the expected basket is
-produced correctly. Both of these functions are oracles.
+produced correctly. The \texttt{keyStrokesFor} and \texttt{basketFor} functions
+are oracles.
 
 \subsection{Using positive and negative sense checks}
 
@@ -1847,9 +1862,8 @@ check with the original check digit fails correctly:
 It is extremely easy to write a comparatively simple looking trace definition
 that expands into a collection of tests that is so large that it is not
 practical to execute, either because it would take too long or because the
-generation process takes up too much memory.
-
-The following tips will help you to avoid this pitfall:
+generation process takes up too much memory. The following tips will help you to
+avoid this pitfall:
 
 \begin{description}
   \item[Start small:] It is tempting to write traces as clearly as
@@ -1857,8 +1871,8 @@ The following tips will help you to avoid this pitfall:
   of data or types with many values. The combinatorial expansion process will
   then either multiply these data sizes together, or in some cases generate 
   combinations that depend on the product of the \emph{factorial} of the data
-  sizes. So a modest set of 50 values might therefore generate of the order of
-  $10^{64}$ tests (i.e.\ the factorial of 50). So start small: design and test 
+  sizes. Therefore a modest set of 50 values might generate of the
+  order of $10^{64}$ tests (i.e.\ the factorial of 50). So start small: design and test 
   traces with small example sets and types, and only expand the data selections
   when you can see that the trace is expanding as you require.
   \item[Split up traces:] The alternation operator, \texttt{|}, will join
@@ -1873,8 +1887,8 @@ The following tips will help you to avoid this pitfall:
   \item[Be careful with multiple-binds and power sets:] As mentioned
   above, factorial scaling is extremely expensive. This occurs most commonly
   with multiple-binds that are used for k-permutations, and with the
-  \texttt{\textbf{power}} operator on sets. As suggested above, in these case start with
-  small sets and increase them with care!
+  \texttt{\textbf{power}} operator on sets. As suggested above, in these cases
+  start with small sets and increase them with care!
 \end{description}
 
 \chapter{Combinatorial Testing Examples}
@@ -1913,9 +1927,7 @@ provided by the non-standard implementation is weaker than the standard one.
 
 \subsection{The Structure of the Specification}
 
-The Luhn algorithm is defined in a singe class, called ``LUHN''.
-
-The first part of the specification defines the encoding for the digit
+The first part of the Luhn specification defines the encoding for the digit
 strings that are to be checked. The algorithm is defined for a given
 \emph{base}, and therefore a set of characters for the base must be defined. In
 the simple base-10 case, the ten characters are usually '0', '1', \ldots, '9',
@@ -1946,7 +1958,7 @@ post RESULT in set dom mapping;
 \end{lstlisting}
 \normalsize
 
-The precondition checks that the string passed is only comprised of characters
+\noindent The precondition checks that the string passed is only comprised of characters
 in the domain of the mapping, and that the base is consistent with the size of
 the mapping. The postcondition checks that the character returned is also a
 member of the mapping.
@@ -1970,13 +1982,13 @@ post RESULT < base and (total(data, base) + RESULT) mod base = 0;
 \end{lstlisting}
 \normalsize
 
-The Luhn check value is defined in terms of a \texttt{total} function. The
+\noindent The Luhn check value is defined in terms of a \texttt{total} function. The
 Luhn result is difference between the total function and the base (modulo the
 base). The precondition checks that all of the values in the input string are
 within the base, and the postcondition checks that the result is within the base
 and that adding the total value to the result gives zero (modulo the base).
 
-Lastly, the \texttt{total} function is passed the string of input values and
+Lastly, the \texttt{total} function is passed the sequence of input values and
 produces a total, which is the sum of the digits of the value multiplied by a
 factor which alternates between 1 and 2, such that the \emph{rightmost}
 factor is always 2.
@@ -1996,7 +2008,7 @@ Executed in 0.006 secs.
 \end{lstlisting}
 \normalsize
 
-This is a perfectly valid way to test, and quickly gives confidence that the
+\noindent This is a perfectly valid way to test, and quickly gives confidence that the
 LUHN specification is roughly correct. But of course there may be many edge
 cases and strange combinations of digits that cause issues. This is where
 combinatorial tests give us more testing power.
@@ -2052,7 +2064,7 @@ check digit for each. Note the following:
 	40,000 work there is unlikely to be a problem in the remainder.
 \end{itemize}
 
-After the \texttt{FirstN} trace, there is a second one called
+\noindent After the \texttt{FirstN} trace, there is a second one called
 \texttt{FirstN\_16}, which does the same processing but in base 16 rather than
 base 10. This naturally produces more test cases (because the alphabet is
 larger), so to keep the trace size manageable, it covers strings of length 1 to
@@ -2154,7 +2166,7 @@ ZeroPadding:
 \end{lstlisting}
 \normalsize
 
-The call to \texttt{checkOK} verifies that the check digit produced from the
+\noindent The call to \texttt{checkOK} verifies that the check digit produced from the
 original input is the same as that produced for the same with a varying prefix
 of between 1 and 8 zeros.
 
@@ -2224,8 +2236,8 @@ in
 \normalsize
 
 \noindent The \texttt{sumDigits} function adds the digits of its argument in the
-given base (e.g. the sum of 123 in base 10 is 1+2+3=6). Here is the equivalent
-in the ACME implementation:
+given base (e.g. the sum of 123 in base 10 is 1 + 2 + 3 = 6). Here is the
+equivalent in the ACME implementation:
 
 \small
 \begin{lstlisting}
@@ -2241,11 +2253,11 @@ in
 \normalsize
 
 \noindent Notice that the ACME algorithm has an extra test for
-\texttt{hasNonDecimals}. This function is true if there are any A-F characters
-in the product. If there are none, then the result of the ACME \texttt{total}
-function will be exactly the same as the standard; but if there are non-decimal
-characters, the function returns the \texttt{code} value - i.e. the
-unmultiplied and unsummed input value. Obviously this is wrong.
+\texttt{hasNonDecimals}. This function is true if there are any characters other
+than 0-9 in the product, such as A-F. If there are none, then the result of the
+ACME \texttt{total} function will be exactly the same as the standard; but if
+there are non-decimal characters, the function returns the \texttt{code} value
+- i.e. the unmultiplied and unsummed input value. Obviously this is wrong.
 
 Using this new specification, we could show that it seemed to produce ACME
 check digits that agree with the old ACME software, both with and without
@@ -2287,9 +2299,14 @@ than the standard algorithm (and we could characterize its weaknesses).
 \subsection{Background}
 
 The Basket Service model describes the behaviour of a simple client-server
-system that manages a basket of retail items. Initially a basket is empty, and
-can have multiple items added and cancelled (removed), before finally the entire
-basket is settled (the customer pays for the items) or cancelled.
+system that manages a basket of retail items\footnote{This is a simplified
+version of a far more complex ARTS transaction system.
+
+See
+https://en.wikipedia.org/wiki/Association\_for\_Retail\_Technology\_Standards}.
+Initially a basket is empty, and can have multiple items added and cancelled
+(removed), before finally the entire basket is settled (the customer pays for
+the items) or cancelled.
 
 \subsection{The Structure of the Specification}
 
@@ -2420,7 +2437,7 @@ pre lastuid = request.uid
 
 \noindent Notice how the main public operation performs basic checks and then
 delegates to the private ``Impl'' operation, which actually performs the update. The
-postcondition on main operation has a detailed postcondition that considers
+main operation has a detailed postcondition that considers
 each possible result type and states the changes in the system state and
 message counters that result. You can see that if the result is \texttt{<OK>},
 then the basket is edited to remove a single item and return the new basket
@@ -2543,7 +2560,7 @@ operation):
 \end{lstlisting}
 \normalsize
 
-Given that all of the server interface operations check their actions in detail,
+\noindent Given that all of the server interface operations check their actions in detail,
 it is tempting to create a combinatorial test that just tries all of the
 operations in every possible order, including with a \emph{false} argument to
 cause error cases:
@@ -2565,8 +2582,8 @@ traces
 \end{lstlisting}
 \normalsize
 
-\noindent This approach does have some value. It produces 8! tests (40,320),
-like this, selecting test number 1234 to illustrate:
+\noindent This approach does have some value. It produces 8! tests (40,320).
+For example test number 1234 is as follows:
 
 \scriptsize
 \lstset{style=tool,language=}
@@ -2634,11 +2651,11 @@ TwoBaskets:
 \normalsize
 
 \noindent This trace means that we always start by adding, or failing to add an
-item; then we either cancel or fail to cancel it or we skip this step; then we add or fail
-to add a second item; then we cancel or fail to cancel or we skip; then we fail
-to cancel the basket or fail to settle the basket; and lastly we successfully
-cancel or settle the basket; and overall we repeat all \emph{combinations} of these
-sequences twice.
+item; then we either cancel or fail to cancel it, or we skip this step; then we
+add or fail to add a second item; then we cancel or fail to cancel or we skip;
+then we fail to cancel the basket or fail to settle the basket; and lastly we
+successfully cancel or settle the basket; and overall we repeat all
+\emph{combinations} of these sequences twice.
 
 This produces far more realistic test sequences and expands to 46,656 tests.
 Here is one selected for illustration:
