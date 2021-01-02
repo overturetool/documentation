@@ -1,0 +1,129 @@
+class Tests
+-- 
+-- Tests of the basket service.
+-- 
+operations
+    public testAdHoc: () ==> seq of bool
+    testAdHoc() == let s = new BasketService() in return
+    [
+        s.cancelItem(mk_BasketService`CancelItemRequest(0, 99))
+            = mk_BasketService`Response(<FAILED>, 1, "Basket is empty", nil, 0),
+        s.cancelBasket(mk_BasketService`CancelBasketRequest(1))
+            = mk_BasketService`Response(<FAILED>, 2, "Basket is empty", nil, 0),
+        s.addItem(mk_BasketService`AddItemRequest(2, "apples", -99))
+            = mk_BasketService`Response(<FAILED>, 3, "Amount invalid", nil, 0),
+        s.addItem(mk_BasketService`AddItemRequest(3, "apples", 1.23))
+            = mk_BasketService`Response(<OK>,     4, nil, 1, 1.23),
+        s.addItem(mk_BasketService`AddItemRequest(99, "pears", 2.34))
+            = mk_BasketService`Response(<SEQERR>, 5, "Invalid sequence", nil, 1.23),
+        s.addItem(mk_BasketService`AddItemRequest(4, "pears", 2.34))
+            = mk_BasketService`Response(<OK>,     6, nil, 2, 3.57),
+        s.cancelItem(mk_BasketService`CancelItemRequest(5, 1))
+            = mk_BasketService`Response(<OK>,     7, nil, 1, 2.34),
+        s.cancelItem(mk_BasketService`CancelItemRequest(6, 99))
+            = mk_BasketService`Response(<FAILED>, 8, "No such item", 99, 2.34),
+        s.settleBasket(mk_BasketService`SettleBasketRequest(7))
+            = mk_BasketService`Response(<OK>,     9, nil, nil, 2.34)
+    ]
+    post elems RESULT = {true};
+
+-- 
+-- State for the combinatorial tests.
+-- 
+instance variables
+    SID : nat               := 0;
+    UID : nat               := 0;
+    iids : set of nat       := {};
+    server : BasketService  := new BasketService();
+
+operations
+    private addItemTest: bool * BasketService`Product * real ==> BasketService`Response
+    addItemTest(ok, product, amount) ==
+    (
+        if ok then UID := UID + 1;
+
+        let response = server.addItem(mk_BasketService`AddItemRequest(UID, product, amount)) in
+        (
+            if response.type = <OK> then iids := iids union {response.iid};
+            checkSID(response.sid);
+            return response
+        )
+    );
+
+    private cancelItemTest: bool ==> [BasketService`Response]
+    cancelItemTest(ok) ==
+    (
+        if iids <> {} then let iid in set iids in
+        (
+            if ok then UID := UID + 1;
+
+            let response = server.cancelItem(mk_BasketService`CancelItemRequest(UID, iid)) in
+            (
+                if response.type = <OK> then iids := iids \ {response.iid};
+                checkSID(response.sid);
+                return response
+            )
+        )
+        else return nil
+    );
+
+    private cancelBasketTest: bool ==> BasketService`Response
+    cancelBasketTest(ok) ==
+    (
+        if ok then UID := UID + 1;
+
+        let response = server.cancelBasket(mk_BasketService`CancelBasketRequest(UID)) in
+        (
+            if response.type = <OK> then ( iids := {}; UID := 0 );
+            checkSID(response.sid);
+            return response
+        )
+    );
+
+    private settleBasketTest: bool ==> BasketService`Response
+    settleBasketTest(ok) ==
+    (
+        if ok then UID := UID + 1;
+
+        let response = server.settleBasket(mk_BasketService`SettleBasketRequest(UID)) in
+        (
+            if response.type = <OK> then ( iids := {}; UID := 0 );
+            checkSID(response.sid);
+            return response
+        )
+    );
+
+    private checkSID: nat ==> ()
+    checkSID(s) ==
+    (
+        SID := s;
+    )
+    pre s = SID + 1;
+
+traces
+TryEverything: ||
+    (
+        addItemTest(true, "apples", 1.23),
+        addItemTest(false, "pears", 4.56),
+        cancelItemTest(true),
+        cancelItemTest(false),
+        cancelBasketTest(true),
+        cancelBasketTest(false),
+        settleBasketTest(true),
+        settleBasketTest(false)
+    );
+
+TwoBaskets:
+    (
+        addItemTest(true, "apples", 1.23) | addItemTest(false, "apples", 1.23);
+        ( cancelItemTest(true) | cancelItemTest(false) )?;
+
+        addItemTest(true, "pears", 2.34) | addItemTest(false, "pears", 2.34);
+        ( cancelItemTest(true) | cancelItemTest(false) )?;
+
+        ( cancelBasketTest(false) | settleBasketTest(false) )?;
+
+        cancelBasketTest(true) | settleBasketTest(true)
+    ) {2}
+
+end Tests

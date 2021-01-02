@@ -1,0 +1,45 @@
+class LUHN
+--
+-- A specification of the standard Luhn base-N check digit algorithm.
+--
+types
+    --
+    -- A type describing valid character mappings. The map must be injective, and it
+    -- must map arbitrary characters onto the set {0, ..., N-1}, where N is the base
+    -- of the algorithm.
+    --
+    public Mapping = inmap char to nat
+    inv m == rng m = {0, ..., card rng m - 1};
+    
+functions
+    --
+    -- Generate the Luhn check character from a string using a particular base and char map.
+    -- The precondition says that all of the input characters must be in the mapping and
+    -- the range of the map must match the base. The postcondition says the result must also
+    -- be in the coding map.
+    --
+    public luhns: seq1 of char * nat1 * LUHN`Mapping -> char	-- Non empty list input
+    luhns(string, base, mapping) ==
+        is subclass responsibility;
+
+    --
+    -- Generate the Luhn check digit from a sequence of numbers in a particular base. There is
+    -- a precondition to check that the input values are within the base. The check digit
+    -- RESULT is defined as correct by the postcondition if the total plus the check digit
+    -- would encode to zero.
+    --
+    public luhn: seq1 of nat * nat1 -> nat	-- Non empty list input
+    luhn(data, base) ==
+        is subclass responsibility;
+
+    --
+    -- Sum the digits of a number in a particular base.
+    --
+    protected sumDigits: nat * nat1 -> nat
+    sumDigits(n, base) ==
+        if n < base
+        then n
+        else (n rem base) + sumDigits(n div base, base)
+    measure n;
+
+end LUHN
