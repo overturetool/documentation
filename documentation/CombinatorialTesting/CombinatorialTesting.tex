@@ -1997,7 +1997,7 @@ factor is always 2.
 
 The natural approach to test the algorithm is to produce a check digit for some
 strings with known check digits, such as a credit or debit card
-number\footnote{No, this isn't my real credit card number!}, where the Luhn
+number\footnote{No, this is not my real credit card number!}, where the Luhn
 calculation is in base-10 and computed over the first 15 digits of the number:
 
 \small
@@ -2110,7 +2110,7 @@ verified by \texttt{checkFail}.
 So having verified the correct detection of all single digit errors, we have to
 check for the cases that are \emph{not detected} by the algorithm. This happens
 in two special cases, firstly for swapped pairs of digits in the input, where
-one digit is zero and the other is base-1 (e.g. 'F' in hexadcimal or '9' in
+one digit is zero and the other is base-1 (e.g.\ 'F' in hexadecimal or '9' in
 base-10). The trace to prove this is as follows:
 
 \small
@@ -2194,11 +2194,11 @@ used to create the barcodes for new parcels.
 Unfortunately, the Luhn implementation used by ACME had a fault. The software
 was originally written in Visual Basic for base-10 and subsequently extended to
 cover base-16. But internally, a VB library to convert decimal characters to
-numbers was silently ignoring hexadecimal characaters. This meant that although
+numbers was silently ignoring hexadecimal characters. This meant that although
 the barcodes produced by the software could be checked by the scanners, the
 check digits produced were not the standard check digits.
 
-This went unnnoticed for some considerable time. But eventually the software
+This went unnoticed for some considerable time. But eventually the software
 used to produce the barcodes had to be updated as part of a planned system
 enhancement, leaving the barcode scanners unchanged. The informal specifications
 of the system stated that it used the Luhn base-16 algorithm, and that was duly
@@ -2280,7 +2280,7 @@ as follows:
   \item[AllOneDigitErrors:] This trace produces no errors with the standard
   algorithm, because it is capable of detecting all single digit errors.
   However, the ACME variant produces six errors. On closer examination, we find
-  that it cannot dectect substitutions of 3 $<->$ 6, 5 $<->$ A, 7 $<->$ B.
+  that it cannot detect substitutions of 3 $<->$ 6, 5 $<->$ A, 7 $<->$ B.
   \item[AllAdjacentTranspositions:] This trace has two exceptions that are not
   detected by the standard algorithm, 0 $<->$ F and F $<->$ 0. The ACME variant
   has these two exceptions as well, but in addition it has 40 others.
@@ -2291,7 +2291,7 @@ as follows:
 \noindent So, with the help of a formal model and combinatorial testing, we
 could show the ACME company not only that their implementation was at fault, but
 that the invalid implementation was significantly weaker at error detection
-than the standard algorithm (and we could characterize its weaknesses).
+than the standard algorithm (and we could characterise its weaknesses).
 
 
 \section{The Basket Service Model}
@@ -2310,7 +2310,7 @@ the items) or cancelled.
 
 \subsection{The Structure of the Specification}
 
-The Basket Service is modelled by a single class, called BasketService, which
+The Basket Service is modelled by a single class, called \texttt{BasketService}, which
 includes the current basket in its state:
 
 \small
@@ -2337,7 +2337,7 @@ instance variables
 \normalsize
 
 \noindent The client-server messages are modelled by record types for each
-transaction type, either adding or cancelling an item from the bsaket, or cancelling or
+transaction type, either adding or cancelling an item from the basket, or cancelling or
 settling the entire basket. For example:
 
 \small
@@ -2610,6 +2610,8 @@ Excluded 40319 tests
 Executed in 0.024 secs. 
 All tests passed
 \end{lstlisting}
+\lstset{style=mystyle}
+\lstset{language=VDM++}
 \normalsize
 
 \noindent Although this permutation approach might show up some corner cases,
