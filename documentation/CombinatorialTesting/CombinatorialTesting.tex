@@ -2788,12 +2788,37 @@ The Overture IDE includes a perspective that is intended for working with
 combinatorial tests in a specifiction. The features available are described in
 Chaper 10 of the Overture User Guide.
 
+\begin{center}
+\includegraphics[width=10cm]{overturect}
+\end{center}
+
+\section{Visual Studio Code GUI}
+
+There is a new experimental VDM extension for Visual Studio Code available that
+supports combinatorial testing
+\footnote{https://github.com/jonaskrask/vdm-vscode}. The interface should be
+intuitive and consistent with normal VS Code usage.
+
+\begin{center}
+\includegraphics[width=10cm]{vscode}
+\end{center}
+
+\section{VDMTools UI}
+
+VDMTools\footnote{https://github.com/vdmtools/vdmtools} includes support for
+traces:
+
+\begin{center}
+\includegraphics[width=10cm]{vdmtools}
+\end{center}
+
+
 \section{Command Line Tools}
 
-Although the Overture IDE is convenient for developing combinatorial tests, to
-push the tool to the limit of what is possible it is better to use the command
-line. This allows more memory to be allocated to the process running the traces
-without the IDE occupying space itself.
+Although the IDEs above are convenient for developing combinatorial tests, to
+push the tools to the limit of what is possible it is better to use a command
+line interface. This allows more memory to be allocated to the process running
+the traces without the IDE occupying space itself.
 
 \subsection{Overture Command Line}
 
@@ -2836,7 +2861,10 @@ visible traces or all traces within the named class or module. This is useful
 when there is a large number of traces in a specification.
 \end{description}
 
+\subsection{VDMTools Command Line}
 
+It is possible to execute traces in VDMTools from the command line, using
+the \texttt{vdmde} and \texttt{vppde} commands.
 
 \chapter{Example Model Listings}
 \label{chap:listings}
