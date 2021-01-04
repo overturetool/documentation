@@ -275,23 +275,23 @@ specification, but it can be unrealistic to produce a complete formal proof for
 complex specifications, even with tool support \cite{Paulson97,Bicarregui&94}.
 
 Model checking provides an approach to formal testing that is considerably
-better than ad-hoc testing but not as complete as formal proof \cite{Clarke&99}. This approach
-uses a formal specification of the system properties desired, often written in a
-temporal calculus, and the model checker symbolically executes the
-specification searching for execution paths that violate the constraints. Since
-the execution is symbolic, extremely large state spaces can be searched
-(billions of cases is not uncommon), and failed cases can produce a ``counter
-example'' that demonstrates the failure. This is a very powerful technique, but
-in practice, realistic specifications often produce a state space explosion
-that is too great for model checkers.
+better than ad-hoc testing but not as complete as formal proof \cite{Clarke&99}.
+This approach uses a formal specification of the system properties desired,
+often written in a temporal calculus, and the model checker symbolically
+executes the specification searching for execution paths that violate the
+constraints. Since the execution is symbolic, extremely large state spaces can
+be searched (billions of cases is not uncommon), and failed cases can produce a
+``counter example'' that demonstrates the failure. This is a very powerful
+technique, but in practice, realistic specifications often produce a state
+space explosion that is too great for model checkers \cite{Clarke2012}.
 
 Combinatorial testing is an approach that is far more powerful than ad-hoc
-testing, but not as complete as model checking. Tests are produced automatically
-from ``\texttt{\textbf{traces}}'' that are relatively simple to define. The approach allows
-specifications to be tested with perhaps millions of test cases, but cannot
-guarantee to catch every corner case in the way that a model checker can.
-Therefore the technique is useful for specifications that are too complex for
-model checking or formal proof.
+testing, but not as complete as model checking. Tests are produced
+automatically from ``\texttt{\textbf{traces}}'' that are relatively simple to
+define. The approach allows specifications to be tested with perhaps millions
+of test cases, but cannot guarantee to catch every corner case in the way that
+a model checker can. Therefore the technique is useful for specifications that
+are too complex for model checking or formal proof.
 
 A combinatorial trace is a pattern that describes the construction of
 argument values and the sequences of operation calls that will exercise the
