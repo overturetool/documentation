@@ -300,9 +300,11 @@ a particular aspect. Traces are automatically expanded into a (potentially
 large) number of tests, each of which is a particular sequence of operation
 calls and argument values. The execution of tests is performed
 automatically, starting each in a known state; a test is considered to pass if
-it does not violate the specification's constraints, or the test's validation
-conjectures. Individual failed tests can be executed in isolation to find out
-why they failed, which is similar to a model checker's counter example. 
+it does not violate the specification's constraints (pre- or postconditions,
+state and type invariants, recursive measure and dynamic type checks), or the
+test's validation conjectures. Individual failed tests can be executed in
+isolation to find out why they failed, which is similar to a model checker's
+counter example.
 
 \section{The Structure of this Document}
 
@@ -333,7 +335,7 @@ Combinatorial tests are embedded within a VDM specification using a section
 called ``\texttt{\textbf{traces}}''. Typically, one or more traces are added to a separate class
 or module that is intended for testing rather than the main specification,
 though you can add traces to any class you wish. In this chapter, we will use
-the example classes below:
+the example VDM++ classes below:
 
 \small
 \begin{lstlisting}
@@ -361,13 +363,14 @@ end Tester
 \end{lstlisting}
 \normalsize
 
-\noindent Notice that there are two classes, \texttt{Counter} and \texttt{Tester}. The \texttt{Counter} class defines a
-simple operation that increments and decrements a total state value that is
-initially zero. The \texttt{Tester} class creates an instance of Counter and defines a
-single trace called \texttt{T1}. Trace names are simple identifiers, optionally separated
-by slashes (e.g.\ \texttt{item456/interface/all}). This example is the simplest
-trace possible and indicates that the trace should expand to a single test that
-just calls \texttt{obj.inc()}.
+\noindent Notice that there are two classes, \texttt{Counter} and
+\texttt{Tester}. The \texttt{Counter} class defines a simple operation that
+increments and decrements a total state value that is initially zero. The
+\texttt{Tester} class creates an instance of Counter and defines a single trace
+called \texttt{T1}. Trace names are simple identifiers, optionally separated by
+slashes (e.g.\ \texttt{item456/interface/all}, though the slashes have no
+deper meaning). This example is the simplest trace possible and indicates that
+the trace should expand to a single test that just calls \texttt{obj.inc()}.
 
 This trace can either be executed in Overture IDE in the Combinatorial Testing
 perspective (see Appendix \ref{chap:tools}), or it can be executed from
