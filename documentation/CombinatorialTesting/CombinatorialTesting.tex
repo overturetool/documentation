@@ -219,7 +219,8 @@
 
 \title{VDM Combinatorial Testing Guidelines}
 \author{Nick Battle\\
-            Peter Gorm Larsen}
+            Peter Gorm Larsen\\
+        Hugo Daniel Macedo}
 
 \date{December 2020}
 \reportno{TR-005}
@@ -245,27 +246,45 @@ December   & 2020 &    0.1     & 3.0.2   & Initial version\\ \hline
 
 \chapter{Introduction}
 
-This manual is a complete guide the combinatorial testing of VDM models. It
+This manual is a complete guide to the combinatorial testing of VDM models. It
 assumes the reader has no prior knowledge of combinatorial testing, but a
-working knowledge of VDM, in particular, the VDM++ and VDM-SL dialects.
+working knowledge of software testing and the Vienna Development Method (VDM),
+in particular, the VDM++ and VDM-SL dialects.
 
 \section{What is Combinatorial Testing?}
 
-Creating a comprehensive set of tests for VDM specifications can be a time
-consuming process. To try to make the generation of test cases simpler, Overture
-provides a VDM language extension (for all dialects) called Combinatorial
-Testing \cite{Nie&11,Larsen&10c}.
-
 In general, specifications are tested to verify that certain properties or
 behaviours are met, as specified by constraints in the specification and
-validation conjectures in the tests.
+validation conjectures in the tests. 
+%
+The simplest way to test a specification is to write ad-hoc tests, starting
+from a known system state and proceeding with a sequence of operation calls
+that should move to a new state or produce some particular result or error
+response.  The problem with this kind of testing is that it can be very
+laborious to produce the number of tests needed to cover the complete system
+behaviour. It is also expensive to maintain a large test suite as the
+specification evolves. Thus, Overture provides a VDM language extension (for
+all dialects) called Combinatorial Testing \cite{Nie&11,Larsen&10c}, which
+enables the automated generation of a comprehensive set of tests for VDM
+specifications from user specified patterns (traces). A trace unfolds into
+several tests, for instance calling a function with arguments arbitrarily taken
+from a set of values instead of hard coding each call,
+thus automating test suite generation and lowering the maintenance effort.
 
-The simplest way to test a specification is to write ad-hoc tests, starting from
-a known system state and proceeding with a sequence of operation calls that
-should move to a new state or produce some particular result or error response.
-The problem with this kind of testing is that it can be very laborious to produce
-the number of tests needed to cover the complete system behaviour. It is also
-expensive to maintain a large test suite as the specification evolves.
+A combinatorial trace is a pattern that describes the construction of argument
+values and the sequences of operation calls that will exercise the
+specification as a standard ad-hoc test, but traces are automatically expanded
+into a (potentially large) number of tests, each of which is a particular
+sequence of operation calls and argument values. The execution of tests is
+performed automatically, starting each in a known state; a test is considered
+to pass if it does not violate the specification's constraints (pre- or
+postconditions, state and type invariants, recursive measure and dynamic type
+checks), or the test's validation conjectures. Individual failed tests can be
+executed in isolation to find out why they failed.  A specification may contain
+several traces, each designed to test a particular aspect, but Combinatorial
+Testing is as incomplete as any other testing approach, yet interesting when
+compared with its alternatives. 
+
 
 The most complete way to test a specification is to produce a formal
 mathematical proof that it will never violate its constraints, and always meet
@@ -273,7 +292,6 @@ its validation conjectures if presented with a legal sequence of operation
 calls. This provides the highest level of confidence in the correctness of a
 specification, but it can be unrealistic to produce a complete formal proof for
 complex specifications, even with tool support \cite{Paulson97,Bicarregui&94}.
-
 Model checking provides an approach to formal testing that is considerably
 better than ad-hoc testing but not as complete as formal proof \cite{Clarke&99}.
 This approach uses a formal specification of the system properties desired,
@@ -285,26 +303,18 @@ be searched (billions of cases is not uncommon), and failed cases can produce a
 technique, but in practice, realistic specifications often produce a state
 space explosion that is too great for model checkers \cite{Clarke2012}.
 
-Combinatorial testing is an approach that is far more powerful than ad-hoc
-testing, but not as complete as model checking. Tests are produced
+Combinatorial testing is not a formal proof. It is far more powerful than
+ad-hoc testing, but not as complete as model checking, yet tests are produced
 automatically from ``\texttt{\textbf{traces}}'' that are relatively simple to
-define. The approach allows specifications to be tested with perhaps millions
-of test cases, but cannot guarantee to catch every corner case in the way that
-a model checker can. Therefore the technique is useful for specifications that
-are too complex for model checking or formal proof.
+define, without the need for extra model checking tools and expertise. The
+approach allows specifications to be tested with perhaps millions of test
+cases, but cannot guarantee to catch every corner case in the way that a model
+checker can. Therefore the technique is useful for specifications that are too
+complex for model checking or formal proof. It is also an efficient approach to
+exercise and test VDM models at an early stage, when a full proof of model
+checking approach is neither useful nor appropriate.
 
-A combinatorial trace is a pattern that describes the construction of
-argument values and the sequences of operation calls that will exercise the
-specification. A specification may contain several traces, each designed to test
-a particular aspect. Traces are automatically expanded into a (potentially
-large) number of tests, each of which is a particular sequence of operation
-calls and argument values. The execution of tests is performed
-automatically, starting each in a known state; a test is considered to pass if
-it does not violate the specification's constraints (pre- or postconditions,
-state and type invariants, recursive measure and dynamic type checks), or the
-test's validation conjectures. Individual failed tests can be executed in
-isolation to find out why they failed, which is similar to a model checker's
-counter example.
+
 
 \section{The Structure of this Document}
 
