@@ -266,10 +266,12 @@ behaviour. It is also expensive to maintain a large test suite as the
 specification evolves. Thus, Overture provides a VDM language extension (for
 all dialects) called Combinatorial Testing \cite{Nie&11,Larsen&10c}, which
 enables the automated generation of a comprehensive set of tests for VDM
-specifications from user specified patterns (traces). A trace unfolds into
-several tests, for instance calling a function with arguments arbitrarily taken
-from a set of values instead of hard coding each call,
-thus automating test suite generation and lowering the maintenance effort.
+specifications from user specified patterns (traces). The language extension
+adds the possibility to define tests using regular expressions, a permutation
+operator, and special VDM let definitions. A trace
+can thus be unfolded into several tests, for instance calling a function with arguments
+arbitrarily taken from a set of values instead of hard coding each call, thus
+automating test suite generation and lowering the maintenance effort.
 
 A combinatorial trace is a pattern that describes the construction of argument
 values and the sequences of operation calls that will exercise the
@@ -306,7 +308,7 @@ space explosion that is too great for model checkers \cite{Clarke2012}.
 Combinatorial testing is not a formal proof. It is far more powerful than
 ad-hoc testing, but not as complete as model checking, yet tests are produced
 automatically from ``\texttt{\textbf{traces}}'' that are relatively simple to
-define, without the need for extra model checking tools and expertise. The
+define without the need for extra model checking tools and expertise. The
 approach allows specifications to be tested with perhaps millions of test
 cases, but cannot guarantee to catch every corner case in the way that a model
 checker can. Therefore the technique is useful for specifications that are too
@@ -992,7 +994,7 @@ which can be useful in some circumstances. This is covered later in Chapter~\ref
 
 \section{Tests with Errors}
 
-The examples so far have only includes tests that \texttt{PASSED}. This means
+The examples so far have only included tests that \texttt{PASSED}. This means
 that they completed the sequence of operation calls without violating any pre-conditions,
 post-conditions, state invariants, type invariants, recursive measures or dynamic
 type checks.
@@ -1424,7 +1426,7 @@ because each test re-initialises the specification, and the module
 state has an \texttt{\textbf{init}} clause that sets the total to zero.
 
 Notice also that the operation calls are not applied to a Counter object, unlike
-VDM++.
+VDM++, but to a function defined inside the Counter module.
 
 \subsection{Traces in VDM++ and VDM-RT}
 
@@ -1449,7 +1451,7 @@ to a number of test definitions; and subsequently executing those definitions.
 The trace expansion typically does not take very long, since it is only
 constructing a tree of iterators that are capable of generating the tests one
 after another. The subsequent execution of those tests can obviously take a long
-time, depending on how many there are.
+time, depending on how many there are and on each test complexity.
 
 We have seen (above) how the specification is initialised before test execution,
 and the state of the module or class is available to the trace, but care must be
@@ -1495,7 +1497,7 @@ here, a call to \texttt{obj.inc(1)} is shown, rather than \texttt{obj.inc(a)}. T
 possible whenever arguments can be easily evaluated. For example the \texttt{Z
 + x + y} case above would produce \texttt{Test 1 = obj.inc(106)}, which is 100 +
 3 + 3. But if the argument is a more complex expression involving operation
-applies or new object creation, these cannot be evaluated and so the argument
+calls or new object creation, these cannot be evaluated and so the argument
 expression is listed ``as is''. For example, if the trace above is changed to
 call \texttt{obj.inc(max(x, y))}, the test would be listed with ``\texttt{x}''
 and ``\texttt{y}'' rather than their current values:
