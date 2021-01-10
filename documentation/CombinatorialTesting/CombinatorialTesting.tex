@@ -219,10 +219,10 @@
 
 \title{VDM Combinatorial Testing Guidelines}
 \author{Nick Battle\\
-            Peter Gorm Larsen\\
-        Hugo Daniel Macedo}
+            Hugo Daniel Macedo\\
+            Peter Gorm Larsen}
 
-\date{December 2020}
+\date{January 2021}
 \reportno{TR-005}
 
 \pagenumbering{roman}
@@ -234,12 +234,13 @@
 \begin{tabular}{|l|l|l|l|l|}\hline
 Month   & Year & Version & Version of Overture.exe & Comment \\ \hline
 December   & 2020 &    0.1     & 3.0.2   & Initial version\\ \hline
+January   & 2021 &    1.0     & 3.0.2   & First public release\\ \hline
 \end{tabular}
 
 %\addtocounter{page}{2}
 \tableofcontents
-\newpage
-\mbox{}
+%\newpage
+%\mbox{}
 \newpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
@@ -389,6 +390,7 @@ perspective (see Appendix \ref{chap:tools}), or it can be executed from
 the command line using the \texttt{runtrace} command. The command line output is
 illustrated in this document for simplicity:
 
+\small
 \lstset{style=tool,language=}
 \begin{lstlisting}[escapechar=@]
 > runtrace Tester`T1
@@ -400,6 +402,7 @@ All tests passed
 \end{lstlisting}
 \lstset{style=mystyle}
 \lstset{language=VDM++}
+\normalsize
 
 \noindent The first line of output indicates that one test has been generated from the
 trace. With more complex examples, this generation could expand to thousands or
@@ -686,6 +689,7 @@ trace.
 If we overload the example increment and decrement operations with versions that
 take an integer parameter, by which to change the counter, we can write traces
 like this:
+\newpage
 
 \small
 \begin{lstlisting}
@@ -741,6 +745,7 @@ traces
           let b in set {4, 5, 6} in
               ( obj.inc(a); obj.dec(b) );
 \end{lstlisting}
+\newpage
 
 \lstset{style=tool,language=}
 \begin{lstlisting}[escapechar=@]
@@ -797,6 +802,7 @@ Type checked 2 classes in 0.12 secs. Found 1 type error
 \noindent Note also that the variables defined are in scope
 throughout the clauses below, so the ``\texttt{a}'' variable could be used to define the
 set of ``\texttt{b}'' values:
+\newpage
 
 \small
 \begin{lstlisting}
@@ -1083,7 +1089,7 @@ The first three tests are fine, but \texttt{Test 4} fails because the fourth cal
 \texttt{inc(6)} pushes the total over the limit. This is therefore a
 post-condition \texttt{FAILED} test, and the error message is listed along with the
 results of the earlier operation calls. Test 5 then tries to do the same, but
-adds a further call. This must fail in the same place as \texttt{Test 4}, because\texttt{Test 4}
+adds a further call. This must fail in the same place as \texttt{Test 4}, because \texttt{Test 4}
 is the ``stem'' of \texttt{Test 5}. Therefore this test is ``\texttt{FILTERED} by \texttt{Test 4}''.
 Similarly, \texttt{Test 8} fails and Tests 9 and 10 are filtered by this failure.
 
@@ -1278,7 +1284,7 @@ from each of the sets. In its simplest form, this could be a sequence of
 operation calls which therefore just expands to one test. But a combination of
 sets of tests expands to a set of the product of the sizes of those sets.
 \item \texttt{set = set1 ?}. A set of tests may be formed from another set with
-a \texttt{?} operator. This produces the same set, but includes a ``skip'' step.
+a \texttt{?} operator. This produces the same set, but includes a ``\texttt{\textbf{skip}}'' step.
 \item \texttt{set = set1 \{n[, n]\}}. A set of tests may be formed from another
 set with a \texttt{\{n\}} or \texttt{\{n1, n2\}} operator. This produces a set
 with every member of the original set repeated \texttt{n} times, or between
@@ -1458,6 +1464,7 @@ and the state of the module or class is available to the trace, but care must be
 taken if operations or functions within the environment are used as part of a
 trace. This is because some expressions are evaluated during trace expansion and
 some during test execution. For example:
+\newpage
 
 \small
 \begin{lstlisting}
@@ -1862,6 +1869,7 @@ shows that the checksum is doing its job, detecting the corruption. So the Luhn
 specification tests deliberately corrupt a piece of data and then verify that
 the algorithm generates a \emph{different} check digit -- i.e.\ they verify that a
 check with the original check digit fails correctly:
+\newpage
 
 \scriptsize
 \begin{lstlisting}
@@ -2340,8 +2348,7 @@ private BasketItem ::
 
 private Basket ::
   items : [seq of BasketItem]
-inv
-  basket ==
+inv basket ==
     basket.items <> nil =>
       let ids = { item.iid | item in seq basket.items } in
         card ids = len basket.items;
@@ -2470,6 +2477,7 @@ only checks the sequence of the user message IDs; it is still up to the
 The obvious way to create a simple test of this model is to write a sequence of
 public interface calls, and check that the return response from each is as
 expected. For example:
+\newpage
 
 \scriptsize
 \begin{lstlisting}
@@ -2563,7 +2571,7 @@ the result details.
 Similar test operations are created for the other server interface operations,
 which similarly use the state data to prepare their requests. For example, the
 \texttt{cancelItemTest} operation includes a line to select an arbitrary IID to
-cancel, or return nil if there are no items in the basket (i.e. skip the
+cancel, or return nil if there are no items in the basket (i.e.\ skip the
 operation):
 
 \scriptsize
@@ -2599,6 +2607,7 @@ traces
 
 \noindent This approach does have some value. It produces 8! tests (40,320).
 For example test number 1234 is as follows:
+\newpage
 
 \scriptsize
 \lstset{style=tool,language=}
