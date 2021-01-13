@@ -1,0 +1,304 @@
+class BasketService
+-- 
+-- A simplifed model of a basket transaction service.
+-- 
+types
+    public Product = seq1 of char;
+
+    public AddItemRequest ::
+        uid         : nat
+        product     : Product
+        amount      : real;
+
+    public CancelItemRequest ::
+        uid         : nat
+        iid         : nat;
+
+    public CancelBasketRequest ::
+        uid         : nat;
+
+    public SettleBasketRequest ::
+        uid         : nat;
+
+    public Response ::
+        type        : <OK> | <FAILED> | <SEQERR>
+        sid         : nat
+        message     : [seq of char]
+        iid         : [nat]
+        total       : real;
+
+    private BasketItem ::
+        iid         : nat   -- Unique per basket
+        product     : Product
+        amount      : real;
+
+    private Basket ::
+        items       : [seq of BasketItem]
+    inv
+        basket ==
+            basket.items <> nil =>
+                let ids = { item.iid | item in seq basket.items } in
+                    card ids = len basket.items;
+
+instance variables
+    sid : nat       := 0;     -- Server message id
+    lastuid : [nat] := nil;   -- Last client message id
+    iid : nat       := 0;     -- Last basket item id
+    basket : Basket := mk_Basket(nil);
+
+operations
+    public addItem: AddItemRequest ==> Response
+    addItem(request) ==
+    (
+        if lastuid <> nil and request.uid <> lastuid + 1
+        then return seqerrResponse("Invalid sequence")
+        else
+        (
+            lastuid := request.uid;
+            return addItemImpl(request)
+        )
+    )
+    post
+        cases RESULT.type:
+            <SEQERR> ->
+                basket = basket~
+                and lastuid = lastuid~
+                and iid = iid~
+                and sid = sid~ + 1,
+
+            <FAILED> ->
+                basket = basket~    -- lastuid and sid change
+                and lastuid = request.uid
+                and iid = iid~
+                and sid = sid~ + 1,
+
+            <OK> ->
+                lastuid = request.uid
+                and iid = iid~ + 1
+                and sid = sid~ + 1
+                and if basket~.items = nil
+                    then
+                        len basket.items = 1
+                        and RESULT.total = request.amount
+                        and let item = basket.items(1) in
+                            item.iid = iid
+                            and item.product = request.product
+                            and item.amount = request.amount
+                    else
+                        len basket.items = len basket~.items + 1
+                        and RESULT.total = basketTotal(basket.items)
+                        and let item = basket.items(len basket.items) in
+                            item.iid = iid
+                            and item.product = request.product
+                            and item.amount = request.amount
+        end;
+
+    private addItemImpl: AddItemRequest ==> Response
+    addItemImpl(request) ==
+    (
+        if request.amount < 0
+        then errorResponse("Amount invalid", nil)
+        else
+        (
+            iid := iid + 1;
+
+            let newItem = mk_BasketItem(iid, request.product, request.amount) in
+                if basket.items = nil
+                then basket.items := [ newItem ]
+                else basket.items := basket.items ^ [ newItem ];
+    
+            return okResponse(iid)
+        )
+    )
+    pre lastuid = request.uid;
+
+
+    public cancelItem: CancelItemRequest ==> Response
+    cancelItem(request) ==
+    (
+        if lastuid <> nil and request.uid <> lastuid + 1
+        then return seqerrResponse("Invalid sequence")
+        else
+        (
+            lastuid := request.uid;
+
+            if basket.items = nil
+            then return errorResponse("Basket is empty", nil)
+            else if request.iid not in set basketItems(basket)
+                then return errorResponse("No such item", request.iid)
+                else return cancelItemImpl(request)
+        )
+    )
+    post
+        cases RESULT.type:
+            <SEQERR> ->
+                basket = basket~    -- sid changes, nothing else
+                and lastuid = lastuid~
+                and iid = iid~
+                and sid = sid~ + 1,
+
+            <FAILED> ->
+                basket = basket~   -- lastuid and sid change
+                and lastuid = request.uid
+                and iid = iid~
+                and sid = sid~ + 1,
+
+            <OK> ->
+                lastuid = request.uid
+                and iid = iid~
+                and sid = sid~ + 1
+                and len basket.items = len basket~.items - 1
+                and RESULT.total = basketTotal(basket.items)
+                and RESULT.iid not in set basketItems(basket)
+        end;
+
+    private cancelItemImpl: CancelItemRequest ==> Response
+    cancelItemImpl(request) ==
+    (
+        basket.items := [ item | item in seq basket.items & item.iid <> request.iid ];
+        return okResponse(request.iid)
+    )
+    pre lastuid = request.uid
+        and basket.items <> nil
+        and request.iid in set basketItems(basket);
+
+
+    public cancelBasket: CancelBasketRequest ==> Response
+    cancelBasket(request) ==
+    (
+        if lastuid <> nil and request.uid <> lastuid + 1
+        then return seqerrResponse("Invalid sequence")
+        else
+        (
+            lastuid := request.uid;
+
+            if basket.items = nil
+            then return errorResponse("Basket is empty", nil)
+            else cancelBasketImpl(request)
+        )
+    )
+    post
+        cases RESULT.type:
+            <SEQERR> ->
+                basket = basket~    -- sid changes, nothing else
+                and lastuid = lastuid~
+                and iid = iid~
+                and sid = sid~ + 1,
+
+            <FAILED> ->
+                basket = basket~    -- lastuid and sid change
+                and lastuid = request.uid
+                and iid = iid~
+                and sid = sid~ + 1,
+
+            <OK> ->
+                lastuid = nil      -- Reset to "no basket" state, except for sid
+                and iid = 0
+                and sid = sid~ + 1
+                and basket.items = nil
+        end;
+
+    private cancelBasketImpl: CancelBasketRequest ==> Response
+    cancelBasketImpl(request) ==
+    (
+        lastuid := nil;
+        iid := 0;
+        basket.items := nil;
+        return okResponse(nil)
+    )
+    pre lastuid = request.uid and basket.items <> nil;
+
+
+    public settleBasket: SettleBasketRequest ==> Response
+    settleBasket(request) ==
+    (
+        if lastuid <> nil and request.uid <> lastuid + 1
+        then return seqerrResponse("Invalid sequence")
+        else
+        (
+            lastuid := request.uid;
+
+            if basket.items = nil
+            then return errorResponse("Basket is empty", nil)
+            else settleBasketImpl(request)
+        )
+    )
+    post
+        cases RESULT.type:
+            <SEQERR> ->
+                basket = basket~    -- sid changes, nothing else
+                and lastuid = lastuid~
+                and iid = iid~
+                and sid = sid~ + 1,
+
+            <FAILED> ->
+                basket = basket~    -- lastuid and sid change
+                and iid = iid~
+                and sid = sid~ + 1,
+
+            <OK> ->
+                lastuid = nil       -- Reset to "no basket" state, except for sid
+                and iid = 0
+                and sid = sid~ + 1
+                and basket.items = nil
+        end;
+
+    private settleBasketImpl: SettleBasketRequest ==> Response
+    settleBasketImpl(request) ==
+    (
+        let response = okResponse(nil) in  -- total basket here
+        (
+            lastuid := nil;
+            iid := 0;
+            basket.items := nil;
+            return response
+        )
+    )
+    pre lastuid = request.uid and basket.items <> nil;
+
+-- 
+-- Common operations and functions
+-- 
+operations
+    private errorResponse: seq1 of char * [nat] ==> Response
+    errorResponse(message, item) ==
+    (
+        sid := sid + 1;
+        return mk_Response(<FAILED>, sid, message, item, basketTotal(basket.items))
+    );
+
+    private seqerrResponse: seq1 of char ==> Response
+    seqerrResponse(message) ==
+    (
+        sid := sid + 1;
+        return mk_Response(<SEQERR>, sid, message, nil, basketTotal(basket.items))
+    );
+
+    private okResponse: [nat] ==> Response
+    okResponse(item) ==
+    (
+        sid := sid + 1;
+        return mk_Response(<OK>, sid, nil, item, basketTotal(basket.items))
+    );
+
+functions
+    private basketItems: Basket -> set of nat
+    basketItems(b) ==
+        if b.items = nil
+        then {}
+        else { item.iid | item in seq b.items };
+
+    private basketTotal: [seq of BasketItem] -> real
+    basketTotal(items) ==
+        if items = nil or items = []
+        then 0
+        else sum(items);
+
+    private sum: [seq of BasketItem] -> real
+    sum(items) ==
+        if items = nil or items = []
+        then 0
+        else (hd items).amount + sum(tl items)
+    measure len items;
+
+end BasketService

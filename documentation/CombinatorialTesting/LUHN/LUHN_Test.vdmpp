@@ -1,0 +1,129 @@
+class Test
+--
+-- Tests for the Luhn algorithm.
+--
+values
+    --
+    -- These maps convert characters to their encoding for the luhns function.
+    -- The coding here is just the hexadecimal or decimal value of the character. They
+    -- must be injective maps because their inverse is used to reverse the translation.
+    --
+    private charToCodeMap16 : LUHN`Mapping =
+        let hex = "0123456789ABCDEF" in
+            { hex(a) |-> (a-1) | a in set inds hex };
+
+    private charToCodeMap10 : LUHN`Mapping =
+        let decimal = "0123456789" in
+            { decimal(a) |-> (a-1) | a in set inds decimal };
+
+    --
+    -- Change this to the STD or ACME engine to test that variant.
+    --
+    private engine : LUHN = new LUHN_STD();
+
+functions
+    --
+    -- A couple of convenience functions for bases 10 and 16 strings.
+    --
+    private luhn10: seq1 of char -> char
+    luhn10(s) == engine.luhns(s, 10, charToCodeMap10)
+    pre elems s subset dom charToCodeMap10;
+
+    private luhn16: seq1 of char -> char
+    luhn16(s) == engine.luhns(s, 16, charToCodeMap16)
+    pre elems s subset dom charToCodeMap16;
+
+traces
+    --
+    -- Generate all the possible 1, 2, 3 and 4 digit sequences and check that the luhn
+    -- calculation completes without breaking any constraints.
+    --
+    FirstN:
+        let a,b,c,d in set dom charToCodeMap10 in
+        (
+            luhn10([a])     |
+            luhn10([a,b])   |
+            luhn10([a,b,c]) |
+            luhn10([a,b,c,d])
+        );
+
+    FirstN_16:
+        let a,b,c in set dom charToCodeMap16 in
+        (
+            luhn16([a])     |
+            luhn16([a,b])   |
+            luhn16([a,b,c])
+        );
+
+    --
+    -- The Luhn algorithm will detect any single-digit error, as well as almost all
+    -- transpositions of adjacent digits. It will not, however, detect transposition
+    -- of the two-digit sequence 0N to N0 (or vice versa) in base N+1.
+    --
+    -- See http://en.wikipedia.org/wiki/Luhn_algorithm
+    --
+    AllOneDigitErrors:
+        let base = 16 in
+        let input = conc [[a, a] | a in set {0, ..., base-1}] in   -- 00112233 etc
+        let expected = engine.luhn(input, base) in
+        let pos in set inds input in
+        let replacement in set {0, ..., base-1} \ {input(pos)} in
+        let corrupt = input(1, ..., pos-1) ^ [replacement] ^ input(pos+1, ..., len input) in
+            checkFail(corrupt, expected, base);
+
+    AllAdjacentTranspositions:
+        let base = 16 in
+        let a, b in set {0, ..., base-1} be st a <> b in
+        let pass = (a = 0 and b = base-1) or (a = base-1 and b = 0) in
+        let expected = engine.luhn([a, b], base) in
+            checkResult([b, a], expected, base, pass);
+
+    --
+    -- It will detect 7 of the 10 possible twin errors (it will not detect
+    -- 22 <> 55, 33 <> 66 or 44 <> 77).
+    --
+    -- See http://en.wikipedia.org/wiki/Luhn_algorithm
+    --
+    AllTwinErrors:
+        let base = 10 in
+        let a, b in set {0, ..., base-1} be st a <> b in
+        let pass = {a, b} in set {{2, 5}, {3, 6}, {4, 7}} in
+        let expected = engine.luhn([a, a], base) in
+            checkResult([b, b], expected, base, pass);
+
+    --
+    -- Because the algorithm operates on the digits in a right-to-left manner and zero
+    -- digits affect the result only if they cause shift in position, zero-padding the
+    -- beginning of a string of numbers does not affect the calculation.
+    --
+    -- See http://en.wikipedia.org/wiki/Luhn_algorithm
+    --
+    ZeroPadding:
+        let base = 16 in
+        let input = [x | x in set {0, ..., base-1}] in  -- 0123456789...
+        let expected = engine.luhn(input, base) in
+        let number in set {1, ..., 8} in                -- Between 1 and 8 leading zeros
+        let padding = [p-p | p in set {1, ..., number}] in 
+            checkOK(padding ^ input, expected, base);   -- They should all pass
+
+operations
+    --
+    -- These operations support the traces above
+    --
+    checkFail: seq1 of nat * nat * nat ==> bool
+    checkFail(data, expected, base) ==
+        return engine.luhn(data, base) <> expected  -- Expect failure
+    post RESULT = true;
+
+    checkOK: seq1 of nat * nat * nat ==> bool
+    checkOK(data, expected, base) ==
+        return engine.luhn(data, base) = expected   -- Expect success
+    post RESULT = true;
+
+    checkResult: seq1 of nat * nat * nat * bool ==> bool
+    checkResult(data, expected, base, pass) ==
+        if pass
+        then checkOK(data, expected, base)
+        else checkFail(data, expected, base);
+
+end Test

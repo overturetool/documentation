@@ -1,0 +1,50 @@
+class LUHN_STD is subclass of LUHN
+functions
+    --
+    -- Generate the Luhn check character from a string using a particular base and char map.
+    -- The precondition says that all of the input characters must be in the mapping and
+    -- the range of the map must match the base. The postcondition says the result must also
+    -- be in the coding map.
+    --
+    public luhns: seq1 of char * nat1 * LUHN`Mapping -> char	-- Non empty list input
+    luhns(string, base, mapping) ==
+        let encoded = [ mapping(string(i)) | i in set inds string ] in
+            (inverse mapping)(luhn(encoded, base))
+
+    pre (elems string subset dom mapping) and (card rng mapping = base)
+    post RESULT in set dom mapping;
+
+    --
+    -- Generate the Luhn check digit from a sequence of numbers in a particular base. There is
+    -- a precondition to check that the input values are within the base. The check digit
+    -- RESULT is defined as correct by the postcondition if the total plus the check digit
+    -- would encode to zero.
+    --
+    public luhn: seq1 of nat * nat1 -> nat	-- Non empty list input
+    luhn(data, base) ==
+        let remainder = total(data, base) mod base in
+            (base - remainder) mod base
+
+    pre forall i in set inds data & data(i) < base
+    post RESULT < base and (total(data, base) + RESULT) mod base = 0;
+
+    --
+    -- Perform the Luhn digit totalling algorithm for a sequence in a given base. The
+    -- precondition just checks that the data is within the base. The measure checks
+    -- that the recursion is always dealing with a shorter and shorter list.
+    --
+    private total: seq of nat * nat1 -> nat
+    total(data, base) ==
+        if data = []
+        then 0
+        else total(tl data, base) +
+            let multipler = (len data) mod 2 + 1,  -- ...1, 2, 1, 2. Rightmost is always 2
+                  code = hd data,
+                  product = code * multipler
+            in
+                LUHN`sumDigits(product, base)
+
+    pre forall i in set inds data & data(i) < base
+    measure len data;	-- Length is strictly decreasing.
+
+end LUHN_STD
