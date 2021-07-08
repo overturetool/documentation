@@ -256,6 +256,7 @@ September & 2016 & 9 & 2.4.0 & RMs \#35, \#36 \\ \hline
 May & 2017 & 10 & 2.5.0 & RM \#39\\ \hline
 Feb & 2018 & 11 & 2.6.0 & Includes RM \#42 \\ \hline
 May & 2020 & 12 & 2.7.4 & Includes RM \#44,\#47,\#48 \\ \hline
+July & 2021 & 13 & 3.0.2 & Includes RC \#52 \\ \hline
 \end{tabular}
 
 %\addtocounter{page}{2}
@@ -12454,6 +12455,8 @@ reserved: \keyw{init\_}, \keyw{inv\_}, \keyw{is\_}, \keyw{mk\_},
 \Ruledef{multiple line comment}{
   \Lit{/*}, \SeqPt{\Ruleref{character}}, \Lit{*/}
   }
+
+Note that multiple line comments will be parsed in a single level without nesting, but tools may provide different strategies of parsing comments, e.g. it is possible for tools to optionally parse nested comments.
 
 The escape sequences given above are to be interpreted as follows:
 
