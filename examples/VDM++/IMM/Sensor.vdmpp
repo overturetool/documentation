@@ -1,0 +1,8 @@
+class Sensor
+
+operations
+
+  public setReading: real ==> ()
+  setReading(r) == is subclass responsibility;  
+  
+end Sensor

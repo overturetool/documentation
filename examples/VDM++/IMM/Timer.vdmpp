@@ -1,0 +1,29 @@
+/*
+This is the Timer class containing the current simulation time. 
+Functionality includes a GetTime operation returning the current time, 
+and a StepTime operation to advance the simulation time by delta.
+*/
+
+class Timer
+
+instance variables
+  public stime : real;      -- simulation time
+  
+  
+operations
+	-- Constructor 
+	public Timer: () ==> (Timer) 
+	Timer() == (
+		stime := 0;
+	);
+	
+	-- Simulation timer
+ 	public GetTime : () ==> real
+	GetTime() == return stime;
+	
+	public StepTime : (real) ==> () 
+	StepTime(delta) == (
+		stime := stime + delta;
+	);
+	
+end Timer

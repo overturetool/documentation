@@ -1,0 +1,86 @@
+/*
+To date, injection moulding machines integrate a complex control and software systems including closed-loop process, open-loop phase, 
+safety and quality control. We developed an abstract model of the control architecture of an injection moulding machine.   
+This model was developed in Overture version 3.0.0. We selected the VDM-RT dialect to implement the process/machine controller, 
+quality controller and data acquisition system as a distributed control architecture. 
+The \texttt{World} class is the top-level entry point to the model. A scenario is input from a CSV file containing timestep, screw position, 
+hydraulic pressure and the order to start production of a new plastic element. The logger operation returns a CSV file after each step of the simulation. 
+*/
+
+class World
+
+types
+
+	public Position = real;
+	public Pressure = real;
+	public Order = real;
+	public TimeStamp = real;
+
+instance variables
+
+	public static  env : [Environment] := nil;
+  
+operations
+
+	public World : () ==> World
+  World() == (env := new Environment(); );
+		
+
+	public ScenarioCSV : seq of char ==> ()
+	ScenarioCSV(scenario) == (RunCSVScenario(scenario););
+	
+	
+	public Stimulate : real * real * real * real ==> ()
+	Stimulate(ts,pos,pres,order) == (
+		-- Check if order is started
+		if (order = 1) then IMM_System`ctl.Start();	
+		-- Step the time by ts 
+		IMM_System`timer.StepTime(ts);
+		
+		-- Deliver input pos and pres
+		if (IMM_System`m.GetState() = <Off>)
+		then	IMM_System`imm.SetPosition(pos);
+		
+		IMM_System`imm.SetPressure(pres);
+		IMM_System`imm.Step();
+
+		-- Step the controller		
+		IMM_System`ctl.Step();
+		IMM_System`m.Step(ts);
+		
+		Logger(); );	 
+	
+	
+	public RunCSVScenario: seq1 of char ==>  ()
+  RunCSVScenario(file_n) ==
+    let mk_(ok,lines) = CSV`flinecount(file_n)
+    in
+      if ok 
+      then (for i = 1 to lines do
+            -- each line in the test events contains
+            -- - The timestamp ts where event occured
+            -- - The position sensor input
+            -- - The pressure sensor input 
+            -- - The order execution command
+             let mk_(ok,[ts,pos,pres,order]) = 
+                  CSV`freadval[seq of real](file_n,i)
+             in Stimulate(ts,pos,pres,order);
+           )
+      else return; 
+   
+    
+   public Logger : () ==> ()
+   Logger() == (
+   	 let b = CSV`fwriteval("out.csv",[IMM_System`timer.GetTime(),
+	 																	 IMM_System`ctl.ctl_x,
+	 																	 IMM_System`imm.env_x,
+	 																	 IMM_System`ctl.ctl_v,
+	 																	 IMM_System`imm.v_t,
+	 																	 IMM_System`ctl.ctl_state,
+	 																	 env.getAccepted(),
+	 																	 env.getScrapped()],<append>)
+	 in return;	);
+	
+	
+end World
+

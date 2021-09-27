@@ -1,0 +1,256 @@
+/*
+The Controller class is reponsible for stepping through the 4+1 phases during the injection moulding process while monitoring quality of the moulded part based on process parameters. 
+The functionality of each phase is implemented as operations - FillStep, PackStep, CoolStep and EjectStep. The Delta operation contains a Cases-statement to switch between phases.
+*/
+
+class Controller
+
+
+types
+	StateType = <Filling> | <Packing> | <Cooling> | <Ejecting> | <Idle>; 
+	LockState = <Open> | <Close>;
+	Quality   = <OK> | <Scrap>;
+
+
+values
+
+	-- Ram velocity setpoints v_f
+	public v1 : real = 20;
+	public v2 : real = 40;
+	public v3 : real = 5;
+	
+	-- Position cutpoints
+	public x1 : real = 3.8;
+	public x2 : real = 15.2;
+	public x3 : real = 20.3; -- switch over position to pressure control
+	-- Packing pressure 
+	public phold : real = 2.88;
+	
+	public t_fill : real = 3;
+	public t_pack : real = 6; -- relative packing time
+	public t_cool : real = 7; -- relative cooling time
+	public t_eject : real = 0.2; -- relative eject time 
+
+	-- Control constant screw motion 
+	K_p = 0.9; 
+	K_d = 0.3; 
+		
+		
+instance variables
+
+	public ctl_x : real; -- position of screw
+	public ctl_v : real; -- velocity of screw
+	
+	public ctl_p_hyd : real;      -- hydraulic pressure
+	p_hold : real;     -- target pressure during packing
+	
+	public ctl_state : StateType; -- current phase 
+	ctl_bin : Quality;
+	lock : LockState;
+ 	tphase : real; -- start time phase n
+ 	
+ 	-- Cooling PD Control
+ 	last_time : real; -- last time step
+ 	e_ti_last : real := 0;
+ 	e_ti : real := 0;
+ 	e'_ti : real := 0;
+ 	ctl_x_last : real := 0;
+ 	
+  -- Quality Control
+ 	ctl_x_max  : real;
+ 	hyd_peak_max : real;
+ 	hyd_peak_ok : bool;
+ 	
+  inv InterlockInvariant(lock,ctl_state)
+  
+  
+
+functions
+  -- Check Property 1
+	InterlockInvariant : LockState * StateType -> bool
+	InterlockInvariant (ls,s) == (ls = <Open>) => (s = <Idle>); 
+	           
+                                    
+	                          
+operations
+
+	public Controller: () ==> Controller 
+	Controller() == (
+		ctl_state := <Idle>; 
+		ctl_bin := <OK>;
+		ctl_x := 0; 
+		ctl_v := 0;
+		ctl_p_hyd := 0;
+	  
+	  -- Quality control
+	  ctl_x_max := 0;
+	  hyd_peak_max := 0;
+	  hyd_peak_ok := true;
+	  
+		lock := <Close>;
+		tphase := 0;
+		last_time := 0;
+		p_hold := 2.88; -- [MPa]	
+		);
+		
+		public Step: () ==> ()
+		Step() == (
+		
+		 cases ctl_state:
+		    <Idle> -> return,
+		    <Filling> -> FillStep(),
+		    <Packing> -> PackStep(),
+		    <Cooling> -> CoolStep(),
+		    <Ejecting> -> EjectStep()
+		 end;	);
+
+	public FillStep : () ==> () 
+	FillStep() == (		
+		dcl t: real;
+		
+		-- Fetch sensor reading
+		ctl_x := IMM_System`ps.getReading();
+		
+		-- Run control logic
+		if (ctl_x < x1)
+		then (IMM_System`imm.v_t := v1)
+		elseif (ctl_x < x2) 
+	  then (IMM_System`imm.v_t := v2)
+	  elseif (ctl_x < x3) 
+	  then (IMM_System`imm.v_t := v3)
+	  -- Transition to Packing
+	  else Delta();
+	  
+	  -- Transition to Packing
+	  if(IMM_System`timer.GetTime()-tphase >= t_fill) 
+	  then Delta(); 
+	  
+	  -- Quality control
+	  -- Property 2
+	  if (ctl_x > ctl_x_max) then ctl_x_max := ctl_x;
+	  
+	  -- Property 3
+	  t         := IMM_System`timer.GetTime();
+	  ctl_p_hyd := IMM_System`prs.getReading();
+	  
+	  if (t <= 0.9 and ctl_p_hyd >= 11) 
+	  then hyd_peak_ok := false;
+	   
+	  if (t >=1.1 and ctl_p_hyd >= 11) 
+	  then hyd_peak_ok := false;
+	  
+	  if (t > 0.9 and t < 1.1 and hyd_peak_ok and hyd_peak_max < ctl_p_hyd)
+	  then hyd_peak_max := ctl_p_hyd;
+	  	  
+	  )
+	  pre ctl_state = <Filling>;
+	  
+	
+	public PackStep : () ==> ()
+	PackStep() == ( 
+	
+		-- Fetch sensor reading
+		ctl_p_hyd := IMM_System`prs.getReading();
+		ctl_x := IMM_System`ps.getReading(); 
+		
+		-- Set holding pressure 
+		IMM_System`imm.env_p_hyd_t := p_hold;
+
+    -- Transition to Cooling
+	  if(IMM_System`timer.GetTime()-tphase >= t_pack) 
+	  then Delta(); 
+	  
+	  )
+	  pre ctl_state = <Packing>;
+	  
+	
+	public CoolStep : () ==> ()
+	CoolStep() == (
+		dcl t : real := IMM_System`timer.GetTime();
+		dcl dt : real := (t - last_time);
+		last_time := t;
+		
+		ctl_x_last := ctl_x;	
+		ctl_x := IMM_System`ps.getReading();
+			
+		e_ti_last := e_ti; 
+		e_ti := 0 - ctl_x_last;
+		e'_ti := (e_ti - e_ti_last)/dt;
+				
+		IMM_System`imm.SetTargetVelocity(K_p * e_ti + K_d * e'_ti);
+		
+		if (IMM_System`timer.GetTime()-tphase >= t_cool)
+  	then Delta(); )
+  	pre ctl_state = <Cooling>
+	  post if (ctl_state = <Ejecting>) then abs (e_ti - 0) < 0.1 else true;
+	
+	public EjectStep : () ==> () 
+	EjectStep() == (
+		-- Actuate ejector pins (Currently assumed to happen automatically)
+		
+	  -- Invoque Quality Control Logic
+		let success : bool = PartIsOK()
+		in if (success) then 
+			    ctl_bin := <OK>
+		   else 
+			    ctl_bin := <Scrap>;
+			 		
+		-- Check if there is a jam
+		if(IMM_System`timer.GetTime()-tphase > t_eject)
+		then ( -- Send the ctl_bin to Environment handle event
+		       if (ctl_bin = <OK>) then IMM_System`b.Accept()
+		       										 else IMM_System`b.Scrap();
+		       Delta()
+		     );	)
+		pre ctl_state = <Ejecting>;
+		     
+
+	public Delta : () ==> ()
+	Delta() == (
+		cases ctl_state:
+		   <Idle> -> 	(ctl_state := <Filling>;),
+		   
+		   <Filling> -> (ctl_state := <Packing>;
+		   							IMM_System`imm.env_state := <Packing>; 
+		   							tphase := IMM_System`timer.GetTime();
+		   							IMM_System`imm.v_t := 0;),
+		   							
+		   <Packing> -> (ctl_state := <Cooling>; 		
+		   							IMM_System`imm.env_state := <Cooling>;	
+		   							tphase := IMM_System`timer.GetTime();
+		   							IMM_System`m.SetState(<On>);
+		   						  e_ti := 0 - ctl_x_last;),
+		   							
+		   							
+		   <Cooling> -> (ctl_state := <Ejecting>;
+		   							IMM_System`imm.env_state := <Ejecting>;
+		   							tphase := IMM_System`timer.GetTime()),
+		   							
+		   <Ejecting> -> (ctl_state := <Idle>; 
+		   							 IMM_System`imm.env_state := <Idle>;)
+		   end 
+		   );
+	
+	
+	public Start : () ==> ()
+  Start () == 
+              if lock = <Close> 
+              then (
+                   -- Initialize variables
+                   ctl_state := <Filling>;
+                   ctl_x_max := 0;
+                   hyd_peak_ok := true;
+                   hyd_peak_max := 0;
+                   -- Send start signal to output interface
+              		 IMM_System`imm.env_state := <Filling>;
+              		)
+              else error
+              pre ctl_state = <Idle>;
+              
+              
+           
+	PartIsOK : () ==> bool
+	PartIsOK () == return (ctl_x_max >= 20.3) and hyd_peak_ok and (hyd_peak_max >= 9.1); -- Check Property 2
+
+
+end Controller

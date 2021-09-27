@@ -1,0 +1,26 @@
+class PressureSensor is subclass of Sensor
+
+types 
+
+	Pressure = real
+	inv r == r >= 0 and r <= 100;
+
+instance variables
+
+	value : Pressure;
+
+operations
+
+	public PressureSensor : real ==> PressureSensor
+	PressureSensor(r) == value := r;
+
+	public getReading: () ==> real
+	getReading() == return value;
+   
+  public setReading: real ==> ()
+	setReading(r) == value := r;
+	              
+  public Step : () ==> ()
+  Step() == return;
+  
+end PressureSensor

@@ -1,0 +1,21 @@
+class Belt
+	
+instance variables
+
+	value : real;
+
+operations
+
+	public Belt : () ==> Belt 
+	Belt() == value := 1;
+	
+	public Accept : () ==> ()
+	Accept () ==  World`env.handleAcceptEvent();
+                 
+  public Scrap : () ==> ()
+	Scrap () == World`env.handleScrapEvent();      
+                       
+  public Step : () ==> ()
+  Step() ==  return;
+
+end Belt
