@@ -1,0 +1,21 @@
+class GateSensor 
+
+instance variables
+
+	value : bool;
+
+operations
+
+	public GateSensor: bool ==> GateSensor
+	GateSensor(p) == value := p;
+	
+	public getReading: () ==> bool
+	getReading() == return value;
+	   
+	public setReading: bool ==> ()
+	setReading(b) == value := b;
+	
+	public Step : () ==> ()
+	Step() == return;
+
+end GateSensor

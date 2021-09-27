@@ -1,0 +1,38 @@
+class MotorActuator
+
+types
+	public ActuatorState = <On> | <Off>;
+
+
+instance variables
+
+	public act_state : ActuatorState;
+
+
+functions
+
+	public CalcPosition : real * real * real -> real
+	CalcPosition(x, v_t, ts) == x + v_t * ts;
+	
+	
+operations
+
+	public MotorActuator : () ==> MotorActuator 
+	MotorActuator() == (
+		act_state := <Off>;
+	);
+	
+	public GetState : () ==> ActuatorState
+	GetState() == return act_state;
+	
+	public SetState : (ActuatorState) ==> ()
+	SetState(act) == act_state := act;
+	
+	public Step : (real) ==> () 
+	Step(ts) == (
+		if (IMM_System`m.GetState() = <On>)
+		then	IMM_System`imm.SetPosition(CalcPosition(IMM_System`imm.GetPosition(),IMM_System`imm.GetTargetVelocity(),ts));
+	);
+	
+
+end MotorActuator

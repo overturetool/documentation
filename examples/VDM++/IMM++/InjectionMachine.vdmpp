@@ -1,0 +1,60 @@
+/*
+The InjectionMachine class resembles the machine tool and contains parameters relevant for the injection moulding provcess. 
+The injection machine is initialized in Idle state with the Gate closed, and all parameters set to zero state.
+*/
+
+class InjectionMachine
+
+
+types
+
+	stateType = <Filling> | <Packing> | <Cooling> | <Ejecting> | <Idle>; 
+	LockState = <Open>    | <Closed>;
+
+	
+instance variables
+
+	public env_x : real;          -- position of screw
+	public env_p_hyd : real;      -- hydraulic pressure
+	public v_t : real;            -- target velocity during filling
+	public env_p_hyd_t : real;    -- target pressure == holding pressure
+	
+	public env_state : stateType; -- current phase 
+	env_lock   : LockState;	  
+  
+  
+operations
+
+	public InjectionMachine : (real) ==> InjectionMachine
+	InjectionMachine(x0) == (
+		env_state   := <Idle>;
+		env_lock    := <Closed>;
+		env_x       := x0;
+		env_p_hyd   := 0;
+		v_t         := 0; 
+		env_p_hyd_t := 0;
+	);
+	
+	public Step : () ==> () 
+	Step() == (
+		IMM_System`ps.setReading(env_x);
+		IMM_System`prs.setReading(env_p_hyd);
+		);
+
+	
+	public GetPosition : () ==> real 
+	GetPosition() ==  return env_x;
+	
+	public GetTargetVelocity : () ==> real 
+	GetTargetVelocity() == return v_t;
+		
+	public SetPosition : real ==> ()
+	SetPosition(r) == env_x := r;
+	
+	public SetTargetVelocity : (real) ==> () 
+	SetTargetVelocity(vt) == v_t := vt;
+	
+	public SetPressure : real ==> () 
+	SetPressure(p) == env_p_hyd := p;
+	
+end InjectionMachine

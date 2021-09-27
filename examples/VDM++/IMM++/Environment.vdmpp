@@ -1,0 +1,30 @@
+class Environment
+
+types
+   Bin = nat;
+
+instance variables
+   accepted : Bin;
+   scrapped : Bin;
+   
+operations
+
+	public Environment : () ==> Environment
+	Environment() == (
+				accepted := 0;
+				scrapped := 0;
+	);
+
+	public handleAcceptEvent : () ==> ()
+	handleAcceptEvent() == accepted := accepted + 1;
+	
+	public handleScrapEvent : () ==> ()
+	handleScrapEvent() == scrapped := scrapped + 1;
+	
+	public getAccepted : () ==> nat
+	getAccepted() == return accepted;
+	 
+	public getScrapped : () ==> nat
+	getScrapped() == return scrapped;
+
+end Environment

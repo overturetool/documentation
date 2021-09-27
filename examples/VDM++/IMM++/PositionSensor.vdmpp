@@ -1,0 +1,32 @@
+/*
+In the following we have the \texttt{PositionSensor} class for which the instances 
+model the position of the screw in the barrel of e IMM.
+The class is a standard sensor model class, yet  we define a position invariant, 
+given that the screw positions are from 0 to 40 mm.
+*/
+
+class PositionSensor is subclass of Sensor
+
+types 
+	Position = real 
+	--inv r ==  r >= 0 and r <= 40;
+	
+instance variables
+
+	value : Position;
+
+operations
+
+	public PositionSensor : real  ==> PositionSensor
+	PositionSensor(r) == value := r;
+
+	public getReading: () ==> real
+	getReading() == return value;
+   
+  public setReading: real ==> ()
+	setReading(r) == value := r;
+	              
+  public Step : () ==> ()
+  Step() == return;
+
+end PositionSensor

@@ -1,0 +1,22 @@
+class IMM_System
+
+instance variables
+	
+	public static timer : Timer := new Timer();
+	public static imm : InjectionMachine := new InjectionMachine(0);
+	
+	-- Controllers
+	public static ctl : Controller := new Controller();
+	
+	-- Actuator
+	public static b : Belt := new Belt();
+	public static m : MotorActuator := new MotorActuator();
+	
+	-- Sensor
+	public static ps   : PositionSensor := new PositionSensor();
+	public static prs  : PressureSensor := new PressureSensor();
+	public static prs5 : PressureSensor := new PressureSensor();
+		
+	public static gs : GateSensor := new GateSensor(false);
+	 
+end IMM_System
