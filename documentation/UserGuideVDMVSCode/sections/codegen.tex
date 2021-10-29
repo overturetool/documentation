@@ -90,6 +90,94 @@ sequences as provided by the \texttt{VDMUtil}, and finally
 functionality to write to the console as available in the \texttt{IO}
 library.
 
+\section{Configuration of the Java Code Generator}
+
+The Java code generator can be configured via a preference page as shown in Figure~\ref{fig:javaGenerationConfiguration}. The
+preference page can be accessed by :
+\begin{enumerate}
+    \item Clicking on 'File' (left top corner), select 'Preferences', then Settings
+    \item Choosing 'Workspace' (not 'User')
+    \item Going below in 'Extensions' and 'VDM VSCode'
+\end{enumerate}
+See Figure~\ref{fig:pathVDMSettings1} for more details
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=16cm]{snapshots/Path to go to VDM settings.PNG}
+\caption{Path to go to Java Code Configuration\label{fig:pathVDMSettings1}}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=16cm]{snapshots/Settings for java code generation.png}
+\caption{Configuration of the Java Code Generator\label{fig:javaGenerationConfiguration}}
+\end{center}
+\end{figure}
+
+\newpage
+The Java code generator provides a few options that allows the user to configure the code generation process (see Figure~\ref{fig:javaGenerationConfiguration}). The subsections
+below treat each of these configuration parameters individually, in the order they appear
+in the preference page.
+
+\subsection{Disable cloning}
+In order to respect the value semantics of VDM the Java code generator sometime needs to perform
+deep copying of objects that represent composite value types (records, tuples, tokens, sets,
+sequences and maps). For example, in VDM a record is a value type, which means that occurrences
+of the record must be copied when it appears in the right-hand side of an assignment, it is passed
+as an argument or returned as a result. However, Java does not support composite value types like
+structs and records, and as a consequence record types must be represented using classes, which
+use reference semantics. This means that an object reference, which is used to represent a composite
+value type in the generated Java code must be deep copied when it appears in the right-hand
+side of an assignment, it is passed as an argument or returned as a result. For arbitrarily complex
+value types (such as records composed of record) deep copying may
+introduce a significant overhead in the generated code. If the specification subject to code generation
+does not truly rely on value semantics the user may wish to disable deep copying of value
+types in the generated code in order to remove this overhead. The user should, however, be aware
+that disabling of cloning may lead to code being generated that does not preserve the semantics
+of the input specification and in general disabling of cloning is discouraged. By default cloning is
+enabled.
+
+\subsection{Generate character sequences as strings}
+In VDM a string is a sequence of characters and there is no notion of a string type. Java in particular
+works differently since it uses a separate type to represent a string. The default behaviour of the
+Java code generator is to code generate sequences of characters as strings and subsequently do
+the necessary conversion between between strings and sequences in the generated code. Another
+possibility is to treat a string literal for what it truly is, namely a sequence of characters, and
+thereby avoid any conversion between strings and sequences. In order to do that, i.e. not generating
+character sequences as strings, the corresponding option must be unchecked.
+
+\subsection{Generate concurrency mechanisms}
+If the user does not rely on the concurrency mechanisms of VDM++ and does not want to include
+support for them in the generated code the corresponding option in the preference page must be
+unchecked. By default the behaviour of the Java code generator is to not include support for the
+concurrency mechanisms of VDM++ in the generated code.
+
+\subsection{Generate VDM location information for code generated constructs}
+When a VDM model is code generated it can be helpful to know where the constructs in the generated
+code originate from. When this option is enabled the Java code generator will generate
+VDM location information for methods, statements and local declarations in the generated code.
+More specifically, the Java code generator will generate a Java source code comment containing
+the name of the VDM source file and the line number and the position, for each method, statement
+and local declaration. As an example, the code fragment below says that the Java return statement
+originates from a VDM construct at line 25, position 12 in \texttt{File.vdmsl.\\
+/* File.vdmsl 25:12 */\\
+return 42;}
+
+\subsection{Choose output package}
+The Java code generator allows the output package of the generated code to be specified. If the
+user does not specify a package, the code generator outputs the generated Java code to a package
+with the same name as the VDM project. If the name of the project is not a valid java package,
+then the generated code is output to the default Java package.
+
+\subsection{Skip classes/modules during the code generation process}
+It may not always make sense to code generate every class or module in a VDM project. A class
+or module can often be skipped if it acts as an execution entry point or it is used to load input for
+the specification. Classes or modules that the user wants to skip can be specified in the text box
+in the Java code generator preference page by separating the class/module names by a semicolon.
+As an example, \texttt{World;Env} makes the code generator skip code generation of \texttt{World} and \texttt{Env}, while generating code for any other module or class. For convenience the output of the Java code
+generator will also inform the user about what classes or modules are being skipped.
+
 \newpage
 \section{Translation of the VDM types and type constructors}
 \label{sec:type-mappings}
@@ -127,6 +215,7 @@ and some are generated.
   \captionof{table}{The type mappings used by the Java code generator.}
   \label{tbl:type-mappings}
 \end{center}
+
 %
 %
 %

@@ -175,7 +175,7 @@
 \makeindex
 
 \begin{document}
-\title{Overture VSCode Extension Support: User Guide \\{\large Version 0.0.1}}
+\title{Overture VSCode Extension Support: User Guide \\{\large Version 0.0.2}}
 \author{Tom Montout, Hugo Daniel Macedo, Jonas K. Rask, Peter Gorm Larsen\\
 Aarhus University, Department of Engineering\\
 Finlandsgade 22, DK-8000 \AA{}rhus C, Denmark\\[3mm]
@@ -184,7 +184,7 @@ Fujitsu UK\\
 Lovelace Road, Bracknell, \\
 Berkshire. RG12 8SN, UK}
 
-\date{August 2021}
+\date{October 2021}
 
 \reportno{TR-007}
 
@@ -195,7 +195,8 @@ Berkshire. RG12 8SN, UK}
 
 \begin{tabular}{|l|l|l|l|}\hline
 Month   & Year & Version & Version of Overture\\ \hline
-August & 2021 &         & 0.0.1 \\ \hline
+August & 2021 &     0.0.1    & 1.2.0 \\ \hline
+October & 2021 & 0.0.2 & 1.2.1\\ \hline
 \end{tabular}
 
 \tableofcontents
@@ -283,15 +284,14 @@ Chapter~\ref{sec:testcoverage} illustrates how test coverage
 information can be gathered when models are interpreted.
 Chapter~\ref{sec:prettyprint} shows how models with test
 coverage information can be written as
-\LaTeX\ and automatically converted to PDF format.
+\LaTeX\ and automatically converted to PDF format. Then, Chapters~\ref{sec:dependencyGraph} illustrates the generation and the visualisation of a dependency graph.
 Chapters~\ref{sec:POmanagement} to \ref{sec:codegen} cover various
 VDM specific features: Chapter~\ref{sec:POmanagement}
 explains the notion of proof obligations and their support in
 Overture; Chapter~\ref{sec:testing} explains
 combinatorial testing and the automation support for that; Chapter~\ref{sec:codegen} explains
-how it is possible automatically to generate executable code in programming languages such as Java for a subset of VDM models;
-Appendix~\ref{app:templates} provides a list
-of all the standard templates built into Overture.
+how it is possible automatically to generate executable code in programming languages such as Java for a subset of VDM models; Chapter ~\ref{sec:javaCombinesWithVDM}
+demonstrates how Java can be used in combination with VDM models.
 Appendixes~\ref{app:internalerrors}
 to~\ref{app:POcategories} give complete lists of possible errors,
 warnings and proof obligation categories. Appendix~\ref{chap:umlrules} provides
@@ -657,7 +657,7 @@ Finally, you can see in Figure~\ref{fig:userguide:new.jsonFile} the newly create
 \begin{figure}[htp]
 \begin{center}
   \includegraphics[width=460px]{snapshots/New .json file with the VDM Run Configuration.png}
-  \caption{New .json file with the configuration}
+  \caption{New launch.json file with the configuration}
   \label{fig:userguide:new.jsonFile}
 \end{center}
 \end{figure}
@@ -678,7 +678,28 @@ On the other hand, you can also create a launch.json file by default without ent
     \item Then a window appear, thus select an environment ('VDM Debug' if you want to configure a VDM project)
 \end{enumerate}
 
-\newpage
+Whenever a launch configuration is started up it is also possible to decide upon which additional
+run-time checks to carry out. By default all possible run-time checks are swiched on (true) but if desired
+(some of) these can be swiched off (false) by modifying the different options by false in the launch.json file (see Figure~\ref{fig:userguide:DefaultLaunch.json}). The different run-time checks that can be performed are:
+ \begin{itemize}
+    \item \textbf{Dynamic type checks:} This is an option for the interpreter (default true) to continuously type check values during interpretation of a VDM model. It is possible to switch off the check here \footnote{However a consequence of doing that is that you may get internal Java errors (null pointer or class cast exceptions typically) rather than nice clean VDM type errors about mismatched types.}.
+    \item \textbf{Invariant checks:} This is an option for the interpreter (default on) to continuously check both
+    state and type invariants. It is possible to switch off this check here, but note that option
+    requires dynamic type checking also to be switched off.
+    \item \textbf{Pre condition checks:} This is an option for the interpreter (default on) to continuously check
+    pre-conditions for all functions and operations during interpretation of a VDM model. It is
+    possible to switch off this check here.
+    \item \textbf{Post condition checks:} This is an option for the interpreter (default on) to continuously check
+    post-conditions for all functions and operations during interpretation of a VDM model. It is
+    possible to switch off this check here.
+    \item \textbf{Measure checks:} This is an option for the interpreter (default on) to continuously check recursive
+    functions, for which a measure function has been defined. It is possible to switch off this
+    check here \footnote{Note that this feature may not work correctly with the presence of mutually recursive function definitions.}.
+ \end{itemize}
+ 
+
+
+
 In addition, you have the possibility to add other configurations. You just have to go in the Run view and follow the instructions below.
 
 \begin{figure}[htp]
@@ -775,7 +796,54 @@ construct: a \verb+\documentclass, \section, \subsection+ or a \LaTeX\ comment.
 
 To use this functionality, you just have to right click on a file and select 'Translate to LaTeX'. Thus, a new file with a \texttt{.tex} extension will be created. This file is written into a project subfolder named \texttt{.generated/latex <date and time>}.
 
+\chapter{Generating Dependency Graph}\label{sec:dependencyGraph}
 
+A dependency graph represents the dependencies of several objects towards each other. Thus, it is considered as a directed graph where each node points to the node on which it depends. In some cases you can add some conditions set on the different connections between the nodes. Moreover, each shape represents a node (usually ellipses or circles) and each connector, composed of one or two arrow heads, indicates the direction of the dependencies. You have also the possibility to add labels on connectors to specify the relation between two nodes. To finish, the main usage of a dependency graph consists of describing processes to make it easier for the developer to understand, reuse and maintain his code.
+
+\section{Generating Dependency Graph}
+
+In order to generate a dependency graph, you just have to right-click on a file and select 'Generate Dependency Graph'. Thus a graphviz file (dependencies.dot) will be generated into a project subfolder named \texttt{.generated/graphviz <date and time>}. One example of the created file is shown below, see Figure~\ref{fig:generateDependencyGraph}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\textwidth]{snapshots/Generation of dependency graph.png}
+\caption{Generating a Dependency Graph\label{fig:generateDependencyGraph}}
+\end{center}
+\end{figure}
+
+\newpage
+\section{Visualising Dependency Graph}
+
+Now that the dependency graph is generated, you can display it thanks to a visualiser, by installing a graphviz extension such as Graphviz for VSCode :
+ \begin{quote}
+ \url{https://marketplace.visualstudio.com/items?itemName=joaompinto.vscode-graphviz}
+ \end{quote}
+ 
+Or with Graphviz Interactive Preview :
+ \begin{quote}
+ \url{https://marketplace.visualstudio.com/items?itemName=tintinweb.graphviz-interactive-preview}
+ \end{quote}
+ 
+However, you can simply add a graphviz extension by clicking on 'Extensions' (Ctrl+Shift+X), writing 'Graphviz' in the search bar, choosing \emph{Graphviz (dot) language support vor Visual Studio Code} and finally installing the extension. See the Figure~\ref{fig:installGraphviz} for more details.\\
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\textwidth]{snapshots/Install Graphviz.png}
+\caption{Installing Graphviz for VSCode\label{fig:installGraphviz}}
+\end{center}
+\end{figure}
+
+You are now able to visualise a dependency graph by opening the graphviz file, right-clicking in the Editor area, selecting 'Command Palette...' (Ctrl+Shift+P), writing Graphviz in the search bar and choosing if you want to 'Open Preview to the Side' or simply 'Toggle Preview' (Ctrl+Shift+V). Thus, the Figure~\ref{fig:VisualisingGraphviz} shows you an example of a dependency graph. If you need more information about the extension Graphviz for VSCode, you can visit their website : 
+ \begin{quote}
+ \url{https://marketplace.visualstudio.com/items?itemName=joaompinto.vscode-graphviz}
+ \end{quote}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\textwidth]{snapshots/Use graphviz to show .dot file.png}
+\caption{Visualising a Graphviz File\label{fig:VisualisingGraphviz}}
+\end{center}
+\end{figure}
 
 \chapter{Managing Proof Obligations}\label{sec:POmanagement}
 
@@ -839,6 +907,8 @@ Moreover, you are able to expand or collapse all proof obligations with the butt
 %At the top of the \emph{Proof Obligation Explorer} the \emph{Filter proved} button
 %allows you to filter away all the proof obligations that are trivially
 %correct.\index{filter proved}
+
+
 
 \chapter{Combinatorial Testing}\label{sec:testing}
 
@@ -929,18 +999,54 @@ variables in scope.
 %
 \input{sections/codegen}
 
+\chapter{Expanding VDM Models Scope and Functionnality by Linking Java and VDM}\label{sec:javaCombinesWithVDM}
+
+\section{Enabling Remote Control of the Overture Interpreter}
+
+In some situations, it may be valuable to establish a front end (for example a GUI or a test harness)
+for calling a VDM model. This feature corresponds roughly to the CORBA based API from
+VDMTools [APIMan].
+
+Remote control should be understood as a delegation of control of the interpreter, which means that
+the remote controller is in charge of the execution or debug session and is responsible for taking
+action and executing parts of the VDM model when needed. When finished, it should return and
+the session will stop. When a Remote controller is used, the Overture debugger continues working
+normally, so for example breakpoints can be used in debug mode. Moreover, all dialects (VDM-SL, VDM++ and VDM-RT) support Remote Control. A new configuration with the
+use of a remote controller can be started by (see Figure~\ref{fig:pathRemoteControl} for more details):
+\begin{enumerate}
+    \item Clicking on the button "Add Configuration..."
+    \item Selecting "VDM Debug: Remote Control (VDM-SL/++/RT)
+\end{enumerate}
+Then a new snippet (see Figure~\ref{fig:remoteControl}) will be created with the remoteControl option. And you simply have to write the full package/class name of the Remote Control.
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=16cm]{snapshots/Path Remote Control.png}
+\caption{Path to add a New Configuration using Remote Control \label{fig:pathRemoteControl}}
+\end{center}
+\end{figure}
 
 
-
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=16cm]{snapshots/remoteControl.PNG}
+\caption{New Snippet with Remote Control Option \label{fig:remoteControl}}
+\end{center}
+\end{figure}
 
 
 \appendix
 \newpage
 
+\chapter*{}
+\renewcommand{\chaptermark}[1]{\markboth{#1.}{}}
+\chaptermark{References}
+
 \bibliographystyle{nnewalpha}
 
 \bibliography{bib/UserGuide,bib/dan}
-\addcontentsline{toc}{section}{\protect\numberline{}{References}}
+
+\addcontentsline{toc}{chapter}{\protect\numberline{}{References}}
 
 
 
