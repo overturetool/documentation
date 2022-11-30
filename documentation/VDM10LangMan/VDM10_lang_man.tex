@@ -5698,10 +5698,40 @@ Constructors are operations that have the same name as the class in
 which they are defined and which create new instances of that
 class. Their return type must therefore be the same class
 name, and if a return value is specified this should be \keyw{self}
-though this can optionally be omitted. Finally, since a constructor is used for initialising a new instance of a class, it is not permitted to declare a constructor \keyw{static}.
+though this can optionally be omitted.
+
+Note that a superclass constructor can be called, but to avoid this
+being the return value of the block, it is common to put these inside
+\keyw{let} statements:
+
+\begin{lstlisting}
+  class A is subclass of B
+  operations
+    public A: nat ==> A
+    A(n) ==
+      let - = B(n, n+1) in ...
+\end{lstlisting}
+
+Since a constructor is used for initialising a new instance of a class,
+it is not permitted to declare a constructor as \keyw{static}.
 
 Multiple constructors can be defined in a single class using
 operation overloading as described in section~\ref{sec:classdep}.
+
+Object construction in VDM is unusual, in that the default initialization
+of object fields is \emph{always} performed first, including superclass
+parent objects. This can be influenced if a class provides a \emph{default}
+constructor (one with no parameters). Once the default construction has
+completed, then the body of the constructor given in the \keyw{new}
+expression is called \emph{as a normal operation}. That operation can
+explicitly call a superclass constructor, but again this is acting as
+a normal operation.
+
+With multiple inheritance, default construction occurs in the order of
+the \keyw{is subclass of} clause, from left to right; parent classes are
+constructed before subclasses. If a parent hierarchy has a common
+superclass (diamond inheritance), the common object is only constructed
+once.
 
 
 \chapter{Statements}\label{sec:stmt}
