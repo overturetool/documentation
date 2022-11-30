@@ -2672,9 +2672,8 @@ one by one. Each of them will be described by means of:
   the let expression.
 
   In standard VDM-SL\ the collection of definitions may be mutually
-  recursive.  However, in the VDM languages this is not
-  supported by the VDM interpreters.  Furthermore, the definitions must be
-  ordered such that all constructs are defined before they are used.
+  recursive.  However, this is not supported by the VDM interpreters.  
+  Furthermore, the definitions must be ordered such that all constructs are defined before they are used.
 
   A {\it let-be-such-that expression} has the form:
   \begin{lstlisting}
@@ -2779,11 +2778,6 @@ set_filter(p)(s) ==
 
 \section{The Define Expression} \label{define-exp}
 
-This expression can only be used inside operations which will be
-described in section~\ref{op-def}. In order to deal with global variables
-inside the expression part an extra expression construct is available
-inside operations.
-
 \begin{description}
 \item[Syntax:]
   \Rule{expression}{
@@ -2809,31 +2803,36 @@ inside operations.
       e
   \end{lstlisting}
   The {\it define expression} corresponds to a let expression except
-  that the right hand side expressions may depend on the value of the
-  local and/or
-  global variable and that it may not be mutually recursive.
-  It denotes the value of the expression {\tt e} in the
+  that binding the local identifiers and the evaluations of the right hand side
+  expressions are processed in the order in which they are presented. 
+  Therefore,  right hand side expressions may not be mutually recursive.
+  A local identifier may be referenced in its following right hand side expressions
+  and also may be overriden by its following bindings.
+
+  A define expression denotes the value of the expression {\tt e} in the
   context in which the patterns (or binds) {\tt pb1, \ldots, pbn} are
   matched against the corresponding expressions {\tt e1, \ldots,
-    en}\footnote{If binds are used, it simply means that the values
-    which can match the pattern are further constrained by the type, sequence, or
-    set expression as explained in Chapter~\ref{patterns}.}.
+  en}\footnote{If binds are used, it simply means that the values
+  which can match the pattern are further constrained by the type, sequence, or
+  set expression as explained in Chapter~\ref{patterns}.}.
 
 \item[Examples:] The {\it define expression} is
   used in a pragmatic way, in order to make the reader aware of the fact that
-  the value of the expression depends upon the global variable.
-
+  the local bindings are defined and/or overriden in order.  
   This can be illustrated by a small example:
   \begin{lstlisting}
-    def user = lib(copy)
+    def 
+        x = op(1);
+        x = op(x);
     in
-      if user = <OUT>
-      then true
-      else false
+      x
   \end{lstlisting}
-  where {\tt copy} is defined in the context, {\tt lib} is global
-  variable (thus {\tt lib(copy)} can be considered as looking up the
-  contents of a part of the variable).
+  where {\tt op} is an operation that may modify state variables.
+  A {\tt define expression} may appear in the body of a non-pure operation, and in such cases its right hand side expressions may contain operation calls and read access to state variables.
+  If in the body of a pure operation, the right hand side expressions may contain pure application calls and read access to state variables.
+
+  In the above example,  {\tt op(1)} is first evaluated and {\tt x} gets its return value, and then {\tt op(x)} is evaluated and {\tt x} now gets its return value.
+  The entire expression evaluates the resulting value of {\tt x}.
 
   The operation \texttt{GroupRunnerUp\_expl} in section \ref{letstmt}
   also gives an example of a define expression.
@@ -5879,16 +5878,17 @@ from the class \texttt{GroupPhase}
       s
   \end{lstlisting}
   The {\it define statement} corresponds to a {\it define expression}
-  except that it is also allowed to use operation calls on the right-hand
-  sides. Thus, operations that change the state can also be used here, and
-  if there are more than one definition they are evaluated in the order in
-  which they are presented.  It denotes the evaluation of the statement
-  {\tt s} in the context in which the patterns (or binds) {\tt pb1, \ldots,
-    pbn} are matched against the values returned by the corresponding
-  expressions or operation calls {\tt e1, \ldots, en}\footnote{If binds are
-    used it simply means that the values which can match the pattern are
-    further constrained by the type or set expression as it is explained in
-    section~\ref{patterns}.}.
+  except that the {\it in} part is a statement instead of an expression. 
+  Like the {\it define expression}, operations that change the state can 
+  also be used in right hand side expressions, and if there are more than 
+  one definition they are evaluated in the order in which they are presented.  
+  A define statement denotes the evaluation of the statement {\tt s} 
+  in the context in which the patterns (or binds) {\tt pb1, \ldots,  pbn} are 
+  matched against the values returned by the corresponding expressions 
+  or operation calls {\tt e1, \ldots, en}
+  \footnote{If binds are used it simply means that the values which can 
+  match the pattern are further constrained by the type or set expression 
+  as it is explained in section~\ref{patterns}.}.
 
 \item[Examples:] Given the following sequences:
   \begin{lstlisting}
