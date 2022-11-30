@@ -2828,7 +2828,10 @@ set_filter(p)(s) ==
       x
   \end{lstlisting}
   where {\tt op} is an operation that may modify state variables.
-  In this example,  {\tt op(1)} is first evaluated and {\tt x} gets its return value, and then {\tt op(x)} is evaluated and {\tt x} now gets its return value.
+  A {\tt define expression} may appear in the body of a non-pure operation, and in such cases its right hand side expressions may contain operation calls and read access to state variables.
+  If in the body of a pure operation, the right hand side expressions may contain pure application calls and read access to state variables.
+
+  In the above example,  {\tt op(1)} is first evaluated and {\tt x} gets its return value, and then {\tt op(x)} is evaluated and {\tt x} now gets its return value.
   The entire expression evaluates the resulting value of {\tt x}.
 
   The operation \texttt{GroupRunnerUp\_expl} in section \ref{letstmt}
