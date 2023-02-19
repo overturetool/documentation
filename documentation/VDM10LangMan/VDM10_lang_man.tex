@@ -8517,19 +8517,21 @@ These guards can be freely mixed. \textbf{Note} that there is no
 \textit{syntactic} distinction between these guards - they are all
 expressions. However they may be distinguished at the semantic level.
 
-A mutex predicate allows the user to specify either that all
-operations of the class are to be executed mutually exclusive, or that
-a list of operations are to be executed mutually exclusive to each
-other. Operations that appear in one mutex predicate are allowed to
+A mutex predicate allows the user to specify either that all operations of the 
+class are to be executed mutually exclusive, an operation is to be executed 
+mutually exclusive to itself, or that a list of operations is to be executed mutually 
+exclusive to each other.
+Operations that appear in one mutex predicate are allowed to
 appear in other mutex predicates as well, and may also be used in the
 usual permission predicates. Each mutex predicate will implicitly be
 translated to permission predicates using history guards for each
 operation mentioned in the name list. For instance,
 \begin{lstlisting}
 sync
-  mutex(opA, opB);
-  mutex(opB, opC, opD);
-  per opD => someVariable > 42;
+    mutex(opA, opB);
+    mutex(opB, opC, opD);
+    mutex(opD);
+    per opD => someVariable > 42;
 \end{lstlisting}
 would be translated to the following permission predicates:
 \begin{lstlisting}
@@ -8539,8 +8541,16 @@ sync
              #active(opC) + #active(opD) = 0;
   per opC => #active(opB) + #active(opD) = 0;
   per opD => #active(opB) + #active(opC) = 0 and
+             #active(opD) = 0 and
              someVariable > 42;
 \end{lstlisting}
+
+As shown in the translated per clauses, a mutex on multiple operations is 
+translated to a set of permission predicates each of which blocks the execution 
+of an operation when any one of the other operations is being executed. 
+Please note that a mutex on multiple operations does not prevent multiple executions 
+of any one of the operations. A mutex on a single operation, such as {\bf\ttfamily{mutex(opD)}}
+in the above example, blocks multiple executions of the operation.
 
 Note that it is only permitted to have one ``stand-alone'' permission
 predicate for each operation. It is also important to note that if
