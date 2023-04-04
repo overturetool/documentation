@@ -6691,9 +6691,11 @@ and returns the result of
   where expression {\tt e} is the return value of the operation.
 
 \item[Examples:] In the following example {\tt OpCall} is an operation call
-  whereas {\tt FunCall} is a function call. As the {\it if statement\/}
+  whereas {\tt FunCall} is a function call.  As the {\it if statement\/}
   only accepts statements in the two branches {\tt FunCall} is
-  ``converted'' to a statement by using the {\it return statement}.
+  ``converted'' to a statement by using the {\it return statement}, i.e.  {\tt return FunCall()}.
+  This ``conversion'' may be carried out explicitly by the specifier, or implicitly by the interpreter.
+
   \begin{lstlisting}
     if test
     then OpCall()
