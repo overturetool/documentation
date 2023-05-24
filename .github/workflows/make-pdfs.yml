@@ -10,6 +10,7 @@ jobs:
         uses: xu-cheng/latex-action@v2
         with:
           root_file: documentation/VDM10LangMan/VDM10_lang_man.tex
+          work_in_root_file_dir: true
       - name: Upload PDF file
         uses: actions/upload-artifact@v3
         with:
