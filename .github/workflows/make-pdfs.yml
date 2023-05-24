@@ -3,6 +3,8 @@ jobs:
   build-lang-man:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout repo
+        uses: actions/checkout@v2.3.4
       - name: Run make script
         run: ./documentation/VDM10LangMan/MakeLangMan.sh
         shell: bash
