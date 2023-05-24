@@ -1,0 +1,8 @@
+on: [push]
+jobs:
+  build-lang-man:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run make script
+        run: ./.github/documentation/VDM10LangMan/MakeLangMan.sh
+        shell: bash
