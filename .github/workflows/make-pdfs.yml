@@ -4,5 +4,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run make script
-        run: ./.github/documentation/VDM10LangMan/MakeLangMan.sh
+        run: ./documentation/VDM10LangMan/MakeLangMan.sh
         shell: bash
