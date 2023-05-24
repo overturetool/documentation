@@ -9,10 +9,28 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: documentation/VDM10LangMan/VDM10_lang_man.tex
+          root_file: ${{ github.workspace }}\documentation\VDM10LangMan\VDM10_lang_man.tex
           work_in_root_file_dir: true
+      - name: Remove Old PDF
+        uses: JesseTG/rm@v1.0.2
+        with:
+          path: ${{ github.workspace }}\documentation\VDM10LangMan\VDM10_lang_man.pdf
       - name: Upload PDF file
         uses: actions/upload-artifact@v3
         with:
           name: PDF
-          path: documentation/VDM10LangMan/VDM10_lang_man.pdf
+          path: ${{ github.workspace }}\documentation\VDM10LangMan\VDM10_lang_man.pdf
+      - name: Download PDF artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: distribution
+          path: ${{ github.workspace }}\documentation\VDM10LangMan
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Automated Change
+          branch: jolnd-pdf-action
+          commit_options: '--no-verify --signoff'
+          commit_author: Author <actions@github.com>
+          status_options: '--untracked-files=no'
+          skip_dirty_check: true
