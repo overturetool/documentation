@@ -1,10 +1,17 @@
+name: Build LaTeX manuals and tutorials
 on: [push]
 jobs:
   build-lang-man:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v2.3.4
-      - name: Run make script
-        run: ./documentation/VDM10LangMan/MakeLangMan.sh
-        shell: bash
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: documentation/VDM10LangMan/VDM10_lang_man.tex
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v3
+        with:
+          name: PDF
+          path: documentation/VDM10LangMan/VDM10_lang_man.pdf
