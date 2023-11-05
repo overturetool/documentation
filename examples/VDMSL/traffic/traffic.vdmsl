@@ -58,7 +58,7 @@ types
         forall c in set cs & 
               mk_Conflict(c.path2,c.path1) in set cs and
               c.path1 in set dom ls and 
-	      c.path2 in set dom ls and 
+	            c.path2 in set dom ls and 
               (ls(c.path1) = <Red> or ls(c.path2) = <Red>)
 
 functions
