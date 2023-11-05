@@ -12,7 +12,7 @@ types
 
   Output = map MagId to seq of OutputStep;
 
-  MagId = token;
+  MagId = token; 
 
   OutputStep = FlareType * AbsTime;
 
@@ -24,7 +24,7 @@ types
               <FlareTwoB>  | <FlareOneC>  | <FlareTwoC> |
               <DoNothingA> | <DoNothingB> | <DoNothingC>;
 
-  Plan = seq of (FlareType * Delay);
+  Plan = seq1 of (FlareType * Delay);
 
   Delay = nat;
 
@@ -105,7 +105,7 @@ LeavePrefixUnchanged: seq of OutputStep * nat ->
 LeavePrefixUnchanged(output_l, curTime) ==
   [o | o in seq output_l & let mk_(-,t) = o in t <= curTime];
 
-MakeOutputFromPlan : nat * seq of Response -> seq of OutputStep
+MakeOutputFromPlan : nat * seq1 of Response -> seq of OutputStep
 MakeOutputFromPlan(curTime, response) ==
   let output = OutputAtTimeZero(response) in
     [let mk_(flare,t) = o
@@ -113,7 +113,7 @@ MakeOutputFromPlan(curTime, response) ==
        mk_(flare,t+curTime)
     | o in seq output];
 
-OutputAtTimeZero : seq of Response -> seq of OutputStep
+OutputAtTimeZero : seq1 of Response -> seq of OutputStep
 OutputAtTimeZero(response) ==
   let absTimes = RelativeToAbsoluteTimes(response) in
     let mk_(firstFlare,-) = hd absTimes in
