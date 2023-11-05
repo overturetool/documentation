@@ -23,11 +23,7 @@ Paths(g,id) ==
     else dunion {{[id] ^ p | p in set Paths(g,c)} 
                 | c in set children}  
 pre id in set dom g
-measure measureTransClos;
-
-measureTransClos : ASyncGraph * Id -> nat
-measureTransClos(g,id) == 
-  card TransClos(g,id);
+measure card TransClos(g,id);
 
 LinearPath: Graph * Id -> Path
 LinearPath(g,id) ==
@@ -66,7 +62,7 @@ AsycDescendents: AcyclicGraph * Id -> set of Id
 AsycDescendents(g,id) == 
   {id} union dunion {AsycDescendents(g,c) | c in set  g(id)}
 pre id in set dom g
-measure measureTransClos;
+measure card TransClos(g,id);
 
 Descendents: Graph * Id * set of Id -> set of Id
 Descendents(g,id,reached) ==
