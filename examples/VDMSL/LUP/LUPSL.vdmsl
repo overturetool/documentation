@@ -29,7 +29,9 @@ lupsltok(a,k) ==
  in
    if compatible = {} 
    then 1 
-   else MaxOfSet(compatible) + 1; 
+   else MaxOfSet(compatible) + 1
+pre k in set inds a
+measure k; 
 
 lupsl : array -> nat
 lupsl(a) == 
