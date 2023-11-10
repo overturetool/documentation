@@ -180,7 +180,7 @@ MakeMultilineResponse(resps) ==
   elseif len resps = 1
   then hd resps
   else hd resps ^ "\n" ^ MakeMultilineResponse(tl resps)
-measure Len;
+measure len resps;
 
 MakeLineSeq: seq of char -> seq of seq of char
 MakeLineSeq(text) ==
@@ -189,7 +189,7 @@ MakeLineSeq(text) ==
   else let mk_(line, rest) = GetLine(text)
        in
          [line] ^ MakeLineSeq(rest)
-measure Len;
+measure len text;
 
 GetLine: seq of char -> (seq of char) * (seq of char)
 GetLine(text) ==
@@ -200,11 +200,7 @@ GetLine(text) ==
   else let mk_(line, rest) = GetLine(tl text)
        in
          mk_([hd text] ^ line, rest)
-measure Len;
-
-Len: seq of char | seq of seq of char -> nat
-Len(l) ==
-  len l;
+measure len text;
 \end{vdm_al}
 
 \begin{vdm_al}
@@ -214,12 +210,7 @@ sum(s) ==
   then 0
   else let e in set s in
        sum(s \ {e}) + e
-measure Card;
-
-Card: set of nat -> nat
-Card(s) ==
-  card s;
-
+measure card s;
 \end{vdm_al}
 
 \begin{vdm_al}

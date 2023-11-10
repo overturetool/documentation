@@ -38,7 +38,7 @@ Delete() ==
   return self
 );
 
-public IsDeleted: () ==> bool
+pure public IsDeleted: () ==> bool
 IsDeleted() ==
   return deleted;
 

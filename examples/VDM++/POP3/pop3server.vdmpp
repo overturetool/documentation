@@ -198,7 +198,7 @@ public GetMessageText: POP3Types`UserName * nat ==> seq of char
 GetMessageText(user, index) ==
   return GetUserMessages(user)(index).GetText()
 pre user in set dom maildrop and
-    let mb = GetUserMessages(user) 
+    let mb = maildrop(user).msgs 
     in
       index in set inds mb and
       not mb(index).IsDeleted();
