@@ -1,0 +1,51 @@
+\section{The Test Class}
+
+The Test class defines an environment for executing test cases. The
+class maintains a reference to a CSL instance, and it provides two
+operations, RunOneTest for execution of one test event, and RunTests
+for execution of a sequence of test events. Different kinds of test
+events can be executed. These are defined by the Event class hierarchy
+defined below.  The data types represent different kinds of categories
+of results.
+
+\begin{vdm_al}
+class Test
+
+types
+
+public TestResult = CSLstate | BeaconsMet | MaxSpeed;
+
+public CSLstate :: cd : CabDisp
+                   eb : EmerBrake;
+
+public CabDisp :: alarm   : bool
+                  emerbr  : bool
+                  grfault : bool;
+
+public EmerBrake :: break : bool;
+
+public BeaconsMet :: ann : seq of Announce
+                     res : seq of Limit;
+
+public Announce :: ts : real;
+
+public Limit :: sp : real;
+
+public MaxSpeed :: ms: real;
+
+instance variables
+
+csl : CSL := new CSL();
+
+operations
+
+public RunTests: seq of Event ==> seq of TestResult
+RunTests(events) ==
+  return [events(i).Execute(csl) | i in set inds events ];
+
+public RunOneTest: Event ==> TestResult
+RunOneTest(event) ==
+  return event.Execute(csl);
+
+end Test
+\end{vdm_al}

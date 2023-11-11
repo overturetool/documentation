@@ -1,0 +1,34 @@
+\section{The TailMeetBeaconEvent Test Class}
+
+The TailMeetBeaconEvent class implements a test event where the tail
+of a train meets a beacon. The execute operation returns the current
+announcements and speed restrictions.
+
+\begin{vdm_al}
+class TailMeetBeaconEvent is subclass of Event
+
+instance variables
+  
+beacon : Beacon;
+
+operations
+
+public
+TailMeetBeaconEvent: Beacon ==> TailMeetBeaconEvent
+TailMeetBeaconEvent(b) ==
+  beacon := b;
+
+public Execute: CSL ==> Test`TestResult
+Execute(csl) ==
+( csl.TailMeetsBeacon(beacon); 
+  let anns = csl.GetAnnouncements(),
+      restr = csl.GetSpeedRestrictions()
+  in
+    return mk_Test`BeaconsMet(
+            [ mk_Test`Announce(anns(i).GetTargetSpeed()) |
+              i in set inds anns ],
+            [ mk_Test`Limit(restr(i).GetSpeedRestriction()) |
+              i in set inds restr ]) );
+
+end TailMeetBeaconEvent
+\end{vdm_al}

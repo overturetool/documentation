@@ -1,0 +1,21 @@
+\section{The CSLStateEvent Test Class}
+
+The CSLStateEvent class implements a test event that does not perform
+any action, but returns the status of the Cab Display and the
+Emergency Brake.
+
+\begin{vdm_al}
+class CSLStateEvent is subclass of Event
+
+operations 
+
+public Execute: CSL ==> Test`TestResult
+Execute(csl) ==
+  let mk_(a,e,g) = csl.GetCabDisplay().GetDisplay(),
+      e' = csl.GetEmergencyBrake().GetEmergencyBrake()
+  in
+     return mk_Test`CSLstate(mk_Test`CabDisp(a,e,g), 
+                             mk_Test`EmerBrake(e'));
+
+end CSLStateEvent
+\end{vdm_al}

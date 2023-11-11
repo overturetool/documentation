@@ -1,0 +1,19 @@
+\section{The Beacon Class}
+
+The beacon class is an abstract class representing the possible kinds
+of beacons. Four different kinds of beacons exist:
+
+\begin{itemize}
+\item AnnounceBeacon: speed restriction announcement beacon, 
+\item LimitBeacon: speed restriction beacon, 
+\item CancelBeacon: announcement cancellation beacon, 
+\item EndBeacon: end of speed restriction area beacon.
+\end{itemize}
+
+A class implementing the Beacon class exists for each of these four kinds.
+
+\begin{vdm_al}
+class Beacon
+
+end Beacon
+\end{vdm_al}

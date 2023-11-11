@@ -1,0 +1,20 @@
+\section{The Fault Class}
+
+\begin{vdm_al}
+class Fault
+
+instance variables
+
+speedlimit  : real;
+actualspeed : real;
+
+operations
+
+public Fault: real * real ==> Fault
+Fault(max,act) ==
+( speedlimit := max;
+  actualspeed := act
+);
+
+end Fault
+\end{vdm_al}

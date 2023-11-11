@@ -1,0 +1,29 @@
+\section{The LimitBeacon Class}
+
+The LimitBeacon class represents the limitation beacon and implements
+the abstract Beacon class. The instance variable represents the
+restricted speed. A limitation beacon corresponds to an announcement
+beacon, and the restricted speed is set by to the target speed of that
+announcement when met. The Set and Get operations of the restricted
+speed is introduced.
+
+\begin{vdm_al}
+class LimitBeacon is subclass of Beacon
+
+instance variables
+
+speed: [real] := nil;
+
+operations
+
+public SetSpeedRestriction: real ==> ()
+SetSpeedRestriction(s) ==
+  speed := s;
+
+public GetSpeedRestriction: () ==> real
+GetSpeedRestriction() ==
+  return speed
+pre speed <> nil;
+
+end LimitBeacon
+\end{vdm_al}

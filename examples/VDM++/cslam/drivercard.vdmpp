@@ -1,0 +1,25 @@
+\section{The DriverCard Class}
+
+\begin{vdm_al}
+class DriverCard
+
+instance variables
+
+id: DriverId;
+
+types
+
+public DriverId = token;
+
+operations
+
+public SetId: DriverId ==> ()
+SetId(newid) ==
+  id := newid;
+
+public GetId: () ==> DriverId
+GetId() ==
+  return id;
+
+end DriverCard
+\end{vdm_al}

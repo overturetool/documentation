@@ -1,0 +1,30 @@
+\section{The EmergencyBrake Class}
+
+The EmergencyBrake class models the emergency brake of a train. The
+instance variable maintains the state of the emergency brake. There
+are operations for setting and unsetting the emergency brake, and for
+getting the status of it.
+
+\begin{vdm_al}
+class EmergencyBrake
+
+instance variables
+
+emergencybrake: bool := false;
+
+operations
+
+public SetEmergencyBrake: () ==> ()
+SetEmergencyBrake() ==
+  emergencybrake := true;
+ 
+public UnsetEmergencyBrake: () ==> ()
+UnsetEmergencyBrake() ==
+  emergencybrake := false;
+
+pure public GetEmergencyBrake: () ==> bool
+GetEmergencyBrake() ==
+  return emergencybrake;
+
+end EmergencyBrake
+\end{vdm_al}

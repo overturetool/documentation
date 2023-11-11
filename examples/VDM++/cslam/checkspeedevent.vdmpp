@@ -1,0 +1,32 @@
+\section{The CheckSpeedEvent Test Class}
+
+The CheckSpeedEvent class implements a test event that checks the
+speed of a train (i.e. of a CLS instance). It provides a SetSpeed and
+an Execute operation. The Execute operation returns the status of the
+Cab Display and of the Emergency Brake.
+
+\begin{vdm_al}
+class CheckSpeedEvent is subclass of Event
+
+instance variables
+
+speed : real;
+
+operations 
+
+public CheckSpeedEvent: real ==> CheckSpeedEvent
+CheckSpeedEvent(s) ==
+  speed := s;
+
+public Execute: CSL ==> Test`TestResult
+Execute(csl) ==
+( csl.CheckSpeed(speed);
+  let mk_(a,e,g) = csl.GetCabDisplay().GetDisplay(),
+      e' =  csl.GetEmergencyBrake().GetEmergencyBrake()
+  in
+    return mk_Test`CSLstate(mk_Test`CabDisp(a,e,g), 
+                            mk_Test`EmerBrake(e'))
+);
+
+end CheckSpeedEvent
+\end{vdm_al}

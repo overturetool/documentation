@@ -58,7 +58,7 @@ HA(haInputs, outputSoFar, curTime) ==
            else ChangeHA(haInputs,outputSoFar,curTime)
   measure len haInputs;
 
-ChangeHA: HAInputs * HAOut * AbsTime -> HAOut
+ChangeHA: seq1 of HAInput * HAOut * AbsTime -> HAOut
 ChangeHA(haInputs,outputSoFar,curTime) ==
   let mk_(change,targetTemp,currentTemp,targetHumid,currentHumid) = hd haInputs,
       rest = tl haInputs,
@@ -106,7 +106,7 @@ InterruptOutput : seq of OutStep * nat -> seq of OutStep
 InterruptOutput(output, curTime) ==
   [output(i) | i in set inds output & let mk_(-,t) = output(i) in t <= curTime];
 
-CounterOutput : seq of OutStep * nat -> seq of OutStep
+CounterOutput : seq1 of OutStep * nat -> seq of OutStep
 CounterOutput(output, curTime) ==
   let mk_(lastOutput,-) = output(len output)
   in

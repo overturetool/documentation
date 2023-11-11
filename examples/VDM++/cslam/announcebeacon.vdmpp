@@ -1,0 +1,30 @@
+\section{The AnnounceBeacon Class}
+
+The AnnounceBeacon class represents the announcement beacon, and
+implements the abstract Beacon class. The instance variable represents
+the target speed provided by the announcement beacon.
+
+\begin{vdm_al}
+class AnnounceBeacon is subclass of Beacon
+instance variables
+\end{vdm_al}
+
+\begin{vdm_al}--[targetspeed]
+instance variables
+
+targetspeed: real;
+\end{vdm_al}
+
+\begin{vdm_al}
+operations
+
+public AnnounceBeacon: real ==> AnnounceBeacon
+AnnounceBeacon(ts) ==
+  targetspeed := ts;
+
+public GetTargetSpeed : () ==> real
+GetTargetSpeed() ==
+  return targetspeed;
+
+end AnnounceBeacon
+\end{vdm_al}

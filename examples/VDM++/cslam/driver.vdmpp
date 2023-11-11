@@ -1,0 +1,25 @@
+\section{The Driver Class}
+
+\begin{vdm_al}
+class Driver
+
+instance variables
+
+faults: set of Fault := {};
+
+types
+
+public DriverId = token;
+
+operations
+
+public AddFaults: set of Fault ==> ()
+AddFaults(newfaults) ==
+  faults := faults union newfaults;
+
+public GetFaults: () ==> set of Fault
+GetFaults() ==
+  return faults;
+
+end Driver
+\end{vdm_al}

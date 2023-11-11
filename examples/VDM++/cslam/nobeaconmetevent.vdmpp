@@ -1,0 +1,24 @@
+\section{The NoBeaconMetEvent Test Class}
+
+The NoBeaconMetEvent class implements the event that an announced
+limitation beacon was not met in the distance it was supposed to be
+located. It provides an execute operation that returns the status of
+the Cab Display and of the Emergency Brake.
+
+\begin{vdm_al}
+class NoBeaconMetEvent is subclass of Event
+
+operations 
+
+public Execute: CSL ==> Test`TestResult
+Execute(csl) ==
+( csl.NoBeaconMet();
+  let mk_(a,e,g) = csl.GetCabDisplay().GetDisplay(),
+      e' =  csl.GetEmergencyBrake().GetEmergencyBrake()
+  in
+    return mk_Test`CSLstate(mk_Test`CabDisp(a,e,g), 
+                            mk_Test`EmerBrake(e'))
+);
+
+end NoBeaconMetEvent
+\end{vdm_al}

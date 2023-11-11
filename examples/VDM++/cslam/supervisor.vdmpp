@@ -1,0 +1,39 @@
+\section{The Supervisor Class}
+
+\begin{vdm_al}
+class Supervisor
+
+instance variables
+\end{vdm_al}
+
+\begin{vdm_al}--[mappings]
+instance variables
+
+driverInfo: map DriverCard to Driver := {|->};
+trainInfo : map TrainId to CSL       := {|->};
+
+types
+
+public TrainId = token;
+\end{vdm_al}
+
+\begin{vdm_al}
+operations
+
+public
+Supervisor: map DriverCard to Driver * map TrainId to CSL ==>
+            Supervisor
+Supervisor(drive,train) ==
+  (driverInfo := drive;
+   trainInfo := train);
+
+public
+CardReturn: TrainId * DriverCard ==> ()
+CardReturn(trainid,driverid) ==
+  let newfaults = trainInfo(trainid).GetFaults()
+  in
+    driverInfo(driverid).AddFaults(newfaults)
+pre trainid in set dom trainInfo and driverid in set dom driverInfo;
+
+end Supervisor
+\end{vdm_al}

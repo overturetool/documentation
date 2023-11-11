@@ -1,0 +1,251 @@
+\section{The CSL Class}
+
+The CSL class is the main class of the CSL system. It controls a Cab
+Display, an On Board Computer, and an Emergency Brake. Furthermore, it
+contains operations corresponding to the kinds of events that can
+trigger the CSL system
+
+\begin{vdm_al}
+class CSL
+instance variables
+\end{vdm_al}
+
+The onboardComp, cabDisplay, and emergencyBrake instance variables are
+references to objects representing the on-board computer, the cab
+display, and the emergency brake.
+
+\begin{vdm_al}
+instance variables
+
+cabDisplay    : CabDisplay     := new CabDisplay();
+emergencyBrake: EmergencyBrake := new EmergencyBrake();
+onboardComp   : OnBoardComp    := new OnBoardComp();
+\end{vdm_al}
+
+\begin{vdm_al}--[announcements]
+instance variables
+
+announcements    : seq of AnnounceBeacon := [];
+speedRestrictions: seq of LimitBeacon := [];
+inv len speedRestrictions <= 5;
+\end{vdm_al}
+
+\begin{vdm_al}
+instance variables
+
+firstSpeedRestriction: bool := true;
+\end{vdm_al}
+
+\begin{vdm_al}--[multiplicities]
+instance variables
+
+driverCard: [DriverCard] := nil;
+faults    : set of Fault := {};
+\end{vdm_al}
+
+\begin{vdm_al}
+values
+
+maxSpeed: real = 180;
+\end{vdm_al}
+
+\begin{vdm_al}
+operations
+
+public HeadMeetsBeacon: Beacon ==> ()
+HeadMeetsBeacon(beacon) ==
+  cases true:
+    (isofclass(AnnounceBeacon, beacon)) ->
+         AnnounceSpeedRestriction(beacon),
+    (isofclass(LimitBeacon, beacon))    -> 
+         AddSpeedRestriction(beacon),
+    (isofclass(CancelBeacon, beacon))   -> 
+         DeleteAnnouncements()
+  end
+pre isofclass(LimitBeacon, beacon) =>   
+    NotEmpty[AnnounceBeacon](announcements);
+\end{vdm_al}
+
+\begin{vdm_al}
+public TailMeetsBeacon: Beacon ==> ()
+TailMeetsBeacon(beacon) ==
+  cases true:
+    (isofclass(LimitBeacon, beacon)) -> 
+         if not firstSpeedRestriction
+         then RemoveSpeedRestriction()
+         else firstSpeedRestriction := false,
+    (isofclass(EndBeacon, beacon))   -> 
+         ( firstSpeedRestriction := true;
+           RemoveSpeedRestriction () )
+  end
+pre ((isofclass(LimitBeacon, beacon) and 
+      not firstSpeedRestriction) or
+     isofclass(EndBeacon, beacon)) => 
+      NotEmpty[LimitBeacon](speedRestrictions);
+\end{vdm_al}
+
+\begin{vdm_al}
+public AnnounceSpeedRestriction: AnnounceBeacon ==> ()
+AnnounceSpeedRestriction(annobea) ==
+( announcements := announcements ^ [annobea];
+  DeletePossibleGroundFault() );
+\end{vdm_al}
+
+\begin{vdm_al}
+public AddSpeedRestriction: LimitBeacon ==> ()
+AddSpeedRestriction(limitbea) ==
+  if len speedRestrictions < 5
+  then ( let speed = (hd announcements).GetTargetSpeed()
+         in
+           limitbea.SetSpeedRestriction(speed);
+         speedRestrictions := speedRestrictions ^ [limitbea];
+         announcements := tl announcements;
+         DeletePossibleGroundFault()
+       )
+  else RaiseGroundFault()
+pre NotEmpty[AnnounceBeacon](announcements);
+\end{vdm_al}
+
+\begin{vdm_al}
+public DeleteAnnouncements: () ==> ()
+DeleteAnnouncements() ==
+( announcements := [];
+  DeletePossibleGroundFault()
+);
+\end{vdm_al}
+
+\begin{vdm_al}
+public RemoveSpeedRestriction: () ==> ()
+RemoveSpeedRestriction() ==
+( speedRestrictions := tl speedRestrictions;
+  DeletePossibleGroundFault()
+)
+pre NotEmpty[LimitBeacon](speedRestrictions);
+\end{vdm_al}
+
+\begin{vdm_al}
+public RaiseGroundFault: () ==> ()
+RaiseGroundFault() ==
+  cabDisplay.SetGroundFault();
+\end{vdm_al}
+
+\begin{vdm_al}
+public DeletePossibleGroundFault: () ==> ()
+DeletePossibleGroundFault() ==
+  let mk_(-,-,gf) = cabDisplay.GetDisplay()
+  in
+    if gf 
+    then cabDisplay.UnsetGroundFault();
+\end{vdm_al}
+
+\begin{vdm_al}
+public NoBeaconMet: () ==> ()
+NoBeaconMet() ==
+( announcements := tl announcements;
+  RaiseGroundFault()
+)
+pre NotEmpty[AnnounceBeacon](announcements);
+\end{vdm_al}
+
+\begin{vdm_al}
+public CheckSpeed: real ==> ()
+CheckSpeed(speed) ==
+  let speedAlarm = onboardComp.CheckSpeed (speed, GetMaxSpeed())
+  in
+    cases speedAlarm:
+      <SpeedOk> -> if not emergencyBrake.GetEmergencyBrake()
+                   then cabDisplay.UnsetAlarm(),
+      <AlarmSpeed> -> if not emergencyBrake.GetEmergencyBrake()
+                      then cabDisplay.SetAlarm(),
+      <EmergencyBreakSpeed> -> ( cabDisplay.SetEmergencyBrake();
+                                 emergencyBrake.SetEmergencyBrake()
+			       )
+  end;
+\end{vdm_al}
+
+\begin{vdm_al}
+public GetMaxSpeed: () ==> real
+GetMaxSpeed() ==
+  if speedRestrictions <> []
+  then let speeds = { limit.GetSpeedRestriction()
+                    | limit in set elems speedRestrictions } in
+       let minspeed in set speeds be st forall sp in set speeds &
+           minspeed <= sp in
+       return minspeed
+  else return maxSpeed;
+
+public ReleaseEmergencyBrake: real ==> ()
+ReleaseEmergencyBrake(sp) ==
+if sp = 0
+then ( cabDisplay.UnsetEmergencyBrake();
+       emergencyBrake.UnsetEmergencyBrake()
+     )
+pre let mk_(-,eb,-) = cabDisplay.GetDisplay() in eb and
+    emergencyBrake.GetEmergencyBrake();
+\end{vdm_al}
+
+\begin{vdm_al}
+public GetCabDisplay: () ==> CabDisplay
+GetCabDisplay() ==
+  return cabDisplay;
+
+public GetEmergencyBrake: () ==> EmergencyBrake
+GetEmergencyBrake() ==
+  return emergencyBrake;
+
+public GetAnnouncements: () ==> seq of AnnounceBeacon
+GetAnnouncements() ==
+  return announcements;
+
+public GetSpeedRestrictions: () ==> seq of LimitBeacon
+GetSpeedRestrictions() ==
+  return speedRestrictions;
+
+public GetFaults: () ==> set of Fault
+GetFaults() ==
+  return faults;
+
+functions
+
+NotEmpty[@T]: seq of @T -> bool
+NotEmpty(list) ==
+  list <> [];
+
+BeaconsAnnounced: seq of Beacon -> bool
+BeaconsAnnounced(beaL) ==
+  forall i in set inds beaL &
+    let sub = beaL(1,...,i)
+    in
+      NumOfBeacon(sub,<ANNOUNCE>) >= NumOfBeacon(sub,<LIMIT>);
+
+NumOfBeacon: seq of Beacon * (<ANNOUNCE> | <LIMIT>) -> nat
+NumOfBeacon(beaL,kind) ==
+  let realbeaL = FilterCancelEnd(beaL)
+  in
+    card {i | i in set inds realbeaL 
+            & if kind = <ANNOUNCE>
+              then isofclass(AnnounceBeacon, realbeaL(i))
+              else isofclass(LimitBeacon, realbeaL(i))}; 
+
+FilterCancelEnd: seq of Beacon -> seq of Beacon
+FilterCancelEnd(beaL) ==
+  if exists bea in set elems beaL & CancelOrEnd(bea)
+  then let maxi in set inds beaL be st 
+           CancelOrEnd(beaL(maxi)) and
+           forall j in set inds beaL & 
+              j > maxi => not CancelOrEnd(beaL(j))
+       in
+         beaL(maxi+1,...,len beaL)
+  else beaL;
+
+CancelOrEnd: Beacon -> bool
+CancelOrEnd(bea) ==
+  isofclass(CancelBeacon, bea) or isofclass(EndBeacon, bea);
+
+Max5SpeedLimits: seq of Beacon -> bool
+Max5SpeedLimits(beaL) ==
+  forall i in set inds beaL & NumOfBeacon(beaL(1,...,i),<LIMIT>) <= 5;
+
+end CSL
+\end{vdm_al}
+

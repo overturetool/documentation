@@ -1,0 +1,12 @@
+\section{The CancelBeacon Class}
+
+The CancelBeacon class represents the cancel beacon and implements the
+abstract Beacon class. The class does not contain any instance
+variables or operations as the presence of the beacon defines the
+action to perform.
+
+\begin{vdm_al}
+class CancelBeacon is subclass of Beacon
+
+end CancelBeacon
+\end{vdm_al}
