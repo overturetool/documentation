@@ -352,13 +352,13 @@ functions
   size5[@a]: (@a +> bool) * seq of @a +> nat
   size5(-, s) == len s;
 
-  size6[@a]: (@a * @a +> bool) * @a * seq of @a +> nat
+  size6[@a]: (@a * @a +> bool) +> @a * seq of @a +> nat
   size6(-,-,s) == len s;
 
-  size7[@a]: (@a * @a +> bool) * seq of @a +> nat
+  size7[@a]: (@a * @a +> bool) +> seq of @a +> nat
   size7(-,s) == len s;
 
-  size8[@a]: (@a * @a +> bool) * seq of @a * seq of @a +> nat
+  size8[@a]: (@a * @a +> bool) +> seq of @a * seq of @a +> nat
   size8(-,s,t) == len s + len t;
 
   size9[@a]: @a * seq of @a +> nat

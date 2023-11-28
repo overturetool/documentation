@@ -2600,7 +2600,7 @@ function defined. In the case of curried functions, the measure function's param
 are the same as the recursive function's parameters. For
 the \texttt{fmap} example, this would be:
 \begin{lstlisting}
-  m[@elem]: (@elem -> @elem) +> seq of @elem -> nat
+  m[@elem]: (@elem -> @elem) +> seq of @elem +> nat
   m(-, l) == len l;
 \end{lstlisting}
 Note that the measure function is also polymorphic, and must have the same type
