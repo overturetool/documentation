@@ -76,5 +76,9 @@ bin
 #########################  
 documentation/vdm2jml-rt/test-copies/
 documentation/vdm2jml-rt/chapters/generated.tex
-  
-  
+
+# VS Code files
+.vscode/
+*.puml
+*.code-workspace
+.generated/
