@@ -91,7 +91,7 @@ HumidChanged: nat * nat * nat * nat * nat * seq of OutStep -> seq of OutStep
 HumidChanged(targetTemp, curTemp, targetHumid, curHumid, curTime, outputSoFar) ==
   let tempChanged = (curHumid-targetHumid)*HumidChangeDuration/TempChangeDuration,
       action = if (curTemp-tempChanged) > targetTemp then <DecTemp> else <IncTemp>,
-      timeChange = curTime+(curHumid-targetHumid)*HumidChangeDuration
+      timeChange = abs (curTime+(curHumid-targetHumid)*HumidChangeDuration)
   in
     outputSoFar ^ [mk_(<OpenWindow>,curTime)] ^ 
     if (curTemp-tempChanged) <> targetTemp

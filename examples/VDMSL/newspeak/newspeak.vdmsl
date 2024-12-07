@@ -1267,7 +1267,8 @@ timeleq(mk_(lt1,ut1),mk_(lt2,ut2)) ==
 
 access_env : Id -> Env -> Denotable_value
 access_env(i)(mk_(m,l)) ==
-  m(i);
+  m(i)
+pre i in set dom m;
 
 update_env : Id -> Denotable_value -> Env -> Env
 update_env(i)(d)(mk_(m,l)) ==

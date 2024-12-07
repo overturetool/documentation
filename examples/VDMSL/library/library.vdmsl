@@ -110,7 +110,7 @@ get(dB,i)==
 	else get(dB\{record},i)	
 pre	i in set usedIds(dB) 
 post RESULT.id=i and RESULT in set dB
-measure card db;
+measure card dB;
   
 getvalue: Valuetype*set of Record*Id +> Value
 getvalue(valuetype,dB,i)==
