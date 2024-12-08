@@ -51,12 +51,8 @@ TransClosAux(g,id,reached) ==
   else {id} union
        dunion {TransClosAux(g,c,reached union {id}) 
               | c in set g(id)}
-pre id in set dom g
-measure measureGraphReached;
-
-measureGraphReached : Graph * Id * set of Id -> nat
-measureGraphReached(g,-,reached) ==
-  card dom g - card reached;
+pre {id} union reached subset dom g
+measure card dom g - card reached;
 
 AsycDescendents: AcyclicGraph * Id -> set of Id
 AsycDescendents(g,id) == 
@@ -71,8 +67,8 @@ Descendents(g,id,reached) ==
   else {id} union
        dunion {Descendents(g,c,reached union {id}) 
               | c in set g(id)}
-pre id in set dom g
-measure measureGraphReached;
+pre {id} union reached subset dom g
+measure card dom g - card reached;
 
 AllDesc: Graph * Id -> set of Id
 AllDesc(g,id) ==

@@ -656,7 +656,7 @@ autonomous train is a shunting train.
 
 \begin{vdm_al}
    Track_state   =  map Train_id to Train_type;
-   Train_id      = seq of char;
+   Train_id      = seq1 of char;
    Train_type    =  <fixedroute> | <autonomous> ;
 \end{vdm_al}
 
@@ -913,12 +913,11 @@ the track topology, otherwise it does not.
      then tried = {}
      else let t in set trackset in
               if   mk_(t,hd connected) in set tracks
-              then Path ((trackset \ {t}) union tried,
-                          [t]^connected,tracks,{})
+              then Path ((trackset \ {t}) ,
+                          [t]^connected,tracks,tried)
               else if mk_(connected (len connected),t) in set 
                       tracks
-                   then Path ((trackset \ {t}) union 
-                               tried,connected^[t],tracks,{})
+                   then Path ((trackset \ {t}),connected^[t],tracks,tried)
                    else Path ((trackset \ {t}),connected,tracks,
                                tried union {t})
   measure card trackset;
@@ -1004,7 +1003,7 @@ imports
                    signals : station`Signals renamed Station_topo;
         Tracks = set of (station`Track_id * station`Track_id) 
         renamed Tracks; 
-        Track_id = seq of char renamed Track_id;
+        Track_id = seq1 of char renamed Track_id;
         Points = map (station`Track_id * station`Track_id) to
 	         (map station`Track_id to station`Point_control)
                  renamed Points;
@@ -1025,7 +1024,7 @@ imports
                         renamed Track_states;
         Track_state   =  map station`Train_id to station`Train_type
                          renamed Track_state;
-        Train_id      =  seq of char
+        Train_id      =  seq1 of char
                          renamed Train_id;
         Train_type    = <fixedroute> | <autonomous> 
                         renamed Train_type;
@@ -1105,7 +1104,10 @@ the two track segments constituting the crossing.
 
    OneTrainAtCross (crossings,trackstates)  ==
      forall mk_(tid1,tid2) in set crossings &
-      card dom (trackstates(tid1)) + card dom (trackstates(tid2)) <= 1;
+      card dom (trackstates(tid1)) + card dom (trackstates(tid2)) <= 1
+  pre forall mk_(tid1,tid2) in set crossings & 
+         tid1 <> tid2 and 
+         {tid1,tid2} subset dom trackstates;
 \end{vdm_al}
 
 A train may derail if a point does not have control in an appropriate
@@ -1185,7 +1187,7 @@ segments is a point.
           then Point_state_ok (mk_(t1,t2),t1,points,pointstates)
           else Point_state_ok (mk_(t1,t2),t2,points,pointstates)
                
-   pre mk_(t1,t2) in set dom points;
+   pre mk_(t1,t2) in set dom points and t1 <> t2;
 \end{vdm_al}
 
 The function {\it Point\_state\_ok} checks whether a point $t$ has
@@ -1316,7 +1318,7 @@ imports
                    signals : station`Signals renamed Station_topo;
         Tracks = set of (station`Track_id * station`Track_id) 
                  renamed Tracks;
-        Track_id = seq of char renamed Track_id;
+        Track_id = seq1 of char renamed Track_id;
         Points = map (station`Track_id * station`Track_id) to
 	         (map station`Track_id to station`Point_control)
                  renamed Points;
@@ -1339,7 +1341,7 @@ imports
                     renamed Track_states;
    Track_state   =  map station`Train_id to station`Train_type
                     renamed Track_state;
-   Train_id      = seq of char
+   Train_id      = seq1 of char
                    renamed Train_id;
    Train_type    =  <fixedroute> | <autonomous>
                     renamed Train_type;
@@ -1424,7 +1426,9 @@ match with the position and the type of the train.
 
    NoDerail (areas,stationtopo,stationstate) ==
      NoDerailUnderTrains (stationtopo,stationstate) and 
-     NoDerailPossible (areas,stationtopo,stationstate); 
+     NoDerailPossible (areas,stationtopo,stationstate)
+  pre forall area in set rng areas &
+         forall t in set area & t in set dom stationstate.trackstates;
 \end{vdm_al}
 
 The function $NoDerailUnderTrains$ is the same as the function
@@ -1460,7 +1464,9 @@ manual operation for autonomous trains.
       let traintype = TrainType (area,stationstate) in
           if   traintype = <fixedroute>
           then NoDerailFixed (area,stationtopo,stationstate)
-          else NoDerailAutonomous (area,stationtopo,stationstate);
+          else NoDerailAutonomous (area,stationtopo,stationstate)
+  pre forall area in set rng areas &
+         forall t in set area & t in set dom stationstate.trackstates;
 \end{vdm_al}
 
 The functions $Trains$ and $Update$ are the same functions as $Trains$
@@ -1503,12 +1509,14 @@ the area.
 
 \begin{vdm_al}
    TrainType : Area * Station_state +> Train_type
-
    TrainType (area,stationstate) ==
-      let t in set area be st stationstate.trackstates (t) <> {|->} in
-          let tt in set dom stationstate.trackstates (t) in
+      if area = {}
+      then <fixedroute>
+      else let t in set area in
+           if stationstate.trackstates (t) <> {|->}
+           then let tt in set dom stationstate.trackstates (t) in
               stationstate.trackstates (t) (tt)
-
+           else <fixedroute> 
    pre forall t in set area & t in set dom stationstate.trackstates ;
 \end{vdm_al}
 
@@ -1542,10 +1550,10 @@ the safety requirements. They are stated here without comments.
           Point_state_ok (mk_(t1,t2),t2,points,pointstates)
      else if   {t1} = dom points (mk_(t1,t2))
           then Point_state_ok (mk_(t1,t2),t1,points,pointstates)
-          else Point_state_ok (mk_(t1,t2),t2,points,pointstates)
-               
+          else Point_state_ok (mk_(t1,t2),t2,points,pointstates)          
 
-   pre mk_(t1,t2) in set dom points;
+   pre pre_Point_state_ok(mk_(t1,t2),t1,points,pointstates) and
+       pre_Point_state_ok(mk_(t1,t2),t2,points,pointstates); 
 
 
    Point_state_ok: (Track_id * Track_id) * Track_id * Points * 
@@ -1577,7 +1585,9 @@ system.
           then IsInterlockPoint (t1,points,pointstates)
           else IsInterlockPoint (t2,points,pointstates)
 
-pre IsPoint (t1,points) or IsPoint (t2,points);
+pre (IsPoint (t1,points) or IsPoint (t2,points)) and
+    (IsPoint (t1,points) => t1 in set dom pointstates) and
+    (IsPoint (t2,points) => t2 in set dom pointstates);
 \end{vdm_al}
 
 The function $IsPoint$ checks whether a track segment is a point.
@@ -1600,7 +1610,8 @@ point, which is controlled by the interlocking system.
      if   IsPoint (t,points)
      then let mk_(-,operation) = pointstates (t) in
               operation = <interlock>
-     else false;
+     else false
+  pre IsPoint (t,points) => t in set dom pointstates;
 \end{vdm_al}
 
 To prevent an autonomous train from derailing, all the points operated by the
@@ -1630,7 +1641,11 @@ may have control in any branch.
           then Point_state_ok (mk_(t1,t2),t1,points,pointstates)
           else if IsInterlockPoint (t2,points,pointstates)
                then Point_state_ok (mk_(t1,t2),t2,points,pointstates)
-               else true; 
+               else true
+  pre pre_IsInterlockPoint (t1,points,pointstates) and
+      pre_IsInterlockPoint (t2,points,pointstates) and
+      pre_Point_state_ok (mk_(t1,t2),t1,points,pointstates) and 
+      pre_Point_state_ok (mk_(t1,t2),t2,points,pointstates);
 \end{vdm_al}
 
 Areas are deduced by for each train finding the nodes in the
@@ -1694,9 +1709,7 @@ removed from the track segment states by the function $RemoveTrain$.
                                       {tid |-> ({train} <-: 
                                       trackstates (tid))})
               else {tid |-> trackstates (tid)} munion 
-                   RemoveTrain (train,{tid} <-: trackstates)
-  measure card dom trackstates;
-
+                   RemoveTrain (train,{tid} <-: trackstates);
 \end{vdm_al}
 
 The function $DeduceAreas$ deduces an area for each train at the station.
@@ -1786,7 +1799,8 @@ signal.
    OkEdge (tpair,stationtopo,stationstate) ==
      OkPoints (tpair,stationtopo.points,stationstate.pointstates) and
      not (StopSignal (tpair,stationtopo.signals,
-                      stationstate.signalstates));
+                      stationstate.signalstates))
+  pre pre_OkPoints (tpair,stationtopo.points,stationstate.pointstates);
 \end{vdm_al}
 
 Given two nodes, representing two track segments connected by an edge labelled
@@ -1827,7 +1841,9 @@ checks whether there is a possibility of derailing in the area.
    OkPoints (mk_(t,t'),points,pointstates) ==
      IsInterlockPoint (t,points,pointstates) and
      Branch (mk_(t,t'),points) =>
-     Point_state_ok (mk_(t,t'),t,points,pointstates);
+     Point_state_ok (mk_(t,t'),t,points,pointstates)
+pre pre_IsInterlockPoint (t,points,pointstates) and
+    pre_Point_state_ok (mk_(t,t'),t,points,pointstates);
 \end{vdm_al}
 
 The function {\it StopSignal} returns true if the edge from the first
@@ -1842,7 +1858,9 @@ it returns false.
      if   tpair in set dom signals
      then let sigid = signals (tpair) in
               signalstates (sigid) = <stop>
-     else false;
+     else false
+  pre tpair in set dom signals => 
+      signals (tpair) in set dom signalstates;
 \end{vdm_al}
 
 The function {\it Branch} checks whether the first track segment in

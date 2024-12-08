@@ -21,7 +21,7 @@ functions
 Parts: Pn * map Pn to set of Pn -> set of Pn
 Parts(p, bom) ==
   TransClos(bom, bom(p))
-pre p in set dom bom;
+pre p in set dom bom and dunion rng bom subset dom bom;
 
 TransClos: (map Pn to set of Pn) * set of Pn -> set of Pn
 TransClos(bom, ps) ==
