@@ -22,7 +22,7 @@ exports
     hasAttribute : TaggedElement * String -> bool;
     getAttributeNames : TaggedElement -> set of Element;
     removeAttribute : TaggedElement * String -> TaggedElement;
-    setAttribute : TaggedElement * String * (String| real| seq of Point) -> TaggedElement;
+    setAttribute : TaggedElement * String * (Name| real| seq of Point) -> TaggedElement;
     setEventHandler : TaggedElement * EventType -> TaggedElement;
     addToken : TaggedElement * token -> TaggedElement;
     hasToken : TaggedElement * token -> bool;
@@ -46,7 +46,7 @@ types
         inv [c]^str ==
             c not in set IllegalNameStartChar
             and elems str inter IllegalNameChar = {};
-     Point :: x : int y : int;
+     Point :: x : nat y : nat;
 
 values
 	/* The following definitions are still too permissive. 
@@ -74,7 +74,7 @@ operations
     pure document : () ==> Element
     document() == return current;
     
-    createElement : String ==> TaggedElement
+    createElement : Name ==> TaggedElement
     createElement(name) ==
         let identifier = nextIdentifier
         in
@@ -123,7 +123,7 @@ functions
     removeAttribute(element, attribute) ==
         mu(element,attributes |-> {attribute} <-: element.attributes);
     
-    setAttribute : TaggedElement * String * (String| real| seq of Point) -> TaggedElement
+    setAttribute : TaggedElement * String * (Name| real| seq of Point) -> TaggedElement
     setAttribute(element, attribute, value) ==
         mu(element,
             attributes
@@ -147,7 +147,8 @@ functions
 	 Utility functions for internal use
 */
     digit2string : nat -> String
-    digit2string(n) == ["0123456789"(n + 1)];
+    digit2string(n) == ["0123456789"(n + 1)]
+    pre n < 10;
     
     int2string : int -> String
     int2string(i) ==
