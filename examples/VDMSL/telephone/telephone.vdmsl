@@ -23,6 +23,7 @@ definitions
        (status(i) = <WI> and status(calls(i)) = <WR>) 
        or
        (status(i) = <SI> and status(calls(i)) = <SR>)
+ init s == s = mk_Exchange({|->},{|->})
  end
 
 \end{vdm_al}
