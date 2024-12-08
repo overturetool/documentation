@@ -3,7 +3,7 @@ exports all
 definitions
 types
 
-Quadrant = seq of M;
+Quadrant = seq1 of M;
 --inv Q == 
 --  forall a in seq Q &
 --    (not exists b in set elems Q \ {a} &

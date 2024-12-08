@@ -30,7 +30,7 @@ TransClos(bom, ps) ==
   else let newps = dunion { bom(p) | p in set ps} 
        in
          TransClos(bom, ps union newps)            
-pre ps subset dom bom
+pre ps subset dom bom and dunion rng bom subset dom bom
 measure card dom bom - card ps;
   
 Explode: Pn * BOM -> set of Pn
@@ -60,7 +60,8 @@ pre (p in set dom bom) and (inv_BOM({p} <-: bom));
 Add: Pn * Pn * BOM -> BOM
 Add(p1, p2, bom) == 
   bom ++ {p1 |-> bom(p1) union {p2} }
-pre (p1 in set dom bom) and (p2 in set dom bom) and 
+pre p1 <> p2 and
+    (p1 in set dom bom) and (p2 in set dom bom) and 
     (p2 not in set bom(p1)) and (p1 not in set Explode(p2,bom));
 
 Erase: Pn * Pn * BOM -> BOM

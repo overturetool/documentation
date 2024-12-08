@@ -93,7 +93,7 @@ definitions
 
 types
         Tracks = set of (Track_id * Track_id);
-        Track_id  =  seq of char
+        Track_id  =  seq1 of char
 
 \end{vdm_al}
 
@@ -905,7 +905,7 @@ been added to the list. If this is the case, the train forms a path in
 the track topology, otherwise it does not.
 
 \begin{vdm_al}
-   Path: set of Track_id * seq of Track_id * Tracks * 
+   Path: set of Track_id * seq1 of Track_id * Tracks * 
          set of Track_id +> bool
 
    Path (trackset,connected,tracks,tried)  ==

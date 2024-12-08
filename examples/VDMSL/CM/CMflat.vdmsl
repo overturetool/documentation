@@ -78,7 +78,8 @@ CM( missileInputs, outputSoFar, lastMissile, curTime) ==
          if magid not in set dom lastMissile or
             (magid in set dom lastMissile and
              missilePriority(curMis) > 
-             missilePriority(lastMissile(magid)))
+             missilePriority(lastMissile(magid))) and
+             outputSoFar <> {|->}
          then let newOutput = 
                      InterruptPlan(curTime,outputSoFar,
                                    responseDB(curMis),
